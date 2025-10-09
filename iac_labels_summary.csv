@@ -1,0 +1,9 @@
+metric,value
+total_files,21107
+files_with_findings,0
+count_critical_findings,0
+count_high_findings,0
+count_medium_findings,0
+count_low_findings,0
+count_none_findings,0
+severity_class_nan_files,21107

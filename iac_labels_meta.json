@@ -1,0 +1,52 @@
+{
+  "total_files": 21107,
+  "with_findings": 0,
+  "distinct_checks": 161,
+  "distinct_resources": 618,
+  "input_iac_file": null,
+  "input_checkov_file": "checkov_results_clean_dedup.csv",
+  "filters": {
+    "min_lines": 0,
+    "extensions": null
+  },
+  "schema": [
+    "repo_root",
+    "rel_path",
+    "abs_path",
+    "extension",
+    "size_bytes",
+    "mtime",
+    "file",
+    "file_type",
+    "lines",
+    "file_basename",
+    "join_file",
+    "severity_low",
+    "severity_medium",
+    "severity_high",
+    "severity_critical",
+    "severity_none",
+    "raw_total",
+    "num_findings",
+    "unique_resources",
+    "severity_class",
+    "unique_check_ids",
+    "check_ids",
+    "repo_root_agg",
+    "file_basename_agg",
+    "file_agg",
+    "has_findings"
+  ],
+  "leakage_columns": [
+    "num_findings",
+    "raw_total",
+    "severity_low",
+    "severity_medium",
+    "severity_high",
+    "severity_critical",
+    "severity_none",
+    "unique_resources",
+    "unique_check_ids",
+    "check_ids"
+  ]
+}
