@@ -1,0 +1,37 @@
+---
+name: Build
+"on":
+  push:
+    branches:
+      - main
+  pull_request: {}
+
+env:
+  AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+  AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+  AWS_REGION: "us-west-2"
+  AWS_DEFAULT_REGION: "us-west-2"
+jobs:
+  ci:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: asdf-vm/actions/install@v1.0.1
+        env:
+          NODEJS_CHECK_SIGNATURES: "no"
+      - name: Override host Go installation
+        run: |
+          export GOVERSION=$(cat .tool-versions | grep 'golang ' | awk '{print $2}')
+          echo "GOROOT=$HOME/.asdf/installs/golang/$GOVERSION/go/" >> $GITHUB_ENV
+          echo "GOTOOLDIR=$HOME/.asdf/installs/golang/$GOVERSION/go/pkg/tool/linux_amd64" >> $GITHUB_ENV
+
+      - name: Create lock
+        uses: abatilo/github-action-locks@master
+        with:
+          name: "grpc-timeout-repro-${{ github.workflow }}"
+      - working-directory: ./deployments
+        env:
+          PULUMI_CONFIG_PASSPHRASE: ${{ secrets.PULUMI_CONFIG_PASSPHRASE }}
+        run: |
+          npm ci
+          pulumi up -s grpc-timeout-repro --yes --skip-preview

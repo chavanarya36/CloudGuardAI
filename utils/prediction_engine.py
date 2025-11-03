@@ -1,6 +1,8 @@
 import os
 import zipfile
 import tempfile
+import json
+import re
 from pathlib import Path
 import pandas as pd
 import numpy as np
@@ -17,6 +19,47 @@ class PredictionEngine:
         self.feature_extractor = FeatureExtractor(expected_total_features=expected)
         self.expected_total = expected
         self._last_shape_report = None
+        # Prefer a triage-budget threshold (e.g., Top-500) if available for UI decisions
+        self._load_budget_threshold()
+
+    def _load_budget_threshold(self):
+        """Attempt to override default threshold using models_artifacts/threshold_budget.json.
+        Prefer a Top-500-style threshold when present to avoid over-flagging at very low base thr.
+        """
+        try:
+            budget_path = Path('models_artifacts') / 'threshold_budget.json'
+            if not budget_path.exists():
+                return
+            with open(budget_path, 'r', encoding='utf-8') as f:
+                tb = json.load(f)
+
+            # Helper to locate a numeric threshold value in a flexible structure
+            def find_thr(obj, keys):
+                for k in keys:
+                    if k in obj:
+                        v = obj[k]
+                        if isinstance(v, dict):
+                            # common shapes: {"threshold": 0.215, ...}
+                            if 'threshold' in v and isinstance(v['threshold'], (int, float)):
+                                return float(v['threshold'])
+                        elif isinstance(v, (int, float)):
+                            return float(v)
+                return None
+
+            # Try a few common key variants
+            thr500 = find_thr(tb, [
+                'Top-500', 'top_500', 'top500', 'budget_500', 'triage_500'
+            ])
+            if thr500 is not None and 0 < thr500 < 1:
+                self.threshold = float(thr500)
+                # Keep loader threshold in sync so UI shows the effective value
+                try:
+                    self.model_loader.threshold = float(thr500)
+                except Exception:
+                    pass
+        except Exception:
+            # Keep original threshold on any error
+            pass
         
     def predict_single_file(self, file_path, content, custom_threshold=None):
         """Predict risk for a single file."""
@@ -32,19 +75,31 @@ class PredictionEngine:
         prob = self.model_loader.predict_proba(X)[0]
         threshold = custom_threshold if custom_threshold is not None else self.threshold
         is_risky = prob >= threshold
+
+        # Heuristic overlay banding for stability and interpretability
+        h_score, h_band, h_reasons = self._heuristic_risk(str(content))
         
         # Generate explanation
         explanation = self._generate_explanation(feature_info, prob)
         
         result = {
             'file_path': str(file_path),
+            'filename': Path(str(file_path)).name,
             'risk_probability': float(prob),
             'risk_percentage': round(prob * 100, 2),
             'is_risky': bool(is_risky),
             'decision_label': '⚠️ High Risk' if is_risky else '✅ Safe',
+            'risk_band': h_band,
+            'heuristic_score': int(h_score),
+            'heuristic_reasons': h_reasons,
+            'confidence_pct': round(prob * 100, 2),
+            'decision_threshold': float(threshold),
             'explanation': explanation,
             'feature_info': feature_info
         }
+
+        # Derive a final unified label prioritizing heuristic band and probability magnitude
+        result['final_label'] = self._compose_final_label(result)
         
         return result
     
@@ -72,15 +127,23 @@ class PredictionEngine:
             
             # Generate explanation
             explanation = self._generate_explanation(feature_info_list[i], prob)
+            h_score, h_band, h_reasons = self._heuristic_risk(str(content))
             
             result = {
                 'file_path': str(file_path),
+                'filename': Path(str(file_path)).name,
                 'risk_probability': float(prob),
                 'risk_percentage': round(prob * 100, 2),
                 'is_risky': bool(risky),
                 'decision_label': '⚠️ High Risk' if risky else '✅ Safe',
+                'risk_band': h_band,
+                'heuristic_score': int(h_score),
+                'heuristic_reasons': h_reasons,
+                'confidence_pct': round(float(prob) * 100, 2),
+                'decision_threshold': float(threshold),
                 'explanation': explanation
             }
+            result['final_label'] = self._compose_final_label(result)
             results.append(result)
         
         # Sort by risk probability (highest first)
@@ -128,6 +191,110 @@ class PredictionEngine:
             return f"{risk_level}: {base_explanation}"
         else:
             return f"{risk_level} prediction based on file structure and content patterns"
+
+    def _heuristic_risk(self, content: str):
+        """Lightweight heuristic to derive a human-friendly risk band.
+        High: severe public exposure or explicit public S3
+        Medium: some risky defaults (open HTTP, missing enc)
+        Low: protective controls present and no 0.0.0.0/0
+        """
+        try:
+            text = content.lower()
+        except Exception:
+            text = str(content)
+
+        score = 0
+        reasons = []
+
+        # Severe exposures
+        cidr_any = re.findall(r"\b0\.0\.0\.0/0\b", text)
+        if cidr_any:
+            score += 2 if len(cidr_any) == 1 else 3
+            reasons.append(f"open_cidr_anywhere x{len(cidr_any)}")
+
+        if re.search(r'\bacl\s*=\s*"(public-read|public-read-write)"', text):
+            score += 3
+            reasons.append("s3_public_acl")
+
+        if 'aws_s3_bucket_public_access_block' in text:
+            # If any of the public-block flags is false, penalize
+            if re.search(r'block_public_acls\s*=\s*false', text) or \
+               re.search(r'block_public_policy\s*=\s*false', text) or \
+               re.search(r'ignore_public_acls\s*=\s*false', text) or \
+               re.search(r'restrict_public_buckets\s*=\s*false', text):
+                score += 2
+                reasons.append("s3_public_block_disabled")
+
+        # Missing encryption keywords
+        if re.search(r'encrypted\s*=\s*false', text):
+            score += 2
+            reasons.append("storage_unencrypted")
+
+        # Secret-like tokens
+        if re.search(r'akia[a-z0-9]{16}', text) or 'password' in text:
+            score += 1
+            reasons.append("secret_like_literal")
+
+        # Protective controls (reduce score)
+        if 'aws_s3_bucket_server_side_encryption_configuration' in text:
+            score -= 3
+            reasons.append("s3_sse_enabled")
+
+        if 'aws_s3_bucket_public_access_block' in text:
+            if re.search(r'block_public_acls\s*=\s*true', text) and \
+               re.search(r'block_public_policy\s*=\s*true', text) and \
+               re.search(r'ignore_public_acls\s*=\s*true', text) and \
+               re.search(r'restrict_public_buckets\s*=\s*true', text):
+                score -= 2
+                reasons.append("s3_public_block_all_true")
+
+        # Private-only SG (RFC1918) and no any-open
+        if not cidr_any and (
+            re.search(r'cidr_blocks\s*=\s*\[.*10\.', text) or
+            re.search(r'cidr_blocks\s*=\s*\[.*192\.168\.', text) or
+            re.search(r'cidr_blocks\s*=\s*\[.*172\.(1[6-9]|2\d|3[0-1])\.', text)
+        ):
+            score -= 1
+            reasons.append("sg_rfc1918_only")
+
+        # Map to band
+        score = max(-5, min(5, score))
+        if score >= 4:
+            band = "High Risk"
+        elif score >= 1:
+            band = "Medium Risk"
+        else:
+            band = "Low Risk"
+        return score, band, reasons
+
+    def _compose_final_label(self, r):
+        """Compose a final human-facing label blending heuristic band & model confidence.
+        Rules:
+          - If probability extremely low (< 0.02) always Low Risk unless heuristic High.
+          - Elevate to High only if (band High AND prob >= max(decision_threshold*1.5, 0.08)).
+          - Medium band with low prob (<0.05) becomes Low (monitor) to reduce noise.
+          - Provide suffix for low-confidence high flags.
+        """
+        prob = r.get('risk_probability', 0.0)
+        thr = r.get('decision_threshold', self.threshold or 0.05)
+        band = r.get('risk_band') or 'Unknown'
+
+        # Extreme low probability guard
+        if prob < 0.02 and band != 'High Risk':
+            return '✅ Low Risk'
+
+        if band == 'High Risk':
+            if prob >= max(thr * 1.5, 0.08):
+                return '🚨 High Risk'
+            else:
+                return '⚠️ Potential High Risk (Low Confidence)'
+        elif band == 'Medium Risk':
+            if prob < 0.05:
+                return '🟡 Medium (Low Confidence)'
+            return '🟠 Medium Risk'
+        elif band == 'Low Risk':
+            return '✅ Low Risk'
+        return band
     
     def process_zip_file(self, zip_path, custom_threshold=None):
         """Process a ZIP file containing IaC files."""
@@ -193,6 +360,8 @@ class PredictionEngine:
                 'File Path': result['file_path'],
                 'Risk Probability (%)': result['risk_percentage'],
                 'Decision': result['decision_label'],
+                'Risk Band': result.get('risk_band', ''),
+                'Final Label': result.get('final_label',''),
                 'Explanation': result['explanation']
             })
         

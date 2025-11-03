@@ -1,0 +1,24 @@
+name: ⚠️ Contribution Not Accepted
+description: This project does not accept public contributions
+body:
+  - type: markdown
+    attributes:
+      value: |
+        ## ⚠️ NOTICE: This is a Proprietary Project
+        
+        **CloudGuard AI does not accept unsolicited contributions.**
+        
+        This form is disabled. If you need to report a security issue or have been 
+        explicitly invited to contribute, please contact @chavanarya36 directly.
+        
+        **Do not submit issues or pull requests without authorization.**
+        
+        See [CONTRIBUTING.md](../CONTRIBUTING.md) for full details.
+  - type: markdown
+    attributes:
+      value: |
+        ---
+        **By proceeding, you acknowledge:**
+        - This project is proprietary and copyrighted
+        - Unauthorized contributions will be rejected
+        - See [LICENSE](../LICENSE) for terms of use
