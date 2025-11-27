@@ -1,0 +1,56 @@
+name: CI/CD
+
+on:
+  push:
+    branches: [main, feature/*]
+  pull_request:
+    branches: [main]
+
+jobs:
+  lint-and-test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+      
+      - name: Install API dependencies
+        run: |
+          cd api
+          pip install -r requirements.txt
+      
+      - name: Lint API
+        run: |
+          cd api
+          black --check .
+          flake8 .
+      
+      - name: Test API
+        run: |
+          cd api
+          pytest
+      
+      - name: Install ML dependencies
+        run: |
+          cd ml
+          pip install -r requirements.txt
+      
+      - name: Test ML
+        run: |
+          cd ml
+          pytest
+
+  build-images:
+    needs: lint-and-test
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      
+      - name: Build Docker images
+        run: |
+          cd infra
+          docker-compose build

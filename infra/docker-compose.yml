@@ -1,0 +1,103 @@
+version: '3.8'
+
+services:
+  # PostgreSQL Database
+  postgres:
+    image: postgres:15-alpine
+    environment:
+      POSTGRES_DB: cloudguard
+      POSTGRES_USER: cloudguard
+      POSTGRES_PASSWORD: cloudguard
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U cloudguard"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # Redis for job queue
+  redis:
+    image: redis:7-alpine
+    ports:
+      - "6379:6379"
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # ML Service
+  ml-service:
+    build:
+      context: ..
+      dockerfile: infra/Dockerfile.ml
+    environment:
+      ML_MODELS_PATH: /app/models_artifacts
+      RULES_PATH: /app/rules_engine
+      FEATURES_PATH: /app/features_artifacts
+    volumes:
+      - ../models_artifacts:/app/models_artifacts
+      - ../rules_engine:/app/rules_engine
+      - ../features_artifacts:/app/features_artifacts
+    ports:
+      - "8001:8001"
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8001/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  # API Service
+  api:
+    build:
+      context: ..
+      dockerfile: infra/Dockerfile.api
+    environment:
+      DATABASE_URL: postgresql://cloudguard:cloudguard@postgres:5432/cloudguard
+      REDIS_URL: redis://redis:6379/0
+      ML_SERVICE_URL: http://ml-service:8001
+      SECRET_KEY: ${SECRET_KEY:-change-this-secret-key}
+      ALLOWED_ORIGINS: http://localhost:3000,http://localhost:5173
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+      ml-service:
+        condition: service_healthy
+    ports:
+      - "8000:8000"
+    command: uvicorn app.main:app --host 0.0.0.0 --port 8000
+
+  # RQ Worker for async jobs
+  worker:
+    build:
+      context: ..
+      dockerfile: infra/Dockerfile.api
+    environment:
+      DATABASE_URL: postgresql://cloudguard:cloudguard@postgres:5432/cloudguard
+      REDIS_URL: redis://redis:6379/0
+      ML_SERVICE_URL: http://ml-service:8001
+    depends_on:
+      - postgres
+      - redis
+      - ml-service
+    command: rq worker -u redis://redis:6379/0 scans retrain
+
+  # Web UI
+  web:
+    build:
+      context: ..
+      dockerfile: infra/Dockerfile.web
+    environment:
+      VITE_API_URL: http://localhost:8000
+    ports:
+      - "3000:80"
+    depends_on:
+      - api
+
+volumes:
+  postgres_data:
