@@ -1,0 +1,120 @@
+import axios from 'axios';
+
+const API_URL = import.meta.env.VITE_API_URL || 'http://127.0.0.1:8000';
+
+const apiClient = axios.create({
+  baseURL: API_URL,
+  headers: {
+    'Content-Type': 'application/json',
+  },
+});
+
+export const scanFile = async (file, scanMode = 'all') => {
+  const formData = new FormData();
+  formData.append('file', file);
+  formData.append('scan_mode', scanMode);
+  
+  const response = await apiClient.post('/scan', formData, {
+    headers: {
+      'Content-Type': 'multipart/form-data',
+    },
+    timeout: 60000,  // 60s timeout for large scans
+  });
+  
+  return response.data;
+};
+
+export const getScan = async (scanId) => {
+  const response = await apiClient.get(`/scan/${scanId}`);
+  return response.data;
+};
+
+export const listScans = async (skip = 0, limit = 100) => {
+  const response = await apiClient.get('/scans', {
+    params: { skip, limit },
+  });
+  return response.data;
+};
+
+export const submitFeedback = async (feedbackData) => {
+  const response = await apiClient.post('/feedback', feedbackData);
+  return response.data;
+};
+
+export const listFeedback = async (skip = 0, limit = 100) => {
+  const response = await apiClient.get('/feedback', {
+    params: { skip, limit },
+  });
+  return response.data;
+};
+
+export const getModelStatus = async () => {
+  const response = await apiClient.get('/model/status');
+  return response.data;
+};
+
+export const triggerRetrain = async (force = false, minSamples = 100) => {
+  const response = await apiClient.post('/model/retrain', {
+    force,
+    min_samples: minSamples,
+  });
+  return response.data;
+};
+
+export const listModelVersions = async (skip = 0, limit = 10) => {
+  const response = await apiClient.get('/model/versions', {
+    params: { skip, limit },
+  });
+  return response.data;
+};
+
+export const getScanStats = async () => {
+  const response = await apiClient.get('/scans/stats');
+  return response.data;
+};
+
+export const getFeedbackStats = async () => {
+  const response = await apiClient.get('/feedback/stats');
+  return response.data;
+};
+
+export const deleteScan = async (scanId) => {
+  const response = await apiClient.delete(`/scans/${scanId}`);
+  return response.data;
+};
+
+// --- Adaptive Learning Endpoints ---
+
+export const getLearningStatus = async () => {
+  const response = await apiClient.get('/learning/status');
+  return response.data;
+};
+
+export const getDiscoveredPatterns = async () => {
+  const response = await apiClient.get('/learning/patterns');
+  return response.data;
+};
+
+export const getDriftStatus = async () => {
+  const response = await apiClient.get('/learning/drift');
+  return response.data;
+};
+
+export const getRuleWeights = async () => {
+  const response = await apiClient.get('/learning/rule-weights');
+  return response.data;
+};
+
+export const getLearningTelemetry = async (limit = 50) => {
+  const response = await apiClient.get('/learning/telemetry', {
+    params: { limit },
+  });
+  return response.data;
+};
+
+export const triggerPatternDiscovery = async () => {
+  const response = await apiClient.post('/learning/discover');
+  return response.data;
+};
+
+export default apiClient;

@@ -4,6 +4,9 @@ __pycache__/
 *$py.class
 *.so
 .Python
+env/
+venv/
+ENV/
 build/
 develop-eggs/
 dist/
@@ -19,20 +22,15 @@ wheels/
 *.egg-info/
 .installed.cfg
 *.egg
-.venv/
-venv/
-ENV/
-env/
 
-# Node
-node_modules/
-npm-debug.log*
-yarn-debug.log*
-yarn-error.log*
-.pnpm-debug.log*
-dist/
-dist-ssr/
-*.local
+# Archive folder (temporary/old files)
+.archive/
+
+# Database
+*.db
+*.sqlite
+*.sqlite3
+cloudguard.db
 
 # IDEs
 .vscode/
@@ -41,30 +39,54 @@ dist-ssr/
 *.swo
 *~
 
+# Node
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.pnpm-debug.log*
+
+# Build
+dist/
+build/
+*.log
+
+# Testing
+.coverage
+.pytest_cache/
+htmlcov/
+.tox/
+coverage.xml
+*.cover
+test_output*.txt
+vitest_*.txt
+rl_out.txt
+rl_test_results.txt
+final_result.txt
+final_test.txt
+_audit*.txt
+_result.txt
+scan_result.json
+
+# Scan result artifacts (large output files with potential detected secrets)
+tests/validation/results/
+
 # Environment
 .env
 .env.local
-
-# Docker
-.dockerignore
-
-# Database
-*.db
-*.sqlite
-*.sqlite3
+.env.*.local
 
 # OS
 .DS_Store
 Thumbs.db
+desktop.ini
 
-# Logs
-*.log
-logs/
+# ML artifacts
+models_artifacts/
+predictions_artifacts/
+features_artifacts/
 
-# Test coverage
-.coverage
-htmlcov/
-.pytest_cache/
-
-# CI/CD
-.github/workflows/*.yml.bak
+# Temporary
+tmp/
+temp/
+*.tmp

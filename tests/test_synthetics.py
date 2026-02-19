@@ -1,3 +1,50 @@
+import pytest
+from pathlib import Path
+import zipfile
+
+try:
+    from scripts.zip_synthetic import create_zip_from_dir, list_files
+except ImportError:
+    pytest.skip("scripts.zip_synthetic not available", allow_module_level=True)
+
+
+def test_create_zip_from_dir_roundtrip(tmp_path: Path) -> None:
+    base = tmp_path / "synthetic"
+    base.mkdir()
+    (base / "a.txt").write_text("alpha", encoding="utf-8")
+    (base / "sub").mkdir()
+    (base / "sub" / "b.txt").write_text("bravo", encoding="utf-8")
+
+    out_zip = tmp_path / "synthetic_samples.zip"
+
+    create_zip_from_dir(base, out_zip)
+
+    assert out_zip.exists()
+    with zipfile.ZipFile(out_zip, "r") as zf:
+        names = set(zf.namelist())
+        assert "a.txt" in names
+        assert "sub/b.txt" in names
+
+
+def test_list_files_returns_correct_paths(tmp_path: Path) -> None:
+    base = tmp_path / "synthetic"
+    base.mkdir()
+    files = [
+        base / "a.txt",
+        base / "b.tf",
+        base / "sub" / "c.yaml",
+    ]
+    for f in files:
+        f.parent.mkdir(parents=True, exist_ok=True)
+        f.write_text("x", encoding="utf-8")
+
+    returned = list(list_files(base))
+    returned_rel = {p.relative_to(base).as_posix() for p in returned}
+
+    assert "a.txt" in returned_rel
+    assert "b.tf" in returned_rel
+    assert "sub/c.yaml" in returned_rel
+    assert len(returned) == len(files)
 from utils.prediction_engine import PredictionEngine
 from pathlib import Path
 import scripts.zip_synthetic as zs

@@ -1,0 +1,57 @@
+rules:
+  - id: AWS_BP_HARDCODED_PASSWORD
+    description: Hardcoded password detected in infrastructure code
+    severity: CRITICAL
+    file_types: ["terraform", "yaml", "json"]
+    match:
+      regex: 'password\s*=\s*"[^"]{3,}"'
+    references: ["AWS Security Best Practices", "https://docs.aws.amazon.com/secretsmanager/latest/userguide/intro.html"]
+
+  - id: AWS_BP_HARDCODED_SECRET
+    description: Hardcoded secret or API key detected
+    severity: CRITICAL
+    file_types: ["terraform", "yaml", "json"]
+    match:
+      regex: 'secret[_-]?key\s*=\s*"[^"]{8,}"'
+    references: ["AWS Security Best Practices"]
+
+  - id: AWS_BP_HARDCODED_ACCESS_KEY
+    description: AWS access key appears to be hardcoded
+    severity: CRITICAL
+    file_types: ["terraform", "yaml", "json"]
+    match:
+      regex: 'access_key\s*=\s*"AKIA[A-Z0-9]{16}"'
+    references: ["AWS Security Best Practices"]
+
+  - id: AWS_BP_S3_NO_LOGGING
+    description: S3 bucket logging is not configured
+    severity: MEDIUM
+    file_types: ["terraform"]
+    match:
+      not_contains: "logging {"
+    references: ["AWS S3 Best Practices"]
+
+  - id: AWS_BP_SKIP_FINAL_SNAPSHOT
+    description: Database configured to skip final snapshot on deletion
+    severity: MEDIUM
+    file_types: ["terraform"]
+    match:
+      regex: 'skip_final_snapshot\s*=\s*true'
+    references: ["AWS RDS Best Practices"]
+
+  - id: AWS_BP_EC2_NO_MONITORING
+    description: EC2 detailed monitoring is disabled
+    severity: LOW
+    file_types: ["terraform"]
+    match:
+      regex: 'monitoring\s*=\s*false'
+    references: ["AWS EC2 Best Practices"]
+
+  - id: AWS_BP_EGRESS_ALL
+    description: Security group allows all egress traffic
+    severity: MEDIUM
+    file_types: ["terraform"]
+    match:
+      regex: 'protocol\s*=\s*"-1"'
+    references: ["AWS VPC Best Practices"]
+

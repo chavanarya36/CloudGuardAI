@@ -1,0 +1,10 @@
+{
+  "R1": {
+    "true_positives": 16,
+    "false_positives": 16,
+    "false_negatives": 0,
+    "total": 32,
+    "confidence": 0.5143,
+    "last_updated": "2026-02-19T09:10:01.732149"
+  }
+}

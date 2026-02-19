@@ -1,0 +1,44 @@
+apiVersion: policy/v1
+kind: PodDisruptionBudget
+metadata:
+  name: {{ include "cloudguard.fullname" . }}-api-pdb
+  namespace: {{ .Release.Namespace }}
+  labels:
+    {{- include "cloudguard.labels" . | nindent 4 }}
+    app.kubernetes.io/component: api
+spec:
+  minAvailable: 1
+  selector:
+    matchLabels:
+      app: cloudguard-api
+      {{- include "cloudguard.selectorLabels" . | nindent 6 }}
+---
+apiVersion: policy/v1
+kind: PodDisruptionBudget
+metadata:
+  name: {{ include "cloudguard.fullname" . }}-ml-pdb
+  namespace: {{ .Release.Namespace }}
+  labels:
+    {{- include "cloudguard.labels" . | nindent 4 }}
+    app.kubernetes.io/component: ml
+spec:
+  minAvailable: 1
+  selector:
+    matchLabels:
+      app: cloudguard-ml
+      {{- include "cloudguard.selectorLabels" . | nindent 6 }}
+---
+apiVersion: policy/v1
+kind: PodDisruptionBudget
+metadata:
+  name: {{ include "cloudguard.fullname" . }}-postgres-pdb
+  namespace: {{ .Release.Namespace }}
+  labels:
+    {{- include "cloudguard.labels" . | nindent 4 }}
+    app.kubernetes.io/component: postgres
+spec:
+  minAvailable: 1
+  selector:
+    matchLabels:
+      app: cloudguard-postgres
+      {{- include "cloudguard.selectorLabels" . | nindent 6 }}

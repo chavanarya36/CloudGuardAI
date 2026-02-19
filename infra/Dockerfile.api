@@ -6,6 +6,7 @@ WORKDIR /app
 RUN apt-get update && apt-get install -y \
     gcc \
     g++ \
+    curl \
     postgresql-client \
     && rm -rf /var/lib/apt/lists/*
 
@@ -17,11 +18,32 @@ RUN pip install --no-cache-dir -r requirements.txt
 
 # Copy API code
 COPY api/app ./app
+COPY api/scanners ./scanners
 COPY api/alembic ./alembic
 COPY api/alembic.ini .
+
+# Copy rules engine for integrated scanner
+COPY rules/rules_engine ./rules_engine
+
+# Create models directory for AI scanners
+RUN mkdir -p /app/models_artifacts
+
+# Copy AI model artifacts (optional - scanner works without them)
+COPY ml/models_artifacts/ /app/models_artifacts/
+
+# Set Python path
+ENV PYTHONPATH=/app
+
+# Add non-root user for security
+RUN useradd -m -r appuser && chown -R appuser:appuser /app
+USER appuser
+
+# Health check
+HEALTHCHECK --interval=15s --timeout=5s --start-period=30s --retries=3 \
+    CMD curl -f http://localhost:8000/health || exit 1
 
 # Expose port
 EXPOSE 8000
 
-# Run migrations and start server
-CMD alembic upgrade head && uvicorn app.main:app --host 0.0.0.0 --port 8000
+# Run migrations and start server (exec form for proper signal handling)
+CMD ["sh", "-c", "alembic upgrade head 2>/dev/null; exec uvicorn app.main:app --host 0.0.0.0 --port 8000"]

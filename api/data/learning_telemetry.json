@@ -1,0 +1,203 @@
+[
+  {
+    "type": "engine_started",
+    "timestamp": "2026-02-19T08:18:47.616039",
+    "components": [
+      "feature_extractor",
+      "label_transformer",
+      "drift_detector",
+      "rule_weights",
+      "pattern_engine",
+      "model_evaluator",
+      "telemetry"
+    ]
+  },
+  {
+    "type": "scan_processed",
+    "timestamp": "2026-02-19T08:18:57.076478",
+    "scan_id": 1,
+    "findings_count": 0,
+    "risk_score": 0.0
+  },
+  {
+    "type": "scan_processed",
+    "timestamp": "2026-02-19T08:18:59.676091",
+    "scan_id": 1,
+    "findings_count": 0,
+    "risk_score": 0.0
+  },
+  {
+    "type": "scan_processed",
+    "timestamp": "2026-02-19T08:19:02.272949",
+    "scan_id": 1,
+    "findings_count": 0,
+    "risk_score": 0.0
+  },
+  {
+    "type": "scan_processed",
+    "timestamp": "2026-02-19T08:19:04.856424",
+    "scan_id": 1,
+    "findings_count": 0,
+    "risk_score": 0.0
+  },
+  {
+    "type": "scan_processed",
+    "timestamp": "2026-02-19T08:19:07.442014",
+    "scan_id": 1,
+    "findings_count": 0,
+    "risk_score": 0.0
+  },
+  {
+    "type": "scan_processed",
+    "timestamp": "2026-02-19T08:19:10.096130",
+    "scan_id": 1,
+    "findings_count": 0,
+    "risk_score": 0.0
+  },
+  {
+    "type": "scan_processed",
+    "timestamp": "2026-02-19T08:19:12.682318",
+    "scan_id": 1,
+    "findings_count": 0,
+    "risk_score": 0.0
+  },
+  {
+    "type": "scan_processed",
+    "timestamp": "2026-02-19T08:19:15.351826",
+    "scan_id": 1,
+    "findings_count": 0,
+    "risk_score": 0.0
+  },
+  {
+    "type": "feedback_processed",
+    "timestamp": "2026-02-19T08:19:15.369589",
+    "scan_id": 1,
+    "label": 0,
+    "feedback_type": null,
+    "rule_id": null,
+    "buffer_size": 1
+  },
+  {
+    "type": "scan_processed",
+    "timestamp": "2026-02-19T08:19:17.990487",
+    "scan_id": 1,
+    "findings_count": 0,
+    "risk_score": 0.0
+  },
+  {
+    "type": "feedback_processed",
+    "timestamp": "2026-02-19T08:19:18.006445",
+    "scan_id": 1,
+    "label": 1,
+    "feedback_type": null,
+    "rule_id": null,
+    "buffer_size": 2
+  },
+  {
+    "type": "engine_started",
+    "timestamp": "2026-02-19T08:19:20.828467",
+    "components": [
+      "feature_extractor",
+      "label_transformer",
+      "drift_detector",
+      "rule_weights",
+      "pattern_engine",
+      "model_evaluator",
+      "telemetry"
+    ]
+  },
+  {
+    "type": "scan_processed",
+    "timestamp": "2026-02-19T08:19:30.374324",
+    "scan_id": 1,
+    "findings_count": 0,
+    "risk_score": 0.0
+  },
+  {
+    "type": "scan_processed",
+    "timestamp": "2026-02-19T08:19:32.980916",
+    "scan_id": 1,
+    "findings_count": 0,
+    "risk_score": 0.0
+  },
+  {
+    "type": "scan_processed",
+    "timestamp": "2026-02-19T08:19:35.579061",
+    "scan_id": 1,
+    "findings_count": 0,
+    "risk_score": 0.0
+  },
+  {
+    "type": "scan_processed",
+    "timestamp": "2026-02-19T08:19:38.226844",
+    "scan_id": 1,
+    "findings_count": 0,
+    "risk_score": 0.0
+  },
+  {
+    "type": "scan_processed",
+    "timestamp": "2026-02-19T08:19:40.826418",
+    "scan_id": 1,
+    "findings_count": 0,
+    "risk_score": 0.0
+  },
+  {
+    "type": "scan_processed",
+    "timestamp": "2026-02-19T08:19:43.480332",
+    "scan_id": 1,
+    "findings_count": 0,
+    "risk_score": 0.0
+  },
+  {
+    "type": "scan_processed",
+    "timestamp": "2026-02-19T08:19:46.083917",
+    "scan_id": 1,
+    "findings_count": 0,
+    "risk_score": 0.0
+  },
+  {
+    "type": "scan_processed",
+    "timestamp": "2026-02-19T08:19:48.774758",
+    "scan_id": 1,
+    "findings_count": 0,
+    "risk_score": 0.0
+  },
+  {
+    "type": "feedback_processed",
+    "timestamp": "2026-02-19T08:19:48.792165",
+    "scan_id": 1,
+    "label": 0,
+    "feedback_type": null,
+    "rule_id": null,
+    "buffer_size": 1
+  },
+  {
+    "type": "scan_processed",
+    "timestamp": "2026-02-19T08:19:51.449362",
+    "scan_id": 1,
+    "findings_count": 0,
+    "risk_score": 0.0
+  },
+  {
+    "type": "feedback_processed",
+    "timestamp": "2026-02-19T08:19:51.465156",
+    "scan_id": 1,
+    "label": 1,
+    "feedback_type": null,
+    "rule_id": null,
+    "buffer_size": 2
+  },
+  {
+    "type": "engine_started",
+    "timestamp": "2026-02-19T09:01:17.695308",
+    "components": [
+      "feature_extractor",
+      "label_transformer",
+      "drift_detector",
+      "rule_weights",
+      "pattern_engine",
+      "model_evaluator",
+      "telemetry"
+    ]
+  }
+]

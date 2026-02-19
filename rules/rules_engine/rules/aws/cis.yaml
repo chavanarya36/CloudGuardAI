@@ -1,0 +1,65 @@
+rules:
+  - id: AWS_CIS_SG_0_0_0_0
+    description: Security group allows unrestricted access from 0.0.0.0/0
+    severity: CRITICAL
+    file_types: ["terraform", "yaml", "json"]
+    match:
+      regex: "0\\.0\\.0\\.0/0"
+    references: ["CIS AWS 4.1", "https://docs.aws.amazon.com/securityhub/latest/userguide/securityhub-cis-controls.html"]
+
+  - id: AWS_CIS_S3_PUBLIC_ACL
+    description: S3 bucket has public-read ACL which allows unrestricted public access
+    severity: CRITICAL
+    file_types: ["terraform"]
+    match:
+      regex: 'acl\s*=\s*"public-read"'
+    references: ["CIS AWS 2.1.5", "https://docs.aws.amazon.com/AmazonS3/latest/userguide/acl-overview.html"]
+
+  - id: AWS_CIS_S3_PUBLIC_WRITE
+    description: S3 bucket has public-read-write ACL which allows anyone to modify objects
+    severity: CRITICAL
+    file_types: ["terraform"]
+    match:
+      regex: 'acl\s*=\s*"public-read-write"'
+    references: ["CIS AWS 2.1.5"]
+
+  - id: AWS_CIS_S3_VERSIONING_DISABLED
+    description: S3 bucket versioning is disabled, preventing recovery of deleted or modified objects
+    severity: HIGH
+    file_types: ["terraform"]
+    match:
+      regex: 'versioning\s*\{[^}]*enabled\s*=\s*false'
+    references: ["CIS AWS 2.1.3", "https://docs.aws.amazon.com/AmazonS3/latest/userguide/Versioning.html"]
+
+  - id: AWS_CIS_SG_ALL_PORTS
+    description: Security group allows access to all ports (0-65535)
+    severity: CRITICAL
+    file_types: ["terraform"]
+    match:
+      regex: 'to_port\s*=\s*65535'
+    references: ["CIS AWS 4.1"]
+
+  - id: AWS_CIS_DB_PUBLIC
+    description: Database instance is publicly accessible
+    severity: CRITICAL
+    file_types: ["terraform"]
+    match:
+      regex: 'publicly_accessible\s*=\s*true'
+    references: ["CIS AWS 4.15"]
+
+  - id: AWS_CIS_DB_UNENCRYPTED
+    description: Database storage encryption is disabled
+    severity: HIGH
+    file_types: ["terraform"]
+    match:
+      regex: 'storage_encrypted\s*=\s*false'
+    references: ["CIS AWS 2.3.1"]
+
+  - id: AWS_CIS_IAM_ROOT_ACCESS
+    description: IAM policy allows root account access
+    severity: CRITICAL
+    file_types: ["terraform", "json"]
+    match:
+      regex: '"arn:aws:iam::[^"]*:root"'
+    references: ["CIS AWS 1.7"]
+

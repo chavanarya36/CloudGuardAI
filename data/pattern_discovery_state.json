@@ -1,0 +1,41 @@
+{
+  "054db4a76908": {
+    "signature": "054db4a76908",
+    "sample_description": "test",
+    "sample_rule_id": "R1",
+    "severity": "HIGH",
+    "scan_ids": [
+      1
+    ],
+    "count": 32,
+    "first_seen": "2026-02-17T14:29:43.304824",
+    "last_seen": "2026-02-19T09:04:22.937664",
+    "rule_generated": false
+  },
+  "6552b7dd4a1a": {
+    "signature": "6552b7dd4a1a",
+    "sample_description": "S3 bucket 'data' does not have server-side encryption enabled. CIS Benchmark 2.1.1 requires encryption at rest.",
+    "sample_rule_id": "CIS_2_1_1",
+    "severity": "HIGH",
+    "scan_ids": [
+      1
+    ],
+    "count": 55,
+    "first_seen": "2026-02-17T14:38:46.516812",
+    "last_seen": "2026-02-19T09:13:49.719949",
+    "rule_generated": false
+  },
+  "cbeba0a936e2": {
+    "signature": "cbeba0a936e2",
+    "sample_description": "S3 bucket 'data' does not have access logging enabled. CIS Benchmark 2.1.2 requires logging for audit trails.",
+    "sample_rule_id": "CIS_2_1_2",
+    "severity": "MEDIUM",
+    "scan_ids": [
+      1
+    ],
+    "count": 55,
+    "first_seen": "2026-02-17T14:38:46.516812",
+    "last_seen": "2026-02-19T09:13:49.719949",
+    "rule_generated": false
+  }
+}

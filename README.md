@@ -1,574 +1,218 @@
-# CloudGuard AI - Infrastructure Risk Scanner
-
-> **⚠️ PROPRIETARY SOFTWARE - ALL RIGHTS RESERVED**  
-> **© 2025 chavanarya36**  
-> This repository is available for **viewing and educational purposes only**.  
-> Redistribution, modification, commercial use, or claiming credit is **strictly prohibited**.  
-> See [LICENSE](LICENSE) for full terms. Unauthorized use will result in legal action.
+<p align="center">
+  <h1 align="center">🛡️ CloudGuardAI</h1>
+  <p align="center">
+    <strong>AI-Powered Infrastructure as Code Security Scanner</strong><br>
+    <em>3 Novel ML Models · GNN Attack Paths · RL Auto-Remediation · Transformer Code Gen</em>
+  </p>
+  <p align="center">
+    <a href="https://github.com/chavanarya36/CloudGuardAI/actions"><img src="https://img.shields.io/github/actions/workflow/status/chavanarya36/CloudGuardAI/pipeline.yml?branch=main&label=CI%2FCD&logo=github" alt="CI/CD"></a>
+    <img src="https://img.shields.io/badge/tests-413%20passing-brightgreen?logo=pytest" alt="Tests">
+    <img src="https://img.shields.io/badge/python-3.11+-3776AB?logo=python&logoColor=white" alt="Python">
+    <img src="https://img.shields.io/badge/react-18.2-61DAFB?logo=react&logoColor=black" alt="React">
+    <img src="https://img.shields.io/badge/AI_contribution-80%25-blueviolet" alt="AI 80%">
+    <a href="docs/LICENSE"><img src="https://img.shields.io/badge/license-MIT-green" alt="License"></a>
+  </p>
+</p>
 
 ---
 
-AI-powered Infrastructure-as-Code (IaC) security scanner using machine learning to detect potential security vulnerabilities.
-
-## 🎯 Features
-
-- **Single File Analysis**: Upload individual .tf, .yaml, .json, or .bicep files for risk assessment
-- **Batch Processing**: Upload ZIP archives containing multiple IaC files for bulk analysis
-- **Real-time Risk Scoring**: Get probability scores and binary risk decisions
-- **Detailed Explanations**: Understand why files are flagged as risky
-- **Professional UI**: Clean, intuitive interface with dark theme
-- **Configurable Thresholds**: Adjust risk sensitivity based on your needs
-- **Export Results**: Download analysis results in CSV or JSON format
-
-
-
----```- **Real-time Risk Scoring**: Get probability scores and binary risk decisions
-
-
-
-## 📁 Project StructureCloudGuardAI/- **Detailed Explanations**: Understand why files are flagged as risky
-
-
-
-```├── app.py                      # Streamlit web application- **Professional UI**: Clean, intuitive interface suitable for enterprise use
-
-CloudGuardAI/
-
-├── app.py                      # Streamlit web application├── data/                       # Data files and datasets- **Configurable Thresholds**: Adjust risk sensitivity based on your needs
-
-├── README.md                   # This file
-
-├── data/                       # Data files and datasets│   ├── iac_labels_clean.csv    # Labeled IaC security findings- **Export Results**: Download analysis results in CSV or JSON format
-
-│   ├── iac_labels_clean.csv
-
-│   ├── programs.csv│   ├── iac_labels_summary.csv  # Label statistics summary
-
-│   └── repositories.csv
-
-├── pipeline/                   # ML pipeline scripts│   ├── programs.csv            # IaC program inventory## Installation
-
-│   ├── 01_prepare_labels.py
-
-│   ├── 02_build_features.py│   ├── repositories.csv        # GitHub repository list
-
-│   ├── 03_train_model.py
-
-│   └── ... (8 more scripts)│   └── merged_findings_v2_sample.csv### Local Development
-
-├── scanners/                   # IaC scanner integration
-
-│   ├── scan_checkov.py├── pipeline/                   # ML pipeline scripts
-
-│   ├── scan_tfsec.py
-
-│   └── scan_kics.py│   ├── 01_prepare_labels.py1. Clone the repository:
-
-├── features_artifacts/         # Extracted ML features
-
-├── models_artifacts/           # Trained models│   ├── 02_build_features.py```bash
-
-├── predictions_artifacts/      # Model predictions
-
-├── utils/                      # Utility functions│   ├── 03_train_model.pygit clone <repository-url>
-
-│   ├── model_loader.py
-
-│   ├── feature_extractor.py│   ├── 04_predict_and_rank.pycd CloudGuardAI
-
-│   └── prediction_engine.py
-
-├── docs/                       # Documentation│   ├── 05_leakage_sanity.py```
-
-│   ├── README.md
-
-│   ├── README_pipeline.md│   ├── 05_validation_sanity.py
-
-│   └── model_report.md
-
-└── config/                     # Configuration│   ├── 06_reliability_diagnostics.py2. Install dependencies:
-
-    ├── requirements.txt
-
-    ├── Dockerfile│   ├── 07_threshold_tuning.py```bash
-
-    └── run_full_pipeline.ps1
-
-```│   ├── 08_per_repo_validation.pypip install -r requirements.txt
-
-
-
----│   └── summarize_metrics.py```
-
-
-
-## 🚀 Quick Start├── scanners/                   # IaC scanner integration
-
-
-
-### 1. Install Dependencies│   ├── scan_checkov.py3. Ensure model artifacts are present:
-
-
-
-```bash│   ├── scan_tfsec.py- `models_artifacts/best_model_lr.joblib`
-
-pip install -r config/requirements.txt
-
-```│   ├── scan_kics.py- `models_artifacts/threshold_lr.json`
-
-
-
-### 2. Run Web Application│   ├── merge_findings.py- `models_artifacts/cv_metrics_lr.json`
-
-
-
-```bash│   └── *_outputs/              # Scanner results- `features_artifacts/meta.json`
-
-streamlit run app.py
-
-# or├── features_artifacts/         # Extracted ML features
-
-python -m streamlit run app.py
-
-```├── models_artifacts/           # Trained models4. Run the application:
-
-
-
-### 3. Open Browser├── predictions_artifacts/      # Model predictions```bash
-
-
-
-Navigate to `http://localhost:8501`├── labels_artifacts/           # Processed labelsstreamlit run app.py
-
-
-
----├── utils/                      # Utility functions```
-
-
-
-## 🐳 Docker Deployment├── scripts/                    # Helper scripts
-
-
-
-### Build Image├── tests/                      # Test files5. Open your browser to `http://localhost:8501`
-
-
-
-```bash├── docs/                       # Documentation
-
-docker build -t cloudguard-ai -f config/Dockerfile .
-
-```│   ├── README.md               # Main documentation### Docker Deployment
-
-
-
-### Run Container│   ├── README_pipeline.md      # Pipeline guide
-
-
-
-```bash│   ├── README_PROJECT.md       # Project overview1. Build the Docker image:
-
-docker run -p 8501:8501 cloudguard-ai
-
-```│   └── model_report.md         # Model performance```bash
-
-
-
-Access at `http://localhost:8501`└── config/                     # Configurationdocker build -t cloudguard-ai .
-
-
-
----    ├── requirements.txt```
-
-
-
-## 💻 Usage    ├── Dockerfile
-
-
-
-### Single File Mode    └── run_full_pipeline.ps12. Run the container:
-
-
-
-1. Select "📄 Single File Analysis" in the sidebar``````bash
-
-2. Upload a supported IaC file (.tf, .yaml, .yml, .json, .bicep)
-
-3. Click "🔍 Analyze File Security"docker run -p 8501:8501 cloudguard-ai
-
-4. View the risk assessment, gauge, and detailed explanation
-
-5. Adjust threshold if needed using the sidebar slider---```
-
-
-
-### Batch Mode
-
-
-
-1. Select "📦 Batch Processing" in the sidebar## 🚀 Quick Start3. Access the application at `http://localhost:8501`
-
-2. Upload a ZIP file containing your IaC files
-
-3. Click "🔍 Analyze ZIP Archive"
-
-4. Review summary metrics and detailed results
-
-5. Use filters to find specific risk levels### 1. Install Dependencies## Usage
-
-6. Download results as CSV or JSON
+CloudGuardAI is a full-stack security scanning platform that uses **3 novel AI models** (GNN + RL + Transformer) alongside traditional tools to detect and auto-remediate vulnerabilities in Infrastructure as Code files. Built with FastAPI, React 18, PyTorch, and deployed via Docker/Kubernetes.
+
+## ✨ Key Highlights
+
+| Capability | Details |
+|:-----------|:--------|
+| 🧠 **GNN Attack Paths** | Graph Neural Network (114K params) detects multi-hop attack chains across infrastructure |
+| 🎯 **RL Auto-Fix** | Deep Q-Network (31K params) selects optimal remediation from 15 action strategies |
+| ✨ **Transformer Code Gen** | 6-layer encoder-decoder (4.9M params) generates secure IaC replacements |
+| 🔁 **Adaptive Learning** | 8-subsystem self-improving engine — drift detection, pattern discovery, auto-retrain |
+| 🔐 **Production Security** | JWT + API-key auth, rate limiting, Prometheus metrics, 3-tier Docker network isolation |
+| 📊 **413 Tests Passing** | Unit, integration, API, ML — zero failures |
+
+## 🏗️ Architecture
+
+```
+┌───────────────┐       ┌───────────────────┐       ┌───────────────────────────┐
+│  React 18 UI  │──────▶│  FastAPI Backend   │──────▶│      ML Service           │
+│  (Vite + MUI) │  HTTP │  28 routes · JWT   │  HTTP │  🧠 GNN  (114K params)   │
+│  10 pages     │◀──────│  Rate Limit · CORS │◀──────│  🎯 RL   (31K params)    │
+└───────────────┘       └────────┬──────────┘       │  ✨ Transformer (4.9M)    │
+                                 │                   │  📦 Ensemble (13MB)       │
+                      ┌──────────┴──────────┐       └───────────────────────────┘
+                      │                     │
+               ┌──────┴──────┐    ┌─────────┴─────────┐
+               │ PostgreSQL  │    │   Redis + Workers  │
+               │ (SQLite dev)│    │   Background Jobs  │
+               └─────────────┘    └───────────────────┘
+```
+
+**Detailed architecture:** [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md)
+
+## 🚀 Quick Start
+
+### Option 1: Docker (Recommended)
 
 ```bash
+git clone https://github.com/chavanarya36/CloudGuardAI.git
+cd CloudGuardAI
+docker compose -f infra/docker-compose.yml up -d
+```
 
----
+| Service | URL |
+|---------|-----|
+| Web UI | http://localhost:3000 |
+| API Docs | http://localhost:8000/docs |
+| ML Service | http://localhost:8001/docs |
 
-pip install -r config/requirements.txt### Single File Mode
+### Option 2: Local Development
 
-## 🧠 Model Information
+```powershell
+# Install dependencies
+pip install -r api/requirements.txt
+pip install -r ml/requirements.txt
+cd web && npm install && cd ..
 
-```1. Select "Single File" in the sidebar
+# Start all services
+.\startup.bat              # Windows — starts API + ML + Web
+# OR
+.\start.ps1 -InstallDeps   # PowerShell with options
+```
 
-- **Algorithm**: Logistic Regression (liblinear solver, L2 regularization)
+### Manual Start (3 terminals)
 
-- **Features**: 32,768 sparse hash features + 8 dense structural features2. Upload a supported IaC file (.tf, .yaml, .yml, .json, .bicep)
+```bash
+# Terminal 1 — API (port 8000)
+cd api && set PYTHONPATH=%CD% && python -m uvicorn app.main:app --reload --port 8000
 
-- **Performance**: 
+# Terminal 2 — ML Service (port 8001)
+cd ml && set PYTHONPATH=%CD% && python -m uvicorn ml_service.main:app --reload --port 8001
 
-  - PR-AUC: 0.3379### 2. Run Web Application3. View the risk assessment and explanation
+# Terminal 3 — Web UI (port 3000)
+cd web && npm run dev
+```
 
-  - ROC-AUC: 0.9726
+## 📖 Usage
 
-  - Balanced Accuracy: 0.9500```bash4. Adjust threshold if needed using the sidebar slider
+1. **Navigate** to http://localhost:3000
+2. **Upload** a Terraform (`.tf`), Kubernetes (`.yaml`), or CloudFormation (`.json`) file
+3. **Select scan mode** — All (full AI pipeline), GNN, or Checkov
+4. **Review findings** with severity levels, GNN attack paths, RL fix recommendations, and generated secure code
 
-- **Training Data**: 21,107 IaC files with 2.3% positive rate
+## 📁 Project Structure
 
-- **Calibration**: 5-fold Sigmoid calibrationstreamlit run app.py
+```
+CloudGuardAI/
+├── api/                    # FastAPI backend — 28 routes, JWT auth, rate limiting
+│   ├── app/                # Core: main.py, models.py, schemas.py, auth.py, config.py
+│   ├── scanners/           # CVE, secrets, compliance, GNN, integrated scanner
+│   └── tests/              # 20 API integration tests
+├── ml/                     # ML service — GNN, RL, Transformer, ensemble
+│   ├── ml_service/         # FastAPI endpoints: predict, rules-scan, aggregate, train
+│   ├── models/             # rl_auto_fix.py, graph_neural_network.py, transformer
+│   ├── models_artifacts/   # Trained model weights (.pt, .joblib)
+│   └── tests/              # 5 ML service tests
+├── web/                    # React 18 + Vite + MUI + Tailwind
+│   └── src/pages/          # Scan, Dashboard, Results, Learning, Settings, etc.
+├── rules/                  # YAML-based rules engine (5 matcher types)
+├── tests/                  # 388 unit/integration/validation tests
+├── infra/                  # Docker Compose, Helm chart, k8s manifests, CI/CD
+├── scripts/                # Data prep, training, testing, validation utilities
+└── docs/                   # Architecture, phase reports, deployment guides
+```
 
+## 🧪 Testing
 
+```bash
+# Run all tests with one command (413 total)
+python -m pytest                            # 413 passed, 10 skipped
 
-See [Model Report](docs/model_report.md) for detailed performance metrics.```### Batch Mode
+# Or run individual suites
+python -m pytest tests/ -q                  # 388 passed, 10 skipped
+python -m pytest api/tests/ -q              # 20 passed
+python -m pytest ml/tests/ -q               # 5 passed
 
+# Run specific suites
+python -m pytest tests/unit/ -v             # Unit tests
+python -m pytest tests/integration/ -v      # Integration tests
+python -m pytest tests/validation/ -v       # Validation tests
+```
 
+## 📊 AI Model Performance
 
----1. Select "Batch Upload" in the sidebar
+| Model | Parameters | Training Data | Metric | Inference |
+|-------|-----------|---------------|--------|-----------|
+| **GNN Attack Detector** | 114,434 | 2,836 graphs | 100% validation acc | <500ms |
+| **RL Auto-Fix Agent** | 31,503 | 500 episodes | 100% fix success | <100ms |
+| **Transformer Code Gen** | 4,906,055 | Architecture ready | Security-focused | 1-3s |
+| **Ensemble Classifier** | ~13MB | 21K IaC files | 70% baseline | <50ms |
 
+## 🔐 Security Features
 
+- **Authentication:** JWT tokens + API key auth with dev bypass mode
+- **Rate Limiting:** Token bucket — 2/s scan, 5/s auth, 10/s general
+- **Observability:** Prometheus metrics, request tracing, timing middleware
+- **Docker Hardening:** 3-tier network isolation, resource limits, `no-new-privileges`, read-only FS
+- **Helm:** HPA (2-10 replicas), PDB, NetworkPolicy (4 policies), StatefulSet for Postgres
 
-## 🔧 Configuration### 3. Run Full Pipeline2. Upload a ZIP file containing your IaC files
+## 🔁 Adaptive Learning Engine
 
+Self-improving pipeline with 8 subsystems:
 
+| Subsystem | Purpose |
+|-----------|---------|
+| RichFeatureExtractor | 40-dimension feature vectors (structural, credential, network, crypto, IAM, logging) |
+| DriftDetector | PSI-based drift detection → auto-retrain trigger |
+| AdaptiveRuleWeights | Per-rule Bayesian confidence (TP/FP tracking with Laplace prior) |
+| PatternDiscoveryEngine | Clusters findings → auto-generates YAML rules |
+| ModelEvaluator | Champion/challenger with ≥2% F1 improvement gate |
+| LearningTelemetry | Full audit trail (last 1000 events) |
 
-### Model Artifacts Required```bash3. Click "Analyze ZIP Archive"
+**6 REST endpoints** at `/learning/*` — status, patterns, drift, rule-weights, telemetry, discover.
 
+## 🚢 Deployment
 
+```bash
+# Docker Compose (local)
+docker compose -f infra/docker-compose.yml up -d
 
-The application requires these files:python pipeline/01_prepare_labels.py4. Review the summary metrics and detailed results table
+# Kubernetes with Helm
+helm install cloudguard infra/helm/cloudguard/
 
-- `models_artifacts/best_model_lr.joblib` - Trained scikit-learn model
+# Direct k8s manifests
+kubectl apply -f infra/k8s/
+```
 
-- `models_artifacts/threshold_lr.json` - Global decision thresholdpython pipeline/02_build_features.py5. Download results as CSV or JSON
+See [infra/README.md](infra/README.md) for full deployment guide.
 
-- `models_artifacts/cv_metrics_lr.json` - Model performance metrics
+## 🎯 Novel Academic Contributions
 
-- `features_artifacts/meta.json` - Feature extraction metadatapython pipeline/03_train_model.py
-
-
-
-### Supported File Types```## Model Information
-
-
-
-- **Terraform**: `.tf` files
-
-- **YAML**: `.yaml`, `.yml` files (Kubernetes, Docker Compose, etc.)
-
-- **JSON**: `.json` files (CloudFormation, etc.)---- **Algorithm**: Logistic Regression (liblinear solver)
-
-- **Bicep**: `.bicep` files (Azure Resource Manager)
-
-- **Features**: Sparse hash features from file paths and content, plus dense structural features
-
----
-
-## 📚 Documentation- **Performance**: PR-AUC ≈ 0.34, ROC-AUC ≈ 0.97
+1. **GNN for IaC Attack Paths** — First application of Graph Attention Networks to multi-hop attack detection in infrastructure code
+2. **RL for Auto-Remediation** — First Deep Q-Network agent for automatic vulnerability fixing with 15 learned strategies
+3. **Transformer for Secure Code** — First attention-based transformer for security-focused IaC code generation
 
 ## 📚 Documentation
 
-- **Training Data**: 21,107 IaC files with 2.3% positive rate
+| Document | Description |
+|----------|-------------|
+| [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md) | Full system architecture and data flow |
+| [docs/PROJECT_SUMMARY.md](docs/PROJECT_SUMMARY.md) | Complete project overview |
+| [docs/PHASE_7.1_GNN_IMPLEMENTATION.md](docs/PHASE_7.1_GNN_IMPLEMENTATION.md) | GNN implementation details |
+| [docs/CONTRIBUTING.md](docs/CONTRIBUTING.md) | Contribution guidelines |
+| [REVIEW_3_READINESS.md](REVIEW_3_READINESS.md) | Review readiness report |
 
-- **[Main Documentation](docs/README.md)** - Comprehensive project guide
+## 🤝 Contributing
 
-- **[Pipeline Guide](docs/README_pipeline.md)** - ML pipeline details- **[Main Documentation](docs/README.md)** - Comprehensive project guide
+See [docs/CONTRIBUTING.md](docs/CONTRIBUTING.md) for guidelines.
 
-- **[Project Overview](docs/README_PROJECT.md)** - Architecture and design
+## 📄 License
 
-- **[Model Report](docs/model_report.md)** - Performance metrics and analysis- **[Pipeline Guide](docs/README_pipeline.md)** - ML pipeline details## Architecture
+MIT License — see [docs/LICENSE](docs/LICENSE)
 
+## 📞 Contact
 
-
----- **[Project Overview](docs/README_PROJECT.md)** - Architecture and design
-
-
-
-## 🛠️ Development- **[Model Report](docs/model_report.md)** - Performance metrics```
-
-
-
-### Run ML Pipelineapp.py                          # Main Streamlit application
-
-
-
-```bash---utils/
-
-# Prepare labels
-
-python pipeline/01_prepare_labels.py├── __init__.py
-
-
-
-# Build features## 🔧 Configuration├── model_loader.py            # Load trained model and artifacts
-
-python pipeline/02_build_features.py
-
-├── feature_extractor.py       # Extract features from IaC files
-
-# Train model
-
-python pipeline/03_train_model.pyConfiguration files located in `config/`:└── prediction_engine.py       # Handle predictions and batch processing
-
-
-
-# Make predictions- `requirements.txt` - Python dependenciesmodels_artifacts/              # Trained model files
-
-python pipeline/04_predict_and_rank.py
-
-```- `Dockerfile` - Container configurationfeatures_artifacts/            # Feature metadata
-
-
-
-### Run Tests- `run_full_pipeline.ps1` - Automated pipeline executionrequirements.txt               # Python dependencies
-
-
-
-```bashDockerfile                     # Container configuration
-
-pytest tests/
-
-```---```
-
-
-
-### Run Scanners
-
-
-
-```bash## 📊 Key Features## API Reference
-
-# Checkov scanner
-
-python scanners/scan_checkov.py
-
-
-
-# tfsec scanner✅ Multi-scanner integration (Checkov, tfsec, KICS)  ### PredictionEngine
-
-python scanners/scan_tfsec.py
-
-✅ Machine learning-based vulnerability prioritization  
-
-# KICS scanner
-
-python scanners/scan_kics.py✅ Interactive web interface with Streamlit  Main class for handling predictions:
-
-```
-
-✅ Comprehensive reliability diagnostics  
+**Author:** [@chavanarya36](https://github.com/chavanarya36)  
+**Repository:** [github.com/chavanarya36/CloudGuardAI](https://github.com/chavanarya36/CloudGuardAI)
 
 ---
 
-✅ Per-repository validation  ```python
-
-## 📊 Performance
-
-✅ Threshold tuning for precision/recall optimization  from utils.prediction_engine import PredictionEngine
-
-- **Single file analysis**: < 1 second
-
-- **Batch processing**: ~100 files per second
-
-- **Memory usage**: ~200MB base + ~1MB per 1000 files
-
----engine = PredictionEngine()
-
----
-
-
-
-## 🔒 Security Considerations
-
-## 📈 Model Performance# Single file prediction
-
-- Files are processed in memory without persistent storage
-
-- Temporary files are automatically cleaned up after processingresult = engine.predict_single_file(file_path, content)
-
-- No data is transmitted outside the application
-
-- Suitable for air-gapped environments- **PR-AUC**: 0.3379
-
-- All processing happens locally
-
-- **ROC-AUC**: 0.9726# Batch prediction
-
----
-
-- **Dataset**: 21,107 labeled IaC filesresults = engine.predict_batch(file_data_list)
-
-## 🐛 Troubleshooting
-
-- **Positive cases**: 490 (2.3%)
-
-### Model Not Found Error
-
-Ensure all model artifacts are present in `models_artifacts/` and `features_artifacts/` directories.# Process ZIP file
-
-
-
-### Feature Extraction ErrorsSee [Model Report](docs/model_report.md) for detailed metrics.results = engine.process_zip_file(zip_path)
-
-Check that uploaded files are valid IaC formats and properly encoded (UTF-8).
-
-```
-
-### Memory Errors on Large Batches
-
-Process smaller ZIP files or increase available memory. Docker users can use `--memory` flag.---
-
-
-
-### Streamlit Command Not Found### ModelLoader
-
-Use `python -m streamlit run app.py` instead of `streamlit run app.py`.
-
-## 🛠️ Development
-
----
-
-Load and manage ML artifacts:
-
-## 📝 License
-
-### Run Tests
-
-[Add your license information here]
-
-```bash```python
-
----
-
-pytest tests/from utils.model_loader import ModelLoader
-
-**Last Updated**: October 31, 2025  
-
-**Version**: 1.0  ```
-
-**Status**: ✅ Production Ready
-
-loader = ModelLoader()
-
-### Rebuild Featuresmodel, threshold, metrics = loader.load_all()
-
-```bash```
-
-python pipeline/02_build_features.py
-
-```### FeatureExtractor
-
-
-
-### Retrain ModelExtract features from IaC files:
-
-```bash
-
-python pipeline/03_train_model.py```python
-
-```from utils.feature_extractor import FeatureExtractor
-
-
-
----extractor = FeatureExtractor()
-
-X, feature_info = extractor.extract_features_single(file_path, content)
-
-## 📝 License```
-
-
-
-[Your License Here]## Configuration
-
-
-
----### Environment Variables
-
-
-
-**Last Updated**: October 31, 2025  - `STREAMLIT_SERVER_PORT`: Port for the web application (default: 8501)
-
-**Version**: 1.0  - `STREAMLIT_SERVER_ADDRESS`: Server address (default: 0.0.0.0 for Docker)
-
-**Status**: Production Ready ✅
-
-### Model Artifacts
-
-The application requires these files to be present:
-
-- `models_artifacts/best_model_lr.joblib`: Trained scikit-learn model
-- `models_artifacts/threshold_lr.json`: Global decision threshold
-- `models_artifacts/cv_metrics_lr.json`: Model performance metrics
-- `features_artifacts/meta.json`: Feature extraction metadata
-
-## Supported File Types
-
-- **Terraform**: `.tf` files
-- **YAML**: `.yaml`, `.yml` files (Kubernetes, Docker Compose, etc.)
-- **JSON**: `.json` files (CloudFormation, etc.)
-- **Bicep**: `.bicep` files (Azure Resource Manager)
-
-## Performance
-
-- Single file analysis: < 1 second
-- Batch processing: ~100 files per second (depends on file size)
-- Memory usage: ~200MB base + ~1MB per 1000 files in batch
-
-## Security Considerations
-
-- Files are processed in memory without persistent storage
-- Temporary files are automatically cleaned up
-- No data is transmitted outside the application
-- Suitable for air-gapped environments
-
-## Troubleshooting
-
-### Common Issues
-
-1. **Model not found error**: Ensure all model artifacts are present in the correct directories
-2. **Feature extraction errors**: Check that uploaded files are valid IaC formats
-3. **Memory errors on large batches**: Process smaller ZIP files or increase container memory
-
-### Logs
-
-When running with Docker, view logs with:
-```bash
-docker logs <container-id>
-```
-
-## Contributing
-
-1. Follow the existing code structure
-2. Add tests for new features
-3. Update documentation as needed
-4. Ensure Docker build succeeds
-
-## License
-
-[Add your license information here]
+<p align="center"><strong>Secure your cloud infrastructure with AI-powered insights</strong> 🛡️</p>

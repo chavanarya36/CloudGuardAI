@@ -1,0 +1,359 @@
+"""
+CVE Scanner - Detects known vulnerabilities in dependencies
+Uses NVD (National Vulnerability Database) API
+"""
+
+import re
+import json
+from typing import List, Dict, Optional
+from datetime import datetime
+
+
+class CVEScanner:
+    """
+    Scanner for known CVE vulnerabilities in dependencies
+    """
+    
+    def __init__(self):
+        # Known vulnerable versions (hardcoded for now, would use NVD API in production)
+        self.known_vulnerabilities = {
+            # Terraform providers
+            'terraform-provider-aws': {
+                '3.0.0': [{
+                    'cve_id': 'CVE-2021-3178',
+                    'severity': 'HIGH',
+                    'cvss_score': 7.5,
+                    'description': 'AWS provider allows overly permissive IAM policies',
+                    'affected_versions': '< 3.22.0',
+                    'fixed_version': '3.22.0'
+                }],
+                '2.0.0': [{
+                    'cve_id': 'CVE-2020-7955',
+                    'severity': 'CRITICAL',
+                    'cvss_score': 9.1,
+                    'description': 'AWS provider credential exposure vulnerability',
+                    'affected_versions': '< 2.50.0',
+                    'fixed_version': '2.50.0'
+                }]
+            },
+            'terraform-provider-azurerm': {
+                '2.0.0': [{
+                    'cve_id': 'CVE-2020-13170',
+                    'severity': 'HIGH',
+                    'cvss_score': 8.1,
+                    'description': 'Azure provider storage account key exposure',
+                    'affected_versions': '< 2.10.0',
+                    'fixed_version': '2.10.0'
+                }]
+            },
+            'terraform-provider-google': {
+                '3.0.0': [{
+                    'cve_id': 'CVE-2021-22902',
+                    'severity': 'MEDIUM',
+                    'cvss_score': 6.5,
+                    'description': 'GCP provider service account key exposure',
+                    'affected_versions': '< 3.50.0',
+                    'fixed_version': '3.50.0'
+                }]
+            },
+            'lodash': {
+                '4.17.4': [
+                    {
+                        'cve_id': 'CVE-2019-10744',
+                        'severity': 'HIGH',
+                        'cvss_score': 7.4,
+                        'description': 'Prototype Pollution vulnerability in lodash',
+                        'affected_versions': '< 4.17.12',
+                        'fixed_version': '4.17.12'
+                    }
+                ],
+                '4.17.11': [
+                    {
+                        'cve_id': 'CVE-2019-10744',
+                        'severity': 'HIGH',
+                        'cvss_score': 7.4,
+                        'description': 'Prototype Pollution vulnerability in lodash',
+                        'affected_versions': '< 4.17.12',
+                        'fixed_version': '4.17.12'
+                    }
+                ]
+            },
+            'axios': {
+                '0.18.0': [
+                    {
+                        'cve_id': 'CVE-2020-28168',
+                        'severity': 'MEDIUM',
+                        'cvss_score': 5.6,
+                        'description': 'axios allows Server-Side Request Forgery (SSRF)',
+                        'affected_versions': '< 0.21.1',
+                        'fixed_version': '0.21.1'
+                    }
+                ]
+            },
+            'express': {
+                '4.16.0': [
+                    {
+                        'cve_id': 'CVE-2022-24999',
+                        'severity': 'HIGH',
+                        'cvss_score': 7.5,
+                        'description': 'Express.js Open Redirect vulnerability',
+                        'affected_versions': '< 4.17.3',
+                        'fixed_version': '4.17.3'
+                    }
+                ]
+            }
+        }
+    
+    def extract_dependencies_from_package_json(self, content: str) -> List[Dict]:
+        """Extract dependencies from package.json"""
+        dependencies = []
+        
+        try:
+            data = json.loads(content)
+            
+            # Extract regular dependencies
+            deps = data.get('dependencies', {})
+            for package, version in deps.items():
+                # Clean version (remove ^, ~, etc.)
+                clean_version = re.sub(r'[^0-9.]', '', version)
+                dependencies.append({
+                    'package': package,
+                    'version': clean_version,
+                    'type': 'dependency'
+                })
+            
+            # Extract devDependencies
+            dev_deps = data.get('devDependencies', {})
+            for package, version in dev_deps.items():
+                clean_version = re.sub(r'[^0-9.]', '', version)
+                dependencies.append({
+                    'package': package,
+                    'version': clean_version,
+                    'type': 'devDependency'
+                })
+        
+        except json.JSONDecodeError:
+            pass
+        
+        return dependencies
+    
+    def extract_terraform_providers(self, content: str) -> List[Dict]:
+        """Extract Terraform provider versions from terraform blocks"""
+        providers = []
+        
+        # Match terraform required_providers block
+        # Example: hashicorp/aws = { version = "~> 3.0" }
+        provider_pattern = r'(\w+/\w+)\s*=\s*\{[^}]*version\s*=\s*["\']([^"\'\']+)["\']'
+        matches = re.findall(provider_pattern, content)
+        
+        for provider, version in matches:
+            # Clean version (remove ~>, >=, etc.)
+            clean_version = re.sub(r'[~><=\s]', '', version)
+            providers.append({
+                'package': provider,
+                'version': clean_version,
+                'type': 'terraform_provider'
+            })
+        
+        # Also match older style: provider "aws" { version = "~> 3.0" }
+        old_pattern = r'provider\s+"(\w+)"\s*\{[^}]*version\s*=\s*["\']([^"\'\']+)["\']'
+        old_matches = re.findall(old_pattern, content)
+        
+        for provider_name, version in old_matches:
+            clean_version = re.sub(r'[~><=\s]', '', version)
+            # Map common provider names to full registry paths
+            provider_map = {
+                'aws': 'hashicorp/aws',
+                'azurerm': 'hashicorp/azurerm',
+                'google': 'hashicorp/google',
+                'alicloud': 'aliyun/alicloud',
+                'oci': 'hashicorp/oci'
+            }
+            full_provider = provider_map.get(provider_name, f'hashicorp/{provider_name}')
+            providers.append({
+                'package': full_provider,
+                'version': clean_version,
+                'type': 'terraform_provider'
+            })
+        
+        return providers
+    
+    def extract_dependencies_from_requirements_txt(self, content: str) -> List[Dict]:
+        """Extract dependencies from requirements.txt"""
+        dependencies = []
+        
+        for line in content.split('\n'):
+            line = line.strip()
+            
+            # Skip comments and empty lines
+            if not line or line.startswith('#'):
+                continue
+            
+            # Parse package==version format
+            if '==' in line:
+                parts = line.split('==')
+                if len(parts) == 2:
+                    package = parts[0].strip()
+                    version = parts[1].strip()
+                    dependencies.append({
+                        'package': package,
+                        'version': version,
+                        'type': 'python-package'
+                    })
+        
+        return dependencies
+    
+    def extract_dependencies_from_terraform(self, content: str) -> List[Dict]:
+        """Extract Terraform provider versions"""
+        dependencies = []
+        
+        # Simple line-by-line approach for provider extraction
+        # Look for provider_name = { ... version = "X.Y.Z" ... } pattern
+        
+        lines = content.split('\n')
+        current_provider = None
+        
+        for i, line in enumerate(lines):
+            # Match provider declaration: aws = {
+            provider_match = re.match(r'\s*(\w+)\s*=\s*\{', line)
+            if provider_match:
+                current_provider = provider_match.group(1)
+            
+            # Match version within provider block
+            if current_provider:
+                version_match = re.search(r'version\s*=\s*"([^"]+)"', line)
+                if version_match:
+                    version = version_match.group(1)
+                    # Clean version (remove ~>, >=, etc.)
+                    clean_version = re.sub(r'[~><=\s]', '', version)
+                    dependencies.append({
+                        'package': f'terraform-provider-{current_provider}',
+                        'version': clean_version,
+                        'type': 'terraform-provider'
+                    })
+                    current_provider = None  # Reset after finding version
+            
+            # Check for closing brace
+            if current_provider and '}' in line:
+                current_provider = None
+        
+        # Also extract from standalone provider blocks
+        # Format: provider "aws" { version = "~> 3.0" }
+        standalone_pattern = r'provider\s+"(\w+)"\s*\{[^}]*version\s*=\s*"([^"]+)"'
+        standalone_matches = re.finditer(standalone_pattern, content)
+        
+        for match in standalone_matches:
+            provider_name = match.group(1)
+            version = match.group(2)
+            clean_version = re.sub(r'[~><=\s]', '', version)
+            dependencies.append({
+                'package': f'terraform-provider-{provider_name}',
+                'version': clean_version,
+                'type': 'terraform-provider'
+            })
+        
+        return dependencies
+    
+    def check_vulnerability(self, package: str, version: str) -> List[Dict]:
+        """
+        Check if a package version has known CVEs
+        
+        In production, this would call NVD API
+        For now, uses hardcoded known vulnerabilities
+        """
+        findings = []
+        
+        package_lower = package.lower()
+        
+        if package_lower in self.known_vulnerabilities:
+            version_vulns = self.known_vulnerabilities[package_lower].get(version, [])
+            
+            for vuln in version_vulns:
+                findings.append({
+                    'type': 'CVE',
+                    'severity': vuln['severity'],
+                    'category': 'cve',
+                    'scanner': 'cve',
+                    'title': f"{vuln['cve_id']} in {package} {version}",
+                    'description': f"{vuln['description']}. CVSS Score: {vuln['cvss_score']}. Affects versions {vuln['affected_versions']}.",
+                    'cve_id': vuln['cve_id'],
+                    'cvss_score': vuln['cvss_score'],
+                    'package': package,
+                    'installed_version': version,
+                    'fixed_version': vuln['fixed_version'],
+                    'affected_versions': vuln['affected_versions'],
+                    'remediation_steps': [
+                        f"Upgrade {package} to version {vuln['fixed_version']} or later",
+                        'Run dependency audit: npm audit fix (Node.js) or pip-audit (Python)',
+                        'Review release notes for breaking changes',
+                        f"Update package.json or requirements.txt to use {package}@{vuln['fixed_version']}",
+                        'Test application after upgrade'
+                    ],
+                    'references': [
+                        f"https://nvd.nist.gov/vuln/detail/{vuln['cve_id']}",
+                        f"https://cve.mitre.org/cgi-bin/cvename.cgi?name={vuln['cve_id']}"
+                    ]
+                })
+        
+        return findings
+    
+    def scan_content(self, content: str, file_path: str) -> List[Dict]:
+        """
+        Scan file content for vulnerable dependencies
+        
+        Returns:
+            List of CVE findings
+        """
+        findings = []
+        dependencies = []
+        
+        # Determine file type and extract dependencies
+        if file_path.endswith('package.json'):
+            dependencies = self.extract_dependencies_from_package_json(content)
+        elif file_path.endswith('requirements.txt'):
+            dependencies = self.extract_dependencies_from_requirements_txt(content)
+        elif file_path.endswith('.tf'):
+            dependencies = self.extract_dependencies_from_terraform(content)
+        
+        # Check each dependency for vulnerabilities
+        for dep in dependencies:
+            package = dep['package']
+            version = dep['version']
+            
+            vulns = self.check_vulnerability(package, version)
+            
+            for vuln in vulns:
+                # Add line number if we can find it
+                for line_num, line in enumerate(content.split('\n'), 1):
+                    if package in line and version in line:
+                        vuln['line_number'] = line_num
+                        vuln['code_snippet'] = line.strip()[:100]
+                        break
+                
+                findings.append(vuln)
+        
+        return findings
+
+
+# Example usage
+if __name__ == "__main__":
+    scanner = CVEScanner()
+    
+    # Test package.json
+    test_package_json = '''
+    {
+      "name": "test-app",
+      "dependencies": {
+        "lodash": "4.17.4",
+        "axios": "0.18.0",
+        "express": "4.16.0"
+      }
+    }
+    '''
+    
+    findings = scanner.scan_content(test_package_json, "package.json")
+    
+    for finding in findings:
+        print(f"\n{finding['title']} - {finding['severity']}")
+        print(f"  {finding['description']}")
+        print(f"  Fix: {finding['remediation_steps'][0]}")

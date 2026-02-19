@@ -1,0 +1,8 @@
+rules:
+  - id: K8S_PRIVILEGED_TRUE
+    description: Kubernetes containers must not run privileged
+    severity: HIGH
+    file_types: ["yaml"]
+    match:
+      contains: "privileged: true"
+    references: ["CIS K8S 1.5", "NSA K8s"]

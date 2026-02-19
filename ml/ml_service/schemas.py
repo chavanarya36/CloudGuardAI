@@ -39,6 +39,8 @@ class RulesScanResponse(BaseModel):
     high_count: int
     medium_count: int
     low_count: int
+    risk_score: float = 0.0
+    severity_counts: Dict[str, int] = {}
 
 
 class ExplainRequest(BaseModel):
@@ -79,6 +81,7 @@ class TrainingData(BaseModel):
 
 class OnlineTrainRequest(BaseModel):
     training_data: List[TrainingData]
+    metadata: Optional[Dict[str, Any]] = None
 
 
 class OnlineTrainResponse(BaseModel):

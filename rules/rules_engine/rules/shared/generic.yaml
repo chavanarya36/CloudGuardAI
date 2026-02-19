@@ -1,0 +1,8 @@
+rules:
+  - id: NO_HARDCODED_SECRET
+    description: Hardcoded secrets should not appear in IaC files
+    severity: HIGH
+    file_types: ["terraform", "yaml", "json", "bicep"]
+    match:
+      regex: '(?i)(password|secret|api[_-]?key)\s*='
+    references: ["OWASP IaC A2"]

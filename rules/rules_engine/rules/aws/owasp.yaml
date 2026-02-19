@@ -1,0 +1,55 @@
+rules:
+  - id: AWS_OWASP_A01_INJECTION
+    description: Potential SQL injection vulnerability in database configuration
+    severity: HIGH
+    file_types:
+      - terraform
+      - yaml
+      - json
+    match:
+      regex: 'parameter_group_name\s*=\s*"[^"]*sql[^"]*"'
+    references:
+      - "OWASP A01:2021"
+
+  - id: AWS_OWASP_A02_CRYPTO_FAILURE
+    description: Encryption not enabled for sensitive data storage
+    severity: HIGH
+    file_types:
+      - terraform
+    match:
+      regex: 'encrypted\s*=\s*false'
+    references:
+      - "OWASP A02:2021"
+
+  - id: AWS_OWASP_A05_MISCONFIG_SG
+    description: Security misconfiguration - overly permissive security group
+    severity: CRITICAL
+    file_types:
+      - terraform
+    match:
+      regex: 'from_port\s*=\s*0'
+    references:
+      - "OWASP A05:2021"
+
+  - id: AWS_OWASP_A07_AUTH_FAILURE
+    description: Weak authentication - password in plaintext
+    severity: CRITICAL
+    file_types:
+      - terraform
+      - yaml
+      - json
+    match:
+      regex: 'password\s*=\s*"[^"]{4,}"'
+    references:
+      - "OWASP A07:2021"
+
+  - id: AWS_OWASP_A09_LOGGING
+    description: Security logging and monitoring not configured
+    severity: MEDIUM
+    file_types:
+      - terraform
+    match:
+      regex: 'enable_log.*=\s*false'
+    references:
+      - "OWASP A09:2021"
+

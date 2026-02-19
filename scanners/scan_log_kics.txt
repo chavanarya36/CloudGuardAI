@@ -1,5 +1,0 @@
-2025-10-20 16:35:03 | iac_files\ci.yml | ERROR | exception: [WinError 2] The system cannot find the file specified
-2025-10-20 16:35:03 | iac_files\HIGH_risk.tf | ERROR | exception: [WinError 2] The system cannot find the file specified
-2025-10-20 16:35:03 | iac_files\LOW_risk.tf | ERROR | exception: [WinError 2] The system cannot find the file specified
-2025-10-20 16:35:03 | iac_files\MEDIUM_risk.tf | ERROR | exception: [WinError 2] The system cannot find the file specified
-2025-10-20 16:35:03 | iac_files\package-lock.json | ERROR | exception: [WinError 2] The system cannot find the file specified

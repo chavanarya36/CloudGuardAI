@@ -1,0 +1,69 @@
+rules:
+  - id: TF_HARDCODED_CREDENTIALS
+    description: Hardcoded credentials detected in Terraform configuration
+    severity: CRITICAL
+    file_types: ["terraform"]
+    match:
+      regex: '(password|secret|api_key|access_key|private_key)\s*=\s*"[^"]{6,}"'
+    references: ["Terraform Security Best Practices"]
+
+  - id: TF_OPEN_SECURITY_GROUP
+    description: Security group with unrestricted inbound access (0.0.0.0/0)
+    severity: CRITICAL
+    file_types: ["terraform"]
+    match:
+      contains: "0.0.0.0/0"
+    references: ["Terraform Security Best Practices"]
+
+  - id: TF_PUBLIC_S3
+    description: S3 bucket configured with public access
+    severity: CRITICAL
+    file_types: ["terraform"]
+    match:
+      regex: 'acl\s*=\s*"(public-read|public-read-write|authenticated-read)"'
+    references: ["Terraform Security Best Practices"]
+
+  - id: TF_UNENCRYPTED_EBS
+    description: EBS volume encryption is not enabled
+    severity: HIGH
+    file_types: ["terraform"]
+    match:
+      terraform_block:
+        type: aws_ebs_volume
+        missing_attribute: encrypted
+    references: ["Terraform Security Best Practices"]
+
+  - id: TF_UNENCRYPTED_RDS
+    description: RDS instance storage encryption is not enabled
+    severity: HIGH
+    file_types: ["terraform"]
+    match:
+      terraform_block:
+        type: aws_db_instance
+        missing_attribute: storage_encrypted
+    references: ["Terraform Security Best Practices"]
+
+  - id: TF_VERSIONING_DISABLED
+    description: S3 bucket versioning is disabled
+    severity: MEDIUM
+    file_types: ["terraform"]
+    match:
+      regex: 'enabled\s*=\s*false'
+    references: ["Terraform Security Best Practices"]
+
+  - id: TF_WIDE_PORT_RANGE
+    description: Security group allows wide port range (0-65535)
+    severity: HIGH
+    file_types: ["terraform"]
+    match:
+      regex: 'to_port\s*=\s*65535'
+    references: ["Terraform Security Best Practices"]
+
+  - id: TF_SKIP_SNAPSHOT
+    description: RDS configured to skip final snapshot
+    severity: MEDIUM
+    file_types: ["terraform"]
+    match:
+      contains: "skip_final_snapshot  = true"
+    references: ["Terraform Security Best Practices"]
+

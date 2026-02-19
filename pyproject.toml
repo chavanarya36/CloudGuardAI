@@ -1,14 +1,9 @@
-[tool.black]
-line-length = 120
-target-version = ['py311']
-include = '\.pyi?$'
-extend-exclude = '''
-/(
-    \.git
-  | \.venv
-  | venv
-  | build
-  | dist
-  | __pycache__
-)/
-'''
+[tool.pytest.ini_options]
+testpaths = ["tests", "api/tests", "ml/tests"]
+pythonpath = [".", "api", "ml", "rules"]
+asyncio_mode = "strict"
+addopts = "-q --tb=short --import-mode=importlib"
+filterwarnings = [
+    "ignore::FutureWarning:torch.*",
+    "ignore::DeprecationWarning:torch_geometric.*",
+]

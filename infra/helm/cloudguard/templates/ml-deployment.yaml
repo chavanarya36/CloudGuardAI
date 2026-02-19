@@ -1,0 +1,70 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "cloudguard.fullname" . }}-ml
+  labels:
+    app: ml-service
+    {{- include "cloudguard.labels" . | nindent 4 }}
+spec:
+  replicas: {{ .Values.replicaCount.ml }}
+  selector:
+    matchLabels:
+      app: ml-service
+      {{- include "cloudguard.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      labels:
+        app: ml-service
+        {{- include "cloudguard.selectorLabels" . | nindent 8 }}
+    spec:
+      {{- with .Values.podSecurityContext }}
+      securityContext:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      containers:
+        - name: ml-service
+          image: "{{ .Values.image.repository }}/ml:{{ .Values.image.tag }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          ports:
+            - containerPort: 8001
+          env:
+            - name: ML_MODELS_PATH
+              value: "/app/models_artifacts"
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: 8001
+            initialDelaySeconds: 60
+            periodSeconds: 30
+          readinessProbe:
+            httpGet:
+              path: /health
+              port: 8001
+            initialDelaySeconds: 30
+            periodSeconds: 10
+          startupProbe:
+            httpGet:
+              path: /health
+              port: 8001
+            failureThreshold: 30
+            periodSeconds: 10
+          {{- with .Values.resources.ml }}
+          resources:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "cloudguard.fullname" . }}-ml
+  labels:
+    app: ml-service
+    {{- include "cloudguard.labels" . | nindent 4 }}
+spec:
+  type: {{ .Values.service.type }}
+  ports:
+    - port: {{ .Values.service.ml.port }}
+      targetPort: 8001
+  selector:
+    app: ml-service
+    {{- include "cloudguard.selectorLabels" . | nindent 4 }}
