@@ -110,8 +110,9 @@ class IntegratedSecurityScanner:
     
     def _parse_terraform_config(self, content: str) -> Dict:
         """
-        Simple Terraform parser for compliance checking
-        Extracts resource blocks for analysis
+        Parse Terraform HCL content for compliance checking.
+        Extracts resource blocks and also performs direct content analysis
+        for common compliance violations.
         """
         import re
         config = {
@@ -120,21 +121,18 @@ class IntegratedSecurityScanner:
             'iam': {'users': []}
         }
         
-        # Extract security group blocks - improved regex for multiline
-        sg_pattern = r'resource\s+"aws_security_group"\s+"([^"]+)"\s*\{(.*?)(?=\nresource|\Z)'
+        # ── Extract security group blocks ─────────────────────────
+        # More lenient regex: stop at the next top-level resource or end
+        sg_pattern = r'resource\s+"aws_security_group"\s+"([^"]+)"\s*\{(.*?)(?=\nresource\s|\Z)'
         for match in re.finditer(sg_pattern, content, re.DOTALL):
             sg_name = match.group(1)
             sg_content = match.group(2)
             
-            # Parse ingress rules - improved to handle nested braces
             ingress_rules = []
             ingress_pattern = r'ingress\s*\{([^}]*?)\}'
-            
-            # Find all ingress blocks
             ingress_blocks = re.findall(ingress_pattern, sg_content, re.DOTALL)
             
             for rule_content in ingress_blocks:
-                # Extract port
                 port_match = re.search(r'from_port\s*=\s*(\d+)', rule_content)
                 to_port_match = re.search(r'to_port\s*=\s*(\d+)', rule_content)
                 cidr_match = re.search(r'cidr_blocks\s*=\s*\[([^\]]+)\]', rule_content)
@@ -156,14 +154,42 @@ class IntegratedSecurityScanner:
                 'id': sg_name,
                 'ingress_rules': ingress_rules
             })
+
+        # ── Fallback: detect inline SG-like patterns even without
+        #    a proper "resource" block – e.g. ingress { ... 0.0.0.0/0 }
+        if not config['security_groups']:
+            # Look for any ingress block with 0.0.0.0/0
+            inline_ingress = re.findall(
+                r'ingress\s*\{([^}]+)\}', content, re.DOTALL
+            )
+            for rule_content in inline_ingress:
+                if '0.0.0.0/0' in rule_content:
+                    port_match = re.search(r'from_port\s*=\s*(\d+)', rule_content)
+                    to_port_match = re.search(r'to_port\s*=\s*(\d+)', rule_content)
+                    cidr_match = re.search(r'cidr_blocks\s*=\s*\[([^\]]+)\]', rule_content)
+
+                    rule = {}
+                    if port_match:
+                        rule['from_port'] = int(port_match.group(1))
+                    if to_port_match:
+                        rule['to_port'] = int(to_port_match.group(1))
+                    if cidr_match:
+                        cidrs = [c.strip(' "\'\n') for c in cidr_match.group(1).split(',')]
+                        rule['cidr_blocks'] = cidrs
+
+                    if rule:
+                        config['security_groups'].append({
+                            'name': 'inline_sg',
+                            'id': 'inline_sg',
+                            'ingress_rules': [rule]
+                        })
         
-        # Extract S3 bucket blocks - improved for multiline
-        s3_pattern = r'resource\s+"aws_s3_bucket"\s+"([^"]+)"\s*\{(.*?)(?=\nresource|\Z)'
+        # ── Extract S3 bucket blocks ──────────────────────────────
+        s3_pattern = r'resource\s+"aws_s3_bucket"\s+"([^"]+)"\s*\{(.*?)(?=\nresource\s|\Z)'
         for match in re.finditer(s3_pattern, content, re.DOTALL):
             bucket_name = match.group(1)
             bucket_content = match.group(2)
             
-            # Check for encryption
             encryption_enabled = 'server_side_encryption_configuration' in bucket_content or 'encryption' in bucket_content
             logging_enabled = 'logging' in bucket_content
             
@@ -173,14 +199,25 @@ class IntegratedSecurityScanner:
                 'encryption_enabled': encryption_enabled,
                 'logging_enabled': logging_enabled
             })
+
+        # Fallback: detect S3 bucket resources even with alternate naming
+        if not config['s3']['buckets'] and 'aws_s3_bucket' in content:
+            # If there are S3 buckets but parser missed them
+            has_encryption = 'server_side_encryption' in content or 'sse_algorithm' in content
+            has_logging = 'logging' in content and 'target_bucket' in content
+            config['s3']['buckets'].append({
+                'name': 'detected_bucket',
+                'arn': 'arn:aws:s3:::detected_bucket',
+                'encryption_enabled': has_encryption,
+                'logging_enabled': has_logging
+            })
         
-        # Extract IAM users - improved for multiline
-        iam_pattern = r'resource\s+"aws_iam_user"\s+"([^"]+)"\s*\{(.*?)(?=\nresource|\Z)'
+        # ── Extract IAM users ─────────────────────────────────────
+        iam_pattern = r'resource\s+"aws_iam_user"\s+"([^"]+)"\s*\{(.*?)(?=\nresource\s|\Z)'
         for match in re.finditer(iam_pattern, content, re.DOTALL):
             user_name = match.group(1)
             user_content = match.group(2)
             
-            # Check for MFA
             mfa_enabled = 'mfa_device' in user_content or 'virtual_mfa' in user_content
             
             config['iam']['users'].append({

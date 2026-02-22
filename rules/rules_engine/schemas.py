@@ -45,16 +45,22 @@ class Finding:
     line: int
     evidence: str
     references: List[str]
+    title: Optional[str] = None
 
     def to_dict(self) -> Dict[str, Any]:
         return {
             "rule_id": self.rule_id,
             "severity": self.severity,
+            "title": self.title or self.rule_id.replace("_", " ").title(),
             "description": self.description,
             "file_path": self.file_path,
             "line": self.line,
+            "line_number": self.line,
+            "code_snippet": self.evidence,
             "evidence": self.evidence,
             "references": list(self.references),
+            "scanner": "rules",
+            "category": "rules",
         }
 
 

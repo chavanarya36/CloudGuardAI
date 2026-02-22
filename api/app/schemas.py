@@ -97,7 +97,7 @@ class ScanResponse(BaseModel):
     error_message: Optional[str] = None
     findings: List[FindingResponse] = []
     # Scanner breakdown
-    scanner_breakdown: Optional[Dict[str, int]] = None  # Findings count per scanner
+    scanner_breakdown: Optional[Dict[str, int]] = None  # Findings count per scanner category
 
     model_config = ConfigDict(from_attributes=True, protected_namespaces=())
 

@@ -177,36 +177,193 @@ async def create_scan(
                     "severity_counts": {},
                     "scanners_used": []
                 }
-        
-        # Process results
+
+        # ── Always run CVE, Compliance & Secrets scanners locally ──
+        # The ML service /rules-scan only returns rules findings, so we
+        # run the remaining fast local scanners every time to ensure
+        # full 6-scanner coverage.
+        scanners_used = list(result.get("scanners_used", []))
+        all_findings = list(result.get("findings", []))
+
+        try:
+            integrated = get_integrated_scanner()
+
+            # Secrets scanner
+            try:
+                secrets_findings = await asyncio.to_thread(
+                    integrated.scan_with_secrets_scanner, file_content, file.filename
+                )
+                if secrets_findings:
+                    all_findings.extend(secrets_findings)
+                    if "secrets" not in scanners_used:
+                        scanners_used.append("secrets")
+                    logger.info("Secrets scanner: %d findings", len(secrets_findings))
+            except Exception as e:
+                logger.warning("Secrets scanner error (non-fatal): %s", e)
+
+            # CVE scanner
+            try:
+                cve_findings = await asyncio.to_thread(
+                    integrated.scan_with_cve_scanner, file_content, file.filename
+                )
+                if cve_findings:
+                    all_findings.extend(cve_findings)
+                    if "cve" not in scanners_used:
+                        scanners_used.append("cve")
+                    logger.info("CVE scanner: %d findings", len(cve_findings))
+            except Exception as e:
+                logger.warning("CVE scanner error (non-fatal): %s", e)
+
+            # Compliance scanner
+            try:
+                compliance_findings = await asyncio.to_thread(
+                    integrated.scan_with_compliance_scanner, file_content, file.filename
+                )
+                if compliance_findings:
+                    all_findings.extend(compliance_findings)
+                    if "compliance" not in scanners_used:
+                        scanners_used.append("compliance")
+                    logger.info("Compliance scanner: %d findings", len(compliance_findings))
+            except Exception as e:
+                logger.warning("Compliance scanner error (non-fatal): %s", e)
+
+            # ML scanner (prediction)
+            try:
+                ml_findings = await asyncio.to_thread(
+                    integrated.scan_with_ml_scanner, file_content, file.filename
+                )
+                if ml_findings:
+                    all_findings.extend(ml_findings)
+                    if "ml" not in scanners_used:
+                        scanners_used.append("ml")
+                    logger.info("ML scanner: %d findings", len(ml_findings))
+            except Exception as e:
+                logger.warning("ML scanner error (non-fatal): %s", e)
+
+        except Exception as e:
+            logger.warning("Additional scanners init error (non-fatal): %s", e)
+
+        # ── Explainability enrichment ──────────────────────────────
+        # Build rich descriptions with impact analysis and remediation
+        # for every finding so users understand WHY an issue matters.
+        _SCANNER_DISPLAY = {
+            "rules": "Rules", "secrets": "Secrets", "cve": "CVE",
+            "compliance": "Compliance", "ml": "ML", "llm": "LLM",
+            "gnn": "GNN",
+        }
+        _IMPACT_DB = {
+            "CRITICAL": "This could allow full system compromise, data breach, or unauthorized access to production infrastructure.",
+            "HIGH": "This could lead to significant data exposure, privilege escalation, or service disruption.",
+            "MEDIUM": "This could enable partial information disclosure or weaken the security posture.",
+            "LOW": "This is a minor issue that could contribute to a larger attack chain.",
+        }
+        _CATEGORY_REMEDIATION = {
+            "rules": [
+                "Review the flagged configuration block",
+                "Apply least-privilege and defense-in-depth principles",
+                "Validate changes with terraform plan before applying",
+                "Add automated policy checks in your CI/CD pipeline",
+            ],
+            "secrets": [
+                "Remove the hardcoded secret from source code immediately",
+                "Rotate the exposed credential (key, token, password)",
+                "Use a secrets manager (AWS Secrets Manager, HashiCorp Vault)",
+                "Add pre-commit hooks to prevent future secret commits",
+            ],
+            "cve": [
+                "Upgrade the affected dependency to the fixed version",
+                "Run dependency audit (npm audit fix / pip-audit / snyk)",
+                "Review release notes for breaking changes before upgrading",
+                "Pin dependency versions and enable automated update PRs",
+            ],
+            "compliance": [
+                "Review the CIS Benchmark control referenced in this finding",
+                "Update the Terraform resource to meet the compliance requirement",
+                "Enable encryption, logging, or access controls as specified",
+                "Validate compliance with terraform plan and manual review",
+            ],
+            "ml": [
+                "Review the file for security misconfigurations flagged by ML model",
+                "Cross-reference with rules and compliance findings",
+                "Apply remediation steps from the most critical related findings",
+            ],
+        }
+
+        for fd in all_findings:
+            raw_scanner = (fd.get("scanner") or fd.get("category") or "rules").lower()
+            display_scanner = _SCANNER_DISPLAY.get(raw_scanner, raw_scanner.capitalize())
+            fd["scanner"] = display_scanner
+            fd["category"] = fd.get("category") or raw_scanner
+
+            # Build an enriched description with impact
+            severity = (fd.get("severity") or "MEDIUM").upper()
+            original_desc = fd.get("description") or fd.get("title") or ""
+            impact = _IMPACT_DB.get(severity, "")
+            if impact and impact not in original_desc:
+                fd["description"] = f"{original_desc}\n\n**Impact:** {impact}"
+
+            # Ensure remediation_steps exist
+            if not fd.get("remediation_steps"):
+                cat_key = raw_scanner if raw_scanner in _CATEGORY_REMEDIATION else "rules"
+                fd["remediation_steps"] = _CATEGORY_REMEDIATION.get(cat_key, [])
+
+        # ── Severity recount across ALL findings ──────────────────
+        severity_counts = {"critical": 0, "high": 0, "medium": 0, "low": 0, "info": 0}
+        for fd in all_findings:
+            sev = (fd.get("severity") or "MEDIUM").upper()
+            severity_counts[sev.lower()] = severity_counts.get(sev.lower(), 0) + 1
+
+        # ── Scanner-specific scores ───────────────────────────────
+        _SCORE_WEIGHTS = {"CRITICAL": 1.0, "HIGH": 0.75, "MEDIUM": 0.5, "LOW": 0.25, "INFO": 0.1}
+        scanner_scores = {}  # e.g. {"Secrets": 0.8, "CVE": 0.0, ...}
+        for fd in all_findings:
+            s = fd.get("scanner", "Rules")
+            w = _SCORE_WEIGHTS.get((fd.get("severity") or "MEDIUM").upper(), 0.25)
+            scanner_scores[s] = scanner_scores.get(s, 0.0) + w
+
+        # Normalize each scanner score to 0-1
+        for s in scanner_scores:
+            scanner_scores[s] = min(scanner_scores[s] / 10.0, 1.0)
+
+        # Overall risk_score
         risk_score = result.get("risk_score", 0.0)
-        severity_counts = result.get("severity_counts", {})
-        
-        # Update scan with results and realistic component scores
+        if all_findings and risk_score == 0:
+            total_w = sum(_SCORE_WEIGHTS.get((f.get("severity") or "MEDIUM").upper(), 0.25) for f in all_findings)
+            risk_score = min(total_w / 10.0, 1.0)
+
+        # ── Update scan record ────────────────────────────────────
         scan.status = ScanStatus.COMPLETED
         scan.completed_at = datetime.utcnow()
         scan.risk_score = risk_score
         scan.unified_risk_score = risk_score
-        scan.supervised_probability = min(risk_score * 1.1, 1.0)  # Slightly higher
-        scan.unsupervised_probability = max(risk_score * 0.9, 0.0)  # Slightly lower
-        scan.ml_score = min(risk_score * 1.05, 1.0)
-        scan.rules_score = risk_score
-        scan.llm_score = max(risk_score * 0.85, 0.0)
+        scan.supervised_probability = min(risk_score * 1.1, 1.0)
+        scan.unsupervised_probability = max(risk_score * 0.9, 0.0)
+        scan.ml_score = scanner_scores.get("ML", min(risk_score * 1.05, 1.0))
+        scan.rules_score = scanner_scores.get("Rules", risk_score)
+        scan.llm_score = scanner_scores.get("LLM", max(risk_score * 0.85, 0.0))
+        scan.secrets_score = scanner_scores.get("Secrets", 0.0)
+        scan.cve_score = scanner_scores.get("CVE", 0.0)
+        scan.compliance_score = scanner_scores.get("Compliance", 0.0)
         scan.severity_counts = severity_counts
-        scan.total_findings = result.get("total_findings", 0)
-        scan.critical_count = result.get("critical_count", 0)
-        scan.high_count = result.get("high_count", 0)
-        scan.medium_count = result.get("medium_count", 0)
-        scan.low_count = result.get("low_count", 0)
-        
-        # Get scanners used from result
-        scanners_used = result.get("scanners_used", [])
-        
-        # Add findings
-        for finding_data in result.get("findings", []):
+        scan.total_findings = len(all_findings)
+        scan.critical_count = severity_counts.get("critical", 0)
+        scan.high_count = severity_counts.get("high", 0)
+        scan.medium_count = severity_counts.get("medium", 0)
+        scan.low_count = severity_counts.get("low", 0)
+        # scanner_breakdown stores finding *counts* per category (lowercase keys)
+        # because the frontend filter buttons use e.g. scannerBreakdown.secrets
+        scanner_counts = {}
+        for fd in all_findings:
+            cat = (fd.get("category") or "rules").lower()
+            scanner_counts[cat] = scanner_counts.get(cat, 0) + 1
+        scanner_counts["total"] = len(all_findings)
+        scan.scanner_breakdown = scanner_counts
+
+        # ── Save findings with full explainability ────────────────
+        for finding_data in all_findings:
             finding = Finding(
                 scan_id=scan.id,
-                rule_id=finding_data.get("rule_id", finding_data.get("check_id", finding_data.get("category", "UNKNOWN"))),
+                rule_id=finding_data.get("rule_id", finding_data.get("check_id", finding_data.get("type", "UNKNOWN"))),
                 severity=finding_data.get("severity", "INFO"),
                 title=finding_data.get("title", finding_data.get("description", "")[:100]),
                 description=finding_data.get("description", ""),
@@ -214,10 +371,25 @@ async def create_scan(
                 line_number=finding_data.get("line_number", finding_data.get("line")),
                 code_snippet=finding_data.get("code_snippet", finding_data.get("evidence", "")),
                 resource=finding_data.get("resource", ""),
-                certainty=finding_data.get("certainty", finding_data.get("confidence", 0.0))
+                certainty=finding_data.get("certainty", finding_data.get("confidence", 0.0)),
+                # Scanner categorization
+                scanner=finding_data.get("scanner", "Rules"),
+                category=finding_data.get("category", "rules"),
+                # CVE-specific fields
+                cve_id=finding_data.get("cve_id"),
+                cvss_score=finding_data.get("cvss_score"),
+                # Compliance-specific fields
+                compliance_framework=finding_data.get("compliance_framework"),
+                control_id=finding_data.get("control_id"),
+                # Remediation & references (explainability)
+                remediation_steps=finding_data.get("remediation_steps"),
+                references=finding_data.get("references"),
+                # LLM explanations
+                llm_explanation=finding_data.get("llm_explanation"),
+                llm_remediation=finding_data.get("llm_remediation", finding_data.get("remediation")),
             )
             db.add(finding)
-        
+
         db.commit()
         db.refresh(scan)
                 
