@@ -1,0 +1,16 @@
+# Auto-discovered rule — generated 2026-02-22T12:07:20.145555
+# Based on 6 occurrences across 6 scans
+# Original: S3 bucket has public-read ACL which allows unrestricted public access
+
+**Impact:** This could allow full system compromi
+rules:
+  - id: DISC_000A4BEF5923
+    description: "[Auto-Discovered] S3 bucket has public-read ACL which allows unrestricted public access
+
+**Impact:** This could allow "
+    severity: CRITICAL
+    file_types: [".tf", ".yaml", ".yml", ".json"]
+    match:
+      regex: "infrastructure.*unauthorized"
+    references:
+      - "https://cloudguard.ai/discovered-patterns/000a4bef5923"

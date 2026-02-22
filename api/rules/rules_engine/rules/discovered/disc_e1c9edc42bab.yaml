@@ -1,0 +1,16 @@
+# Auto-discovered rule — generated 2026-02-22T12:07:20.166153
+# Based on 8 occurrences across 6 scans
+# Original: Hardcoded credentials detected in Terraform configuration
+
+**Impact:** This could allow full system compromise, data bre
+rules:
+  - id: DISC_E1C9EDC42BAB
+    description: "[Auto-Discovered] Hardcoded credentials detected in Terraform configuration
+
+**Impact:** This could allow full system "
+    severity: CRITICAL
+    file_types: [".tf", ".yaml", ".yml", ".json"]
+    match:
+      regex: "infrastructure.*configuration"
+    references:
+      - "https://cloudguard.ai/discovered-patterns/e1c9edc42bab"

@@ -1,1 +1,3310 @@
-{}
+{
+  "b21689da84e7": {
+    "signature": "b21689da84e7",
+    "sample_description": "S3 bucket logging is not configured",
+    "sample_rule_id": "AWS_BP_S3_NO_LOGGING",
+    "severity": "MEDIUM",
+    "scan_ids": [
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10,
+      11,
+      12,
+      13,
+      14
+    ],
+    "count": 18,
+    "first_seen": "2026-02-19T13:08:49.010005",
+    "last_seen": "2026-02-20T11:39:42.944792",
+    "rule_generated": true
+  },
+  "c77298d00877": {
+    "signature": "c77298d00877",
+    "sample_description": "Potential AWS Secret Access Key detected. This poses a critical security risk as credentials should never be hardcoded.",
+    "sample_rule_id": "SECRET_AWS_SECRET_KEY",
+    "severity": "CRITICAL",
+    "scan_ids": [
+      3,
+      8,
+      10
+    ],
+    "count": 4,
+    "first_seen": "2026-02-19T13:11:17.536035",
+    "last_seen": "2026-02-20T11:37:58.077141",
+    "rule_generated": true
+  },
+  "d5ffd5f0b286": {
+    "signature": "d5ffd5f0b286",
+    "sample_description": "S3 bucket versioning is disabled",
+    "sample_rule_id": "TF_VERSIONING_DISABLED",
+    "severity": "MEDIUM",
+    "scan_ids": [
+      3,
+      5,
+      7,
+      8
+    ],
+    "count": 5,
+    "first_seen": "2026-02-19T13:11:17.536035",
+    "last_seen": "2026-02-20T11:36:59.190886",
+    "rule_generated": true
+  },
+  "8988653e5e2a": {
+    "signature": "8988653e5e2a",
+    "sample_description": "Machine learning model detected potential security issues with 70.0% risk score and 40.0% confidence.",
+    "sample_rule_id": "ML_PREDICTION",
+    "severity": "HIGH",
+    "scan_ids": [
+      3,
+      8
+    ],
+    "count": 3,
+    "first_seen": "2026-02-19T13:11:17.536035",
+    "last_seen": "2026-02-20T11:36:59.190886",
+    "rule_generated": false
+  },
+  "a4638d713fa1": {
+    "signature": "a4638d713fa1",
+    "sample_description": "Security group allows unrestricted access from 0.0.0.0/0",
+    "sample_rule_id": "AWS_CIS_SG_0_0_0_0",
+    "severity": "CRITICAL",
+    "scan_ids": [
+      4,
+      1,
+      2
+    ],
+    "count": 3,
+    "first_seen": "2026-02-20T11:23:46.850411",
+    "last_seen": "2026-02-20T11:28:24.383523",
+    "rule_generated": true
+  },
+  "891af0be0faa": {
+    "signature": "891af0be0faa",
+    "sample_description": "S3 bucket has public-read ACL which allows unrestricted public access",
+    "sample_rule_id": "AWS_CIS_S3_PUBLIC_ACL",
+    "severity": "CRITICAL",
+    "scan_ids": [
+      4,
+      1,
+      2
+    ],
+    "count": 3,
+    "first_seen": "2026-02-20T11:23:46.850411",
+    "last_seen": "2026-02-20T11:28:24.383523",
+    "rule_generated": true
+  },
+  "e94aef7ff39c": {
+    "signature": "e94aef7ff39c",
+    "sample_description": "Security group allows access to all ports (0-65535)",
+    "sample_rule_id": "AWS_CIS_SG_ALL_PORTS",
+    "severity": "CRITICAL",
+    "scan_ids": [
+      4,
+      1,
+      2
+    ],
+    "count": 3,
+    "first_seen": "2026-02-20T11:23:46.850411",
+    "last_seen": "2026-02-20T11:28:24.383523",
+    "rule_generated": true
+  },
+  "a219f52764d2": {
+    "signature": "a219f52764d2",
+    "sample_description": "Security misconfiguration - overly permissive security group",
+    "sample_rule_id": "AWS_OWASP_A05_MISCONFIG_SG",
+    "severity": "CRITICAL",
+    "scan_ids": [
+      4,
+      1,
+      2
+    ],
+    "count": 3,
+    "first_seen": "2026-02-20T11:23:46.850411",
+    "last_seen": "2026-02-20T11:28:24.383523",
+    "rule_generated": true
+  },
+  "ee86e8bd7b52": {
+    "signature": "ee86e8bd7b52",
+    "sample_description": "Hardcoded secret or API key detected",
+    "sample_rule_id": "AWS_BP_HARDCODED_SECRET",
+    "severity": "CRITICAL",
+    "scan_ids": [
+      4,
+      1,
+      2
+    ],
+    "count": 3,
+    "first_seen": "2026-02-20T11:23:46.850411",
+    "last_seen": "2026-02-20T11:28:24.383523",
+    "rule_generated": true
+  },
+  "41867ff8131e": {
+    "signature": "41867ff8131e",
+    "sample_description": "AWS access key appears to be hardcoded",
+    "sample_rule_id": "AWS_BP_HARDCODED_ACCESS_KEY",
+    "severity": "CRITICAL",
+    "scan_ids": [
+      4,
+      1,
+      2
+    ],
+    "count": 3,
+    "first_seen": "2026-02-20T11:23:46.850411",
+    "last_seen": "2026-02-20T11:28:24.383523",
+    "rule_generated": true
+  },
+  "811f90c1ae09": {
+    "signature": "811f90c1ae09",
+    "sample_description": "Hardcoded credentials detected in Terraform configuration",
+    "sample_rule_id": "TF_HARDCODED_CREDENTIALS",
+    "severity": "CRITICAL",
+    "scan_ids": [
+      4,
+      1,
+      2
+    ],
+    "count": 3,
+    "first_seen": "2026-02-20T11:23:46.850411",
+    "last_seen": "2026-02-20T11:28:24.383523",
+    "rule_generated": true
+  },
+  "9c57fd07f0f3": {
+    "signature": "9c57fd07f0f3",
+    "sample_description": "Security group with unrestricted inbound access (0.0.0.0/0)",
+    "sample_rule_id": "TF_OPEN_SECURITY_GROUP",
+    "severity": "CRITICAL",
+    "scan_ids": [
+      4,
+      1,
+      2
+    ],
+    "count": 3,
+    "first_seen": "2026-02-20T11:23:46.850411",
+    "last_seen": "2026-02-20T11:28:24.383523",
+    "rule_generated": true
+  },
+  "1ba53cfa3836": {
+    "signature": "1ba53cfa3836",
+    "sample_description": "S3 bucket configured with public access",
+    "sample_rule_id": "TF_PUBLIC_S3",
+    "severity": "CRITICAL",
+    "scan_ids": [
+      4,
+      1,
+      2
+    ],
+    "count": 3,
+    "first_seen": "2026-02-20T11:23:46.850411",
+    "last_seen": "2026-02-20T11:28:24.383523",
+    "rule_generated": true
+  },
+  "ef46394119ac": {
+    "signature": "ef46394119ac",
+    "sample_description": "Security group allows wide port range (0-65535)",
+    "sample_rule_id": "TF_WIDE_PORT_RANGE",
+    "severity": "HIGH",
+    "scan_ids": [
+      4,
+      1,
+      2
+    ],
+    "count": 3,
+    "first_seen": "2026-02-20T11:23:46.850411",
+    "last_seen": "2026-02-20T11:28:24.383523",
+    "rule_generated": true
+  },
+  "3ce527101706": {
+    "signature": "3ce527101706",
+    "sample_description": "Security group allows unrestricted access from 0.0.0.0/0\n\n**Impact:** This could allow full system compromise, data breach, or unauthorized access to production infrastructure.",
+    "sample_rule_id": "AWS_CIS_SG_0_0_0_0",
+    "severity": "CRITICAL",
+    "scan_ids": [
+      15,
+      16,
+      17,
+      18,
+      23,
+      24,
+      25,
+      26,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6
+    ],
+    "count": 36,
+    "first_seen": "2026-02-22T11:47:30.883001",
+    "last_seen": "2026-02-22T13:01:50.989291",
+    "rule_generated": true,
+    "affected_files": [
+      "vulnerable_infra.tf"
+    ],
+    "rule_ids_involved": [
+      "AWS_CIS_SG_0_0_0_0"
+    ],
+    "scanners_involved": [
+      "Rules"
+    ],
+    "categories": [
+      "rules"
+    ],
+    "example_findings": [
+      {
+        "description": "Security group allows unrestricted access from 0.0.0.0/0\n\n**Impact:** This could allow full system compromise, data breach, or unauthorized access to production infrastructure.",
+        "title": "Aws Cis Sg 0 0 0 0",
+        "severity": "CRITICAL",
+        "resource": "",
+        "file": "vulnerable_infra.tf",
+        "rule_id": "AWS_CIS_SG_0_0_0_0",
+        "line_number": null,
+        "code_snippet": "cidr_blocks = [\"0.0.0.0/0\"]",
+        "scanner": "Rules",
+        "scan_id": 1
+      }
+    ],
+    "remediation_guidance": [
+      "Review the flagged configuration block",
+      "Apply least-privilege and defense-in-depth principles",
+      "Validate changes with terraform plan before applying",
+      "Add automated policy checks in your CI/CD pipeline"
+    ],
+    "risk_explanation": "This pattern has been detected 36 times across 14 scan(s), affecting 0 unique resource(s) in 1 file(s). Severity: CRITICAL. Detected by: Rules."
+  },
+  "000a4bef5923": {
+    "signature": "000a4bef5923",
+    "sample_description": "S3 bucket has public-read ACL which allows unrestricted public access\n\n**Impact:** This could allow full system compromise, data breach, or unauthorized access to production infrastructure.",
+    "sample_rule_id": "AWS_CIS_S3_PUBLIC_ACL",
+    "severity": "CRITICAL",
+    "scan_ids": [
+      15,
+      16,
+      23,
+      24,
+      25,
+      26,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6
+    ],
+    "count": 12,
+    "first_seen": "2026-02-22T11:47:30.883001",
+    "last_seen": "2026-02-22T13:01:50.989291",
+    "rule_generated": true,
+    "affected_files": [
+      "vulnerable_infra.tf"
+    ],
+    "rule_ids_involved": [
+      "AWS_CIS_S3_PUBLIC_ACL"
+    ],
+    "scanners_involved": [
+      "Rules"
+    ],
+    "categories": [
+      "rules"
+    ],
+    "example_findings": [
+      {
+        "description": "S3 bucket has public-read ACL which allows unrestricted public access\n\n**Impact:** This could allow full system compromise, data breach, or unauthorized access to production infrastructure.",
+        "title": "Aws Cis S3 Public Acl",
+        "severity": "CRITICAL",
+        "resource": "",
+        "file": "vulnerable_infra.tf",
+        "rule_id": "AWS_CIS_S3_PUBLIC_ACL",
+        "line_number": null,
+        "code_snippet": "acl    = \"public-read\"",
+        "scanner": "Rules",
+        "scan_id": 1
+      }
+    ],
+    "remediation_guidance": [
+      "Review the flagged configuration block",
+      "Apply least-privilege and defense-in-depth principles",
+      "Validate changes with terraform plan before applying",
+      "Add automated policy checks in your CI/CD pipeline"
+    ],
+    "risk_explanation": "This pattern has been detected 12 times across 12 scan(s), affecting 0 unique resource(s) in 1 file(s). Severity: CRITICAL. Detected by: Rules."
+  },
+  "3fbe6f84ec2f": {
+    "signature": "3fbe6f84ec2f",
+    "sample_description": "Security group allows access to all ports (0-65535)\n\n**Impact:** This could allow full system compromise, data breach, or unauthorized access to production infrastructure.",
+    "sample_rule_id": "AWS_CIS_SG_ALL_PORTS",
+    "severity": "CRITICAL",
+    "scan_ids": [
+      15,
+      16,
+      17,
+      18,
+      23,
+      24,
+      25,
+      26,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6
+    ],
+    "count": 14,
+    "first_seen": "2026-02-22T11:47:30.883001",
+    "last_seen": "2026-02-22T13:01:50.989291",
+    "rule_generated": true,
+    "affected_files": [
+      "vulnerable_infra.tf"
+    ],
+    "rule_ids_involved": [
+      "AWS_CIS_SG_ALL_PORTS"
+    ],
+    "scanners_involved": [
+      "Rules"
+    ],
+    "categories": [
+      "rules"
+    ],
+    "example_findings": [
+      {
+        "description": "Security group allows access to all ports (0-65535)\n\n**Impact:** This could allow full system compromise, data breach, or unauthorized access to production infrastructure.",
+        "title": "Aws Cis Sg All Ports",
+        "severity": "CRITICAL",
+        "resource": "",
+        "file": "vulnerable_infra.tf",
+        "rule_id": "AWS_CIS_SG_ALL_PORTS",
+        "line_number": null,
+        "code_snippet": "to_port     = 65535",
+        "scanner": "Rules",
+        "scan_id": 1
+      }
+    ],
+    "remediation_guidance": [
+      "Review the flagged configuration block",
+      "Apply least-privilege and defense-in-depth principles",
+      "Validate changes with terraform plan before applying",
+      "Add automated policy checks in your CI/CD pipeline"
+    ],
+    "risk_explanation": "This pattern has been detected 14 times across 14 scan(s), affecting 0 unique resource(s) in 1 file(s). Severity: CRITICAL. Detected by: Rules."
+  },
+  "e12449bc8249": {
+    "signature": "e12449bc8249",
+    "sample_description": "Security misconfiguration - overly permissive security group\n\n**Impact:** This could allow full system compromise, data breach, or unauthorized access to production infrastructure.",
+    "sample_rule_id": "AWS_OWASP_A05_MISCONFIG_SG",
+    "severity": "CRITICAL",
+    "scan_ids": [
+      15,
+      16,
+      17,
+      18,
+      23,
+      24,
+      25,
+      26,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6
+    ],
+    "count": 56,
+    "first_seen": "2026-02-22T11:47:30.883001",
+    "last_seen": "2026-02-22T13:01:50.989805",
+    "rule_generated": true,
+    "affected_files": [
+      "vulnerable_infra.tf"
+    ],
+    "rule_ids_involved": [
+      "AWS_OWASP_A05_MISCONFIG_SG",
+      "TF_OPEN_SECURITY_GROUP"
+    ],
+    "scanners_involved": [
+      "Rules"
+    ],
+    "categories": [
+      "rules"
+    ],
+    "example_findings": [
+      {
+        "description": "Security misconfiguration - overly permissive security group\n\n**Impact:** This could allow full system compromise, data breach, or unauthorized access to production infrastructure.",
+        "title": "Aws Owasp A05 Misconfig Sg",
+        "severity": "CRITICAL",
+        "resource": "",
+        "file": "vulnerable_infra.tf",
+        "rule_id": "AWS_OWASP_A05_MISCONFIG_SG",
+        "line_number": null,
+        "code_snippet": "from_port   = 0",
+        "scanner": "Rules",
+        "scan_id": 1
+      },
+      {
+        "description": "Security group with unrestricted inbound access (0.0.0.0/0)\n\n**Impact:** This could allow full system compromise, data breach, or unauthorized access to production infrastructure.",
+        "title": "Tf Open Security Group",
+        "severity": "CRITICAL",
+        "resource": "",
+        "file": "vulnerable_infra.tf",
+        "rule_id": "TF_OPEN_SECURITY_GROUP",
+        "line_number": null,
+        "code_snippet": "cidr_blocks = [\"0.0.0.0/0\"]",
+        "scanner": "Rules",
+        "scan_id": 1
+      }
+    ],
+    "remediation_guidance": [
+      "Review the flagged configuration block",
+      "Apply least-privilege and defense-in-depth principles",
+      "Validate changes with terraform plan before applying",
+      "Add automated policy checks in your CI/CD pipeline"
+    ],
+    "risk_explanation": "This pattern has been detected 56 times across 14 scan(s), affecting 0 unique resource(s) in 1 file(s). Severity: CRITICAL. Detected by: Rules."
+  },
+  "f15970b619a7": {
+    "signature": "f15970b619a7",
+    "sample_description": "Weak authentication - password in plaintext\n\n**Impact:** This could allow full system compromise, data breach, or unauthorized access to production infrastructure.",
+    "sample_rule_id": "AWS_OWASP_A07_AUTH_FAILURE",
+    "severity": "CRITICAL",
+    "scan_ids": [
+      15,
+      16,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6
+    ],
+    "count": 8,
+    "first_seen": "2026-02-22T11:47:30.883001",
+    "last_seen": "2026-02-22T13:01:50.989805",
+    "rule_generated": false,
+    "affected_files": [
+      "vulnerable_infra.tf"
+    ],
+    "rule_ids_involved": [
+      "AWS_OWASP_A07_AUTH_FAILURE"
+    ],
+    "scanners_involved": [
+      "Rules"
+    ],
+    "categories": [
+      "rules"
+    ],
+    "example_findings": [
+      {
+        "description": "Weak authentication - password in plaintext\n\n**Impact:** This could allow full system compromise, data breach, or unauthorized access to production infrastructure.",
+        "title": "Aws Owasp A07 Auth Failure",
+        "severity": "CRITICAL",
+        "resource": "",
+        "file": "vulnerable_infra.tf",
+        "rule_id": "AWS_OWASP_A07_AUTH_FAILURE",
+        "line_number": null,
+        "code_snippet": "password = \"supersecret123\"",
+        "scanner": "Rules",
+        "scan_id": 1
+      }
+    ],
+    "remediation_guidance": [
+      "Review the flagged configuration block",
+      "Apply least-privilege and defense-in-depth principles",
+      "Validate changes with terraform plan before applying",
+      "Add automated policy checks in your CI/CD pipeline"
+    ],
+    "risk_explanation": "This pattern has been detected 8 times across 8 scan(s), affecting 0 unique resource(s) in 1 file(s). Severity: CRITICAL. Detected by: Rules."
+  },
+  "36027ee229e8": {
+    "signature": "36027ee229e8",
+    "sample_description": "Hardcoded password detected in infrastructure code\n\n**Impact:** This could allow full system compromise, data breach, or unauthorized access to production infrastructure.",
+    "sample_rule_id": "AWS_BP_HARDCODED_PASSWORD",
+    "severity": "CRITICAL",
+    "scan_ids": [
+      15,
+      16,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6
+    ],
+    "count": 8,
+    "first_seen": "2026-02-22T11:47:30.883001",
+    "last_seen": "2026-02-22T13:01:50.989805",
+    "rule_generated": false,
+    "affected_files": [
+      "vulnerable_infra.tf"
+    ],
+    "rule_ids_involved": [
+      "AWS_BP_HARDCODED_PASSWORD"
+    ],
+    "scanners_involved": [
+      "Rules"
+    ],
+    "categories": [
+      "rules"
+    ],
+    "example_findings": [
+      {
+        "description": "Hardcoded password detected in infrastructure code\n\n**Impact:** This could allow full system compromise, data breach, or unauthorized access to production infrastructure.",
+        "title": "Aws Bp Hardcoded Password",
+        "severity": "CRITICAL",
+        "resource": "",
+        "file": "vulnerable_infra.tf",
+        "rule_id": "AWS_BP_HARDCODED_PASSWORD",
+        "line_number": null,
+        "code_snippet": "password = \"supersecret123\"",
+        "scanner": "Rules",
+        "scan_id": 1
+      }
+    ],
+    "remediation_guidance": [
+      "Review the flagged configuration block",
+      "Apply least-privilege and defense-in-depth principles",
+      "Validate changes with terraform plan before applying",
+      "Add automated policy checks in your CI/CD pipeline"
+    ],
+    "risk_explanation": "This pattern has been detected 8 times across 8 scan(s), affecting 0 unique resource(s) in 1 file(s). Severity: CRITICAL. Detected by: Rules."
+  },
+  "04f7bc8714b1": {
+    "signature": "04f7bc8714b1",
+    "sample_description": "Hardcoded secret or API key detected\n\n**Impact:** This could allow full system compromise, data breach, or unauthorized access to production infrastructure.",
+    "sample_rule_id": "AWS_BP_HARDCODED_SECRET",
+    "severity": "CRITICAL",
+    "scan_ids": [
+      15,
+      16,
+      23,
+      24,
+      25
+    ],
+    "count": 5,
+    "first_seen": "2026-02-22T11:47:30.883001",
+    "last_seen": "2026-02-22T12:03:02.955161",
+    "rule_generated": true
+  },
+  "fbf1217de89c": {
+    "signature": "fbf1217de89c",
+    "sample_description": "AWS access key appears to be hardcoded\n\n**Impact:** This could allow full system compromise, data breach, or unauthorized access to production infrastructure.",
+    "sample_rule_id": "AWS_BP_HARDCODED_ACCESS_KEY",
+    "severity": "CRITICAL",
+    "scan_ids": [
+      15,
+      16,
+      23,
+      24,
+      25,
+      26
+    ],
+    "count": 6,
+    "first_seen": "2026-02-22T11:47:30.883001",
+    "last_seen": "2026-02-22T12:04:26.281362",
+    "rule_generated": true
+  },
+  "81090e64d7ee": {
+    "signature": "81090e64d7ee",
+    "sample_description": "S3 bucket logging is not configured\n\n**Impact:** This could enable partial information disclosure or weaken the security posture.",
+    "sample_rule_id": "AWS_BP_S3_NO_LOGGING",
+    "severity": "MEDIUM",
+    "scan_ids": [
+      15,
+      16,
+      17,
+      18,
+      19,
+      21,
+      22,
+      23,
+      24,
+      25,
+      26,
+      27,
+      28,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6
+    ],
+    "count": 19,
+    "first_seen": "2026-02-22T11:47:30.883001",
+    "last_seen": "2026-02-22T13:01:50.989805",
+    "rule_generated": true,
+    "affected_files": [
+      "vulnerable_infra.tf"
+    ],
+    "rule_ids_involved": [
+      "AWS_BP_S3_NO_LOGGING"
+    ],
+    "scanners_involved": [
+      "Rules"
+    ],
+    "categories": [
+      "rules"
+    ],
+    "example_findings": [
+      {
+        "description": "S3 bucket logging is not configured\n\n**Impact:** This could enable partial information disclosure or weaken the security posture.",
+        "title": "Aws Bp S3 No Logging",
+        "severity": "MEDIUM",
+        "resource": "",
+        "file": "vulnerable_infra.tf",
+        "rule_id": "AWS_BP_S3_NO_LOGGING",
+        "line_number": null,
+        "code_snippet": "missing disallowed string: logging {",
+        "scanner": "Rules",
+        "scan_id": 1
+      }
+    ],
+    "remediation_guidance": [
+      "Review the flagged configuration block",
+      "Apply least-privilege and defense-in-depth principles",
+      "Validate changes with terraform plan before applying",
+      "Add automated policy checks in your CI/CD pipeline"
+    ],
+    "risk_explanation": "This pattern has been detected 19 times across 19 scan(s), affecting 0 unique resource(s) in 1 file(s). Severity: MEDIUM. Detected by: Rules."
+  },
+  "50d4cc8b5dc3": {
+    "signature": "50d4cc8b5dc3",
+    "sample_description": "Hardcoded secrets should not appear in IaC files\n\n**Impact:** This could lead to significant data exposure, privilege escalation, or service disruption.",
+    "sample_rule_id": "NO_HARDCODED_SECRET",
+    "severity": "HIGH",
+    "scan_ids": [
+      15,
+      16,
+      23,
+      24,
+      25,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6
+    ],
+    "count": 11,
+    "first_seen": "2026-02-22T11:47:30.883001",
+    "last_seen": "2026-02-22T13:01:50.989805",
+    "rule_generated": true,
+    "affected_files": [
+      "vulnerable_infra.tf"
+    ],
+    "rule_ids_involved": [
+      "NO_HARDCODED_SECRET"
+    ],
+    "scanners_involved": [
+      "Rules"
+    ],
+    "categories": [
+      "rules"
+    ],
+    "example_findings": [
+      {
+        "description": "Hardcoded secrets should not appear in IaC files\n\n**Impact:** This could lead to significant data exposure, privilege escalation, or service disruption.",
+        "title": "No Hardcoded Secret",
+        "severity": "HIGH",
+        "resource": "",
+        "file": "vulnerable_infra.tf",
+        "rule_id": "NO_HARDCODED_SECRET",
+        "line_number": null,
+        "code_snippet": "password = \"supersecret123\"",
+        "scanner": "Rules",
+        "scan_id": 1
+      }
+    ],
+    "remediation_guidance": [
+      "Review the flagged configuration block",
+      "Apply least-privilege and defense-in-depth principles",
+      "Validate changes with terraform plan before applying",
+      "Add automated policy checks in your CI/CD pipeline"
+    ],
+    "risk_explanation": "This pattern has been detected 11 times across 11 scan(s), affecting 0 unique resource(s) in 1 file(s). Severity: HIGH. Detected by: Rules."
+  },
+  "e1c9edc42bab": {
+    "signature": "e1c9edc42bab",
+    "sample_description": "Hardcoded credentials detected in Terraform configuration\n\n**Impact:** This could allow full system compromise, data breach, or unauthorized access to production infrastructure.",
+    "sample_rule_id": "TF_HARDCODED_CREDENTIALS",
+    "severity": "CRITICAL",
+    "scan_ids": [
+      15,
+      16,
+      23,
+      24,
+      25,
+      26,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6
+    ],
+    "count": 14,
+    "first_seen": "2026-02-22T11:47:30.883001",
+    "last_seen": "2026-02-22T13:01:50.989805",
+    "rule_generated": true,
+    "affected_files": [
+      "vulnerable_infra.tf"
+    ],
+    "rule_ids_involved": [
+      "TF_HARDCODED_CREDENTIALS"
+    ],
+    "scanners_involved": [
+      "Rules"
+    ],
+    "categories": [
+      "rules"
+    ],
+    "example_findings": [
+      {
+        "description": "Hardcoded credentials detected in Terraform configuration\n\n**Impact:** This could allow full system compromise, data breach, or unauthorized access to production infrastructure.",
+        "title": "Tf Hardcoded Credentials",
+        "severity": "CRITICAL",
+        "resource": "",
+        "file": "vulnerable_infra.tf",
+        "rule_id": "TF_HARDCODED_CREDENTIALS",
+        "line_number": null,
+        "code_snippet": "password = \"supersecret123\"",
+        "scanner": "Rules",
+        "scan_id": 1
+      }
+    ],
+    "remediation_guidance": [
+      "Review the flagged configuration block",
+      "Apply least-privilege and defense-in-depth principles",
+      "Validate changes with terraform plan before applying",
+      "Add automated policy checks in your CI/CD pipeline"
+    ],
+    "risk_explanation": "This pattern has been detected 14 times across 12 scan(s), affecting 0 unique resource(s) in 1 file(s). Severity: CRITICAL. Detected by: Rules."
+  },
+  "6d78475595b4": {
+    "signature": "6d78475595b4",
+    "sample_description": "S3 bucket configured with public access\n\n**Impact:** This could allow full system compromise, data breach, or unauthorized access to production infrastructure.",
+    "sample_rule_id": "TF_PUBLIC_S3",
+    "severity": "CRITICAL",
+    "scan_ids": [
+      15,
+      16,
+      23,
+      24,
+      25,
+      26,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6
+    ],
+    "count": 12,
+    "first_seen": "2026-02-22T11:47:30.883001",
+    "last_seen": "2026-02-22T13:01:50.989805",
+    "rule_generated": true,
+    "affected_files": [
+      "vulnerable_infra.tf"
+    ],
+    "rule_ids_involved": [
+      "TF_PUBLIC_S3"
+    ],
+    "scanners_involved": [
+      "Rules"
+    ],
+    "categories": [
+      "rules"
+    ],
+    "example_findings": [
+      {
+        "description": "S3 bucket configured with public access\n\n**Impact:** This could allow full system compromise, data breach, or unauthorized access to production infrastructure.",
+        "title": "Tf Public S3",
+        "severity": "CRITICAL",
+        "resource": "",
+        "file": "vulnerable_infra.tf",
+        "rule_id": "TF_PUBLIC_S3",
+        "line_number": null,
+        "code_snippet": "acl    = \"public-read\"",
+        "scanner": "Rules",
+        "scan_id": 1
+      }
+    ],
+    "remediation_guidance": [
+      "Review the flagged configuration block",
+      "Apply least-privilege and defense-in-depth principles",
+      "Validate changes with terraform plan before applying",
+      "Add automated policy checks in your CI/CD pipeline"
+    ],
+    "risk_explanation": "This pattern has been detected 12 times across 12 scan(s), affecting 0 unique resource(s) in 1 file(s). Severity: CRITICAL. Detected by: Rules."
+  },
+  "5a916dcf1476": {
+    "signature": "5a916dcf1476",
+    "sample_description": "RDS instance storage encryption is not enabled\n\n**Impact:** This could lead to significant data exposure, privilege escalation, or service disruption.",
+    "sample_rule_id": "TF_UNENCRYPTED_RDS",
+    "severity": "HIGH",
+    "scan_ids": [
+      15,
+      16,
+      23,
+      24,
+      25,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6
+    ],
+    "count": 11,
+    "first_seen": "2026-02-22T11:47:30.883001",
+    "last_seen": "2026-02-22T13:01:50.989805",
+    "rule_generated": true,
+    "affected_files": [
+      "vulnerable_infra.tf"
+    ],
+    "rule_ids_involved": [
+      "TF_UNENCRYPTED_RDS"
+    ],
+    "scanners_involved": [
+      "Rules"
+    ],
+    "categories": [
+      "rules"
+    ],
+    "example_findings": [
+      {
+        "description": "RDS instance storage encryption is not enabled\n\n**Impact:** This could lead to significant data exposure, privilege escalation, or service disruption.",
+        "title": "Tf Unencrypted Rds",
+        "severity": "HIGH",
+        "resource": "",
+        "file": "vulnerable_infra.tf",
+        "rule_id": "TF_UNENCRYPTED_RDS",
+        "line_number": null,
+        "code_snippet": "resource \"aws_db_instance\" \"database\" {",
+        "scanner": "Rules",
+        "scan_id": 1
+      }
+    ],
+    "remediation_guidance": [
+      "Review the flagged configuration block",
+      "Apply least-privilege and defense-in-depth principles",
+      "Validate changes with terraform plan before applying",
+      "Add automated policy checks in your CI/CD pipeline"
+    ],
+    "risk_explanation": "This pattern has been detected 11 times across 11 scan(s), affecting 0 unique resource(s) in 1 file(s). Severity: HIGH. Detected by: Rules."
+  },
+  "16338fa813bb": {
+    "signature": "16338fa813bb",
+    "sample_description": "Security group allows wide port range (0-65535)\n\n**Impact:** This could lead to significant data exposure, privilege escalation, or service disruption.",
+    "sample_rule_id": "TF_WIDE_PORT_RANGE",
+    "severity": "HIGH",
+    "scan_ids": [
+      15,
+      16,
+      17,
+      18,
+      23,
+      24,
+      25,
+      26,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6
+    ],
+    "count": 14,
+    "first_seen": "2026-02-22T11:47:30.883001",
+    "last_seen": "2026-02-22T13:01:50.989805",
+    "rule_generated": true,
+    "affected_files": [
+      "vulnerable_infra.tf"
+    ],
+    "rule_ids_involved": [
+      "TF_WIDE_PORT_RANGE"
+    ],
+    "scanners_involved": [
+      "Rules"
+    ],
+    "categories": [
+      "rules"
+    ],
+    "example_findings": [
+      {
+        "description": "Security group allows wide port range (0-65535)\n\n**Impact:** This could lead to significant data exposure, privilege escalation, or service disruption.",
+        "title": "Tf Wide Port Range",
+        "severity": "HIGH",
+        "resource": "",
+        "file": "vulnerable_infra.tf",
+        "rule_id": "TF_WIDE_PORT_RANGE",
+        "line_number": null,
+        "code_snippet": "to_port     = 65535",
+        "scanner": "Rules",
+        "scan_id": 1
+      }
+    ],
+    "remediation_guidance": [
+      "Review the flagged configuration block",
+      "Apply least-privilege and defense-in-depth principles",
+      "Validate changes with terraform plan before applying",
+      "Add automated policy checks in your CI/CD pipeline"
+    ],
+    "risk_explanation": "This pattern has been detected 14 times across 14 scan(s), affecting 0 unique resource(s) in 1 file(s). Severity: HIGH. Detected by: Rules."
+  },
+  "94a9146dcfc9": {
+    "signature": "94a9146dcfc9",
+    "sample_description": "AWS provider allows overly permissive IAM policies. CVSS: 7.5.\n\n**Impact:** This could lead to significant data exposure, privilege escalation, or service disruption.",
+    "sample_rule_id": "CVE",
+    "severity": "HIGH",
+    "scan_ids": [
+      20,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6
+    ],
+    "count": 7,
+    "first_seen": "2026-02-22T11:56:22.049283",
+    "last_seen": "2026-02-22T13:01:50.989805",
+    "rule_generated": false,
+    "affected_files": [
+      "vulnerable_infra.tf"
+    ],
+    "scanners_involved": [
+      "CVE"
+    ],
+    "categories": [
+      "cve"
+    ],
+    "example_findings": [
+      {
+        "description": "AWS provider allows overly permissive IAM policies. CVSS: 7.5.\n\n**Impact:** This could lead to significant data exposure, privilege escalation, or service disruption.",
+        "title": "CVE-2021-3178 in terraform-provider-aws 3.0.0",
+        "severity": "HIGH",
+        "resource": "",
+        "file": "vulnerable_infra.tf",
+        "rule_id": "",
+        "line_number": null,
+        "code_snippet": "",
+        "scanner": "CVE",
+        "scan_id": 1
+      }
+    ],
+    "remediation_guidance": [
+      "Upgrade terraform-provider-aws to 3.22.0"
+    ],
+    "risk_explanation": "This pattern has been detected 7 times across 7 scan(s), affecting 0 unique resource(s) in 1 file(s). Severity: HIGH. Detected by: CVE."
+  },
+  "a1bf1f8aad75": {
+    "signature": "a1bf1f8aad75",
+    "sample_description": "S3 bucket 'b' does not have server-side encryption enabled. CIS Benchmark 2.1.1 requires encryption at rest.\n\n**Impact:** This could lead to significant data exposure, privilege escalation, or service",
+    "sample_rule_id": "CIS_2_1_1",
+    "severity": "HIGH",
+    "scan_ids": [
+      20
+    ],
+    "count": 1,
+    "first_seen": "2026-02-22T11:56:22.049283",
+    "last_seen": "2026-02-22T11:56:22.049283",
+    "rule_generated": false
+  },
+  "e9bab3175f1c": {
+    "signature": "e9bab3175f1c",
+    "sample_description": "S3 bucket 'b' does not have access logging enabled. CIS Benchmark 2.1.2 requires logging for audit trails.\n\n**Impact:** This could enable partial information disclosure or weaken the security posture.",
+    "sample_rule_id": "CIS_2_1_2",
+    "severity": "MEDIUM",
+    "scan_ids": [
+      20
+    ],
+    "count": 1,
+    "first_seen": "2026-02-22T11:56:22.049283",
+    "last_seen": "2026-02-22T11:56:22.049283",
+    "rule_generated": false
+  },
+  "909bef9b0672": {
+    "signature": "909bef9b0672",
+    "sample_description": "Database instance is publicly accessible\n\n**Impact:** This could allow full system compromise, data breach, or unauthorized access to production infrastructure.",
+    "sample_rule_id": "AWS_CIS_DB_PUBLIC",
+    "severity": "CRITICAL",
+    "scan_ids": [
+      23,
+      24,
+      25,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6
+    ],
+    "count": 9,
+    "first_seen": "2026-02-22T11:59:34.936932",
+    "last_seen": "2026-02-22T13:01:50.989291",
+    "rule_generated": true,
+    "affected_files": [
+      "vulnerable_infra.tf"
+    ],
+    "rule_ids_involved": [
+      "AWS_CIS_DB_PUBLIC"
+    ],
+    "scanners_involved": [
+      "Rules"
+    ],
+    "categories": [
+      "rules"
+    ],
+    "example_findings": [
+      {
+        "description": "Database instance is publicly accessible\n\n**Impact:** This could allow full system compromise, data breach, or unauthorized access to production infrastructure.",
+        "title": "Aws Cis Db Public",
+        "severity": "CRITICAL",
+        "resource": "",
+        "file": "vulnerable_infra.tf",
+        "rule_id": "AWS_CIS_DB_PUBLIC",
+        "line_number": null,
+        "code_snippet": "publicly_accessible = true",
+        "scanner": "Rules",
+        "scan_id": 1
+      }
+    ],
+    "remediation_guidance": [
+      "Review the flagged configuration block",
+      "Apply least-privilege and defense-in-depth principles",
+      "Validate changes with terraform plan before applying",
+      "Add automated policy checks in your CI/CD pipeline"
+    ],
+    "risk_explanation": "This pattern has been detected 9 times across 9 scan(s), affecting 0 unique resource(s) in 1 file(s). Severity: CRITICAL. Detected by: Rules."
+  },
+  "1a5f29664184": {
+    "signature": "1a5f29664184",
+    "sample_description": "Database storage encryption is disabled\n\n**Impact:** This could lead to significant data exposure, privilege escalation, or service disruption.",
+    "sample_rule_id": "AWS_CIS_DB_UNENCRYPTED",
+    "severity": "HIGH",
+    "scan_ids": [
+      23,
+      24,
+      25,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6
+    ],
+    "count": 9,
+    "first_seen": "2026-02-22T11:59:34.936932",
+    "last_seen": "2026-02-22T13:01:50.989291",
+    "rule_generated": true,
+    "affected_files": [
+      "vulnerable_infra.tf"
+    ],
+    "rule_ids_involved": [
+      "AWS_CIS_DB_UNENCRYPTED"
+    ],
+    "scanners_involved": [
+      "Rules"
+    ],
+    "categories": [
+      "rules"
+    ],
+    "example_findings": [
+      {
+        "description": "Database storage encryption is disabled\n\n**Impact:** This could lead to significant data exposure, privilege escalation, or service disruption.",
+        "title": "Aws Cis Db Unencrypted",
+        "severity": "HIGH",
+        "resource": "",
+        "file": "vulnerable_infra.tf",
+        "rule_id": "AWS_CIS_DB_UNENCRYPTED",
+        "line_number": null,
+        "code_snippet": "storage_encrypted   = false",
+        "scanner": "Rules",
+        "scan_id": 1
+      }
+    ],
+    "remediation_guidance": [
+      "Review the flagged configuration block",
+      "Apply least-privilege and defense-in-depth principles",
+      "Validate changes with terraform plan before applying",
+      "Add automated policy checks in your CI/CD pipeline"
+    ],
+    "risk_explanation": "This pattern has been detected 9 times across 9 scan(s), affecting 0 unique resource(s) in 1 file(s). Severity: HIGH. Detected by: Rules."
+  },
+  "97b91f264efb": {
+    "signature": "97b91f264efb",
+    "sample_description": "Encryption not enabled for sensitive data storage\n\n**Impact:** This could lead to significant data exposure, privilege escalation, or service disruption.",
+    "sample_rule_id": "AWS_OWASP_A02_CRYPTO_FAILURE",
+    "severity": "HIGH",
+    "scan_ids": [
+      23,
+      24,
+      25,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6
+    ],
+    "count": 9,
+    "first_seen": "2026-02-22T11:59:34.936932",
+    "last_seen": "2026-02-22T13:01:50.989805",
+    "rule_generated": true,
+    "affected_files": [
+      "vulnerable_infra.tf"
+    ],
+    "rule_ids_involved": [
+      "AWS_OWASP_A02_CRYPTO_FAILURE"
+    ],
+    "scanners_involved": [
+      "Rules"
+    ],
+    "categories": [
+      "rules"
+    ],
+    "example_findings": [
+      {
+        "description": "Encryption not enabled for sensitive data storage\n\n**Impact:** This could lead to significant data exposure, privilege escalation, or service disruption.",
+        "title": "Aws Owasp A02 Crypto Failure",
+        "severity": "HIGH",
+        "resource": "",
+        "file": "vulnerable_infra.tf",
+        "rule_id": "AWS_OWASP_A02_CRYPTO_FAILURE",
+        "line_number": null,
+        "code_snippet": "storage_encrypted   = false",
+        "scanner": "Rules",
+        "scan_id": 1
+      }
+    ],
+    "remediation_guidance": [
+      "Review the flagged configuration block",
+      "Apply least-privilege and defense-in-depth principles",
+      "Validate changes with terraform plan before applying",
+      "Add automated policy checks in your CI/CD pipeline"
+    ],
+    "risk_explanation": "This pattern has been detected 9 times across 9 scan(s), affecting 0 unique resource(s) in 1 file(s). Severity: HIGH. Detected by: Rules."
+  },
+  "d135cd26b7a3": {
+    "signature": "d135cd26b7a3",
+    "sample_description": "Potential AWS Secret Access Key detected. This poses a critical security risk as credentials should never be hardcoded.\n\n**Impact:** This could allow full system compromise, data breach, or unauthoriz",
+    "sample_rule_id": "SECRET_AWS_SECRET_KEY",
+    "severity": "CRITICAL",
+    "scan_ids": [
+      27
+    ],
+    "count": 1,
+    "first_seen": "2026-02-22T12:15:32.442442",
+    "last_seen": "2026-02-22T12:15:32.442442",
+    "rule_generated": false
+  },
+  "6dc0e20dd318": {
+    "signature": "6dc0e20dd318",
+    "sample_description": "S3 bucket versioning is disabled\n\n**Impact:** This could enable partial information disclosure or weaken the security posture.",
+    "sample_rule_id": "TF_VERSIONING_DISABLED",
+    "severity": "MEDIUM",
+    "scan_ids": [
+      27
+    ],
+    "count": 1,
+    "first_seen": "2026-02-22T12:15:32.442442",
+    "last_seen": "2026-02-22T12:15:32.442442",
+    "rule_generated": false
+  },
+  "2453312bae3b": {
+    "signature": "2453312bae3b",
+    "sample_description": "Machine learning model detected potential security issues with 70.0% risk score and 40.0% confidence.\n\n**Impact:** This could lead to significant data exposure, privilege escalation, or service disrup",
+    "sample_rule_id": "ML_PREDICTION",
+    "severity": "HIGH",
+    "scan_ids": [
+      27
+    ],
+    "count": 1,
+    "first_seen": "2026-02-22T12:15:32.442442",
+    "last_seen": "2026-02-22T12:15:32.442442",
+    "rule_generated": false
+  },
+  "8ecb858f3a9e": {
+    "signature": "8ecb858f3a9e",
+    "sample_description": "Security group allows all egress traffic\n\n**Impact:** This could enable partial information disclosure or weaken the security posture.",
+    "sample_rule_id": "AWS_BP_EGRESS_ALL",
+    "severity": "MEDIUM",
+    "scan_ids": [
+      1,
+      2,
+      3,
+      4,
+      5,
+      6
+    ],
+    "count": 12,
+    "first_seen": "2026-02-22T12:56:12.324119",
+    "last_seen": "2026-02-22T13:01:50.989805",
+    "rule_generated": false,
+    "affected_resources": [],
+    "affected_files": [
+      "vulnerable_infra.tf"
+    ],
+    "rule_ids_involved": [
+      "AWS_BP_EGRESS_ALL"
+    ],
+    "example_findings": [
+      {
+        "description": "Security group allows all egress traffic\n\n**Impact:** This could enable partial information disclosure or weaken the security posture.",
+        "title": "Aws Bp Egress All",
+        "severity": "MEDIUM",
+        "resource": "",
+        "file": "vulnerable_infra.tf",
+        "rule_id": "AWS_BP_EGRESS_ALL",
+        "line_number": null,
+        "code_snippet": "protocol    = \"-1\"",
+        "scanner": "Rules",
+        "scan_id": 1
+      }
+    ],
+    "scanners_involved": [
+      "Rules"
+    ],
+    "categories": [
+      "rules"
+    ],
+    "remediation_guidance": [
+      "Review the flagged configuration block",
+      "Apply least-privilege and defense-in-depth principles",
+      "Validate changes with terraform plan before applying",
+      "Add automated policy checks in your CI/CD pipeline"
+    ],
+    "risk_explanation": "This pattern has been detected 12 times across 6 scan(s), affecting 0 unique resource(s) in 1 file(s). Severity: MEDIUM. Detected by: Rules."
+  },
+  "2ca895597198": {
+    "signature": "2ca895597198",
+    "sample_description": "Potential hardcoded password detected. This poses a critical security risk as credentials should never be hardcoded.\n\n**Impact:** This could lead to significant data exposure, privilege escalation, or",
+    "sample_rule_id": "",
+    "severity": "HIGH",
+    "scan_ids": [
+      1,
+      2,
+      3,
+      4,
+      5,
+      6
+    ],
+    "count": 6,
+    "first_seen": "2026-02-22T12:56:12.324635",
+    "last_seen": "2026-02-22T13:01:50.989805",
+    "rule_generated": false,
+    "affected_resources": [],
+    "affected_files": [
+      "vulnerable_infra.tf"
+    ],
+    "rule_ids_involved": [],
+    "example_findings": [
+      {
+        "description": "Potential hardcoded password detected. This poses a critical security risk as credentials should never be hardcoded.\n\n**Impact:** This could lead to significant data exposure, privilege escalation, or service disruption.",
+        "title": "Hardcoded Password",
+        "severity": "HIGH",
+        "resource": "",
+        "file": "vulnerable_infra.tf",
+        "rule_id": "",
+        "line_number": 33,
+        "code_snippet": "pass********************",
+        "scanner": "Secrets",
+        "scan_id": 1
+      }
+    ],
+    "scanners_involved": [
+      "Secrets"
+    ],
+    "categories": [
+      "secrets"
+    ],
+    "remediation_guidance": [
+      "Remove the hardcoded credential from the code",
+      "Use environment variables or a secrets management service (AWS Secrets Manager, Azure Key Vault, HashiCorp Vault)",
+      "Rotate the exposed credential immediately",
+      "Implement pre-commit hooks to prevent future credential commits",
+      "Review Git history and remove credential if committed"
+    ],
+    "risk_explanation": "This pattern has been detected 6 times across 6 scan(s), affecting 0 unique resource(s) in 1 file(s). Severity: HIGH. Detected by: Secrets."
+  },
+  "e5a22a913714": {
+    "signature": "e5a22a913714",
+    "sample_description": "S3 bucket 'data_backup' does not have server-side encryption enabled. CIS Benchmark 2.1.1 requires encryption at rest.\n\n**Impact:** This could lead to significant data exposure, privilege escalation, ",
+    "sample_rule_id": "",
+    "severity": "HIGH",
+    "scan_ids": [
+      1,
+      2,
+      3,
+      4,
+      5,
+      6
+    ],
+    "count": 6,
+    "first_seen": "2026-02-22T12:56:12.324635",
+    "last_seen": "2026-02-22T13:01:50.989805",
+    "rule_generated": false,
+    "affected_resources": [
+      "arn:aws:s3:::data_backup"
+    ],
+    "affected_files": [
+      "vulnerable_infra.tf"
+    ],
+    "rule_ids_involved": [],
+    "example_findings": [
+      {
+        "description": "S3 bucket 'data_backup' does not have server-side encryption enabled. CIS Benchmark 2.1.1 requires encryption at rest.\n\n**Impact:** This could lead to significant data exposure, privilege escalation, or service disruption.",
+        "title": "S3 Bucket Encryption Not Enabled",
+        "severity": "HIGH",
+        "resource": "arn:aws:s3:::data_backup",
+        "file": "vulnerable_infra.tf",
+        "rule_id": "",
+        "line_number": null,
+        "code_snippet": "",
+        "scanner": "Compliance",
+        "scan_id": 1
+      }
+    ],
+    "scanners_involved": [
+      "Compliance"
+    ],
+    "categories": [
+      "compliance"
+    ],
+    "remediation_guidance": [
+      "Enable S3 bucket encryption",
+      "Use AWS KMS or S3-managed keys (SSE-S3)",
+      "Configure default encryption for the bucket",
+      "Update bucket policy to require encrypted uploads"
+    ],
+    "risk_explanation": "This pattern has been detected 6 times across 6 scan(s), affecting 1 unique resource(s) in 1 file(s). Severity: HIGH. Detected by: Compliance."
+  },
+  "dea18ee15d82": {
+    "signature": "dea18ee15d82",
+    "sample_description": "S3 bucket 'data_backup' does not have access logging enabled. CIS Benchmark 2.1.2 requires logging for audit trails.\n\n**Impact:** This could enable partial information disclosure or weaken the securit",
+    "sample_rule_id": "",
+    "severity": "MEDIUM",
+    "scan_ids": [
+      1,
+      2,
+      3,
+      4,
+      5,
+      6
+    ],
+    "count": 6,
+    "first_seen": "2026-02-22T12:56:12.324635",
+    "last_seen": "2026-02-22T13:01:50.989805",
+    "rule_generated": false,
+    "affected_resources": [
+      "arn:aws:s3:::data_backup"
+    ],
+    "affected_files": [
+      "vulnerable_infra.tf"
+    ],
+    "rule_ids_involved": [],
+    "example_findings": [
+      {
+        "description": "S3 bucket 'data_backup' does not have access logging enabled. CIS Benchmark 2.1.2 requires logging for audit trails.\n\n**Impact:** This could enable partial information disclosure or weaken the security posture.",
+        "title": "S3 Bucket Logging Not Enabled",
+        "severity": "MEDIUM",
+        "resource": "arn:aws:s3:::data_backup",
+        "file": "vulnerable_infra.tf",
+        "rule_id": "",
+        "line_number": null,
+        "code_snippet": "",
+        "scanner": "Compliance",
+        "scan_id": 1
+      }
+    ],
+    "scanners_involved": [
+      "Compliance"
+    ],
+    "categories": [
+      "compliance"
+    ],
+    "remediation_guidance": [
+      "Enable S3 bucket access logging",
+      "Configure a target bucket for logs",
+      "Set appropriate log file prefix",
+      "Review logs regularly for security events"
+    ],
+    "risk_explanation": "This pattern has been detected 6 times across 6 scan(s), affecting 1 unique resource(s) in 1 file(s). Severity: MEDIUM. Detected by: Compliance."
+  },
+  "43accab55d1c": {
+    "signature": "43accab55d1c",
+    "sample_description": "Security group 'web_sg' allows SSH access (port 22) from the internet (0.0.0.0/0). CIS Benchmark 4.1 prohibits this.\n\n**Impact:** This could allow full system compromise, data breach, or unauthorized ",
+    "sample_rule_id": "",
+    "severity": "CRITICAL",
+    "scan_ids": [
+      1,
+      2,
+      3,
+      4,
+      5,
+      6
+    ],
+    "count": 12,
+    "first_seen": "2026-02-22T12:56:12.324635",
+    "last_seen": "2026-02-22T13:01:50.989805",
+    "rule_generated": false,
+    "affected_resources": [
+      "web_sg"
+    ],
+    "affected_files": [
+      "vulnerable_infra.tf"
+    ],
+    "rule_ids_involved": [],
+    "example_findings": [
+      {
+        "description": "Security group 'web_sg' allows SSH access (port 22) from the internet (0.0.0.0/0). CIS Benchmark 4.1 prohibits this.\n\n**Impact:** This could allow full system compromise, data breach, or unauthorized access to production infrastructure.",
+        "title": "SSH Open to Internet",
+        "severity": "CRITICAL",
+        "resource": "web_sg",
+        "file": "vulnerable_infra.tf",
+        "rule_id": "",
+        "line_number": null,
+        "code_snippet": "",
+        "scanner": "Compliance",
+        "scan_id": 1
+      },
+      {
+        "description": "Security group 'web_sg' allows RDP access (port 3389) from the internet (0.0.0.0/0). CIS Benchmark 4.2 prohibits this.\n\n**Impact:** This could allow full system compromise, data breach, or unauthorized access to production infrastructure.",
+        "title": "RDP Open to Internet",
+        "severity": "CRITICAL",
+        "resource": "web_sg",
+        "file": "vulnerable_infra.tf",
+        "rule_id": "",
+        "line_number": null,
+        "code_snippet": "",
+        "scanner": "Compliance",
+        "scan_id": 1
+      }
+    ],
+    "scanners_involved": [
+      "Compliance"
+    ],
+    "categories": [
+      "compliance"
+    ],
+    "remediation_guidance": [
+      "Restrict SSH access to specific IP ranges",
+      "Use VPN or bastion host for SSH access",
+      "Remove 0.0.0.0/0 from CIDR blocks",
+      "Implement AWS Systems Manager Session Manager as alternative",
+      "Restrict RDP access to specific IP ranges",
+      "Use VPN for RDP access",
+      "Consider using AWS Systems Manager Session Manager"
+    ],
+    "risk_explanation": "This pattern has been detected 12 times across 6 scan(s), affecting 1 unique resource(s) in 1 file(s). Severity: CRITICAL. Detected by: Compliance."
+  },
+  "1db9024d2edd": {
+    "signature": "1db9024d2edd",
+    "sample_description": "Machine learning model detected potential security issues with 100.0% risk score and 40.0% confidence.\n\n**Impact:** This could allow full system compromise, data breach, or unauthorized access to prod",
+    "sample_rule_id": "",
+    "severity": "CRITICAL",
+    "scan_ids": [
+      1,
+      2,
+      3,
+      4,
+      5,
+      6
+    ],
+    "count": 6,
+    "first_seen": "2026-02-22T12:56:12.324635",
+    "last_seen": "2026-02-22T13:01:50.989805",
+    "rule_generated": false,
+    "affected_resources": [],
+    "affected_files": [
+      "vulnerable_infra.tf"
+    ],
+    "rule_ids_involved": [],
+    "example_findings": [
+      {
+        "description": "Machine learning model detected potential security issues with 100.0% risk score and 40.0% confidence.\n\n**Impact:** This could allow full system compromise, data breach, or unauthorized access to production infrastructure.",
+        "title": "ML-Detected Security Risk (CRITICAL)",
+        "severity": "CRITICAL",
+        "resource": "",
+        "file": "vulnerable_infra.tf",
+        "rule_id": "",
+        "line_number": null,
+        "code_snippet": "",
+        "scanner": "ML",
+        "scan_id": 1
+      }
+    ],
+    "scanners_involved": [
+      "ML"
+    ],
+    "categories": [
+      "ml"
+    ],
+    "remediation_guidance": [
+      "Review the file for security misconfigurations flagged by ML model",
+      "Cross-reference with rules and compliance findings",
+      "Apply remediation steps from the most critical related findings"
+    ],
+    "risk_explanation": "This pattern has been detected 6 times across 6 scan(s), affecting 0 unique resource(s) in 1 file(s). Severity: CRITICAL. Detected by: ML."
+  },
+  "1dcad65dbce3": {
+    "signature": "1dcad65dbce3",
+    "sample_description": "Detected a 2-hop attack path from aws_security_group.db_sg to aws_db_instance.database.\n\n**Attack Chain:** db_sg \u2192 database\n\nAttacker enters via **aws_security_group.db_sg**\n  \u21b3 Unrestricted ingress (",
+    "sample_rule_id": "AP-001",
+    "severity": "CRITICAL",
+    "scan_ids": [
+      1,
+      2,
+      3,
+      4,
+      5,
+      6
+    ],
+    "count": 6,
+    "first_seen": "2026-02-22T12:56:12.324635",
+    "last_seen": "2026-02-22T13:01:50.990826",
+    "rule_generated": false,
+    "affected_resources": [
+      "aws_security_group.db_sg"
+    ],
+    "affected_files": [
+      "vulnerable_infra.tf"
+    ],
+    "rule_ids_involved": [
+      "AP-001",
+      "AP-015",
+      "AP-008"
+    ],
+    "example_findings": [
+      {
+        "description": "Detected a 2-hop attack path from aws_security_group.db_sg to aws_db_instance.database.\n\n**Attack Chain:** db_sg \u2192 database\n\nAttacker enters via **aws_security_group.db_sg**\n  \u21b3 Unrestricted ingress (0.0.0.0/0)\n\u2192 Traverses to **aws_db_instance.database** (protected_by)\n  \u21b3 Database publicly accessible\n  \u21b3 Database storage not encrypted\n  \u21b3 Hardcoded database password\n  \ud83c\udfaf **HIGH-VALUE TARGET REACHED**\n\n**Impact:** This could allow full system compromise, data breach, or unauthorized access to pro",
+        "title": "Attack Path: db_sg \u2192 database",
+        "severity": "CRITICAL",
+        "resource": "aws_security_group.db_sg",
+        "file": "vulnerable_infra.tf",
+        "rule_id": "AP-001",
+        "line_number": null,
+        "code_snippet": "",
+        "scanner": "GNN",
+        "scan_id": 1
+      },
+      {
+        "description": "Detected a 2-hop attack path from aws_security_group.db_sg to aws_db_instance.database.\n\n**Attack Chain:** db_sg \u2192 database\n\nAttacker enters via **aws_security_group.db_sg**\n  \u21b3 Unrestricted ingress (0.0.0.0/0)\n\u2192 Traverses to **aws_db_instance.database** (protected_by)\n  \u21b3 Database publicly accessible\n  \u21b3 Database storage not encrypted\n  \u21b3 Hardcoded database password\n  \ud83c\udfaf **HIGH-VALUE TARGET REACHED**\n\n**Impact:** This could allow full system compromise, data breach, or unauthorized access to pro",
+        "title": "Attack Path: db_sg \u2192 database",
+        "severity": "CRITICAL",
+        "resource": "aws_security_group.db_sg",
+        "file": "vulnerable_infra.tf",
+        "rule_id": "AP-015",
+        "line_number": null,
+        "code_snippet": "",
+        "scanner": "GNN",
+        "scan_id": 2
+      },
+      {
+        "description": "Detected a 2-hop attack path from aws_security_group.db_sg to aws_db_instance.database.\n\n**Attack Chain:** db_sg \u2192 database\n\nAttacker enters via **aws_security_group.db_sg**\n  \u21b3 Unrestricted ingress (0.0.0.0/0)\n\u2192 Traverses to **aws_db_instance.database** (protected_by)\n  \u21b3 Database publicly accessible\n  \u21b3 Database storage not encrypted\n  \u21b3 Hardcoded database password\n  \ud83c\udfaf **HIGH-VALUE TARGET REACHED**\n\n**Impact:** This could allow full system compromise, data breach, or unauthorized access to pro",
+        "title": "Attack Path: db_sg \u2192 database",
+        "severity": "CRITICAL",
+        "resource": "aws_security_group.db_sg",
+        "file": "vulnerable_infra.tf",
+        "rule_id": "AP-015",
+        "line_number": null,
+        "code_snippet": "",
+        "scanner": "GNN",
+        "scan_id": 3
+      },
+      {
+        "description": "Detected a 2-hop attack path from aws_security_group.db_sg to aws_db_instance.database.\n\n**Attack Chain:** db_sg \u2192 database\n\nAttacker enters via **aws_security_group.db_sg**\n  \u21b3 Unrestricted ingress (0.0.0.0/0)\n\u2192 Traverses to **aws_db_instance.database** (protected_by)\n  \u21b3 Database publicly accessible\n  \u21b3 Database storage not encrypted\n  \u21b3 Hardcoded database password\n  \ud83c\udfaf **HIGH-VALUE TARGET REACHED**\n\n**Impact:** This could allow full system compromise, data breach, or unauthorized access to pro",
+        "title": "Attack Path: db_sg \u2192 database",
+        "severity": "CRITICAL",
+        "resource": "aws_security_group.db_sg",
+        "file": "vulnerable_infra.tf",
+        "rule_id": "AP-015",
+        "line_number": null,
+        "code_snippet": "",
+        "scanner": "GNN",
+        "scan_id": 4
+      },
+      {
+        "description": "Detected a 2-hop attack path from aws_security_group.db_sg to aws_db_instance.database.\n\n**Attack Chain:** db_sg \u2192 database\n\nAttacker enters via **aws_security_group.db_sg**\n  \u21b3 Unrestricted ingress (0.0.0.0/0)\n\u2192 Traverses to **aws_db_instance.database** (protected_by)\n  \u21b3 Database publicly accessible\n  \u21b3 Database storage not encrypted\n  \u21b3 Hardcoded database password\n  \ud83c\udfaf **HIGH-VALUE TARGET REACHED**\n\n**Impact:** This could allow full system compromise, data breach, or unauthorized access to pro",
+        "title": "Attack Path: db_sg \u2192 database",
+        "severity": "CRITICAL",
+        "resource": "aws_security_group.db_sg",
+        "file": "vulnerable_infra.tf",
+        "rule_id": "AP-015",
+        "line_number": null,
+        "code_snippet": "",
+        "scanner": "GNN",
+        "scan_id": 5
+      }
+    ],
+    "scanners_involved": [
+      "GNN"
+    ],
+    "categories": [
+      "gnn"
+    ],
+    "remediation_guidance": [
+      "[aws_security_group.db_sg] Restrict CIDR blocks to specific IP ranges",
+      "[aws_db_instance.database] Set publicly_accessible = false and use VPC peering",
+      "[aws_db_instance.database] Enable storage_encrypted = true with KMS key",
+      "[aws_db_instance.database] Use aws_secretsmanager_secret or variable references",
+      "Apply principle of least privilege across all connected resources.",
+      "Add monitoring and alerting for the identified attack path."
+    ],
+    "risk_explanation": "This pattern has been detected 6 times across 6 scan(s), affecting 1 unique resource(s) in 1 file(s). Severity: CRITICAL. Detected by: GNN."
+  },
+  "3126697cd7c5": {
+    "signature": "3126697cd7c5",
+    "sample_description": "Resource **aws_security_group.web_sg** has vulnerability: Unrestricted ingress (0.0.0.0/0). This resource is part of the infrastructure attack graph and may enable lateral movement or data exfiltratio",
+    "sample_rule_id": "GNN_AWS_SECURITY_GROUP_WEB_SG",
+    "severity": "HIGH",
+    "scan_ids": [
+      1,
+      2,
+      3,
+      4,
+      5,
+      6
+    ],
+    "count": 6,
+    "first_seen": "2026-02-22T12:56:12.324635",
+    "last_seen": "2026-02-22T13:01:50.990826",
+    "rule_generated": false,
+    "affected_resources": [
+      "aws_security_group.web_sg"
+    ],
+    "affected_files": [
+      "vulnerable_infra.tf"
+    ],
+    "rule_ids_involved": [
+      "GNN_AWS_SECURITY_GROUP_WEB_SG"
+    ],
+    "example_findings": [
+      {
+        "description": "Resource **aws_security_group.web_sg** has vulnerability: Unrestricted ingress (0.0.0.0/0). This resource is part of the infrastructure attack graph and may enable lateral movement or data exfiltration.\n\n**Impact:** This could lead to significant data exposure, privilege escalation, or service disruption.",
+        "title": "[web_sg] Unrestricted ingress (0.0.0.0/0)",
+        "severity": "HIGH",
+        "resource": "aws_security_group.web_sg",
+        "file": "vulnerable_infra.tf",
+        "rule_id": "GNN_AWS_SECURITY_GROUP_WEB_SG",
+        "line_number": 2,
+        "code_snippet": "",
+        "scanner": "GNN",
+        "scan_id": 1
+      }
+    ],
+    "scanners_involved": [
+      "GNN"
+    ],
+    "categories": [
+      "gnn"
+    ],
+    "remediation_guidance": [
+      "Restrict CIDR blocks to specific IP ranges"
+    ],
+    "risk_explanation": "This pattern has been detected 6 times across 6 scan(s), affecting 1 unique resource(s) in 1 file(s). Severity: HIGH. Detected by: GNN."
+  },
+  "91aa7179c00f": {
+    "signature": "91aa7179c00f",
+    "sample_description": "Resource **aws_security_group.web_sg** has vulnerability: All ports open. This resource is part of the infrastructure attack graph and may enable lateral movement or data exfiltration.\n\n**Impact:** Th",
+    "sample_rule_id": "GNN_AWS_SECURITY_GROUP_WEB_SG",
+    "severity": "CRITICAL",
+    "scan_ids": [
+      1,
+      2,
+      3,
+      4,
+      5,
+      6
+    ],
+    "count": 6,
+    "first_seen": "2026-02-22T12:56:12.324635",
+    "last_seen": "2026-02-22T13:01:50.990826",
+    "rule_generated": false,
+    "affected_resources": [
+      "aws_security_group.web_sg"
+    ],
+    "affected_files": [
+      "vulnerable_infra.tf"
+    ],
+    "rule_ids_involved": [
+      "GNN_AWS_SECURITY_GROUP_WEB_SG"
+    ],
+    "example_findings": [
+      {
+        "description": "Resource **aws_security_group.web_sg** has vulnerability: All ports open. This resource is part of the infrastructure attack graph and may enable lateral movement or data exfiltration.\n\n**Impact:** This could allow full system compromise, data breach, or unauthorized access to production infrastructure.",
+        "title": "[web_sg] All ports open",
+        "severity": "CRITICAL",
+        "resource": "aws_security_group.web_sg",
+        "file": "vulnerable_infra.tf",
+        "rule_id": "GNN_AWS_SECURITY_GROUP_WEB_SG",
+        "line_number": 2,
+        "code_snippet": "",
+        "scanner": "GNN",
+        "scan_id": 1
+      }
+    ],
+    "scanners_involved": [
+      "GNN"
+    ],
+    "categories": [
+      "gnn"
+    ],
+    "remediation_guidance": [
+      "Limit port ranges to necessary services only"
+    ],
+    "risk_explanation": "This pattern has been detected 6 times across 6 scan(s), affecting 1 unique resource(s) in 1 file(s). Severity: CRITICAL. Detected by: GNN."
+  },
+  "b7683e88e1a5": {
+    "signature": "b7683e88e1a5",
+    "sample_description": "Resource **aws_security_group.web_sg** has vulnerability: All protocols allowed. This resource is part of the infrastructure attack graph and may enable lateral movement or data exfiltration.\n\n**Impac",
+    "sample_rule_id": "GNN_AWS_SECURITY_GROUP_WEB_SG",
+    "severity": "HIGH",
+    "scan_ids": [
+      1,
+      2,
+      3,
+      4,
+      5,
+      6
+    ],
+    "count": 6,
+    "first_seen": "2026-02-22T12:56:12.324635",
+    "last_seen": "2026-02-22T13:01:50.990826",
+    "rule_generated": false,
+    "affected_resources": [
+      "aws_security_group.web_sg"
+    ],
+    "affected_files": [
+      "vulnerable_infra.tf"
+    ],
+    "rule_ids_involved": [
+      "GNN_AWS_SECURITY_GROUP_WEB_SG"
+    ],
+    "example_findings": [
+      {
+        "description": "Resource **aws_security_group.web_sg** has vulnerability: All protocols allowed. This resource is part of the infrastructure attack graph and may enable lateral movement or data exfiltration.\n\n**Impact:** This could lead to significant data exposure, privilege escalation, or service disruption.",
+        "title": "[web_sg] All protocols allowed",
+        "severity": "HIGH",
+        "resource": "aws_security_group.web_sg",
+        "file": "vulnerable_infra.tf",
+        "rule_id": "GNN_AWS_SECURITY_GROUP_WEB_SG",
+        "line_number": 2,
+        "code_snippet": "",
+        "scanner": "GNN",
+        "scan_id": 1
+      }
+    ],
+    "scanners_involved": [
+      "GNN"
+    ],
+    "categories": [
+      "gnn"
+    ],
+    "remediation_guidance": [
+      "Restrict to specific protocols (tcp, udp)"
+    ],
+    "risk_explanation": "This pattern has been detected 6 times across 6 scan(s), affecting 1 unique resource(s) in 1 file(s). Severity: HIGH. Detected by: GNN."
+  },
+  "5cc1f2f7c045": {
+    "signature": "5cc1f2f7c045",
+    "sample_description": "Resource **aws_instance.web_server** has vulnerability: Public IP assigned. This resource is part of the infrastructure attack graph and may enable lateral movement or data exfiltration.\n\n**Impact:** ",
+    "sample_rule_id": "GNN_AWS_INSTANCE_WEB_SERVER",
+    "severity": "MEDIUM",
+    "scan_ids": [
+      1,
+      2,
+      3,
+      4,
+      5,
+      6
+    ],
+    "count": 6,
+    "first_seen": "2026-02-22T12:56:12.324635",
+    "last_seen": "2026-02-22T13:01:50.990826",
+    "rule_generated": false,
+    "affected_resources": [
+      "aws_instance.web_server"
+    ],
+    "affected_files": [
+      "vulnerable_infra.tf"
+    ],
+    "rule_ids_involved": [
+      "GNN_AWS_INSTANCE_WEB_SERVER"
+    ],
+    "example_findings": [
+      {
+        "description": "Resource **aws_instance.web_server** has vulnerability: Public IP assigned. This resource is part of the infrastructure attack graph and may enable lateral movement or data exfiltration.\n\n**Impact:** This could enable partial information disclosure or weaken the security posture.",
+        "title": "[web_server] Public IP assigned",
+        "severity": "MEDIUM",
+        "resource": "aws_instance.web_server",
+        "file": "vulnerable_infra.tf",
+        "rule_id": "GNN_AWS_INSTANCE_WEB_SERVER",
+        "line_number": 18,
+        "code_snippet": "",
+        "scanner": "GNN",
+        "scan_id": 1
+      }
+    ],
+    "scanners_involved": [
+      "GNN"
+    ],
+    "categories": [
+      "gnn"
+    ],
+    "remediation_guidance": [
+      "Place instance behind a load balancer or NAT gateway"
+    ],
+    "risk_explanation": "This pattern has been detected 6 times across 6 scan(s), affecting 1 unique resource(s) in 1 file(s). Severity: MEDIUM. Detected by: GNN."
+  },
+  "2ed8e2da8b27": {
+    "signature": "2ed8e2da8b27",
+    "sample_description": "Resource **aws_db_instance.database** has vulnerability: Database publicly accessible. This resource is part of the infrastructure attack graph and may enable lateral movement or data exfiltration.\n\n*",
+    "sample_rule_id": "GNN_AWS_DB_INSTANCE_DATABASE",
+    "severity": "CRITICAL",
+    "scan_ids": [
+      1,
+      2,
+      3,
+      4,
+      5,
+      6
+    ],
+    "count": 6,
+    "first_seen": "2026-02-22T12:56:12.324635",
+    "last_seen": "2026-02-22T13:01:50.990826",
+    "rule_generated": false,
+    "affected_resources": [
+      "aws_db_instance.database"
+    ],
+    "affected_files": [
+      "vulnerable_infra.tf"
+    ],
+    "rule_ids_involved": [
+      "GNN_AWS_DB_INSTANCE_DATABASE"
+    ],
+    "example_findings": [
+      {
+        "description": "Resource **aws_db_instance.database** has vulnerability: Database publicly accessible. This resource is part of the infrastructure attack graph and may enable lateral movement or data exfiltration.\n\n**Impact:** This could allow full system compromise, data breach, or unauthorized access to production infrastructure.",
+        "title": "[database] Database publicly accessible",
+        "severity": "CRITICAL",
+        "resource": "aws_db_instance.database",
+        "file": "vulnerable_infra.tf",
+        "rule_id": "GNN_AWS_DB_INSTANCE_DATABASE",
+        "line_number": 25,
+        "code_snippet": "",
+        "scanner": "GNN",
+        "scan_id": 1
+      }
+    ],
+    "scanners_involved": [
+      "GNN"
+    ],
+    "categories": [
+      "gnn"
+    ],
+    "remediation_guidance": [
+      "Set publicly_accessible = false and use VPC peering"
+    ],
+    "risk_explanation": "This pattern has been detected 6 times across 6 scan(s), affecting 1 unique resource(s) in 1 file(s). Severity: CRITICAL. Detected by: GNN."
+  },
+  "c0ea8c2f963f": {
+    "signature": "c0ea8c2f963f",
+    "sample_description": "Resource **aws_db_instance.database** has vulnerability: Database storage not encrypted. This resource is part of the infrastructure attack graph and may enable lateral movement or data exfiltration.\n",
+    "sample_rule_id": "GNN_AWS_DB_INSTANCE_DATABASE",
+    "severity": "HIGH",
+    "scan_ids": [
+      1,
+      2,
+      3,
+      4,
+      5,
+      6
+    ],
+    "count": 6,
+    "first_seen": "2026-02-22T12:56:12.324635",
+    "last_seen": "2026-02-22T13:01:50.990826",
+    "rule_generated": false,
+    "affected_resources": [
+      "aws_db_instance.database"
+    ],
+    "affected_files": [
+      "vulnerable_infra.tf"
+    ],
+    "rule_ids_involved": [
+      "GNN_AWS_DB_INSTANCE_DATABASE"
+    ],
+    "example_findings": [
+      {
+        "description": "Resource **aws_db_instance.database** has vulnerability: Database storage not encrypted. This resource is part of the infrastructure attack graph and may enable lateral movement or data exfiltration.\n\n**Impact:** This could lead to significant data exposure, privilege escalation, or service disruption.",
+        "title": "[database] Database storage not encrypted",
+        "severity": "HIGH",
+        "resource": "aws_db_instance.database",
+        "file": "vulnerable_infra.tf",
+        "rule_id": "GNN_AWS_DB_INSTANCE_DATABASE",
+        "line_number": 25,
+        "code_snippet": "",
+        "scanner": "GNN",
+        "scan_id": 1
+      }
+    ],
+    "scanners_involved": [
+      "GNN"
+    ],
+    "categories": [
+      "gnn"
+    ],
+    "remediation_guidance": [
+      "Enable storage_encrypted = true with KMS key"
+    ],
+    "risk_explanation": "This pattern has been detected 6 times across 6 scan(s), affecting 1 unique resource(s) in 1 file(s). Severity: HIGH. Detected by: GNN."
+  },
+  "4c99385ea394": {
+    "signature": "4c99385ea394",
+    "sample_description": "Resource **aws_db_instance.database** has vulnerability: Hardcoded database password. This resource is part of the infrastructure attack graph and may enable lateral movement or data exfiltration.\n\n**",
+    "sample_rule_id": "GNN_AWS_DB_INSTANCE_DATABASE",
+    "severity": "CRITICAL",
+    "scan_ids": [
+      1,
+      2,
+      3,
+      4,
+      5,
+      6
+    ],
+    "count": 6,
+    "first_seen": "2026-02-22T12:56:12.324635",
+    "last_seen": "2026-02-22T13:01:50.990826",
+    "rule_generated": false,
+    "affected_resources": [
+      "aws_db_instance.database"
+    ],
+    "affected_files": [
+      "vulnerable_infra.tf"
+    ],
+    "rule_ids_involved": [
+      "GNN_AWS_DB_INSTANCE_DATABASE"
+    ],
+    "example_findings": [
+      {
+        "description": "Resource **aws_db_instance.database** has vulnerability: Hardcoded database password. This resource is part of the infrastructure attack graph and may enable lateral movement or data exfiltration.\n\n**Impact:** This could allow full system compromise, data breach, or unauthorized access to production infrastructure.",
+        "title": "[database] Hardcoded database password",
+        "severity": "CRITICAL",
+        "resource": "aws_db_instance.database",
+        "file": "vulnerable_infra.tf",
+        "rule_id": "GNN_AWS_DB_INSTANCE_DATABASE",
+        "line_number": 25,
+        "code_snippet": "",
+        "scanner": "GNN",
+        "scan_id": 1
+      }
+    ],
+    "scanners_involved": [
+      "GNN"
+    ],
+    "categories": [
+      "gnn"
+    ],
+    "remediation_guidance": [
+      "Use aws_secretsmanager_secret or variable references"
+    ],
+    "risk_explanation": "This pattern has been detected 6 times across 6 scan(s), affecting 1 unique resource(s) in 1 file(s). Severity: CRITICAL. Detected by: GNN."
+  },
+  "18fdd7a32e03": {
+    "signature": "18fdd7a32e03",
+    "sample_description": "Resource **aws_security_group.db_sg** has vulnerability: Unrestricted ingress (0.0.0.0/0). This resource is part of the infrastructure attack graph and may enable lateral movement or data exfiltration",
+    "sample_rule_id": "GNN_AWS_SECURITY_GROUP_DB_SG",
+    "severity": "HIGH",
+    "scan_ids": [
+      1,
+      2,
+      3,
+      4,
+      5,
+      6
+    ],
+    "count": 6,
+    "first_seen": "2026-02-22T12:56:12.324635",
+    "last_seen": "2026-02-22T13:01:50.990826",
+    "rule_generated": false,
+    "affected_resources": [
+      "aws_security_group.db_sg"
+    ],
+    "affected_files": [
+      "vulnerable_infra.tf"
+    ],
+    "rule_ids_involved": [
+      "GNN_AWS_SECURITY_GROUP_DB_SG"
+    ],
+    "example_findings": [
+      {
+        "description": "Resource **aws_security_group.db_sg** has vulnerability: Unrestricted ingress (0.0.0.0/0). This resource is part of the infrastructure attack graph and may enable lateral movement or data exfiltration.\n\n**Impact:** This could lead to significant data exposure, privilege escalation, or service disruption.",
+        "title": "[db_sg] Unrestricted ingress (0.0.0.0/0)",
+        "severity": "HIGH",
+        "resource": "aws_security_group.db_sg",
+        "file": "vulnerable_infra.tf",
+        "rule_id": "GNN_AWS_SECURITY_GROUP_DB_SG",
+        "line_number": 37,
+        "code_snippet": "",
+        "scanner": "GNN",
+        "scan_id": 1
+      }
+    ],
+    "scanners_involved": [
+      "GNN"
+    ],
+    "categories": [
+      "gnn"
+    ],
+    "remediation_guidance": [
+      "Restrict CIDR blocks to specific IP ranges"
+    ],
+    "risk_explanation": "This pattern has been detected 6 times across 6 scan(s), affecting 1 unique resource(s) in 1 file(s). Severity: HIGH. Detected by: GNN."
+  },
+  "8ed7aecd4af5": {
+    "signature": "8ed7aecd4af5",
+    "sample_description": "Resource **aws_s3_bucket.data_backup** has vulnerability: S3 bucket publicly readable. This resource is part of the infrastructure attack graph and may enable lateral movement or data exfiltration.\n\n*",
+    "sample_rule_id": "GNN_AWS_S3_BUCKET_DATA_BACKUP",
+    "severity": "CRITICAL",
+    "scan_ids": [
+      1,
+      2,
+      3,
+      4,
+      5,
+      6
+    ],
+    "count": 6,
+    "first_seen": "2026-02-22T12:56:12.324635",
+    "last_seen": "2026-02-22T13:01:50.990826",
+    "rule_generated": false,
+    "affected_resources": [
+      "aws_s3_bucket.data_backup"
+    ],
+    "affected_files": [
+      "vulnerable_infra.tf"
+    ],
+    "rule_ids_involved": [
+      "GNN_AWS_S3_BUCKET_DATA_BACKUP"
+    ],
+    "example_findings": [
+      {
+        "description": "Resource **aws_s3_bucket.data_backup** has vulnerability: S3 bucket publicly readable. This resource is part of the infrastructure attack graph and may enable lateral movement or data exfiltration.\n\n**Impact:** This could allow full system compromise, data breach, or unauthorized access to production infrastructure.",
+        "title": "[data_backup] S3 bucket publicly readable",
+        "severity": "CRITICAL",
+        "resource": "aws_s3_bucket.data_backup",
+        "file": "vulnerable_infra.tf",
+        "rule_id": "GNN_AWS_S3_BUCKET_DATA_BACKUP",
+        "line_number": 47,
+        "code_snippet": "",
+        "scanner": "GNN",
+        "scan_id": 1
+      }
+    ],
+    "scanners_involved": [
+      "GNN"
+    ],
+    "categories": [
+      "gnn"
+    ],
+    "remediation_guidance": [
+      "Remove public ACL; use bucket policies for access control"
+    ],
+    "risk_explanation": "This pattern has been detected 6 times across 6 scan(s), affecting 1 unique resource(s) in 1 file(s). Severity: CRITICAL. Detected by: GNN."
+  },
+  "2d5f8c1711a2": {
+    "signature": "2d5f8c1711a2",
+    "sample_description": "Detected a 3-hop attack path from aws_security_group.web_sg to aws_db_instance.database.\n\n**Attack Chain:** web_sg \u2192 web_server \u2192 database\n\nAttacker enters via **aws_security_group.web_sg**\n  \u21b3 Unrest",
+    "sample_rule_id": "AP-008",
+    "severity": "CRITICAL",
+    "scan_ids": [
+      2,
+      3,
+      4,
+      5,
+      6
+    ],
+    "count": 5,
+    "first_seen": "2026-02-22T12:58:56.871052",
+    "last_seen": "2026-02-22T13:01:50.989805",
+    "rule_generated": false,
+    "affected_resources": [
+      "aws_security_group.web_sg"
+    ],
+    "affected_files": [
+      "vulnerable_infra.tf"
+    ],
+    "rule_ids_involved": [
+      "AP-008",
+      "AP-001"
+    ],
+    "example_findings": [
+      {
+        "description": "Detected a 3-hop attack path from aws_security_group.web_sg to aws_db_instance.database.\n\n**Attack Chain:** web_sg \u2192 web_server \u2192 database\n\nAttacker enters via **aws_security_group.web_sg**\n  \u21b3 Unrestricted ingress (0.0.0.0/0)\n  \u21b3 All ports open\n  \u21b3 All protocols allowed\n\u2192 Traverses to **aws_instance.web_server** (protected_by)\n  \u21b3 Public IP assigned\n\u2192 Traverses to **aws_db_instance.database** (network_access)\n  \u21b3 Database publicly accessible\n  \u21b3 Database storage not encrypted\n  \u21b3 Hardcoded data",
+        "title": "Attack Path: web_sg \u2192 web_server \u2192 database",
+        "severity": "CRITICAL",
+        "resource": "aws_security_group.web_sg",
+        "file": "vulnerable_infra.tf",
+        "rule_id": "AP-008",
+        "line_number": null,
+        "code_snippet": "",
+        "scanner": "GNN",
+        "scan_id": 2
+      },
+      {
+        "description": "Detected a 3-hop attack path from aws_security_group.web_sg to aws_db_instance.database.\n\n**Attack Chain:** web_sg \u2192 web_server \u2192 database\n\nAttacker enters via **aws_security_group.web_sg**\n  \u21b3 Unrestricted ingress (0.0.0.0/0)\n  \u21b3 All ports open\n  \u21b3 All protocols allowed\n\u2192 Traverses to **aws_instance.web_server** (protected_by)\n  \u21b3 Public IP assigned\n\u2192 Traverses to **aws_db_instance.database** (network_access)\n  \u21b3 Database publicly accessible\n  \u21b3 Database storage not encrypted\n  \u21b3 Hardcoded data",
+        "title": "Attack Path: web_sg \u2192 web_server \u2192 database",
+        "severity": "CRITICAL",
+        "resource": "aws_security_group.web_sg",
+        "file": "vulnerable_infra.tf",
+        "rule_id": "AP-008",
+        "line_number": null,
+        "code_snippet": "",
+        "scanner": "GNN",
+        "scan_id": 3
+      },
+      {
+        "description": "Detected a 3-hop attack path from aws_security_group.web_sg to aws_db_instance.database.\n\n**Attack Chain:** web_sg \u2192 web_server \u2192 database\n\nAttacker enters via **aws_security_group.web_sg**\n  \u21b3 Unrestricted ingress (0.0.0.0/0)\n  \u21b3 All ports open\n  \u21b3 All protocols allowed\n\u2192 Traverses to **aws_instance.web_server** (protected_by)\n  \u21b3 Public IP assigned\n\u2192 Traverses to **aws_db_instance.database** (network_access)\n  \u21b3 Database publicly accessible\n  \u21b3 Database storage not encrypted\n  \u21b3 Hardcoded data",
+        "title": "Attack Path: web_sg \u2192 web_server \u2192 database",
+        "severity": "CRITICAL",
+        "resource": "aws_security_group.web_sg",
+        "file": "vulnerable_infra.tf",
+        "rule_id": "AP-008",
+        "line_number": null,
+        "code_snippet": "",
+        "scanner": "GNN",
+        "scan_id": 4
+      },
+      {
+        "description": "Detected a 3-hop attack path from aws_security_group.web_sg to aws_db_instance.database.\n\n**Attack Chain:** web_sg \u2192 web_server \u2192 database\n\nAttacker enters via **aws_security_group.web_sg**\n  \u21b3 Unrestricted ingress (0.0.0.0/0)\n  \u21b3 All ports open\n  \u21b3 All protocols allowed\n\u2192 Traverses to **aws_instance.web_server** (protected_by)\n  \u21b3 Public IP assigned\n\u2192 Traverses to **aws_db_instance.database** (network_access)\n  \u21b3 Database publicly accessible\n  \u21b3 Database storage not encrypted\n  \u21b3 Hardcoded data",
+        "title": "Attack Path: web_sg \u2192 web_server \u2192 database",
+        "severity": "CRITICAL",
+        "resource": "aws_security_group.web_sg",
+        "file": "vulnerable_infra.tf",
+        "rule_id": "AP-008",
+        "line_number": null,
+        "code_snippet": "",
+        "scanner": "GNN",
+        "scan_id": 5
+      },
+      {
+        "description": "Detected a 3-hop attack path from aws_security_group.web_sg to aws_db_instance.database.\n\n**Attack Chain:** web_sg \u2192 web_server \u2192 database\n\nAttacker enters via **aws_security_group.web_sg**\n  \u21b3 Unrestricted ingress (0.0.0.0/0)\n  \u21b3 All ports open\n  \u21b3 All protocols allowed\n\u2192 Traverses to **aws_instance.web_server** (protected_by)\n  \u21b3 Public IP assigned\n\u2192 Traverses to **aws_db_instance.database** (network_access)\n  \u21b3 Database publicly accessible\n  \u21b3 Database storage not encrypted\n  \u21b3 Hardcoded data",
+        "title": "Attack Path: web_sg \u2192 web_server \u2192 database",
+        "severity": "CRITICAL",
+        "resource": "aws_security_group.web_sg",
+        "file": "vulnerable_infra.tf",
+        "rule_id": "AP-001",
+        "line_number": null,
+        "code_snippet": "",
+        "scanner": "GNN",
+        "scan_id": 6
+      }
+    ],
+    "scanners_involved": [
+      "GNN"
+    ],
+    "categories": [
+      "gnn"
+    ],
+    "remediation_guidance": [
+      "[aws_security_group.web_sg] Restrict CIDR blocks to specific IP ranges",
+      "[aws_security_group.web_sg] Limit port ranges to necessary services only",
+      "[aws_security_group.web_sg] Restrict to specific protocols (tcp, udp)",
+      "[aws_instance.web_server] Place instance behind a load balancer or NAT gateway",
+      "[aws_db_instance.database] Set publicly_accessible = false and use VPC peering",
+      "[aws_db_instance.database] Enable storage_encrypted = true with KMS key",
+      "[aws_db_instance.database] Use aws_secretsmanager_secret or variable references",
+      "Apply principle of least privilege across all connected resources.",
+      "Add monitoring and alerting for the identified attack path."
+    ],
+    "risk_explanation": "This pattern has been detected 5 times across 5 scan(s), affecting 1 unique resource(s) in 1 file(s). Severity: CRITICAL. Detected by: GNN."
+  },
+  "df07a533a329": {
+    "signature": "df07a533a329",
+    "sample_description": "Detected a 4-hop attack path from aws_security_group.db_sg to aws_s3_bucket.data_backup.\n\n**Attack Chain:** db_sg \u2192 database \u2192 web_server \u2192 data_backup\n\nAttacker enters via **aws_security_group.db_sg*",
+    "sample_rule_id": "AP-016",
+    "severity": "CRITICAL",
+    "scan_ids": [
+      2,
+      3,
+      4,
+      5,
+      6
+    ],
+    "count": 15,
+    "first_seen": "2026-02-22T12:58:56.871052",
+    "last_seen": "2026-02-22T13:01:50.989805",
+    "rule_generated": false,
+    "affected_resources": [
+      "aws_security_group.db_sg",
+      "aws_s3_bucket.data_backup",
+      "aws_db_instance.database"
+    ],
+    "affected_files": [
+      "vulnerable_infra.tf"
+    ],
+    "rule_ids_involved": [
+      "AP-016",
+      "AP-005",
+      "AP-012",
+      "AP-002",
+      "AP-003",
+      "AP-004"
+    ],
+    "example_findings": [
+      {
+        "description": "Detected a 4-hop attack path from aws_security_group.db_sg to aws_s3_bucket.data_backup.\n\n**Attack Chain:** db_sg \u2192 database \u2192 web_server \u2192 data_backup\n\nAttacker enters via **aws_security_group.db_sg**\n  \u21b3 Unrestricted ingress (0.0.0.0/0)\n\u2192 Traverses to **aws_db_instance.database** (protected_by)\n  \u21b3 Database publicly accessible\n  \u21b3 Database storage not encrypted\n  \u21b3 Hardcoded database password\n  \ud83c\udfaf **HIGH-VALUE TARGET REACHED**\n\u2192 Traverses to **aws_instance.web_server** (network_access)\n  \u21b3 Publ",
+        "title": "Attack Path: db_sg \u2192 database \u2192 web_server \u2192 data_backup",
+        "severity": "CRITICAL",
+        "resource": "aws_security_group.db_sg",
+        "file": "vulnerable_infra.tf",
+        "rule_id": "AP-016",
+        "line_number": null,
+        "code_snippet": "",
+        "scanner": "GNN",
+        "scan_id": 2
+      },
+      {
+        "description": "Detected a 3-hop attack path from aws_s3_bucket.data_backup to aws_db_instance.database.\n\n**Attack Chain:** data_backup \u2192 web_server \u2192 database\n\nAttacker enters via **aws_s3_bucket.data_backup**\n  \u21b3 S3 bucket publicly readable\n  \ud83c\udfaf **HIGH-VALUE TARGET REACHED**\n\u2192 Traverses to **aws_instance.web_server** (data_access)\n  \u21b3 Public IP assigned\n\u2192 Traverses to **aws_db_instance.database** (network_access)\n  \u21b3 Database publicly accessible\n  \u21b3 Database storage not encrypted\n  \u21b3 Hardcoded database passwor",
+        "title": "Attack Path: data_backup \u2192 web_server \u2192 database",
+        "severity": "CRITICAL",
+        "resource": "aws_s3_bucket.data_backup",
+        "file": "vulnerable_infra.tf",
+        "rule_id": "AP-005",
+        "line_number": null,
+        "code_snippet": "",
+        "scanner": "GNN",
+        "scan_id": 2
+      },
+      {
+        "description": "Detected a 3-hop attack path from aws_db_instance.database to aws_s3_bucket.data_backup.\n\n**Attack Chain:** database \u2192 web_server \u2192 data_backup\n\nAttacker enters via **aws_db_instance.database**\n  \u21b3 Database publicly accessible\n  \u21b3 Database storage not encrypted\n  \u21b3 Hardcoded database password\n  \ud83c\udfaf **HIGH-VALUE TARGET REACHED**\n\u2192 Traverses to **aws_instance.web_server** (network_access)\n  \u21b3 Public IP assigned\n\u2192 Traverses to **aws_s3_bucket.data_backup** (data_access)\n  \u21b3 S3 bucket publicly readabl",
+        "title": "Attack Path: database \u2192 web_server \u2192 data_backup",
+        "severity": "CRITICAL",
+        "resource": "aws_db_instance.database",
+        "file": "vulnerable_infra.tf",
+        "rule_id": "AP-012",
+        "line_number": null,
+        "code_snippet": "",
+        "scanner": "GNN",
+        "scan_id": 2
+      },
+      {
+        "description": "Detected a 4-hop attack path from aws_security_group.db_sg to aws_s3_bucket.data_backup.\n\n**Attack Chain:** db_sg \u2192 database \u2192 web_server \u2192 data_backup\n\nAttacker enters via **aws_security_group.db_sg**\n  \u21b3 Unrestricted ingress (0.0.0.0/0)\n\u2192 Traverses to **aws_db_instance.database** (protected_by)\n  \u21b3 Database publicly accessible\n  \u21b3 Database storage not encrypted\n  \u21b3 Hardcoded database password\n  \ud83c\udfaf **HIGH-VALUE TARGET REACHED**\n\u2192 Traverses to **aws_instance.web_server** (network_access)\n  \u21b3 Publ",
+        "title": "Attack Path: db_sg \u2192 database \u2192 web_server \u2192 data_backup",
+        "severity": "CRITICAL",
+        "resource": "aws_security_group.db_sg",
+        "file": "vulnerable_infra.tf",
+        "rule_id": "AP-016",
+        "line_number": null,
+        "code_snippet": "",
+        "scanner": "GNN",
+        "scan_id": 3
+      },
+      {
+        "description": "Detected a 3-hop attack path from aws_s3_bucket.data_backup to aws_db_instance.database.\n\n**Attack Chain:** data_backup \u2192 web_server \u2192 database\n\nAttacker enters via **aws_s3_bucket.data_backup**\n  \u21b3 S3 bucket publicly readable\n  \ud83c\udfaf **HIGH-VALUE TARGET REACHED**\n\u2192 Traverses to **aws_instance.web_server** (data_access)\n  \u21b3 Public IP assigned\n\u2192 Traverses to **aws_db_instance.database** (network_access)\n  \u21b3 Database publicly accessible\n  \u21b3 Database storage not encrypted\n  \u21b3 Hardcoded database passwor",
+        "title": "Attack Path: data_backup \u2192 web_server \u2192 database",
+        "severity": "CRITICAL",
+        "resource": "aws_s3_bucket.data_backup",
+        "file": "vulnerable_infra.tf",
+        "rule_id": "AP-005",
+        "line_number": null,
+        "code_snippet": "",
+        "scanner": "GNN",
+        "scan_id": 3
+      }
+    ],
+    "scanners_involved": [
+      "GNN"
+    ],
+    "categories": [
+      "gnn"
+    ],
+    "remediation_guidance": [
+      "[aws_security_group.db_sg] Restrict CIDR blocks to specific IP ranges",
+      "[aws_db_instance.database] Set publicly_accessible = false and use VPC peering",
+      "[aws_db_instance.database] Enable storage_encrypted = true with KMS key",
+      "[aws_db_instance.database] Use aws_secretsmanager_secret or variable references",
+      "[aws_instance.web_server] Place instance behind a load balancer or NAT gateway",
+      "[aws_s3_bucket.data_backup] Remove public ACL; use bucket policies for access control",
+      "Apply principle of least privilege across all connected resources.",
+      "Add monitoring and alerting for the identified attack path."
+    ],
+    "risk_explanation": "This pattern has been detected 15 times across 5 scan(s), affecting 3 unique resource(s) in 1 file(s). Severity: CRITICAL. Detected by: GNN."
+  },
+  "f5c3dfefe5c7": {
+    "signature": "f5c3dfefe5c7",
+    "sample_description": "Detected a 3-hop attack path from aws_security_group.web_sg to aws_s3_bucket.data_backup.\n\n**Attack Chain:** web_sg \u2192 web_server \u2192 data_backup\n\nAttacker enters via **aws_security_group.web_sg**\n  \u21b3 Un",
+    "sample_rule_id": "AP-009",
+    "severity": "CRITICAL",
+    "scan_ids": [
+      2,
+      3,
+      4,
+      5,
+      6
+    ],
+    "count": 5,
+    "first_seen": "2026-02-22T12:58:56.871052",
+    "last_seen": "2026-02-22T13:01:50.989805",
+    "rule_generated": false,
+    "affected_resources": [
+      "aws_security_group.web_sg"
+    ],
+    "affected_files": [
+      "vulnerable_infra.tf"
+    ],
+    "rule_ids_involved": [
+      "AP-009",
+      "AP-005"
+    ],
+    "example_findings": [
+      {
+        "description": "Detected a 3-hop attack path from aws_security_group.web_sg to aws_s3_bucket.data_backup.\n\n**Attack Chain:** web_sg \u2192 web_server \u2192 data_backup\n\nAttacker enters via **aws_security_group.web_sg**\n  \u21b3 Unrestricted ingress (0.0.0.0/0)\n  \u21b3 All ports open\n  \u21b3 All protocols allowed\n\u2192 Traverses to **aws_instance.web_server** (protected_by)\n  \u21b3 Public IP assigned\n\u2192 Traverses to **aws_s3_bucket.data_backup** (data_access)\n  \u21b3 S3 bucket publicly readable\n  \ud83c\udfaf **HIGH-VALUE TARGET REACHED**\n\n**Impact:** This ",
+        "title": "Attack Path: web_sg \u2192 web_server \u2192 data_backup",
+        "severity": "CRITICAL",
+        "resource": "aws_security_group.web_sg",
+        "file": "vulnerable_infra.tf",
+        "rule_id": "AP-009",
+        "line_number": null,
+        "code_snippet": "",
+        "scanner": "GNN",
+        "scan_id": 2
+      },
+      {
+        "description": "Detected a 3-hop attack path from aws_security_group.web_sg to aws_s3_bucket.data_backup.\n\n**Attack Chain:** web_sg \u2192 web_server \u2192 data_backup\n\nAttacker enters via **aws_security_group.web_sg**\n  \u21b3 Unrestricted ingress (0.0.0.0/0)\n  \u21b3 All ports open\n  \u21b3 All protocols allowed\n\u2192 Traverses to **aws_instance.web_server** (protected_by)\n  \u21b3 Public IP assigned\n\u2192 Traverses to **aws_s3_bucket.data_backup** (data_access)\n  \u21b3 S3 bucket publicly readable\n  \ud83c\udfaf **HIGH-VALUE TARGET REACHED**\n\n**Impact:** This ",
+        "title": "Attack Path: web_sg \u2192 web_server \u2192 data_backup",
+        "severity": "CRITICAL",
+        "resource": "aws_security_group.web_sg",
+        "file": "vulnerable_infra.tf",
+        "rule_id": "AP-009",
+        "line_number": null,
+        "code_snippet": "",
+        "scanner": "GNN",
+        "scan_id": 3
+      },
+      {
+        "description": "Detected a 3-hop attack path from aws_security_group.web_sg to aws_s3_bucket.data_backup.\n\n**Attack Chain:** web_sg \u2192 web_server \u2192 data_backup\n\nAttacker enters via **aws_security_group.web_sg**\n  \u21b3 Unrestricted ingress (0.0.0.0/0)\n  \u21b3 All ports open\n  \u21b3 All protocols allowed\n\u2192 Traverses to **aws_instance.web_server** (protected_by)\n  \u21b3 Public IP assigned\n\u2192 Traverses to **aws_s3_bucket.data_backup** (data_access)\n  \u21b3 S3 bucket publicly readable\n  \ud83c\udfaf **HIGH-VALUE TARGET REACHED**\n\n**Impact:** This ",
+        "title": "Attack Path: web_sg \u2192 web_server \u2192 data_backup",
+        "severity": "CRITICAL",
+        "resource": "aws_security_group.web_sg",
+        "file": "vulnerable_infra.tf",
+        "rule_id": "AP-009",
+        "line_number": null,
+        "code_snippet": "",
+        "scanner": "GNN",
+        "scan_id": 4
+      },
+      {
+        "description": "Detected a 3-hop attack path from aws_security_group.web_sg to aws_s3_bucket.data_backup.\n\n**Attack Chain:** web_sg \u2192 web_server \u2192 data_backup\n\nAttacker enters via **aws_security_group.web_sg**\n  \u21b3 Unrestricted ingress (0.0.0.0/0)\n  \u21b3 All ports open\n  \u21b3 All protocols allowed\n\u2192 Traverses to **aws_instance.web_server** (protected_by)\n  \u21b3 Public IP assigned\n\u2192 Traverses to **aws_s3_bucket.data_backup** (data_access)\n  \u21b3 S3 bucket publicly readable\n  \ud83c\udfaf **HIGH-VALUE TARGET REACHED**\n\n**Impact:** This ",
+        "title": "Attack Path: web_sg \u2192 web_server \u2192 data_backup",
+        "severity": "CRITICAL",
+        "resource": "aws_security_group.web_sg",
+        "file": "vulnerable_infra.tf",
+        "rule_id": "AP-009",
+        "line_number": null,
+        "code_snippet": "",
+        "scanner": "GNN",
+        "scan_id": 5
+      },
+      {
+        "description": "Detected a 3-hop attack path from aws_security_group.web_sg to aws_s3_bucket.data_backup.\n\n**Attack Chain:** web_sg \u2192 web_server \u2192 data_backup\n\nAttacker enters via **aws_security_group.web_sg**\n  \u21b3 Unrestricted ingress (0.0.0.0/0)\n  \u21b3 All ports open\n  \u21b3 All protocols allowed\n\u2192 Traverses to **aws_instance.web_server** (protected_by)\n  \u21b3 Public IP assigned\n\u2192 Traverses to **aws_s3_bucket.data_backup** (data_access)\n  \u21b3 S3 bucket publicly readable\n  \ud83c\udfaf **HIGH-VALUE TARGET REACHED**\n\n**Impact:** This ",
+        "title": "Attack Path: web_sg \u2192 web_server \u2192 data_backup",
+        "severity": "CRITICAL",
+        "resource": "aws_security_group.web_sg",
+        "file": "vulnerable_infra.tf",
+        "rule_id": "AP-005",
+        "line_number": null,
+        "code_snippet": "",
+        "scanner": "GNN",
+        "scan_id": 6
+      }
+    ],
+    "scanners_involved": [
+      "GNN"
+    ],
+    "categories": [
+      "gnn"
+    ],
+    "remediation_guidance": [
+      "[aws_security_group.web_sg] Restrict CIDR blocks to specific IP ranges",
+      "[aws_security_group.web_sg] Limit port ranges to necessary services only",
+      "[aws_security_group.web_sg] Restrict to specific protocols (tcp, udp)",
+      "[aws_instance.web_server] Place instance behind a load balancer or NAT gateway",
+      "[aws_s3_bucket.data_backup] Remove public ACL; use bucket policies for access control",
+      "Apply principle of least privilege across all connected resources.",
+      "Add monitoring and alerting for the identified attack path."
+    ],
+    "risk_explanation": "This pattern has been detected 5 times across 5 scan(s), affecting 1 unique resource(s) in 1 file(s). Severity: CRITICAL. Detected by: GNN."
+  },
+  "356fe5fec9e9": {
+    "signature": "356fe5fec9e9",
+    "sample_description": "Detected a 4-hop attack path from aws_security_group.db_sg to aws_iam_role.admin_role.\n\n**Attack Chain:** db_sg \u2192 database \u2192 web_server \u2192 admin_role\n\nAttacker enters via **aws_security_group.db_sg**\n ",
+    "sample_rule_id": "AP-017",
+    "severity": "CRITICAL",
+    "scan_ids": [
+      2,
+      3,
+      4,
+      5,
+      6
+    ],
+    "count": 10,
+    "first_seen": "2026-02-22T12:58:56.871052",
+    "last_seen": "2026-02-22T13:01:50.990826",
+    "rule_generated": false,
+    "affected_resources": [
+      "aws_security_group.db_sg",
+      "aws_db_instance.database"
+    ],
+    "affected_files": [
+      "vulnerable_infra.tf"
+    ],
+    "rule_ids_involved": [
+      "AP-017",
+      "AP-013",
+      "AP-006",
+      "AP-010"
+    ],
+    "example_findings": [
+      {
+        "description": "Detected a 4-hop attack path from aws_security_group.db_sg to aws_iam_role.admin_role.\n\n**Attack Chain:** db_sg \u2192 database \u2192 web_server \u2192 admin_role\n\nAttacker enters via **aws_security_group.db_sg**\n  \u21b3 Unrestricted ingress (0.0.0.0/0)\n\u2192 Traverses to **aws_db_instance.database** (protected_by)\n  \u21b3 Database publicly accessible\n  \u21b3 Database storage not encrypted\n  \u21b3 Hardcoded database password\n  \ud83c\udfaf **HIGH-VALUE TARGET REACHED**\n\u2192 Traverses to **aws_instance.web_server** (network_access)\n  \u21b3 Public ",
+        "title": "Attack Path: db_sg \u2192 database \u2192 web_server \u2192 admin_role",
+        "severity": "CRITICAL",
+        "resource": "aws_security_group.db_sg",
+        "file": "vulnerable_infra.tf",
+        "rule_id": "AP-017",
+        "line_number": null,
+        "code_snippet": "",
+        "scanner": "GNN",
+        "scan_id": 2
+      },
+      {
+        "description": "Detected a 3-hop attack path from aws_db_instance.database to aws_iam_role.admin_role.\n\n**Attack Chain:** database \u2192 web_server \u2192 admin_role\n\nAttacker enters via **aws_db_instance.database**\n  \u21b3 Database publicly accessible\n  \u21b3 Database storage not encrypted\n  \u21b3 Hardcoded database password\n  \ud83c\udfaf **HIGH-VALUE TARGET REACHED**\n\u2192 Traverses to **aws_instance.web_server** (network_access)\n  \u21b3 Public IP assigned\n\u2192 Traverses to **aws_iam_role.admin_role** (assumes_role)\n  \ud83c\udfaf **HIGH-VALUE TARGET REACHED**\n",
+        "title": "Attack Path: database \u2192 web_server \u2192 admin_role",
+        "severity": "CRITICAL",
+        "resource": "aws_db_instance.database",
+        "file": "vulnerable_infra.tf",
+        "rule_id": "AP-013",
+        "line_number": null,
+        "code_snippet": "",
+        "scanner": "GNN",
+        "scan_id": 2
+      },
+      {
+        "description": "Detected a 4-hop attack path from aws_security_group.db_sg to aws_iam_role.admin_role.\n\n**Attack Chain:** db_sg \u2192 database \u2192 web_server \u2192 admin_role\n\nAttacker enters via **aws_security_group.db_sg**\n  \u21b3 Unrestricted ingress (0.0.0.0/0)\n\u2192 Traverses to **aws_db_instance.database** (protected_by)\n  \u21b3 Database publicly accessible\n  \u21b3 Database storage not encrypted\n  \u21b3 Hardcoded database password\n  \ud83c\udfaf **HIGH-VALUE TARGET REACHED**\n\u2192 Traverses to **aws_instance.web_server** (network_access)\n  \u21b3 Public ",
+        "title": "Attack Path: db_sg \u2192 database \u2192 web_server \u2192 admin_role",
+        "severity": "CRITICAL",
+        "resource": "aws_security_group.db_sg",
+        "file": "vulnerable_infra.tf",
+        "rule_id": "AP-017",
+        "line_number": null,
+        "code_snippet": "",
+        "scanner": "GNN",
+        "scan_id": 3
+      },
+      {
+        "description": "Detected a 3-hop attack path from aws_db_instance.database to aws_iam_role.admin_role.\n\n**Attack Chain:** database \u2192 web_server \u2192 admin_role\n\nAttacker enters via **aws_db_instance.database**\n  \u21b3 Database publicly accessible\n  \u21b3 Database storage not encrypted\n  \u21b3 Hardcoded database password\n  \ud83c\udfaf **HIGH-VALUE TARGET REACHED**\n\u2192 Traverses to **aws_instance.web_server** (network_access)\n  \u21b3 Public IP assigned\n\u2192 Traverses to **aws_iam_role.admin_role** (assumes_role)\n  \ud83c\udfaf **HIGH-VALUE TARGET REACHED**\n",
+        "title": "Attack Path: database \u2192 web_server \u2192 admin_role",
+        "severity": "CRITICAL",
+        "resource": "aws_db_instance.database",
+        "file": "vulnerable_infra.tf",
+        "rule_id": "AP-013",
+        "line_number": null,
+        "code_snippet": "",
+        "scanner": "GNN",
+        "scan_id": 3
+      },
+      {
+        "description": "Detected a 4-hop attack path from aws_security_group.db_sg to aws_iam_role.admin_role.\n\n**Attack Chain:** db_sg \u2192 database \u2192 web_server \u2192 admin_role\n\nAttacker enters via **aws_security_group.db_sg**\n  \u21b3 Unrestricted ingress (0.0.0.0/0)\n\u2192 Traverses to **aws_db_instance.database** (protected_by)\n  \u21b3 Database publicly accessible\n  \u21b3 Database storage not encrypted\n  \u21b3 Hardcoded database password\n  \ud83c\udfaf **HIGH-VALUE TARGET REACHED**\n\u2192 Traverses to **aws_instance.web_server** (network_access)\n  \u21b3 Public ",
+        "title": "Attack Path: db_sg \u2192 database \u2192 web_server \u2192 admin_role",
+        "severity": "CRITICAL",
+        "resource": "aws_security_group.db_sg",
+        "file": "vulnerable_infra.tf",
+        "rule_id": "AP-017",
+        "line_number": null,
+        "code_snippet": "",
+        "scanner": "GNN",
+        "scan_id": 4
+      }
+    ],
+    "scanners_involved": [
+      "GNN"
+    ],
+    "categories": [
+      "gnn"
+    ],
+    "remediation_guidance": [
+      "[aws_security_group.db_sg] Restrict CIDR blocks to specific IP ranges",
+      "[aws_db_instance.database] Set publicly_accessible = false and use VPC peering",
+      "[aws_db_instance.database] Enable storage_encrypted = true with KMS key",
+      "[aws_db_instance.database] Use aws_secretsmanager_secret or variable references",
+      "[aws_instance.web_server] Place instance behind a load balancer or NAT gateway",
+      "Apply principle of least privilege across all connected resources.",
+      "Add monitoring and alerting for the identified attack path."
+    ],
+    "risk_explanation": "This pattern has been detected 10 times across 5 scan(s), affecting 2 unique resource(s) in 1 file(s). Severity: CRITICAL. Detected by: GNN."
+  },
+  "4ae16b3b17d0": {
+    "signature": "4ae16b3b17d0",
+    "sample_description": "Detected a 5-hop attack path from aws_security_group.db_sg to aws_iam_policy.admin_policy.\n\n**Attack Chain:** db_sg \u2192 database \u2192 web_server \u2192 admin_role \u2192 admin_policy\n\nAttacker enters via **aws_secur",
+    "sample_rule_id": "AP-018",
+    "severity": "CRITICAL",
+    "scan_ids": [
+      2,
+      3,
+      4,
+      5,
+      6
+    ],
+    "count": 9,
+    "first_seen": "2026-02-22T12:58:56.871052",
+    "last_seen": "2026-02-22T13:01:50.989805",
+    "rule_generated": false,
+    "affected_resources": [
+      "aws_security_group.db_sg",
+      "aws_db_instance.database"
+    ],
+    "affected_files": [
+      "vulnerable_infra.tf"
+    ],
+    "rule_ids_involved": [
+      "AP-018",
+      "AP-014",
+      "AP-007"
+    ],
+    "example_findings": [
+      {
+        "description": "Detected a 5-hop attack path from aws_security_group.db_sg to aws_iam_policy.admin_policy.\n\n**Attack Chain:** db_sg \u2192 database \u2192 web_server \u2192 admin_role \u2192 admin_policy\n\nAttacker enters via **aws_security_group.db_sg**\n  \u21b3 Unrestricted ingress (0.0.0.0/0)\n\u2192 Traverses to **aws_db_instance.database** (protected_by)\n  \u21b3 Database publicly accessible\n  \u21b3 Database storage not encrypted\n  \u21b3 Hardcoded database password\n  \ud83c\udfaf **HIGH-VALUE TARGET REACHED**\n\u2192 Traverses to **aws_instance.web_server** (network_",
+        "title": "Attack Path: db_sg \u2192 database \u2192 web_server \u2192 admin_role \u2192 admin_policy",
+        "severity": "CRITICAL",
+        "resource": "aws_security_group.db_sg",
+        "file": "vulnerable_infra.tf",
+        "rule_id": "AP-018",
+        "line_number": null,
+        "code_snippet": "",
+        "scanner": "GNN",
+        "scan_id": 2
+      },
+      {
+        "description": "Detected a 4-hop attack path from aws_db_instance.database to aws_iam_policy.admin_policy.\n\n**Attack Chain:** database \u2192 web_server \u2192 admin_role \u2192 admin_policy\n\nAttacker enters via **aws_db_instance.database**\n  \u21b3 Database publicly accessible\n  \u21b3 Database storage not encrypted\n  \u21b3 Hardcoded database password\n  \ud83c\udfaf **HIGH-VALUE TARGET REACHED**\n\u2192 Traverses to **aws_instance.web_server** (network_access)\n  \u21b3 Public IP assigned\n\u2192 Traverses to **aws_iam_role.admin_role** (assumes_role)\n  \ud83c\udfaf **HIGH-VALU",
+        "title": "Attack Path: database \u2192 web_server \u2192 admin_role \u2192 admin_policy",
+        "severity": "CRITICAL",
+        "resource": "aws_db_instance.database",
+        "file": "vulnerable_infra.tf",
+        "rule_id": "AP-014",
+        "line_number": null,
+        "code_snippet": "",
+        "scanner": "GNN",
+        "scan_id": 2
+      },
+      {
+        "description": "Detected a 5-hop attack path from aws_security_group.db_sg to aws_iam_policy.admin_policy.\n\n**Attack Chain:** db_sg \u2192 database \u2192 web_server \u2192 admin_role \u2192 admin_policy\n\nAttacker enters via **aws_security_group.db_sg**\n  \u21b3 Unrestricted ingress (0.0.0.0/0)\n\u2192 Traverses to **aws_db_instance.database** (protected_by)\n  \u21b3 Database publicly accessible\n  \u21b3 Database storage not encrypted\n  \u21b3 Hardcoded database password\n  \ud83c\udfaf **HIGH-VALUE TARGET REACHED**\n\u2192 Traverses to **aws_instance.web_server** (network_",
+        "title": "Attack Path: db_sg \u2192 database \u2192 web_server \u2192 admin_role \u2192 admin_policy",
+        "severity": "CRITICAL",
+        "resource": "aws_security_group.db_sg",
+        "file": "vulnerable_infra.tf",
+        "rule_id": "AP-018",
+        "line_number": null,
+        "code_snippet": "",
+        "scanner": "GNN",
+        "scan_id": 3
+      },
+      {
+        "description": "Detected a 4-hop attack path from aws_db_instance.database to aws_iam_policy.admin_policy.\n\n**Attack Chain:** database \u2192 web_server \u2192 admin_role \u2192 admin_policy\n\nAttacker enters via **aws_db_instance.database**\n  \u21b3 Database publicly accessible\n  \u21b3 Database storage not encrypted\n  \u21b3 Hardcoded database password\n  \ud83c\udfaf **HIGH-VALUE TARGET REACHED**\n\u2192 Traverses to **aws_instance.web_server** (network_access)\n  \u21b3 Public IP assigned\n\u2192 Traverses to **aws_iam_role.admin_role** (assumes_role)\n  \ud83c\udfaf **HIGH-VALU",
+        "title": "Attack Path: database \u2192 web_server \u2192 admin_role \u2192 admin_policy",
+        "severity": "CRITICAL",
+        "resource": "aws_db_instance.database",
+        "file": "vulnerable_infra.tf",
+        "rule_id": "AP-014",
+        "line_number": null,
+        "code_snippet": "",
+        "scanner": "GNN",
+        "scan_id": 3
+      },
+      {
+        "description": "Detected a 5-hop attack path from aws_security_group.db_sg to aws_iam_policy.admin_policy.\n\n**Attack Chain:** db_sg \u2192 database \u2192 web_server \u2192 admin_role \u2192 admin_policy\n\nAttacker enters via **aws_security_group.db_sg**\n  \u21b3 Unrestricted ingress (0.0.0.0/0)\n\u2192 Traverses to **aws_db_instance.database** (protected_by)\n  \u21b3 Database publicly accessible\n  \u21b3 Database storage not encrypted\n  \u21b3 Hardcoded database password\n  \ud83c\udfaf **HIGH-VALUE TARGET REACHED**\n\u2192 Traverses to **aws_instance.web_server** (network_",
+        "title": "Attack Path: db_sg \u2192 database \u2192 web_server \u2192 admin_role \u2192 admin_policy",
+        "severity": "CRITICAL",
+        "resource": "aws_security_group.db_sg",
+        "file": "vulnerable_infra.tf",
+        "rule_id": "AP-018",
+        "line_number": null,
+        "code_snippet": "",
+        "scanner": "GNN",
+        "scan_id": 4
+      }
+    ],
+    "scanners_involved": [
+      "GNN"
+    ],
+    "categories": [
+      "gnn"
+    ],
+    "remediation_guidance": [
+      "[aws_security_group.db_sg] Restrict CIDR blocks to specific IP ranges",
+      "[aws_db_instance.database] Set publicly_accessible = false and use VPC peering",
+      "[aws_db_instance.database] Enable storage_encrypted = true with KMS key",
+      "[aws_db_instance.database] Use aws_secretsmanager_secret or variable references",
+      "[aws_instance.web_server] Place instance behind a load balancer or NAT gateway",
+      "Apply principle of least privilege across all connected resources.",
+      "Add monitoring and alerting for the identified attack path."
+    ],
+    "risk_explanation": "This pattern has been detected 9 times across 5 scan(s), affecting 2 unique resource(s) in 1 file(s). Severity: CRITICAL. Detected by: GNN."
+  },
+  "55990caf1365": {
+    "signature": "55990caf1365",
+    "sample_description": "Detected a 2-hop attack path from aws_instance.web_server to aws_db_instance.database.\n\n**Attack Chain:** web_server \u2192 database\n\nAttacker enters via **aws_instance.web_server**\n  \u21b3 Public IP assigned\n",
+    "sample_rule_id": "AP-001",
+    "severity": "CRITICAL",
+    "scan_ids": [
+      2,
+      3,
+      4,
+      5,
+      6
+    ],
+    "count": 5,
+    "first_seen": "2026-02-22T12:58:56.871052",
+    "last_seen": "2026-02-22T13:01:50.990826",
+    "rule_generated": false,
+    "affected_resources": [
+      "aws_instance.web_server"
+    ],
+    "affected_files": [
+      "vulnerable_infra.tf"
+    ],
+    "rule_ids_involved": [
+      "AP-001",
+      "AP-009"
+    ],
+    "example_findings": [
+      {
+        "description": "Detected a 2-hop attack path from aws_instance.web_server to aws_db_instance.database.\n\n**Attack Chain:** web_server \u2192 database\n\nAttacker enters via **aws_instance.web_server**\n  \u21b3 Public IP assigned\n\u2192 Traverses to **aws_db_instance.database** (network_access)\n  \u21b3 Database publicly accessible\n  \u21b3 Database storage not encrypted\n  \u21b3 Hardcoded database password\n  \ud83c\udfaf **HIGH-VALUE TARGET REACHED**\n\n**Impact:** This could allow full system compromise, data breach, or unauthorized access to production i",
+        "title": "Attack Path: web_server \u2192 database",
+        "severity": "CRITICAL",
+        "resource": "aws_instance.web_server",
+        "file": "vulnerable_infra.tf",
+        "rule_id": "AP-001",
+        "line_number": null,
+        "code_snippet": "",
+        "scanner": "GNN",
+        "scan_id": 2
+      },
+      {
+        "description": "Detected a 2-hop attack path from aws_instance.web_server to aws_db_instance.database.\n\n**Attack Chain:** web_server \u2192 database\n\nAttacker enters via **aws_instance.web_server**\n  \u21b3 Public IP assigned\n\u2192 Traverses to **aws_db_instance.database** (network_access)\n  \u21b3 Database publicly accessible\n  \u21b3 Database storage not encrypted\n  \u21b3 Hardcoded database password\n  \ud83c\udfaf **HIGH-VALUE TARGET REACHED**\n\n**Impact:** This could allow full system compromise, data breach, or unauthorized access to production i",
+        "title": "Attack Path: web_server \u2192 database",
+        "severity": "CRITICAL",
+        "resource": "aws_instance.web_server",
+        "file": "vulnerable_infra.tf",
+        "rule_id": "AP-001",
+        "line_number": null,
+        "code_snippet": "",
+        "scanner": "GNN",
+        "scan_id": 3
+      },
+      {
+        "description": "Detected a 2-hop attack path from aws_instance.web_server to aws_db_instance.database.\n\n**Attack Chain:** web_server \u2192 database\n\nAttacker enters via **aws_instance.web_server**\n  \u21b3 Public IP assigned\n\u2192 Traverses to **aws_db_instance.database** (network_access)\n  \u21b3 Database publicly accessible\n  \u21b3 Database storage not encrypted\n  \u21b3 Hardcoded database password\n  \ud83c\udfaf **HIGH-VALUE TARGET REACHED**\n\n**Impact:** This could allow full system compromise, data breach, or unauthorized access to production i",
+        "title": "Attack Path: web_server \u2192 database",
+        "severity": "CRITICAL",
+        "resource": "aws_instance.web_server",
+        "file": "vulnerable_infra.tf",
+        "rule_id": "AP-001",
+        "line_number": null,
+        "code_snippet": "",
+        "scanner": "GNN",
+        "scan_id": 4
+      },
+      {
+        "description": "Detected a 2-hop attack path from aws_instance.web_server to aws_db_instance.database.\n\n**Attack Chain:** web_server \u2192 database\n\nAttacker enters via **aws_instance.web_server**\n  \u21b3 Public IP assigned\n\u2192 Traverses to **aws_db_instance.database** (network_access)\n  \u21b3 Database publicly accessible\n  \u21b3 Database storage not encrypted\n  \u21b3 Hardcoded database password\n  \ud83c\udfaf **HIGH-VALUE TARGET REACHED**\n\n**Impact:** This could allow full system compromise, data breach, or unauthorized access to production i",
+        "title": "Attack Path: web_server \u2192 database",
+        "severity": "CRITICAL",
+        "resource": "aws_instance.web_server",
+        "file": "vulnerable_infra.tf",
+        "rule_id": "AP-001",
+        "line_number": null,
+        "code_snippet": "",
+        "scanner": "GNN",
+        "scan_id": 5
+      },
+      {
+        "description": "Detected a 2-hop attack path from aws_instance.web_server to aws_db_instance.database.\n\n**Attack Chain:** web_server \u2192 database\n\nAttacker enters via **aws_instance.web_server**\n  \u21b3 Public IP assigned\n\u2192 Traverses to **aws_db_instance.database** (network_access)\n  \u21b3 Database publicly accessible\n  \u21b3 Database storage not encrypted\n  \u21b3 Hardcoded database password\n  \ud83c\udfaf **HIGH-VALUE TARGET REACHED**\n\n**Impact:** This could allow full system compromise, data breach, or unauthorized access to production i",
+        "title": "Attack Path: web_server \u2192 database",
+        "severity": "CRITICAL",
+        "resource": "aws_instance.web_server",
+        "file": "vulnerable_infra.tf",
+        "rule_id": "AP-009",
+        "line_number": null,
+        "code_snippet": "",
+        "scanner": "GNN",
+        "scan_id": 6
+      }
+    ],
+    "scanners_involved": [
+      "GNN"
+    ],
+    "categories": [
+      "gnn"
+    ],
+    "remediation_guidance": [
+      "[aws_instance.web_server] Place instance behind a load balancer or NAT gateway",
+      "[aws_db_instance.database] Set publicly_accessible = false and use VPC peering",
+      "[aws_db_instance.database] Enable storage_encrypted = true with KMS key",
+      "[aws_db_instance.database] Use aws_secretsmanager_secret or variable references",
+      "Apply principle of least privilege across all connected resources.",
+      "Add monitoring and alerting for the identified attack path."
+    ],
+    "risk_explanation": "This pattern has been detected 5 times across 5 scan(s), affecting 1 unique resource(s) in 1 file(s). Severity: CRITICAL. Detected by: GNN."
+  },
+  "96ae5eb2c9e0": {
+    "signature": "96ae5eb2c9e0",
+    "sample_description": "Detected a 3-hop attack path from aws_security_group.web_sg to aws_iam_role.admin_role.\n\n**Attack Chain:** web_sg \u2192 web_server \u2192 admin_role\n\nAttacker enters via **aws_security_group.web_sg**\n  \u21b3 Unres",
+    "sample_rule_id": "AP-010",
+    "severity": "CRITICAL",
+    "scan_ids": [
+      2,
+      3,
+      4,
+      5
+    ],
+    "count": 4,
+    "first_seen": "2026-02-22T12:58:56.871052",
+    "last_seen": "2026-02-22T13:00:57.869458",
+    "rule_generated": false,
+    "affected_resources": [
+      "aws_security_group.web_sg"
+    ],
+    "affected_files": [
+      "vulnerable_infra.tf"
+    ],
+    "rule_ids_involved": [
+      "AP-010"
+    ],
+    "example_findings": [
+      {
+        "description": "Detected a 3-hop attack path from aws_security_group.web_sg to aws_iam_role.admin_role.\n\n**Attack Chain:** web_sg \u2192 web_server \u2192 admin_role\n\nAttacker enters via **aws_security_group.web_sg**\n  \u21b3 Unrestricted ingress (0.0.0.0/0)\n  \u21b3 All ports open\n  \u21b3 All protocols allowed\n\u2192 Traverses to **aws_instance.web_server** (protected_by)\n  \u21b3 Public IP assigned\n\u2192 Traverses to **aws_iam_role.admin_role** (assumes_role)\n  \ud83c\udfaf **HIGH-VALUE TARGET REACHED**\n\n**Impact:** This could allow full system compromise, ",
+        "title": "Attack Path: web_sg \u2192 web_server \u2192 admin_role",
+        "severity": "CRITICAL",
+        "resource": "aws_security_group.web_sg",
+        "file": "vulnerable_infra.tf",
+        "rule_id": "AP-010",
+        "line_number": null,
+        "code_snippet": "",
+        "scanner": "GNN",
+        "scan_id": 2
+      },
+      {
+        "description": "Detected a 3-hop attack path from aws_security_group.web_sg to aws_iam_role.admin_role.\n\n**Attack Chain:** web_sg \u2192 web_server \u2192 admin_role\n\nAttacker enters via **aws_security_group.web_sg**\n  \u21b3 Unrestricted ingress (0.0.0.0/0)\n  \u21b3 All ports open\n  \u21b3 All protocols allowed\n\u2192 Traverses to **aws_instance.web_server** (protected_by)\n  \u21b3 Public IP assigned\n\u2192 Traverses to **aws_iam_role.admin_role** (assumes_role)\n  \ud83c\udfaf **HIGH-VALUE TARGET REACHED**\n\n**Impact:** This could allow full system compromise, ",
+        "title": "Attack Path: web_sg \u2192 web_server \u2192 admin_role",
+        "severity": "CRITICAL",
+        "resource": "aws_security_group.web_sg",
+        "file": "vulnerable_infra.tf",
+        "rule_id": "AP-010",
+        "line_number": null,
+        "code_snippet": "",
+        "scanner": "GNN",
+        "scan_id": 3
+      },
+      {
+        "description": "Detected a 3-hop attack path from aws_security_group.web_sg to aws_iam_role.admin_role.\n\n**Attack Chain:** web_sg \u2192 web_server \u2192 admin_role\n\nAttacker enters via **aws_security_group.web_sg**\n  \u21b3 Unrestricted ingress (0.0.0.0/0)\n  \u21b3 All ports open\n  \u21b3 All protocols allowed\n\u2192 Traverses to **aws_instance.web_server** (protected_by)\n  \u21b3 Public IP assigned\n\u2192 Traverses to **aws_iam_role.admin_role** (assumes_role)\n  \ud83c\udfaf **HIGH-VALUE TARGET REACHED**\n\n**Impact:** This could allow full system compromise, ",
+        "title": "Attack Path: web_sg \u2192 web_server \u2192 admin_role",
+        "severity": "CRITICAL",
+        "resource": "aws_security_group.web_sg",
+        "file": "vulnerable_infra.tf",
+        "rule_id": "AP-010",
+        "line_number": null,
+        "code_snippet": "",
+        "scanner": "GNN",
+        "scan_id": 4
+      },
+      {
+        "description": "Detected a 3-hop attack path from aws_security_group.web_sg to aws_iam_role.admin_role.\n\n**Attack Chain:** web_sg \u2192 web_server \u2192 admin_role\n\nAttacker enters via **aws_security_group.web_sg**\n  \u21b3 Unrestricted ingress (0.0.0.0/0)\n  \u21b3 All ports open\n  \u21b3 All protocols allowed\n\u2192 Traverses to **aws_instance.web_server** (protected_by)\n  \u21b3 Public IP assigned\n\u2192 Traverses to **aws_iam_role.admin_role** (assumes_role)\n  \ud83c\udfaf **HIGH-VALUE TARGET REACHED**\n\n**Impact:** This could allow full system compromise, ",
+        "title": "Attack Path: web_sg \u2192 web_server \u2192 admin_role",
+        "severity": "CRITICAL",
+        "resource": "aws_security_group.web_sg",
+        "file": "vulnerable_infra.tf",
+        "rule_id": "AP-010",
+        "line_number": null,
+        "code_snippet": "",
+        "scanner": "GNN",
+        "scan_id": 5
+      }
+    ],
+    "scanners_involved": [
+      "GNN"
+    ],
+    "categories": [
+      "gnn"
+    ],
+    "remediation_guidance": [
+      "[aws_security_group.web_sg] Restrict CIDR blocks to specific IP ranges",
+      "[aws_security_group.web_sg] Limit port ranges to necessary services only",
+      "[aws_security_group.web_sg] Restrict to specific protocols (tcp, udp)",
+      "[aws_instance.web_server] Place instance behind a load balancer or NAT gateway",
+      "Apply principle of least privilege across all connected resources.",
+      "Add monitoring and alerting for the identified attack path."
+    ],
+    "risk_explanation": "This pattern has been detected 4 times across 4 scan(s), affecting 1 unique resource(s) in 1 file(s). Severity: CRITICAL. Detected by: GNN."
+  },
+  "d2ebf6a0d9bb": {
+    "signature": "d2ebf6a0d9bb",
+    "sample_description": "Detected a 4-hop attack path from aws_security_group.web_sg to aws_iam_policy.admin_policy.\n\n**Attack Chain:** web_sg \u2192 web_server \u2192 admin_role \u2192 admin_policy\n\nAttacker enters via **aws_security_group",
+    "sample_rule_id": "AP-011",
+    "severity": "CRITICAL",
+    "scan_ids": [
+      2,
+      3,
+      4,
+      5
+    ],
+    "count": 4,
+    "first_seen": "2026-02-22T12:58:56.871052",
+    "last_seen": "2026-02-22T13:00:57.869458",
+    "rule_generated": false,
+    "affected_resources": [
+      "aws_security_group.web_sg"
+    ],
+    "affected_files": [
+      "vulnerable_infra.tf"
+    ],
+    "rule_ids_involved": [
+      "AP-011"
+    ],
+    "example_findings": [
+      {
+        "description": "Detected a 4-hop attack path from aws_security_group.web_sg to aws_iam_policy.admin_policy.\n\n**Attack Chain:** web_sg \u2192 web_server \u2192 admin_role \u2192 admin_policy\n\nAttacker enters via **aws_security_group.web_sg**\n  \u21b3 Unrestricted ingress (0.0.0.0/0)\n  \u21b3 All ports open\n  \u21b3 All protocols allowed\n\u2192 Traverses to **aws_instance.web_server** (protected_by)\n  \u21b3 Public IP assigned\n\u2192 Traverses to **aws_iam_role.admin_role** (assumes_role)\n  \ud83c\udfaf **HIGH-VALUE TARGET REACHED**\n\u2192 Traverses to **aws_iam_policy.adm",
+        "title": "Attack Path: web_sg \u2192 web_server \u2192 admin_role \u2192 admin_policy",
+        "severity": "CRITICAL",
+        "resource": "aws_security_group.web_sg",
+        "file": "vulnerable_infra.tf",
+        "rule_id": "AP-011",
+        "line_number": null,
+        "code_snippet": "",
+        "scanner": "GNN",
+        "scan_id": 2
+      },
+      {
+        "description": "Detected a 4-hop attack path from aws_security_group.web_sg to aws_iam_policy.admin_policy.\n\n**Attack Chain:** web_sg \u2192 web_server \u2192 admin_role \u2192 admin_policy\n\nAttacker enters via **aws_security_group.web_sg**\n  \u21b3 Unrestricted ingress (0.0.0.0/0)\n  \u21b3 All ports open\n  \u21b3 All protocols allowed\n\u2192 Traverses to **aws_instance.web_server** (protected_by)\n  \u21b3 Public IP assigned\n\u2192 Traverses to **aws_iam_role.admin_role** (assumes_role)\n  \ud83c\udfaf **HIGH-VALUE TARGET REACHED**\n\u2192 Traverses to **aws_iam_policy.adm",
+        "title": "Attack Path: web_sg \u2192 web_server \u2192 admin_role \u2192 admin_policy",
+        "severity": "CRITICAL",
+        "resource": "aws_security_group.web_sg",
+        "file": "vulnerable_infra.tf",
+        "rule_id": "AP-011",
+        "line_number": null,
+        "code_snippet": "",
+        "scanner": "GNN",
+        "scan_id": 3
+      },
+      {
+        "description": "Detected a 4-hop attack path from aws_security_group.web_sg to aws_iam_policy.admin_policy.\n\n**Attack Chain:** web_sg \u2192 web_server \u2192 admin_role \u2192 admin_policy\n\nAttacker enters via **aws_security_group.web_sg**\n  \u21b3 Unrestricted ingress (0.0.0.0/0)\n  \u21b3 All ports open\n  \u21b3 All protocols allowed\n\u2192 Traverses to **aws_instance.web_server** (protected_by)\n  \u21b3 Public IP assigned\n\u2192 Traverses to **aws_iam_role.admin_role** (assumes_role)\n  \ud83c\udfaf **HIGH-VALUE TARGET REACHED**\n\u2192 Traverses to **aws_iam_policy.adm",
+        "title": "Attack Path: web_sg \u2192 web_server \u2192 admin_role \u2192 admin_policy",
+        "severity": "CRITICAL",
+        "resource": "aws_security_group.web_sg",
+        "file": "vulnerable_infra.tf",
+        "rule_id": "AP-011",
+        "line_number": null,
+        "code_snippet": "",
+        "scanner": "GNN",
+        "scan_id": 4
+      },
+      {
+        "description": "Detected a 4-hop attack path from aws_security_group.web_sg to aws_iam_policy.admin_policy.\n\n**Attack Chain:** web_sg \u2192 web_server \u2192 admin_role \u2192 admin_policy\n\nAttacker enters via **aws_security_group.web_sg**\n  \u21b3 Unrestricted ingress (0.0.0.0/0)\n  \u21b3 All ports open\n  \u21b3 All protocols allowed\n\u2192 Traverses to **aws_instance.web_server** (protected_by)\n  \u21b3 Public IP assigned\n\u2192 Traverses to **aws_iam_role.admin_role** (assumes_role)\n  \ud83c\udfaf **HIGH-VALUE TARGET REACHED**\n\u2192 Traverses to **aws_iam_policy.adm",
+        "title": "Attack Path: web_sg \u2192 web_server \u2192 admin_role \u2192 admin_policy",
+        "severity": "CRITICAL",
+        "resource": "aws_security_group.web_sg",
+        "file": "vulnerable_infra.tf",
+        "rule_id": "AP-011",
+        "line_number": null,
+        "code_snippet": "",
+        "scanner": "GNN",
+        "scan_id": 5
+      }
+    ],
+    "scanners_involved": [
+      "GNN"
+    ],
+    "categories": [
+      "gnn"
+    ],
+    "remediation_guidance": [
+      "[aws_security_group.web_sg] Restrict CIDR blocks to specific IP ranges",
+      "[aws_security_group.web_sg] Limit port ranges to necessary services only",
+      "[aws_security_group.web_sg] Restrict to specific protocols (tcp, udp)",
+      "[aws_instance.web_server] Place instance behind a load balancer or NAT gateway",
+      "Apply principle of least privilege across all connected resources.",
+      "Add monitoring and alerting for the identified attack path."
+    ],
+    "risk_explanation": "This pattern has been detected 4 times across 4 scan(s), affecting 1 unique resource(s) in 1 file(s). Severity: CRITICAL. Detected by: GNN."
+  },
+  "cbc36900e0f3": {
+    "signature": "cbc36900e0f3",
+    "sample_description": "Detected a 2-hop attack path from aws_instance.web_server to aws_s3_bucket.data_backup.\n\n**Attack Chain:** web_server \u2192 data_backup\n\nAttacker enters via **aws_instance.web_server**\n  \u21b3 Public IP assig",
+    "sample_rule_id": "AP-002",
+    "severity": "HIGH",
+    "scan_ids": [
+      2,
+      3,
+      4,
+      5
+    ],
+    "count": 4,
+    "first_seen": "2026-02-22T12:58:56.871052",
+    "last_seen": "2026-02-22T13:00:57.869458",
+    "rule_generated": false,
+    "affected_resources": [
+      "aws_instance.web_server"
+    ],
+    "affected_files": [
+      "vulnerable_infra.tf"
+    ],
+    "rule_ids_involved": [
+      "AP-002"
+    ],
+    "example_findings": [
+      {
+        "description": "Detected a 2-hop attack path from aws_instance.web_server to aws_s3_bucket.data_backup.\n\n**Attack Chain:** web_server \u2192 data_backup\n\nAttacker enters via **aws_instance.web_server**\n  \u21b3 Public IP assigned\n\u2192 Traverses to **aws_s3_bucket.data_backup** (data_access)\n  \u21b3 S3 bucket publicly readable\n  \ud83c\udfaf **HIGH-VALUE TARGET REACHED**\n\n**Impact:** This could lead to significant data exposure, privilege escalation, or service disruption.",
+        "title": "Attack Path: web_server \u2192 data_backup",
+        "severity": "HIGH",
+        "resource": "aws_instance.web_server",
+        "file": "vulnerable_infra.tf",
+        "rule_id": "AP-002",
+        "line_number": null,
+        "code_snippet": "",
+        "scanner": "GNN",
+        "scan_id": 2
+      }
+    ],
+    "scanners_involved": [
+      "GNN"
+    ],
+    "categories": [
+      "gnn"
+    ],
+    "remediation_guidance": [
+      "[aws_instance.web_server] Place instance behind a load balancer or NAT gateway",
+      "[aws_s3_bucket.data_backup] Remove public ACL; use bucket policies for access control",
+      "Apply principle of least privilege across all connected resources.",
+      "Add monitoring and alerting for the identified attack path."
+    ],
+    "risk_explanation": "This pattern has been detected 4 times across 4 scan(s), affecting 1 unique resource(s) in 1 file(s). Severity: HIGH. Detected by: GNN."
+  },
+  "37bdb3ef53a3": {
+    "signature": "37bdb3ef53a3",
+    "sample_description": "Detected a 3-hop attack path from aws_s3_bucket.data_backup to aws_iam_role.admin_role.\n\n**Attack Chain:** data_backup \u2192 web_server \u2192 admin_role\n\nAttacker enters via **aws_s3_bucket.data_backup**\n  \u21b3 ",
+    "sample_rule_id": "AP-006",
+    "severity": "HIGH",
+    "scan_ids": [
+      2,
+      3,
+      4,
+      5
+    ],
+    "count": 4,
+    "first_seen": "2026-02-22T12:58:56.871052",
+    "last_seen": "2026-02-22T13:00:57.869458",
+    "rule_generated": false,
+    "affected_resources": [
+      "aws_s3_bucket.data_backup"
+    ],
+    "affected_files": [
+      "vulnerable_infra.tf"
+    ],
+    "rule_ids_involved": [
+      "AP-006"
+    ],
+    "example_findings": [
+      {
+        "description": "Detected a 3-hop attack path from aws_s3_bucket.data_backup to aws_iam_role.admin_role.\n\n**Attack Chain:** data_backup \u2192 web_server \u2192 admin_role\n\nAttacker enters via **aws_s3_bucket.data_backup**\n  \u21b3 S3 bucket publicly readable\n  \ud83c\udfaf **HIGH-VALUE TARGET REACHED**\n\u2192 Traverses to **aws_instance.web_server** (data_access)\n  \u21b3 Public IP assigned\n\u2192 Traverses to **aws_iam_role.admin_role** (assumes_role)\n  \ud83c\udfaf **HIGH-VALUE TARGET REACHED**\n\n**Impact:** This could lead to significant data exposure, privile",
+        "title": "Attack Path: data_backup \u2192 web_server \u2192 admin_role",
+        "severity": "HIGH",
+        "resource": "aws_s3_bucket.data_backup",
+        "file": "vulnerable_infra.tf",
+        "rule_id": "AP-006",
+        "line_number": null,
+        "code_snippet": "",
+        "scanner": "GNN",
+        "scan_id": 2
+      },
+      {
+        "description": "Detected a 3-hop attack path from aws_s3_bucket.data_backup to aws_iam_role.admin_role.\n\n**Attack Chain:** data_backup \u2192 web_server \u2192 admin_role\n\nAttacker enters via **aws_s3_bucket.data_backup**\n  \u21b3 S3 bucket publicly readable\n  \ud83c\udfaf **HIGH-VALUE TARGET REACHED**\n\u2192 Traverses to **aws_instance.web_server** (data_access)\n  \u21b3 Public IP assigned\n\u2192 Traverses to **aws_iam_role.admin_role** (assumes_role)\n  \ud83c\udfaf **HIGH-VALUE TARGET REACHED**\n\n**Impact:** This could lead to significant data exposure, privile",
+        "title": "Attack Path: data_backup \u2192 web_server \u2192 admin_role",
+        "severity": "HIGH",
+        "resource": "aws_s3_bucket.data_backup",
+        "file": "vulnerable_infra.tf",
+        "rule_id": "AP-006",
+        "line_number": null,
+        "code_snippet": "",
+        "scanner": "GNN",
+        "scan_id": 3
+      },
+      {
+        "description": "Detected a 3-hop attack path from aws_s3_bucket.data_backup to aws_iam_role.admin_role.\n\n**Attack Chain:** data_backup \u2192 web_server \u2192 admin_role\n\nAttacker enters via **aws_s3_bucket.data_backup**\n  \u21b3 S3 bucket publicly readable\n  \ud83c\udfaf **HIGH-VALUE TARGET REACHED**\n\u2192 Traverses to **aws_instance.web_server** (data_access)\n  \u21b3 Public IP assigned\n\u2192 Traverses to **aws_iam_role.admin_role** (assumes_role)\n  \ud83c\udfaf **HIGH-VALUE TARGET REACHED**\n\n**Impact:** This could lead to significant data exposure, privile",
+        "title": "Attack Path: data_backup \u2192 web_server \u2192 admin_role",
+        "severity": "HIGH",
+        "resource": "aws_s3_bucket.data_backup",
+        "file": "vulnerable_infra.tf",
+        "rule_id": "AP-006",
+        "line_number": null,
+        "code_snippet": "",
+        "scanner": "GNN",
+        "scan_id": 4
+      },
+      {
+        "description": "Detected a 3-hop attack path from aws_s3_bucket.data_backup to aws_iam_role.admin_role.\n\n**Attack Chain:** data_backup \u2192 web_server \u2192 admin_role\n\nAttacker enters via **aws_s3_bucket.data_backup**\n  \u21b3 S3 bucket publicly readable\n  \ud83c\udfaf **HIGH-VALUE TARGET REACHED**\n\u2192 Traverses to **aws_instance.web_server** (data_access)\n  \u21b3 Public IP assigned\n\u2192 Traverses to **aws_iam_role.admin_role** (assumes_role)\n  \ud83c\udfaf **HIGH-VALUE TARGET REACHED**\n\n**Impact:** This could lead to significant data exposure, privile",
+        "title": "Attack Path: data_backup \u2192 web_server \u2192 admin_role",
+        "severity": "HIGH",
+        "resource": "aws_s3_bucket.data_backup",
+        "file": "vulnerable_infra.tf",
+        "rule_id": "AP-006",
+        "line_number": null,
+        "code_snippet": "",
+        "scanner": "GNN",
+        "scan_id": 5
+      }
+    ],
+    "scanners_involved": [
+      "GNN"
+    ],
+    "categories": [
+      "gnn"
+    ],
+    "remediation_guidance": [
+      "[aws_s3_bucket.data_backup] Remove public ACL; use bucket policies for access control",
+      "[aws_instance.web_server] Place instance behind a load balancer or NAT gateway",
+      "Apply principle of least privilege across all connected resources.",
+      "Add monitoring and alerting for the identified attack path."
+    ],
+    "risk_explanation": "This pattern has been detected 4 times across 4 scan(s), affecting 1 unique resource(s) in 1 file(s). Severity: HIGH. Detected by: GNN."
+  },
+  "d6b49ed7575b": {
+    "signature": "d6b49ed7575b",
+    "sample_description": "Detected a 4-hop attack path from aws_s3_bucket.data_backup to aws_iam_policy.admin_policy.\n\n**Attack Chain:** data_backup \u2192 web_server \u2192 admin_role \u2192 admin_policy\n\nAttacker enters via **aws_s3_bucket",
+    "sample_rule_id": "AP-007",
+    "severity": "HIGH",
+    "scan_ids": [
+      2,
+      3,
+      4,
+      5
+    ],
+    "count": 4,
+    "first_seen": "2026-02-22T12:58:56.871052",
+    "last_seen": "2026-02-22T13:00:57.869458",
+    "rule_generated": false,
+    "affected_resources": [
+      "aws_s3_bucket.data_backup"
+    ],
+    "affected_files": [
+      "vulnerable_infra.tf"
+    ],
+    "rule_ids_involved": [
+      "AP-007"
+    ],
+    "example_findings": [
+      {
+        "description": "Detected a 4-hop attack path from aws_s3_bucket.data_backup to aws_iam_policy.admin_policy.\n\n**Attack Chain:** data_backup \u2192 web_server \u2192 admin_role \u2192 admin_policy\n\nAttacker enters via **aws_s3_bucket.data_backup**\n  \u21b3 S3 bucket publicly readable\n  \ud83c\udfaf **HIGH-VALUE TARGET REACHED**\n\u2192 Traverses to **aws_instance.web_server** (data_access)\n  \u21b3 Public IP assigned\n\u2192 Traverses to **aws_iam_role.admin_role** (assumes_role)\n  \ud83c\udfaf **HIGH-VALUE TARGET REACHED**\n\u2192 Traverses to **aws_iam_policy.admin_policy** ",
+        "title": "Attack Path: data_backup \u2192 web_server \u2192 admin_role \u2192 admin_policy",
+        "severity": "HIGH",
+        "resource": "aws_s3_bucket.data_backup",
+        "file": "vulnerable_infra.tf",
+        "rule_id": "AP-007",
+        "line_number": null,
+        "code_snippet": "",
+        "scanner": "GNN",
+        "scan_id": 2
+      },
+      {
+        "description": "Detected a 4-hop attack path from aws_s3_bucket.data_backup to aws_iam_policy.admin_policy.\n\n**Attack Chain:** data_backup \u2192 web_server \u2192 admin_role \u2192 admin_policy\n\nAttacker enters via **aws_s3_bucket.data_backup**\n  \u21b3 S3 bucket publicly readable\n  \ud83c\udfaf **HIGH-VALUE TARGET REACHED**\n\u2192 Traverses to **aws_instance.web_server** (data_access)\n  \u21b3 Public IP assigned\n\u2192 Traverses to **aws_iam_role.admin_role** (assumes_role)\n  \ud83c\udfaf **HIGH-VALUE TARGET REACHED**\n\u2192 Traverses to **aws_iam_policy.admin_policy** ",
+        "title": "Attack Path: data_backup \u2192 web_server \u2192 admin_role \u2192 admin_policy",
+        "severity": "HIGH",
+        "resource": "aws_s3_bucket.data_backup",
+        "file": "vulnerable_infra.tf",
+        "rule_id": "AP-007",
+        "line_number": null,
+        "code_snippet": "",
+        "scanner": "GNN",
+        "scan_id": 3
+      },
+      {
+        "description": "Detected a 4-hop attack path from aws_s3_bucket.data_backup to aws_iam_policy.admin_policy.\n\n**Attack Chain:** data_backup \u2192 web_server \u2192 admin_role \u2192 admin_policy\n\nAttacker enters via **aws_s3_bucket.data_backup**\n  \u21b3 S3 bucket publicly readable\n  \ud83c\udfaf **HIGH-VALUE TARGET REACHED**\n\u2192 Traverses to **aws_instance.web_server** (data_access)\n  \u21b3 Public IP assigned\n\u2192 Traverses to **aws_iam_role.admin_role** (assumes_role)\n  \ud83c\udfaf **HIGH-VALUE TARGET REACHED**\n\u2192 Traverses to **aws_iam_policy.admin_policy** ",
+        "title": "Attack Path: data_backup \u2192 web_server \u2192 admin_role \u2192 admin_policy",
+        "severity": "HIGH",
+        "resource": "aws_s3_bucket.data_backup",
+        "file": "vulnerable_infra.tf",
+        "rule_id": "AP-007",
+        "line_number": null,
+        "code_snippet": "",
+        "scanner": "GNN",
+        "scan_id": 4
+      },
+      {
+        "description": "Detected a 4-hop attack path from aws_s3_bucket.data_backup to aws_iam_policy.admin_policy.\n\n**Attack Chain:** data_backup \u2192 web_server \u2192 admin_role \u2192 admin_policy\n\nAttacker enters via **aws_s3_bucket.data_backup**\n  \u21b3 S3 bucket publicly readable\n  \ud83c\udfaf **HIGH-VALUE TARGET REACHED**\n\u2192 Traverses to **aws_instance.web_server** (data_access)\n  \u21b3 Public IP assigned\n\u2192 Traverses to **aws_iam_role.admin_role** (assumes_role)\n  \ud83c\udfaf **HIGH-VALUE TARGET REACHED**\n\u2192 Traverses to **aws_iam_policy.admin_policy** ",
+        "title": "Attack Path: data_backup \u2192 web_server \u2192 admin_role \u2192 admin_policy",
+        "severity": "HIGH",
+        "resource": "aws_s3_bucket.data_backup",
+        "file": "vulnerable_infra.tf",
+        "rule_id": "AP-007",
+        "line_number": null,
+        "code_snippet": "",
+        "scanner": "GNN",
+        "scan_id": 5
+      }
+    ],
+    "scanners_involved": [
+      "GNN"
+    ],
+    "categories": [
+      "gnn"
+    ],
+    "remediation_guidance": [
+      "[aws_s3_bucket.data_backup] Remove public ACL; use bucket policies for access control",
+      "[aws_instance.web_server] Place instance behind a load balancer or NAT gateway",
+      "Apply principle of least privilege across all connected resources.",
+      "Add monitoring and alerting for the identified attack path."
+    ],
+    "risk_explanation": "This pattern has been detected 4 times across 4 scan(s), affecting 1 unique resource(s) in 1 file(s). Severity: HIGH. Detected by: GNN."
+  },
+  "8574dfd29b4c": {
+    "signature": "8574dfd29b4c",
+    "sample_description": "Detected a 2-hop attack path from aws_instance.web_server to aws_iam_role.admin_role.\n\n**Attack Chain:** web_server \u2192 admin_role\n\nAttacker enters via **aws_instance.web_server**\n  \u21b3 Public IP assigned",
+    "sample_rule_id": "AP-003",
+    "severity": "MEDIUM",
+    "scan_ids": [
+      2,
+      3,
+      4,
+      5
+    ],
+    "count": 4,
+    "first_seen": "2026-02-22T12:58:56.871052",
+    "last_seen": "2026-02-22T13:00:57.869458",
+    "rule_generated": false,
+    "affected_resources": [
+      "aws_instance.web_server"
+    ],
+    "affected_files": [
+      "vulnerable_infra.tf"
+    ],
+    "rule_ids_involved": [
+      "AP-003"
+    ],
+    "example_findings": [
+      {
+        "description": "Detected a 2-hop attack path from aws_instance.web_server to aws_iam_role.admin_role.\n\n**Attack Chain:** web_server \u2192 admin_role\n\nAttacker enters via **aws_instance.web_server**\n  \u21b3 Public IP assigned\n\u2192 Traverses to **aws_iam_role.admin_role** (assumes_role)\n  \ud83c\udfaf **HIGH-VALUE TARGET REACHED**\n\n**Impact:** This could enable partial information disclosure or weaken the security posture.",
+        "title": "Attack Path: web_server \u2192 admin_role",
+        "severity": "MEDIUM",
+        "resource": "aws_instance.web_server",
+        "file": "vulnerable_infra.tf",
+        "rule_id": "AP-003",
+        "line_number": null,
+        "code_snippet": "",
+        "scanner": "GNN",
+        "scan_id": 2
+      }
+    ],
+    "scanners_involved": [
+      "GNN"
+    ],
+    "categories": [
+      "gnn"
+    ],
+    "remediation_guidance": [
+      "[aws_instance.web_server] Place instance behind a load balancer or NAT gateway",
+      "Apply principle of least privilege across all connected resources.",
+      "Add monitoring and alerting for the identified attack path."
+    ],
+    "risk_explanation": "This pattern has been detected 4 times across 4 scan(s), affecting 1 unique resource(s) in 1 file(s). Severity: MEDIUM. Detected by: GNN."
+  },
+  "75a2c1fd33b7": {
+    "signature": "75a2c1fd33b7",
+    "sample_description": "Detected a 3-hop attack path from aws_instance.web_server to aws_iam_policy.admin_policy.\n\n**Attack Chain:** web_server \u2192 admin_role \u2192 admin_policy\n\nAttacker enters via **aws_instance.web_server**\n  \u21b3",
+    "sample_rule_id": "AP-004",
+    "severity": "MEDIUM",
+    "scan_ids": [
+      2,
+      3,
+      4,
+      5
+    ],
+    "count": 4,
+    "first_seen": "2026-02-22T12:58:56.871052",
+    "last_seen": "2026-02-22T13:00:57.869458",
+    "rule_generated": false,
+    "affected_resources": [
+      "aws_instance.web_server"
+    ],
+    "affected_files": [
+      "vulnerable_infra.tf"
+    ],
+    "rule_ids_involved": [
+      "AP-004"
+    ],
+    "example_findings": [
+      {
+        "description": "Detected a 3-hop attack path from aws_instance.web_server to aws_iam_policy.admin_policy.\n\n**Attack Chain:** web_server \u2192 admin_role \u2192 admin_policy\n\nAttacker enters via **aws_instance.web_server**\n  \u21b3 Public IP assigned\n\u2192 Traverses to **aws_iam_role.admin_role** (assumes_role)\n  \ud83c\udfaf **HIGH-VALUE TARGET REACHED**\n\u2192 Traverses to **aws_iam_policy.admin_policy** (policy_attachment)\n  \ud83c\udfaf **HIGH-VALUE TARGET REACHED**\n\n**Impact:** This could enable partial information disclosure or weaken the security po",
+        "title": "Attack Path: web_server \u2192 admin_role \u2192 admin_policy",
+        "severity": "MEDIUM",
+        "resource": "aws_instance.web_server",
+        "file": "vulnerable_infra.tf",
+        "rule_id": "AP-004",
+        "line_number": null,
+        "code_snippet": "",
+        "scanner": "GNN",
+        "scan_id": 2
+      },
+      {
+        "description": "Detected a 3-hop attack path from aws_instance.web_server to aws_iam_policy.admin_policy.\n\n**Attack Chain:** web_server \u2192 admin_role \u2192 admin_policy\n\nAttacker enters via **aws_instance.web_server**\n  \u21b3 Public IP assigned\n\u2192 Traverses to **aws_iam_role.admin_role** (assumes_role)\n  \ud83c\udfaf **HIGH-VALUE TARGET REACHED**\n\u2192 Traverses to **aws_iam_policy.admin_policy** (policy_attachment)\n  \ud83c\udfaf **HIGH-VALUE TARGET REACHED**\n\n**Impact:** This could enable partial information disclosure or weaken the security po",
+        "title": "Attack Path: web_server \u2192 admin_role \u2192 admin_policy",
+        "severity": "MEDIUM",
+        "resource": "aws_instance.web_server",
+        "file": "vulnerable_infra.tf",
+        "rule_id": "AP-004",
+        "line_number": null,
+        "code_snippet": "",
+        "scanner": "GNN",
+        "scan_id": 3
+      },
+      {
+        "description": "Detected a 3-hop attack path from aws_instance.web_server to aws_iam_policy.admin_policy.\n\n**Attack Chain:** web_server \u2192 admin_role \u2192 admin_policy\n\nAttacker enters via **aws_instance.web_server**\n  \u21b3 Public IP assigned\n\u2192 Traverses to **aws_iam_role.admin_role** (assumes_role)\n  \ud83c\udfaf **HIGH-VALUE TARGET REACHED**\n\u2192 Traverses to **aws_iam_policy.admin_policy** (policy_attachment)\n  \ud83c\udfaf **HIGH-VALUE TARGET REACHED**\n\n**Impact:** This could enable partial information disclosure or weaken the security po",
+        "title": "Attack Path: web_server \u2192 admin_role \u2192 admin_policy",
+        "severity": "MEDIUM",
+        "resource": "aws_instance.web_server",
+        "file": "vulnerable_infra.tf",
+        "rule_id": "AP-004",
+        "line_number": null,
+        "code_snippet": "",
+        "scanner": "GNN",
+        "scan_id": 4
+      },
+      {
+        "description": "Detected a 3-hop attack path from aws_instance.web_server to aws_iam_policy.admin_policy.\n\n**Attack Chain:** web_server \u2192 admin_role \u2192 admin_policy\n\nAttacker enters via **aws_instance.web_server**\n  \u21b3 Public IP assigned\n\u2192 Traverses to **aws_iam_role.admin_role** (assumes_role)\n  \ud83c\udfaf **HIGH-VALUE TARGET REACHED**\n\u2192 Traverses to **aws_iam_policy.admin_policy** (policy_attachment)\n  \ud83c\udfaf **HIGH-VALUE TARGET REACHED**\n\n**Impact:** This could enable partial information disclosure or weaken the security po",
+        "title": "Attack Path: web_server \u2192 admin_role \u2192 admin_policy",
+        "severity": "MEDIUM",
+        "resource": "aws_instance.web_server",
+        "file": "vulnerable_infra.tf",
+        "rule_id": "AP-004",
+        "line_number": null,
+        "code_snippet": "",
+        "scanner": "GNN",
+        "scan_id": 5
+      }
+    ],
+    "scanners_involved": [
+      "GNN"
+    ],
+    "categories": [
+      "gnn"
+    ],
+    "remediation_guidance": [
+      "[aws_instance.web_server] Place instance behind a load balancer or NAT gateway",
+      "Apply principle of least privilege across all connected resources.",
+      "Add monitoring and alerting for the identified attack path."
+    ],
+    "risk_explanation": "This pattern has been detected 4 times across 4 scan(s), affecting 1 unique resource(s) in 1 file(s). Severity: MEDIUM. Detected by: GNN."
+  }
+}

@@ -1,0 +1,12 @@
+# Auto-discovered rule — generated 2026-02-22T11:34:44.902869
+# Based on 3 occurrences across 3 scans
+# Original: Security group allows access to all ports (0-65535)
+rules:
+  - id: DISC_E94AEF7FF39C
+    description: "[Auto-Discovered] Security group allows access to all ports (0-65535)"
+    severity: CRITICAL
+    file_types: [".tf", ".yaml", ".yml", ".json"]
+    match:
+      regex: "security.*allows"
+    references:
+      - "https://cloudguard.ai/discovered-patterns/e94aef7ff39c"

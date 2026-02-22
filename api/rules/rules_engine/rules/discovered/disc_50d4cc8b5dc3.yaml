@@ -1,0 +1,16 @@
+# Auto-discovered rule — generated 2026-02-22T12:07:20.164017
+# Based on 5 occurrences across 5 scans
+# Original: Hardcoded secrets should not appear in IaC files
+
+**Impact:** This could lead to significant data exposure, privilege es
+rules:
+  - id: DISC_50D4CC8B5DC3
+    description: "[Auto-Discovered] Hardcoded secrets should not appear in IaC files
+
+**Impact:** This could lead to significant data ex"
+    severity: HIGH
+    file_types: [".tf", ".yaml", ".yml", ".json"]
+    match:
+      regex: "significant.*escalation"
+    references:
+      - "https://cloudguard.ai/discovered-patterns/50d4cc8b5dc3"

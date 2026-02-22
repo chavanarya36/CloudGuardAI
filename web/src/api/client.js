@@ -87,6 +87,7 @@ export const listModelVersions = async (skip = 0, limit = 10) => { const r = awa
 // Adaptive Learning
 export const getLearningStatus = async () => { const r = await apiClient.get('/learning/status'); return r.data; };
 export const getDiscoveredPatterns = async () => { const r = await apiClient.get('/learning/patterns'); return r.data; };
+export const getPatternDetail = async (signature) => { const r = await apiClient.get(`/learning/patterns/${signature}`); return r.data; };
 export const getDriftStatus = async () => { const r = await apiClient.get('/learning/drift'); return r.data; };
 export const getRuleWeights = async () => { const r = await apiClient.get('/learning/rule-weights'); return r.data; };
 export const getLearningTelemetry = async (limit = 50) => { const r = await apiClient.get('/learning/telemetry', { params: { limit } }); return r.data; };

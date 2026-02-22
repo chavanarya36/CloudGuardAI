@@ -1,0 +1,12 @@
+# Auto-discovered rule — generated 2026-02-22T11:34:44.878647
+# Based on 4 occurrences across 3 scans
+# Original: Potential AWS Secret Access Key detected. This poses a critical security risk as credentials should never be hardcoded.
+rules:
+  - id: DISC_C77298D00877
+    description: "[Auto-Discovered] Potential AWS Secret Access Key detected. This poses a critical security risk as credentials should "
+    severity: CRITICAL
+    file_types: [".tf", ".yaml", ".yml", ".json"]
+    match:
+      regex: "credentials.*hardcoded"
+    references:
+      - "https://cloudguard.ai/discovered-patterns/c77298d00877"

@@ -1,0 +1,16 @@
+# Auto-discovered rule — generated 2026-02-22T12:07:20.142553
+# Based on 18 occurrences across 8 scans
+# Original: Security group allows unrestricted access from 0.0.0.0/0
+
+**Impact:** This could allow full system compromise, data brea
+rules:
+  - id: DISC_3CE527101706
+    description: "[Auto-Discovered] Security group allows unrestricted access from 0.0.0.0/0
+
+**Impact:** This could allow full system c"
+    severity: CRITICAL
+    file_types: [".tf", ".yaml", ".yml", ".json"]
+    match:
+      regex: "infrastructure.*unrestricted"
+    references:
+      - "https://cloudguard.ai/discovered-patterns/3ce527101706"

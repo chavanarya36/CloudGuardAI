@@ -1,0 +1,16 @@
+# Auto-discovered rule — generated 2026-02-22T12:07:20.179758
+# Based on 3 occurrences across 3 scans
+# Original: Database storage encryption is disabled
+
+**Impact:** This could lead to significant data exposure, privilege escalation,
+rules:
+  - id: DISC_1A5F29664184
+    description: "[Auto-Discovered] Database storage encryption is disabled
+
+**Impact:** This could lead to significant data exposure, p"
+    severity: HIGH
+    file_types: [".tf", ".yaml", ".yml", ".json"]
+    match:
+      regex: "significant.*encryption"
+    references:
+      - "https://cloudguard.ai/discovered-patterns/1a5f29664184"

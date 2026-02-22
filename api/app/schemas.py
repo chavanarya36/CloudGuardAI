@@ -98,6 +98,8 @@ class ScanResponse(BaseModel):
     findings: List[FindingResponse] = []
     # Scanner breakdown
     scanner_breakdown: Optional[Dict[str, int]] = None  # Findings count per scanner category
+    # GNN attack path graph data
+    gnn_graph_data: Optional[Dict[str, Any]] = None
 
     model_config = ConfigDict(from_attributes=True, protected_namespaces=())
 

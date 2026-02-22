@@ -1,0 +1,12 @@
+# Auto-discovered rule — generated 2026-02-22T11:34:44.884715
+# Based on 5 occurrences across 4 scans
+# Original: S3 bucket versioning is disabled
+rules:
+  - id: DISC_D5FFD5F0B286
+    description: "[Auto-Discovered] S3 bucket versioning is disabled"
+    severity: MEDIUM
+    file_types: [".tf", ".yaml", ".yml", ".json"]
+    match:
+      regex: "versioning.*disabled"
+    references:
+      - "https://cloudguard.ai/discovered-patterns/d5ffd5f0b286"

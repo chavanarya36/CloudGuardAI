@@ -1,0 +1,16 @@
+# Auto-discovered rule — generated 2026-02-22T12:07:20.173184
+# Based on 8 occurrences across 8 scans
+# Original: Security group allows wide port range (0-65535)
+
+**Impact:** This could lead to significant data exposure, privilege esc
+rules:
+  - id: DISC_16338FA813BB
+    description: "[Auto-Discovered] Security group allows wide port range (0-65535)
+
+**Impact:** This could lead to significant data exp"
+    severity: HIGH
+    file_types: [".tf", ".yaml", ".yml", ".json"]
+    match:
+      regex: "significant.*escalation"
+    references:
+      - "https://cloudguard.ai/discovered-patterns/16338fa813bb"

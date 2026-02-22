@@ -1,0 +1,12 @@
+# Auto-discovered rule — generated 2026-02-22T11:34:44.934274
+# Based on 3 occurrences across 3 scans
+# Original: S3 bucket configured with public access
+rules:
+  - id: DISC_1BA53CFA3836
+    description: "[Auto-Discovered] S3 bucket configured with public access"
+    severity: CRITICAL
+    file_types: [".tf", ".yaml", ".yml", ".json"]
+    match:
+      regex: "configured.*public"
+    references:
+      - "https://cloudguard.ai/discovered-patterns/1ba53cfa3836"

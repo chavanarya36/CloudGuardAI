@@ -1,0 +1,16 @@
+# Auto-discovered rule — generated 2026-02-22T12:07:20.152055
+# Based on 5 occurrences across 5 scans
+# Original: Hardcoded secret or API key detected
+
+**Impact:** This could allow full system compromise, data breach, or unauthorized 
+rules:
+  - id: DISC_04F7BC8714B1
+    description: "[Auto-Discovered] Hardcoded secret or API key detected
+
+**Impact:** This could allow full system compromise, data brea"
+    severity: CRITICAL
+    file_types: [".tf", ".yaml", ".yml", ".json"]
+    match:
+      regex: "infrastructure.*unauthorized"
+    references:
+      - "https://cloudguard.ai/discovered-patterns/04f7bc8714b1"

@@ -21,6 +21,7 @@ from app.auth import get_current_user, optional_auth, AuthUser, create_jwt, gene
 from app.rate_limiter import RateLimitMiddleware
 from app.metrics import MetricsMiddleware, metrics
 from scanners.integrated_scanner import get_integrated_scanner
+from scanners.attack_path_analyzer import analyze_attack_paths
 
 logger = logging.getLogger(__name__)
 
@@ -184,6 +185,9 @@ async def create_scan(
         # full 6-scanner coverage.
         scanners_used = list(result.get("scanners_used", []))
         all_findings = list(result.get("findings", []))
+        _gnn_graph_data = {}
+        _gnn_attack_paths = []
+        _gnn_summary = {}
 
         try:
             integrated = get_integrated_scanner()
@@ -239,6 +243,30 @@ async def create_scan(
                     logger.info("ML scanner: %d findings", len(ml_findings))
             except Exception as e:
                 logger.warning("ML scanner error (non-fatal): %s", e)
+
+            # GNN Attack Path Analyzer (graph-based attack chain detection)
+            try:
+                gnn_result = await asyncio.to_thread(
+                    analyze_attack_paths, file_content, file.filename
+                )
+                gnn_findings = gnn_result.get("findings", [])
+                if gnn_findings:
+                    all_findings.extend(gnn_findings)
+                    if "gnn" not in scanners_used:
+                        scanners_used.append("gnn")
+                    logger.info(
+                        "GNN Attack Path Analyzer: %d findings, %d paths detected",
+                        len(gnn_findings), gnn_result.get("summary", {}).get("total_paths", 0),
+                    )
+                # Store graph data and attack paths for the response
+                _gnn_graph_data = gnn_result.get("graph", {})
+                _gnn_attack_paths = gnn_result.get("attack_paths", [])
+                _gnn_summary = gnn_result.get("summary", {})
+            except Exception as e:
+                logger.warning("GNN Attack Path Analyzer error (non-fatal): %s", e)
+                _gnn_graph_data = {}
+                _gnn_attack_paths = []
+                _gnn_summary = {}
 
         except Exception as e:
             logger.warning("Additional scanners init error (non-fatal): %s", e)
@@ -359,6 +387,30 @@ async def create_scan(
         scanner_counts["total"] = len(all_findings)
         scan.scanner_breakdown = scanner_counts
 
+        # Store GNN attack path graph data for visualization
+        try:
+            scan.gnn_graph_data = {
+                "graph": _gnn_graph_data,
+                "attack_paths": [
+                    {
+                        "path_id": p.get("path_id"),
+                        "entry_point": p.get("entry_point"),
+                        "target": p.get("target"),
+                        "hops": p.get("hops"),
+                        "severity": p.get("severity"),
+                        "severity_score": p.get("severity_score"),
+                        "path_string": p.get("path_string"),
+                        "narrative": p.get("narrative"),
+                        "remediation": p.get("remediation"),
+                        "chain": p.get("chain"),
+                    }
+                    for p in _gnn_attack_paths
+                ],
+                "summary": _gnn_summary,
+            }
+        except Exception:
+            scan.gnn_graph_data = None
+
         # ── Save findings with full explainability ────────────────
         for finding_data in all_findings:
             finding = Finding(
@@ -393,12 +445,25 @@ async def create_scan(
         db.commit()
         db.refresh(scan)
                 
-        # --- Adaptive Learning: feed scan results ---
+        # --- Adaptive Learning: feed scan results with FULL details ---
         try:
             scan_findings = [
-                {"description": fd.get("description", ""), "severity": fd.get("severity", "MEDIUM"),
-                 "rule_id": fd.get("rule_id", "")}
-                for fd in result.get("findings", [])
+                {
+                    "description": fd.get("description", ""),
+                    "title": fd.get("title", ""),
+                    "severity": fd.get("severity", "MEDIUM"),
+                    "rule_id": fd.get("rule_id", ""),
+                    "resource": fd.get("resource", ""),
+                    "file_path": fd.get("file_path", file.filename),
+                    "file": file.filename,
+                    "scanner": fd.get("scanner", ""),
+                    "category": fd.get("category", ""),
+                    "line_number": fd.get("line_number"),
+                    "code_snippet": fd.get("code_snippet", ""),
+                    "remediation_steps": fd.get("remediation_steps"),
+                    "remediation": fd.get("remediation", fd.get("llm_remediation", "")),
+                }
+                for fd in all_findings
             ]
             learning_engine.on_scan_completed(scan.id, scan_findings, risk_score)
         except Exception as learn_err:
@@ -834,6 +899,15 @@ async def get_learning_status():
 async def get_discovered_patterns():
     """Return all discovered vulnerability patterns and auto-generated rules."""
     return learning_engine.pattern_engine.get_stats()
+
+
+@app.get("/learning/patterns/{signature}")
+async def get_pattern_detail(signature: str):
+    """Return full details for a specific discovered pattern."""
+    detail = learning_engine.pattern_engine.get_pattern_detail(signature)
+    if detail is None:
+        raise HTTPException(status_code=404, detail="Pattern not found")
+    return detail
 
 
 @app.get("/learning/drift")

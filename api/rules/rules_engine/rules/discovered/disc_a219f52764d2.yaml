@@ -1,0 +1,12 @@
+# Auto-discovered rule — generated 2026-02-22T11:34:44.908664
+# Based on 3 occurrences across 3 scans
+# Original: Security misconfiguration - overly permissive security group
+rules:
+  - id: DISC_A219F52764D2
+    description: "[Auto-Discovered] Security misconfiguration - overly permissive security group"
+    severity: CRITICAL
+    file_types: [".tf", ".yaml", ".yml", ".json"]
+    match:
+      regex: "misconfiguration.*permissive"
+    references:
+      - "https://cloudguard.ai/discovered-patterns/a219f52764d2"

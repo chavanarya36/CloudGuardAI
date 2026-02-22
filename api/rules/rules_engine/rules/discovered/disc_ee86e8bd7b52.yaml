@@ -1,0 +1,12 @@
+# Auto-discovered rule — generated 2026-02-22T11:34:44.915794
+# Based on 3 occurrences across 3 scans
+# Original: Hardcoded secret or API key detected
+rules:
+  - id: DISC_EE86E8BD7B52
+    description: "[Auto-Discovered] Hardcoded secret or API key detected"
+    severity: CRITICAL
+    file_types: [".tf", ".yaml", ".yml", ".json"]
+    match:
+      regex: "hardcoded.*detected"
+    references:
+      - "https://cloudguard.ai/discovered-patterns/ee86e8bd7b52"

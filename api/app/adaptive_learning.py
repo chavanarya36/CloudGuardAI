@@ -359,7 +359,7 @@ class PatternDiscoveryEngine:
         return hashlib.md5(raw.encode()).hexdigest()[:12]
 
     def ingest_findings(self, findings: List[Dict[str, Any]], scan_id: int):
-        """Ingest findings from a completed scan."""
+        """Ingest findings from a completed scan with rich detail capture."""
         for f in findings:
             sig = self._signature(f)
             if sig not in self._pattern_counts:
@@ -373,12 +373,97 @@ class PatternDiscoveryEngine:
                     "first_seen": datetime.utcnow().isoformat(),
                     "last_seen": None,
                     "rule_generated": False,
+                    # --- Rich pattern details ---
+                    "affected_resources": [],
+                    "affected_files": [],
+                    "rule_ids_involved": [],
+                    "example_findings": [],
+                    "scanners_involved": [],
+                    "categories": [],
+                    "remediation_guidance": [],
+                    "risk_explanation": "",
                 }
             entry = self._pattern_counts[sig]
             if scan_id not in entry["scan_ids"]:
                 entry["scan_ids"].append(scan_id)
             entry["count"] += 1
             entry["last_seen"] = datetime.utcnow().isoformat()
+
+            # --- Capture rich details from each finding ---
+            # Affected resources
+            resource = f.get("resource", "")
+            if resource and resource not in entry.get("affected_resources", []):
+                entry.setdefault("affected_resources", [])
+                if len(entry["affected_resources"]) < 20:
+                    entry["affected_resources"].append(resource)
+
+            # Affected files
+            file_path = f.get("file_path", f.get("file", ""))
+            if file_path and file_path not in entry.get("affected_files", []):
+                entry.setdefault("affected_files", [])
+                if len(entry["affected_files"]) < 20:
+                    entry["affected_files"].append(file_path)
+
+            # Rule IDs involved
+            rule_id = f.get("rule_id", "")
+            if rule_id and rule_id not in entry.get("rule_ids_involved", []):
+                entry.setdefault("rule_ids_involved", [])
+                if len(entry["rule_ids_involved"]) < 15:
+                    entry["rule_ids_involved"].append(rule_id)
+
+            # Scanner types
+            scanner = f.get("scanner", f.get("category", ""))
+            if scanner and scanner not in entry.get("scanners_involved", []):
+                entry.setdefault("scanners_involved", [])
+                entry["scanners_involved"].append(scanner)
+
+            # Categories
+            category = f.get("category", "")
+            if category and category not in entry.get("categories", []):
+                entry.setdefault("categories", [])
+                entry["categories"].append(category)
+
+            # Example findings (up to 5 unique descriptions)
+            desc = f.get("description", "")
+            entry.setdefault("example_findings", [])
+            existing_descs = [e.get("description", "") for e in entry["example_findings"]]
+            if desc and desc not in existing_descs and len(entry["example_findings"]) < 5:
+                example = {
+                    "description": desc[:500],
+                    "title": f.get("title", "")[:200],
+                    "severity": f.get("severity", "MEDIUM"),
+                    "resource": resource,
+                    "file": file_path,
+                    "rule_id": rule_id,
+                    "line_number": f.get("line_number", f.get("line")),
+                    "code_snippet": (f.get("code_snippet") or f.get("evidence") or "")[:300],
+                    "scanner": scanner,
+                    "scan_id": scan_id,
+                }
+                entry["example_findings"].append(example)
+
+            # Remediation guidance
+            remediation = f.get("remediation_steps") or f.get("remediation") or ""
+            entry.setdefault("remediation_guidance", [])
+            if remediation:
+                if isinstance(remediation, list):
+                    for step in remediation:
+                        if step and step not in entry["remediation_guidance"] and len(entry["remediation_guidance"]) < 10:
+                            entry["remediation_guidance"].append(step)
+                elif isinstance(remediation, str) and remediation not in entry["remediation_guidance"]:
+                    if len(entry["remediation_guidance"]) < 10:
+                        entry["remediation_guidance"].append(remediation)
+
+            # Build risk explanation from the pattern data
+            n_resources = len(entry.get("affected_resources", []))
+            n_files = len(entry.get("affected_files", []))
+            n_scans = len(entry.get("scan_ids", []))
+            entry["risk_explanation"] = (
+                f"This pattern has been detected {entry['count']} times across {n_scans} scan(s), "
+                f"affecting {n_resources} unique resource(s) in {n_files} file(s). "
+                f"Severity: {entry['severity']}. "
+                f"Detected by: {', '.join(entry.get('scanners_involved', ['Unknown']))}."
+            )
 
         self._save_state()
 
@@ -466,7 +551,7 @@ rules:
         }
 
     def get_stats(self) -> Dict[str, Any]:
-        """Return current pattern discovery statistics."""
+        """Return current pattern discovery statistics with rich details."""
         generated = sum(
             1 for d in self._pattern_counts.values() if d.get("rule_generated")
         )
@@ -475,15 +560,64 @@ rules:
             if len(d.get("scan_ids", [])) >= self.MIN_OCCURRENCES
             and not d.get("rule_generated")
         ]
+        # Build enriched top_patterns with full details
+        top_patterns = sorted(
+            self._pattern_counts.values(),
+            key=lambda x: x.get("count", 0),
+            reverse=True,
+        )[:10]
+
+        enriched = []
+        for p in top_patterns:
+            enriched.append({
+                "signature": p.get("signature"),
+                "sample_description": p.get("sample_description", ""),
+                "severity": p.get("severity", "MEDIUM"),
+                "count": p.get("count", 0),
+                "scan_ids": p.get("scan_ids", []),
+                "first_seen": p.get("first_seen"),
+                "last_seen": p.get("last_seen"),
+                "rule_generated": p.get("rule_generated", False),
+                "affected_resources": p.get("affected_resources", []),
+                "affected_files": p.get("affected_files", []),
+                "rule_ids_involved": p.get("rule_ids_involved", []),
+                "scanners_involved": p.get("scanners_involved", []),
+                "categories": p.get("categories", []),
+                "example_findings": p.get("example_findings", []),
+                "remediation_guidance": p.get("remediation_guidance", []),
+                "risk_explanation": p.get("risk_explanation", ""),
+            })
+
         return {
             "total_patterns_tracked": len(self._pattern_counts),
             "rules_generated": generated,
             "pending_patterns": len(pending),
-            "top_patterns": sorted(
-                self._pattern_counts.values(),
-                key=lambda x: x.get("count", 0),
-                reverse=True,
-            )[:5],
+            "top_patterns": enriched,
+        }
+
+    def get_pattern_detail(self, signature: str) -> Optional[Dict[str, Any]]:
+        """Return full details for a single pattern by signature."""
+        p = self._pattern_counts.get(signature)
+        if not p:
+            return None
+        return {
+            "signature": p.get("signature"),
+            "sample_description": p.get("sample_description", ""),
+            "severity": p.get("severity", "MEDIUM"),
+            "count": p.get("count", 0),
+            "scan_ids": p.get("scan_ids", []),
+            "first_seen": p.get("first_seen"),
+            "last_seen": p.get("last_seen"),
+            "rule_generated": p.get("rule_generated", False),
+            "affected_resources": p.get("affected_resources", []),
+            "affected_files": p.get("affected_files", []),
+            "rule_ids_involved": p.get("rule_ids_involved", []),
+            "scanners_involved": p.get("scanners_involved", []),
+            "categories": p.get("categories", []),
+            "example_findings": p.get("example_findings", []),
+            "remediation_guidance": p.get("remediation_guidance", []),
+            "risk_explanation": p.get("risk_explanation", ""),
+            "sample_rule_id": p.get("sample_rule_id", ""),
         }
 
 

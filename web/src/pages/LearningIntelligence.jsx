@@ -19,6 +19,12 @@ import {
   TableHead,
   TableRow,
   Tooltip,
+  Collapse,
+  IconButton,
+  List,
+  ListItem,
+  ListItemText,
+  ListItemIcon,
 } from '@mui/material';
 import PsychologyIcon from '@mui/icons-material/Psychology';
 import AutorenewIcon from '@mui/icons-material/Autorenew';
@@ -29,10 +35,16 @@ import PatternIcon from '@mui/icons-material/Pattern';
 import ScaleIcon from '@mui/icons-material/Scale';
 import TimelineIcon from '@mui/icons-material/Timeline';
 import RuleIcon from '@mui/icons-material/Rule';
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import ExpandLessIcon from '@mui/icons-material/ExpandLess';
+import SecurityIcon from '@mui/icons-material/Security';
+import BugReportIcon from '@mui/icons-material/BugReport';
+import BuildIcon from '@mui/icons-material/Build';
 import {
   getLearningStatus,
   triggerPatternDiscovery,
   getLearningTelemetry,
+  getPatternDetail,
 } from '../api/client';
 
 function StatusChip({ active }) {
@@ -72,6 +84,9 @@ export default function LearningIntelligence() {
   const [loading, setLoading] = useState(true);
   const [discovering, setDiscovering] = useState(false);
   const [error, setError] = useState(null);
+  const [expandedPattern, setExpandedPattern] = useState(null);
+  const [patternDetail, setPatternDetail] = useState(null);
+  const [loadingDetail, setLoadingDetail] = useState(false);
 
   const fetchData = useCallback(async () => {
     try {
@@ -103,6 +118,24 @@ export default function LearningIntelligence() {
       setError(err.message);
     } finally {
       setDiscovering(false);
+    }
+  };
+
+  const handleTogglePattern = async (sig) => {
+    if (expandedPattern === sig) {
+      setExpandedPattern(null);
+      setPatternDetail(null);
+      return;
+    }
+    setExpandedPattern(sig);
+    setLoadingDetail(true);
+    try {
+      const detail = await getPatternDetail(sig);
+      setPatternDetail(detail);
+    } catch {
+      setPatternDetail(null);
+    } finally {
+      setLoadingDetail(false);
     }
   };
 
@@ -307,7 +340,7 @@ export default function LearningIntelligence() {
           </Paper>
         </Grid>
 
-        {/* Pattern Discovery */}
+        {/* Pattern Discovery — Expanded with rich detail view */}
         <Grid item xs={12} md={6}>
           <Paper variant="outlined" sx={{ p: 3, borderRadius: 3, border: '2px solid', borderColor: 'divider' }}>
             <Typography variant="h6" fontWeight="bold" gutterBottom>
@@ -321,37 +354,157 @@ export default function LearningIntelligence() {
               <Chip label={`${patterns.pending_patterns ?? 0} pending`} color="warning" variant="outlined" size="small" />
             </Box>
             {(patterns.top_patterns ?? []).length > 0 ? (
-              <TableContainer sx={{ maxHeight: 180 }}>
-                <Table size="small">
-                  <TableHead>
-                    <TableRow>
-                      <TableCell>Pattern</TableCell>
-                      <TableCell align="right">Count</TableCell>
-                      <TableCell align="right">Scans</TableCell>
-                      <TableCell>Status</TableCell>
-                    </TableRow>
-                  </TableHead>
-                  <TableBody>
-                    {patterns.top_patterns.map((p, i) => (
-                      <TableRow key={i}>
+              <Box>
+                {patterns.top_patterns.map((p, i) => {
+                  const isExpanded = expandedPattern === p.signature;
+                  const detail = isExpanded ? patternDetail : null;
+                  const sevColor = p.severity === 'CRITICAL' ? 'error' : p.severity === 'HIGH' ? 'warning' : p.severity === 'MEDIUM' ? 'info' : 'success';
+                  return (
+                    <Paper key={i} variant="outlined" sx={{ mb: 1.5, borderRadius: 2, overflow: 'hidden', borderColor: isExpanded ? 'primary.main' : 'divider' }}>
+                      {/* Clickable header */}
+                      <Box
+                        sx={{ p: 1.5, cursor: 'pointer', display: 'flex', alignItems: 'center', gap: 1, '&:hover': { bgcolor: 'action.hover' } }}
+                        onClick={() => handleTogglePattern(p.signature)}
+                      >
+                        <Chip label={p.severity} size="small" color={sevColor} sx={{ fontWeight: 'bold', minWidth: 70 }} />
                         <Tooltip title={p.sample_description || ''}>
-                          <TableCell sx={{ fontSize: 12, maxWidth: 150, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
-                            {p.sample_description?.slice(0, 40) || p.signature}
-                          </TableCell>
+                          <Typography variant="body2" sx={{ flex: 1, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', fontWeight: 500 }}>
+                            {p.sample_description || p.signature}
+                          </Typography>
                         </Tooltip>
-                        <TableCell align="right">{p.count}</TableCell>
-                        <TableCell align="right">{p.scan_ids?.length ?? 0}</TableCell>
-                        <TableCell>
-                          {p.rule_generated
-                            ? <Chip label="Rule Created" size="small" color="success" />
-                            : <Chip label="Tracking" size="small" variant="outlined" />
-                          }
-                        </TableCell>
-                      </TableRow>
-                    ))}
-                  </TableBody>
-                </Table>
-              </TableContainer>
+                        <Chip label={`${p.count}×`} size="small" variant="outlined" />
+                        <Chip label={`${p.scan_ids?.length ?? 0} scans`} size="small" variant="outlined" />
+                        {p.rule_generated
+                          ? <Chip label="Rule Created" size="small" color="success" />
+                          : <Chip label="Tracking" size="small" variant="outlined" />
+                        }
+                        <IconButton size="small">{isExpanded ? <ExpandLessIcon /> : <ExpandMoreIcon />}</IconButton>
+                      </Box>
+                      {/* Expanded detail panel */}
+                      <Collapse in={isExpanded}>
+                        <Divider />
+                        <Box sx={{ p: 2, bgcolor: 'grey.50' }}>
+                          {loadingDetail ? (
+                            <Box sx={{ display: 'flex', justifyContent: 'center', py: 2 }}><CircularProgress size={24} /></Box>
+                          ) : detail ? (
+                            <Box>
+                              {/* Risk explanation */}
+                              {detail.risk_explanation && (
+                                <Alert severity="info" sx={{ mb: 2, borderRadius: 2 }}>
+                                  <Typography variant="body2">{detail.risk_explanation}</Typography>
+                                </Alert>
+                              )}
+
+                              {/* Affected resources */}
+                              {(detail.affected_resources?.length > 0) && (
+                                <Box sx={{ mb: 2 }}>
+                                  <Typography variant="subtitle2" fontWeight="bold" gutterBottom>
+                                    <SecurityIcon sx={{ fontSize: 16, mr: 0.5, verticalAlign: 'middle' }} />
+                                    Affected Resources ({detail.affected_resources.length})
+                                  </Typography>
+                                  <Box sx={{ display: 'flex', gap: 0.5, flexWrap: 'wrap' }}>
+                                    {detail.affected_resources.map((r, ri) => (
+                                      <Chip key={ri} label={r} size="small" variant="outlined" sx={{ fontFamily: 'monospace', fontSize: 11 }} />
+                                    ))}
+                                  </Box>
+                                </Box>
+                              )}
+
+                              {/* Scanners & Rule IDs */}
+                              <Box sx={{ display: 'flex', gap: 3, mb: 2 }}>
+                                {(detail.scanners_involved?.length > 0) && (
+                                  <Box>
+                                    <Typography variant="caption" color="text.secondary">Detected by</Typography>
+                                    <Box sx={{ display: 'flex', gap: 0.5, mt: 0.5 }}>
+                                      {detail.scanners_involved.map((s, si) => (
+                                        <Chip key={si} label={s} size="small" color="primary" variant="outlined" />
+                                      ))}
+                                    </Box>
+                                  </Box>
+                                )}
+                                {(detail.rule_ids_involved?.length > 0) && (
+                                  <Box>
+                                    <Typography variant="caption" color="text.secondary">Rule IDs</Typography>
+                                    <Box sx={{ display: 'flex', gap: 0.5, mt: 0.5, flexWrap: 'wrap' }}>
+                                      {detail.rule_ids_involved.slice(0, 5).map((r, ri) => (
+                                        <Chip key={ri} label={r} size="small" variant="outlined" sx={{ fontFamily: 'monospace', fontSize: 10 }} />
+                                      ))}
+                                      {detail.rule_ids_involved.length > 5 && (
+                                        <Chip label={`+${detail.rule_ids_involved.length - 5} more`} size="small" variant="outlined" />
+                                      )}
+                                    </Box>
+                                  </Box>
+                                )}
+                              </Box>
+
+                              {/* Example findings */}
+                              {(detail.example_findings?.length > 0) && (
+                                <Box sx={{ mb: 2 }}>
+                                  <Typography variant="subtitle2" fontWeight="bold" gutterBottom>
+                                    <BugReportIcon sx={{ fontSize: 16, mr: 0.5, verticalAlign: 'middle' }} />
+                                    Example Findings ({detail.example_findings.length})
+                                  </Typography>
+                                  {detail.example_findings.map((ex, ei) => (
+                                    <Paper key={ei} variant="outlined" sx={{ p: 1.5, mb: 1, borderRadius: 1.5, borderLeft: '3px solid', borderLeftColor: ex.severity === 'CRITICAL' ? 'error.main' : ex.severity === 'HIGH' ? 'warning.main' : 'info.main' }}>
+                                      <Typography variant="body2" fontWeight="bold">{ex.title || 'Finding'}</Typography>
+                                      <Typography variant="caption" color="text.secondary" sx={{ display: 'block', mb: 0.5 }}>
+                                        {ex.resource && `Resource: ${ex.resource}`}{ex.file && ` | File: ${ex.file}`}{ex.line_number && ` | Line: ${ex.line_number}`}
+                                      </Typography>
+                                      <Typography variant="body2" sx={{ fontSize: 12 }}>{ex.description?.slice(0, 300)}</Typography>
+                                      {ex.code_snippet && (
+                                        <Paper sx={{ p: 1, mt: 1, bgcolor: 'grey.100', borderRadius: 1 }}>
+                                          <Typography variant="caption" component="pre" sx={{ whiteSpace: 'pre-wrap', fontFamily: 'monospace', fontSize: 10 }}>
+                                            {ex.code_snippet}
+                                          </Typography>
+                                        </Paper>
+                                      )}
+                                    </Paper>
+                                  ))}
+                                </Box>
+                              )}
+
+                              {/* Remediation guidance */}
+                              {(detail.remediation_guidance?.length > 0) && (
+                                <Box sx={{ mb: 1 }}>
+                                  <Typography variant="subtitle2" fontWeight="bold" gutterBottom>
+                                    <BuildIcon sx={{ fontSize: 16, mr: 0.5, verticalAlign: 'middle' }} />
+                                    Remediation Guidance
+                                  </Typography>
+                                  <List dense disablePadding>
+                                    {detail.remediation_guidance.map((step, si) => (
+                                      <ListItem key={si} disableGutters sx={{ py: 0.25 }}>
+                                        <ListItemIcon sx={{ minWidth: 24 }}>
+                                          <CheckCircleIcon sx={{ fontSize: 14, color: 'success.main' }} />
+                                        </ListItemIcon>
+                                        <ListItemText primaryTypographyProps={{ variant: 'body2', fontSize: 12 }} primary={step} />
+                                      </ListItem>
+                                    ))}
+                                  </List>
+                                </Box>
+                              )}
+
+                              {/* Metadata */}
+                              <Box sx={{ display: 'flex', gap: 2, mt: 1 }}>
+                                <Typography variant="caption" color="text.secondary">
+                                  First seen: {detail.first_seen ? new Date(detail.first_seen).toLocaleDateString() : '—'}
+                                </Typography>
+                                <Typography variant="caption" color="text.secondary">
+                                  Last seen: {detail.last_seen ? new Date(detail.last_seen).toLocaleDateString() : '—'}
+                                </Typography>
+                                <Typography variant="caption" color="text.secondary">
+                                  Files: {detail.affected_files?.length ?? 0}
+                                </Typography>
+                              </Box>
+                            </Box>
+                          ) : (
+                            <Typography variant="body2" color="text.secondary">No detail available for this pattern.</Typography>
+                          )}
+                        </Box>
+                      </Collapse>
+                    </Paper>
+                  );
+                })}
+              </Box>
             ) : (
               <Typography variant="body2" color="text.secondary">
                 No patterns discovered yet — run more scans to build data.

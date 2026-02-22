@@ -1,0 +1,16 @@
+# Auto-discovered rule — generated 2026-02-22T12:07:20.147038
+# Based on 8 occurrences across 8 scans
+# Original: Security group allows access to all ports (0-65535)
+
+**Impact:** This could allow full system compromise, data breach, o
+rules:
+  - id: DISC_3FBE6F84EC2F
+    description: "[Auto-Discovered] Security group allows access to all ports (0-65535)
+
+**Impact:** This could allow full system compro"
+    severity: CRITICAL
+    file_types: [".tf", ".yaml", ".yml", ".json"]
+    match:
+      regex: "infrastructure.*unauthorized"
+    references:
+      - "https://cloudguard.ai/discovered-patterns/3fbe6f84ec2f"

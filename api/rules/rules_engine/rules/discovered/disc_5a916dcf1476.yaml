@@ -1,0 +1,16 @@
+# Auto-discovered rule — generated 2026-02-22T12:07:20.170748
+# Based on 5 occurrences across 5 scans
+# Original: RDS instance storage encryption is not enabled
+
+**Impact:** This could lead to significant data exposure, privilege esca
+rules:
+  - id: DISC_5A916DCF1476
+    description: "[Auto-Discovered] RDS instance storage encryption is not enabled
+
+**Impact:** This could lead to significant data expo"
+    severity: HIGH
+    file_types: [".tf", ".yaml", ".yml", ".json"]
+    match:
+      regex: "significant.*encryption"
+    references:
+      - "https://cloudguard.ai/discovered-patterns/5a916dcf1476"

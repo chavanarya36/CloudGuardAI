@@ -1,0 +1,16 @@
+# Auto-discovered rule — generated 2026-02-22T12:07:20.181766
+# Based on 3 occurrences across 3 scans
+# Original: Encryption not enabled for sensitive data storage
+
+**Impact:** This could lead to significant data exposure, privilege e
+rules:
+  - id: DISC_97B91F264EFB
+    description: "[Auto-Discovered] Encryption not enabled for sensitive data storage
+
+**Impact:** This could lead to significant data e"
+    severity: HIGH
+    file_types: [".tf", ".yaml", ".yml", ".json"]
+    match:
+      regex: "significant.*encryption"
+    references:
+      - "https://cloudguard.ai/discovered-patterns/97b91f264efb"

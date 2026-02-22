@@ -1,0 +1,12 @@
+# Auto-discovered rule — generated 2026-02-22T11:34:44.920987
+# Based on 3 occurrences across 3 scans
+# Original: AWS access key appears to be hardcoded
+rules:
+  - id: DISC_41867FF8131E
+    description: "[Auto-Discovered] AWS access key appears to be hardcoded"
+    severity: CRITICAL
+    file_types: [".tf", ".yaml", ".yml", ".json"]
+    match:
+      regex: "hardcoded.*appears"
+    references:
+      - "https://cloudguard.ai/discovered-patterns/41867ff8131e"

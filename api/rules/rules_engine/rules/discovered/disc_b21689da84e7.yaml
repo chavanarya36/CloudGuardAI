@@ -1,0 +1,12 @@
+# Auto-discovered rule — generated 2026-02-22T11:34:44.839800
+# Based on 18 occurrences across 14 scans
+# Original: S3 bucket logging is not configured
+rules:
+  - id: DISC_B21689DA84E7
+    description: "[Auto-Discovered] S3 bucket logging is not configured"
+    severity: MEDIUM
+    file_types: [".tf", ".yaml", ".yml", ".json"]
+    match:
+      regex: "configured.*logging"
+    references:
+      - "https://cloudguard.ai/discovered-patterns/b21689da84e7"

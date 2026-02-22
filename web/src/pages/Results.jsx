@@ -242,6 +242,170 @@ export default function Results() {
           />
         </Grid>
 
+        {/* GNN Attack Path Visualization */}
+        {scan.gnn_graph_data && (scan.gnn_graph_data.attack_paths?.length > 0 || scan.gnn_graph_data.graph?.nodes?.length > 0) && (
+          <Grid item xs={12}>
+            <Card sx={{ borderRadius: 3, border: '2px solid', borderColor: 'warning.main' }}>
+              <CardContent>
+                <Typography variant="h5" fontWeight="bold" gutterBottom sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+                  🔗 GNN Attack Path Detection
+                  {scan.gnn_graph_data.summary && (
+                    <Chip
+                      label={`${scan.gnn_graph_data.summary.total_paths || 0} path(s) detected`}
+                      color={scan.gnn_graph_data.summary.critical_paths > 0 ? 'error' : scan.gnn_graph_data.summary.total_paths > 0 ? 'warning' : 'success'}
+                      size="small"
+                      sx={{ ml: 1 }}
+                    />
+                  )}
+                </Typography>
+
+                {/* Summary stats */}
+                {scan.gnn_graph_data.summary && (
+                  <Box sx={{ display: 'flex', gap: 2, mb: 3, flexWrap: 'wrap' }}>
+                    <Chip label={`${scan.gnn_graph_data.summary.total_resources || 0} resources`} variant="outlined" size="small" />
+                    <Chip label={`${scan.gnn_graph_data.summary.total_edges || 0} connections`} variant="outlined" size="small" />
+                    <Chip label={`${scan.gnn_graph_data.summary.total_vulnerabilities || 0} vulnerabilities`} color="error" variant="outlined" size="small" />
+                    {scan.gnn_graph_data.summary.critical_paths > 0 && (
+                      <Chip label={`${scan.gnn_graph_data.summary.critical_paths} CRITICAL paths`} color="error" size="small" />
+                    )}
+                  </Box>
+                )}
+
+                {/* Infrastructure Graph Visualization */}
+                {scan.gnn_graph_data.graph?.nodes?.length > 0 && (
+                  <Paper variant="outlined" sx={{ p: 2, mb: 3, borderRadius: 2, bgcolor: '#f8f9fa' }}>
+                    <Typography variant="subtitle1" fontWeight="bold" gutterBottom>
+                      Infrastructure Dependency Graph
+                    </Typography>
+                    <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 1.5, justifyContent: 'center', py: 2 }}>
+                      {scan.gnn_graph_data.graph.nodes.map((node, idx) => (
+                        <Paper
+                          key={idx}
+                          elevation={node.is_entry_point || node.is_target ? 4 : 1}
+                          sx={{
+                            p: 1.5, borderRadius: 2, minWidth: 140, textAlign: 'center',
+                            border: '2px solid',
+                            borderColor: node.is_entry_point ? 'error.main' : node.is_target ? 'warning.main' : node.vulnerabilities > 0 ? 'warning.light' : 'grey.300',
+                            bgcolor: node.is_entry_point ? 'error.50' : node.is_target ? 'warning.50' : 'white',
+                          }}
+                        >
+                          <Typography variant="body2" fontWeight="bold" sx={{ fontFamily: 'monospace', fontSize: 11 }}>
+                            {node.label}
+                          </Typography>
+                          <Typography variant="caption" color="text.secondary" sx={{ display: 'block' }}>
+                            {node.type?.replace('aws_', '')}
+                          </Typography>
+                          {node.vulnerabilities > 0 && (
+                            <Chip
+                              label={`${node.vulnerabilities} vuln${node.vulnerabilities > 1 ? 's' : ''}`}
+                              size="small"
+                              color={node.max_severity === 'CRITICAL' ? 'error' : node.max_severity === 'HIGH' ? 'warning' : 'info'}
+                              sx={{ mt: 0.5, fontSize: 10 }}
+                            />
+                          )}
+                          {node.is_entry_point && <Chip label="ENTRY" size="small" color="error" sx={{ mt: 0.5, ml: 0.5, fontSize: 10 }} />}
+                          {node.is_target && <Chip label="TARGET" size="small" color="warning" sx={{ mt: 0.5, ml: 0.5, fontSize: 10 }} />}
+                        </Paper>
+                      ))}
+                    </Box>
+                    {/* Connection legend */}
+                    <Box sx={{ display: 'flex', gap: 2, justifyContent: 'center', mt: 1 }}>
+                      <Typography variant="caption" sx={{ display: 'flex', alignItems: 'center', gap: 0.5 }}>
+                        <Box sx={{ width: 12, height: 12, bgcolor: 'error.main', borderRadius: '50%' }} /> Entry Point
+                      </Typography>
+                      <Typography variant="caption" sx={{ display: 'flex', alignItems: 'center', gap: 0.5 }}>
+                        <Box sx={{ width: 12, height: 12, bgcolor: 'warning.main', borderRadius: '50%' }} /> Target
+                      </Typography>
+                      <Typography variant="caption" sx={{ display: 'flex', alignItems: 'center', gap: 0.5 }}>
+                        <Box sx={{ width: 12, height: 12, border: '2px solid', borderColor: 'grey.400', borderRadius: '50%' }} /> Resource
+                      </Typography>
+                    </Box>
+                  </Paper>
+                )}
+
+                {/* Attack Paths */}
+                {scan.gnn_graph_data.attack_paths?.map((path, pathIdx) => (
+                  <Accordion key={pathIdx} sx={{ mb: 1.5, borderRadius: 2, overflow: 'hidden', border: '1px solid', borderColor: path.severity === 'CRITICAL' ? 'error.main' : path.severity === 'HIGH' ? 'warning.main' : 'divider' }}>
+                    <AccordionSummary expandIcon={<ExpandMoreIcon />}>
+                      <Box display="flex" alignItems="center" gap={1.5} width="100%">
+                        <Chip
+                          label={path.severity}
+                          size="small"
+                          color={path.severity === 'CRITICAL' ? 'error' : path.severity === 'HIGH' ? 'warning' : 'info'}
+                          sx={{ fontWeight: 'bold' }}
+                        />
+                        <Typography variant="body2" fontWeight="bold" sx={{ flex: 1 }}>
+                          {path.path_string}
+                        </Typography>
+                        <Chip label={`${path.hops} hops`} size="small" variant="outlined" />
+                        <Typography variant="caption" color="text.secondary">{path.path_id}</Typography>
+                      </Box>
+                    </AccordionSummary>
+                    <AccordionDetails sx={{ bgcolor: 'grey.50' }}>
+                      {/* Visual chain */}
+                      <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, flexWrap: 'wrap', mb: 2, p: 2, bgcolor: 'white', borderRadius: 2, border: '1px solid', borderColor: 'divider' }}>
+                        {path.chain?.map((node, ni) => (
+                          <Box key={ni} sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+                            {ni > 0 && (
+                              <Typography variant="h5" color="error.main" sx={{ mx: 0.5 }}>→</Typography>
+                            )}
+                            <Paper
+                              elevation={1}
+                              sx={{
+                                p: 1, borderRadius: 1.5, textAlign: 'center', minWidth: 100,
+                                border: '2px solid',
+                                borderColor: node.is_entry ? 'error.main' : node.is_target ? 'warning.main' : 'primary.light',
+                                bgcolor: node.is_entry ? 'error.50' : node.is_target ? 'warning.50' : 'white',
+                              }}
+                            >
+                              <Typography variant="body2" fontWeight="bold" sx={{ fontFamily: 'monospace', fontSize: 11 }}>
+                                {node.resource_name || node.resource}
+                              </Typography>
+                              <Typography variant="caption" color="text.secondary" sx={{ display: 'block' }}>
+                                {node.resource_type?.replace('aws_', '')}
+                              </Typography>
+                              {node.vulnerabilities?.map((v, vi) => (
+                                <Chip key={vi} label={v.vuln} size="small" color="error" variant="outlined" sx={{ mt: 0.5, fontSize: 9 }} />
+                              ))}
+                              {ni > 0 && (
+                                <Typography variant="caption" color="primary.main" sx={{ display: 'block', mt: 0.5, fontStyle: 'italic' }}>
+                                  via {node.relationship}
+                                </Typography>
+                              )}
+                            </Paper>
+                          </Box>
+                        ))}
+                      </Box>
+
+                      {/* Narrative */}
+                      <Paper sx={{ p: 2, mb: 2, bgcolor: 'white', borderRadius: 1.5 }}>
+                        <Typography variant="subtitle2" gutterBottom fontWeight="bold">Attack Narrative</Typography>
+                        <Typography variant="body2" sx={{ whiteSpace: 'pre-line', fontFamily: 'monospace', fontSize: 12 }}>
+                          {path.narrative}
+                        </Typography>
+                      </Paper>
+
+                      {/* Remediation */}
+                      {path.remediation?.length > 0 && (
+                        <Paper sx={{ p: 2, bgcolor: 'success.50', borderRadius: 1.5, border: '1px solid', borderColor: 'success.light' }}>
+                          <Typography variant="subtitle2" gutterBottom fontWeight="bold" color="success.dark">
+                            Remediation to Break This Path
+                          </Typography>
+                          {path.remediation.map((step, si) => (
+                            <Typography key={si} variant="body2" sx={{ fontSize: 12, mb: 0.5 }}>
+                              {si + 1}. {step}
+                            </Typography>
+                          ))}
+                        </Paper>
+                      )}
+                    </AccordionDetails>
+                  </Accordion>
+                ))}
+              </CardContent>
+            </Card>
+          </Grid>
+        )}
+
         {/* Keep traditional Material-UI findings for additional details */}
         <Grid item xs={12}>
           <Typography variant="h5" gutterBottom sx={{ mt: 2 }}>

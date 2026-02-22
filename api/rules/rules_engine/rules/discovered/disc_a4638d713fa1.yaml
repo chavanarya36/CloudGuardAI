@@ -1,0 +1,12 @@
+# Auto-discovered rule — generated 2026-02-22T11:34:44.891858
+# Based on 3 occurrences across 3 scans
+# Original: Security group allows unrestricted access from 0.0.0.0/0
+rules:
+  - id: DISC_A4638D713FA1
+    description: "[Auto-Discovered] Security group allows unrestricted access from 0.0.0.0/0"
+    severity: CRITICAL
+    file_types: [".tf", ".yaml", ".yml", ".json"]
+    match:
+      regex: "unrestricted.*security"
+    references:
+      - "https://cloudguard.ai/discovered-patterns/a4638d713fa1"

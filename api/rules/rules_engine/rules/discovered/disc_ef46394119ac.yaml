@@ -1,0 +1,12 @@
+# Auto-discovered rule — generated 2026-02-22T11:34:44.940457
+# Based on 3 occurrences across 3 scans
+# Original: Security group allows wide port range (0-65535)
+rules:
+  - id: DISC_EF46394119AC
+    description: "[Auto-Discovered] Security group allows wide port range (0-65535)"
+    severity: HIGH
+    file_types: [".tf", ".yaml", ".yml", ".json"]
+    match:
+      regex: "security.*allows"
+    references:
+      - "https://cloudguard.ai/discovered-patterns/ef46394119ac"

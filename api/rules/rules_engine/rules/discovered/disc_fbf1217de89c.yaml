@@ -1,0 +1,16 @@
+# Auto-discovered rule — generated 2026-02-22T12:07:20.158563
+# Based on 6 occurrences across 6 scans
+# Original: AWS access key appears to be hardcoded
+
+**Impact:** This could allow full system compromise, data breach, or unauthorize
+rules:
+  - id: DISC_FBF1217DE89C
+    description: "[Auto-Discovered] AWS access key appears to be hardcoded
+
+**Impact:** This could allow full system compromise, data br"
+    severity: CRITICAL
+    file_types: [".tf", ".yaml", ".yml", ".json"]
+    match:
+      regex: "infrastructure.*unauthorized"
+    references:
+      - "https://cloudguard.ai/discovered-patterns/fbf1217de89c"

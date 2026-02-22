@@ -40,6 +40,8 @@ class Scan(Base):
     compliance_score = Column(Float)  # 0-100, higher is better
     # Scanner breakdown
     scanner_breakdown = Column(JSON)
+    # GNN attack path graph data (nodes + edges + attack paths)
+    gnn_graph_data = Column(JSON)
     risk_score = Column(Float, default=0.0)
     severity_counts = Column(JSON)
     total_findings = Column(Integer, default=0)
