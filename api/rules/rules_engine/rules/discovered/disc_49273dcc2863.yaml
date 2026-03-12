@@ -1,0 +1,14 @@
+# Auto-discovered rule — generated 2026-03-11T07:55:37.446340
+# Based on 123 occurrences across 7 scans
+# Original: Azure client secret detected. This poses a critical security risk as credentials should never be hardcoded.
+
+**Impact:**
+rules:
+  - id: DISC_49273DCC2863
+    description: "[Auto-Discovered] Azure client secret detected. This poses a critical security risk as credentials should never be har"
+    severity: CRITICAL
+    file_types: [".tf", ".yaml", ".yml", ".json"]
+    match:
+      regex: "unauthorized.*credentials"
+    references:
+      - "https://cloudguard.ai/discovered-patterns/49273dcc2863"

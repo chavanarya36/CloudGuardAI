@@ -1,0 +1,12 @@
+# Auto-discovered rule — generated 2026-03-11T07:55:37.863696
+# Based on 7 occurrences across 7 scans
+# Original: GNN attention mechanism identified azurerm_storage_account.test as a critical point in potential attack paths. This reso
+rules:
+  - id: DISC_AE33BE2BFCFA
+    description: "[Auto-Discovered] GNN attention mechanism identified azurerm_storage_account.test as a critical point in potential att"
+    severity: MEDIUM
+    file_types: [".tf", ".yaml", ".yml", ".json"]
+    match:
+      regex: "azurerm_storage_account.*infrastructure"
+    references:
+      - "https://cloudguard.ai/discovered-patterns/ae33be2bfcfa"

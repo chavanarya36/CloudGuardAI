@@ -13,6 +13,9 @@ import json
 from datetime import datetime
 from typing import Dict, List
 import matplotlib.pyplot as plt
+import logging
+
+logger = logging.getLogger(__name__)
 
 try:
     from ml.models.graph_neural_network import InfrastructureGNN, AttackPathPredictor
@@ -20,11 +23,11 @@ try:
     IMPORTS_AVAILABLE = True
 except ImportError:
     IMPORTS_AVAILABLE = False
-    print("⚠️  Import error. Run from project root: python -m ml.models.train_gnn")
+    logger.error("Import error. Run from project root: python -m ml.models.train_gnn")
 
 
 class GNNTrainer:
-    """Trains and evaluates GNN model for attack path detection"""
+    """Trains and evaluates GNN model for topology-aware risk scoring"""
     
     def __init__(
         self,

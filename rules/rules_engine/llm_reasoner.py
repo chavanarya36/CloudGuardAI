@@ -1,11 +1,21 @@
 """LLM-backed explanation and remediation helper for rules engine findings.
 
 This module is import-safe and designed to be fully mockable in tests.
+
+Resolution order:
+  1. OpenAI API (if OPENAI_API_KEY is set)
+  2. Local Ollama LLM (if server is reachable)
+  3. Deterministic template fallback (always available)
 """
 from __future__ import annotations
 
+import json
+import logging
+import re
 from typing import Any, Dict, Optional
 import os
+
+logger = logging.getLogger(__name__)
 
 
 def _call_llm(prompt: str, *, api_key: str) -> Dict[str, Any]:
@@ -99,39 +109,135 @@ def explain_and_remediate(finding: Dict[str, Any], file_content: str) -> Dict[st
 
         {
           "explanation": str,
+          "impact": str,        # optional — only present with a real LLM
           "remediation": str,
-          "certainty": float,  # between 0.0 and 1.0
+          "certainty": float,   # between 0.0 and 1.0
         }
 
-    If the environment variable ``OPENAI_API_KEY`` is not set, a
-    deterministic template-based explanation is used. When it is set,
-    this function attempts to call an OpenAI-compatible LLM endpoint via
-    :func:`_call_llm` and parses a simple, robust response.
+    Resolution order:
+      1. OpenAI API  (OPENAI_API_KEY set)
+      2. Local Ollama (server reachable)
+      3. Deterministic template fallback
     """
 
+    # --- Path 1: OpenAI API ---
     api_key = os.getenv("OPENAI_API_KEY")
-    if not api_key:
-        return _deterministic_fallback(finding, file_content)
+    if api_key:
+        return _call_openai_path(finding, file_content, api_key)
 
+    # --- Path 2: Local Ollama LLM ---
+    try:
+        from llm.local_llm_client import is_ollama_available, call_local_llm
+        if is_ollama_available():
+            result = _call_local_llm_path(finding, file_content, call_local_llm)
+            if result is not None:
+                return result
+            logger.warning("Local LLM returned no usable output; falling back to deterministic")
+    except ImportError:
+        logger.debug("llm.local_llm_client not available; skipping local LLM path")
+    except Exception as exc:
+        logger.warning("Local LLM path failed: %s; falling back to deterministic", exc)
+
+    # --- Path 3: Deterministic fallback ---
+    return _deterministic_fallback(finding, file_content)
+
+
+def _build_structured_prompt(finding: Dict[str, Any], file_content: str) -> str:
+    """Build a concise prompt optimized for fast local LLM inference."""
     rule_id = finding.get("rule_id") or finding.get("id") or "UNKNOWN_RULE"
     description = finding.get("description") or "Potential IaC misconfiguration."
     severity = finding.get("severity") or finding.get("level") or "UNKNOWN"
-    file_path = finding.get("file_path") or finding.get("path") or "<unknown>"
+    code_snippet = finding.get("code_snippet") or ""
 
-    # Construct a compact, structured prompt. This is intentionally
-    # stable so tests can mock _call_llm predictably.
-    snippet = file_content[:8000]
+    # Keep code context short to reduce inference time on CPU
+    code_block = code_snippet if code_snippet else file_content[:1500]
+
     prompt = (
-        "You are helping to triage an Infrastructure-as-Code (IaC) finding.\n"  # noqa: E501
-        f"Rule ID: {rule_id}\n"
-        f"Severity: {severity}\n"
-        f"Description: {description}\n"
-        f"File path: {file_path}\n"
-        "IaC snippet (may be truncated):\n" + snippet + "\n\n"  # noqa: E501
-        "1) Briefly explain why this is risky in clear, practical terms.\n"  # noqa: E501
-        "2) Provide a concrete remediation in 1-3 bullet points.\n"  # noqa: E501
-        "3) Rate your certainty from 0.0 to 1.0 at the end as 'Certainty: X'."  # noqa: E501
+        f"IaC finding {rule_id} [{severity}]: {description[:200]}\n"
+        f"Code:\n{code_block}\n\n"
+        'Return JSON: {"explanation":"why dangerous","impact":"consequences","remediation":"fix steps","risk_level":"HIGH"}'
     )
+    return prompt
+
+
+_SYSTEM_MSG = "You are a cloud security expert. Respond with valid JSON only."
+
+
+def _parse_structured_response(text: str) -> Optional[Dict[str, Any]]:
+    """Parse structured JSON from an LLM response.
+
+    Handles common issues: markdown fences, trailing text, etc.
+    Returns None if parsing fails.
+    """
+    # Strip markdown code fences if present
+    cleaned = re.sub(r'^```(?:json)?\s*', '', text.strip(), flags=re.MULTILINE)
+    cleaned = re.sub(r'```\s*$', '', cleaned.strip(), flags=re.MULTILINE)
+
+    try:
+        data = json.loads(cleaned)
+        if isinstance(data, dict) and "explanation" in data:
+            return data
+    except (json.JSONDecodeError, ValueError):
+        pass
+
+    # Try to extract JSON object from within other text
+    match = re.search(r'\{.*"explanation".*\}', text, re.DOTALL)
+    if match:
+        try:
+            return json.loads(match.group())
+        except (json.JSONDecodeError, ValueError):
+            pass
+    return None
+
+
+def _certainty_from_risk(risk_level: str) -> float:
+    """Map a risk_level string to a certainty value."""
+    return {"CRITICAL": 0.95, "HIGH": 0.85, "MEDIUM": 0.7, "LOW": 0.55}.get(
+        risk_level.upper(), 0.7
+    )
+
+
+def _call_local_llm_path(
+    finding: Dict[str, Any], file_content: str, call_fn
+) -> Optional[Dict[str, Any]]:
+    """Try to get an explanation from the local Ollama LLM."""
+    prompt = _build_structured_prompt(finding, file_content)
+    raw = call_fn(prompt, system=_SYSTEM_MSG)
+    if not raw:
+        return None
+
+    structured = _parse_structured_response(raw)
+    if structured:
+        risk = structured.get("risk_level", "MEDIUM")
+        # Coerce list values to strings (0.6b models sometimes return arrays)
+        remediation = structured.get("remediation", "")
+        if isinstance(remediation, list):
+            remediation = "\n".join(str(r) for r in remediation)
+        impact = structured.get("impact", "")
+        if isinstance(impact, list):
+            impact = " ".join(str(i) for i in impact)
+        return {
+            "explanation": str(structured["explanation"]),
+            "impact": str(impact),
+            "remediation": str(remediation),
+            "certainty": _certainty_from_risk(risk),
+        }
+
+    # Fallback: use raw text as explanation
+    logger.info("Local LLM response was not valid JSON; using raw text")
+    return {
+        "explanation": raw,
+        "impact": "",
+        "remediation": "",
+        "certainty": 0.65,
+    }
+
+
+def _call_openai_path(
+    finding: Dict[str, Any], file_content: str, api_key: str
+) -> Dict[str, Any]:
+    """Original OpenAI-based explanation path."""
+    prompt = _build_structured_prompt(finding, file_content)
 
     try:
         resp = _call_llm(prompt, api_key=api_key)
@@ -139,15 +245,23 @@ def explain_and_remediate(finding: Dict[str, Any], file_content: str) -> Dict[st
         if not message:
             raise ValueError("Empty LLM response")
 
-        # Very lightweight certainty parsing: look for a trailing
-        # 'Certainty: 0.xyz' token; fall back to 0.8 if missing.
+        structured = _parse_structured_response(message)
+        if structured:
+            risk = structured.get("risk_level", "MEDIUM")
+            return {
+                "explanation": structured["explanation"],
+                "impact": structured.get("impact", ""),
+                "remediation": structured.get("remediation", ""),
+                "certainty": _certainty_from_risk(risk),
+            }
+
+        # Legacy unstructured fallback
         certainty: float = 0.8
         lower = message.lower()
         marker = "certainty:"
         if marker in lower:
             idx = lower.rfind(marker)
             tail = lower[idx + len(marker) :].strip()
-            # Take first token that looks like a float.
             token = tail.split()[0]
             try:
                 parsed = float(token)
@@ -156,15 +270,10 @@ def explain_and_remediate(finding: Dict[str, Any], file_content: str) -> Dict[st
             except ValueError:
                 pass
 
-        explanation = message
-        remediation = "See the recommended remediation steps described above."
-
         return {
-            "explanation": explanation,
-            "remediation": remediation,
+            "explanation": message,
+            "remediation": "See the recommended remediation steps described above.",
             "certainty": certainty,
         }
     except Exception:
-        # Any runtime failure falls back to deterministic output so that
-        # the rest of the pipeline continues to function.
         return _deterministic_fallback(finding, file_content)

@@ -1,0 +1,12 @@
+# Auto-discovered rule — generated 2026-03-11T07:55:37.672382
+# Based on 3 occurrences across 3 scans
+# Original: Resource **aws_s3_bucket.bad** has vulnerability: S3 bucket publicly readable. This resource is part of the infrastructu
+rules:
+  - id: DISC_154457A3574D
+    description: "[Auto-Discovered] Resource **aws_s3_bucket.bad** has vulnerability: S3 bucket publicly readable. This resource is part"
+    severity: CRITICAL
+    file_types: [".tf", ".yaml", ".yml", ".json"]
+    match:
+      regex: "infrastructure.*vulnerability"
+    references:
+      - "https://cloudguard.ai/discovered-patterns/154457a3574d"

@@ -1,0 +1,1377 @@
+﻿tfsec.exe : 
+At line:1 char:1
++ & "D:\CloudGuardAI\evaluation\tools\tfsec.exe" "D:\CloudGuardAI\evalu ...
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+======================================================
+tfsec is joining the Trivy family
+
+tfsec will continue to remain available 
+for the time being, although our engineering 
+attention will be directed at Trivy going forward.
+
+You can read more here: 
+https://github.com/aquasecurity/tfsec/discussions/1994
+======================================================
+{
+	"results": [
+		{
+			"rule_id": "AVD-AWS-0017",
+			"long_id": "aws-cloudwatch-log-group-customer-key",
+			"rule_description": "CloudWatch log groups should be encrypted using CMK",
+			"rule_provider": "aws",
+			"rule_service": "cloudwatch",
+			"impact": "Log data may be leaked if the logs are compromised. No auditing of who have viewed the logs.",
+			"resolution": "Enable CMK encryption of CloudWatch Log Groups",
+			"links": [
+				"https://aquasecurity.github.io/tfsec/v1.28.11/checks/aws/cloudwatch/log-group-customer-key/",
+				"https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/cloudwatch_log_group#kms_key_id"
+			],
+			"description": "Log group is not encrypted.",
+			"severity": "LOW",
+			"warning": false,
+			"status": 0,
+			"resource": "aws_cloudwatch_log_group.flow_logs",
+			"location": {
+				"filename": "D:\\CloudGuardAI\\evaluation\\dataset\\clean\\clean_20_logging_enabled.tf",
+				"start_line": 12,
+				"end_line": 19
+			}
+		},
+		{
+			"rule_id": "AVD-AWS-0131",
+			"long_id": "aws-ec2-enable-at-rest-encryption",
+			"rule_description": "Instance with unencrypted block device.",
+			"rule_provider": "aws",
+			"rule_service": "ec2",
+			"impact": "The block device could be compromised and read from",
+			"resolution": "Turn on encryption for all block devices",
+			"links": [
+				"https://aquasecurity.github.io/tfsec/v1.28.11/checks/aws/ec2/enable-at-rest-encryption/",
+				"https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/instance#ebs-ephemeral-and-root-block-devices"
+			],
+			"description": "Root block device is not encrypted.",
+			"severity": "HIGH",
+			"warning": false,
+			"status": 0,
+			"resource": "aws_instance.web_server",
+			"location": {
+				"filename": "D:\\CloudGuardAI\\evaluation\\dataset\\clean\\clean_21_full_stack_secure.tf",
+				"start_line": 23,
+				"end_line": 34
+			}
+		},
+		{
+			"rule_id": "AVD-AWS-0131",
+			"long_id": "aws-ec2-enable-at-rest-encryption",
+			"rule_description": "Instance with unencrypted block device.",
+			"rule_provider": "aws",
+			"rule_service": "ec2",
+			"impact": "The block device could be compromised and read from",
+			"resolution": "Turn on encryption for all block devices",
+			"links": [
+				"https://aquasecurity.github.io/tfsec/v1.28.11/checks/aws/ec2/enable-at-rest-encryption/",
+				"https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/instance#ebs-ephemeral-and-root-block-devices"
+			],
+			"description": "Root block device is not encrypted.",
+			"severity": "HIGH",
+			"warning": false,
+			"status": 0,
+			"resource": "aws_instance.bastion",
+			"location": {
+				"filename": "D:\\CloudGuardAI\\evaluation\\dataset\\clean\\clean_19_ec2_bastion_secure.tf",
+				"start_line": 1,
+				"end_line": 15
+			}
+		},
+		{
+			"rule_id": "AVD-AWS-0131",
+			"long_id": "aws-ec2-enable-at-rest-encryption",
+			"rule_description": "Instance with unencrypted block device.",
+			"rule_provider": "aws",
+			"rule_service": "ec2",
+			"impact": "The block device could be compromised and read from",
+			"resolution": "Turn on encryption for all block devices",
+			"links": [
+				"https://aquasecurity.github.io/tfsec/v1.28.11/checks/aws/ec2/enable-at-rest-encryption/",
+				"https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/instance#ebs-ephemeral-and-root-block-devices"
+			],
+			"description": "Root block device is not encrypted.",
+			"severity": "HIGH",
+			"warning": false,
+			"status": 0,
+			"resource": "aws_instance.app_server",
+			"location": {
+				"filename": "D:\\CloudGuardAI\\evaluation\\dataset\\clean\\clean_16_provider_no_creds.tf",
+				"start_line": 5,
+				"end_line": 12
+			}
+		},
+		{
+			"rule_id": "AVD-AWS-0131",
+			"long_id": "aws-ec2-enable-at-rest-encryption",
+			"rule_description": "Instance with unencrypted block device.",
+			"rule_provider": "aws",
+			"rule_service": "ec2",
+			"impact": "The block device could be compromised and read from",
+			"resolution": "Turn on encryption for all block devices",
+			"links": [
+				"https://aquasecurity.github.io/tfsec/v1.28.11/checks/aws/ec2/enable-at-rest-encryption/",
+				"https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/instance#ebs-ephemeral-and-root-block-devices"
+			],
+			"description": "Root block device is not encrypted.",
+			"severity": "HIGH",
+			"warning": false,
+			"status": 0,
+			"resource": "aws_instance.app_server",
+			"location": {
+				"filename": "D:\\CloudGuardAI\\evaluation\\dataset\\clean\\clean_13_ec2_private_monitored.tf",
+				"start_line": 1,
+				"end_line": 20
+			}
+		},
+		{
+			"rule_id": "AVD-AWS-0028",
+			"long_id": "aws-ec2-enforce-http-token-imds",
+			"rule_description": "aws_instance should activate session tokens for Instance Metadata Service.",
+			"rule_provider": "aws",
+			"rule_service": "ec2",
+			"impact": "Instance metadata service can be interacted with freely",
+			"resolution": "Enable HTTP token requirement for IMDS",
+			"links": [
+				"https://aquasecurity.github.io/tfsec/v1.28.11/checks/aws/ec2/enforce-http-token-imds/",
+				"https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/instance#metadata-options"
+			],
+			"description": "Instance does not require IMDS access to require a token",
+			"severity": "HIGH",
+			"warning": false,
+			"status": 0,
+			"resource": "aws_instance.web_server",
+			"location": {
+				"filename": "D:\\CloudGuardAI\\evaluation\\dataset\\clean\\clean_21_full_stack_secure.tf",
+				"start_line": 23,
+				"end_line": 34
+			}
+		},
+		{
+			"rule_id": "AVD-AWS-0028",
+			"long_id": "aws-ec2-enforce-http-token-imds",
+			"rule_description": "aws_instance should activate session tokens for Instance Metadata Service.",
+			"rule_provider": "aws",
+			"rule_service": "ec2",
+			"impact": "Instance metadata service can be interacted with freely",
+			"resolution": "Enable HTTP token requirement for IMDS",
+			"links": [
+				"https://aquasecurity.github.io/tfsec/v1.28.11/checks/aws/ec2/enforce-http-token-imds/",
+				"https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/instance#metadata-options"
+			],
+			"description": "Instance does not require IMDS access to require a token",
+			"severity": "HIGH",
+			"warning": false,
+			"status": 0,
+			"resource": "aws_instance.bastion",
+			"location": {
+				"filename": "D:\\CloudGuardAI\\evaluation\\dataset\\clean\\clean_19_ec2_bastion_secure.tf",
+				"start_line": 1,
+				"end_line": 15
+			}
+		},
+		{
+			"rule_id": "AVD-AWS-0028",
+			"long_id": "aws-ec2-enforce-http-token-imds",
+			"rule_description": "aws_instance should activate session tokens for Instance Metadata Service.",
+			"rule_provider": "aws",
+			"rule_service": "ec2",
+			"impact": "Instance metadata service can be interacted with freely",
+			"resolution": "Enable HTTP token requirement for IMDS",
+			"links": [
+				"https://aquasecurity.github.io/tfsec/v1.28.11/checks/aws/ec2/enforce-http-token-imds/",
+				"https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/instance#metadata-options"
+			],
+			"description": "Instance does not require IMDS access to require a token",
+			"severity": "HIGH",
+			"warning": false,
+			"status": 0,
+			"resource": "aws_instance.app_server",
+			"location": {
+				"filename": "D:\\CloudGuardAI\\evaluation\\dataset\\clean\\clean_16_provider_no_creds.tf",
+				"start_line": 5,
+				"end_line": 12
+			}
+		},
+		{
+			"rule_id": "AVD-AWS-0052",
+			"long_id": "aws-elb-drop-invalid-headers",
+			"rule_description": "Load balancers should drop invalid headers",
+			"rule_provider": "aws",
+			"rule_service": "elb",
+			"impact": "Invalid headers being passed through to the target of the load balance may exploit vulnerabilities",
+			"resolution": "Set drop_invalid_header_fields to true",
+			"links": [
+				"https://aquasecurity.github.io/tfsec/v1.28.11/checks/aws/elb/drop-invalid-headers/",
+				"https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/lb#drop_invalid_header_fields"
+			],
+			"description": "Application load balancer is not set to drop invalid headers.",
+			"severity": "HIGH",
+			"warning": false,
+			"status": 0,
+			"resource": "aws_lb.internal",
+			"location": {
+				"filename": "D:\\CloudGuardAI\\evaluation\\dataset\\clean\\clean_24_alb_internal.tf",
+				"start_line": 1,
+				"end_line": 20
+			}
+		},
+		{
+			"rule_id": "AVD-AWS-0057",
+			"long_id": "aws-iam-no-policy-wildcards",
+			"rule_description": "IAM policy should avoid use of wildcards and instead apply the principle of least privilege",
+			"rule_provider": "aws",
+			"rule_service": "iam",
+			"impact": "Overly permissive policies may grant access to sensitive resources",
+			"resolution": "Specify the exact permissions required, and to which resources they should apply instead of using wildcards.",
+			"links": [
+				"https://aquasecurity.github.io/tfsec/v1.28.11/checks/aws/iam/no-policy-wildcards/",
+				"https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/iam_policy_document"
+			],
+			"description": "IAM policy document uses sensitive action 's3:GetObject' on wildcarded resource 'arn:aws:s3:::webapp-data-store/*'",
+			"severity": "HIGH",
+			"warning": false,
+			"status": 0,
+			"resource": "aws_iam_role_policy.app_policy",
+			"location": {
+				"filename": "D:\\CloudGuardAI\\evaluation\\dataset\\clean\\clean_21_full_stack_secure.tf",
+				"start_line": 88,
+				"end_line": 88
+			}
+		},
+		{
+			"rule_id": "AVD-AWS-0057",
+			"long_id": "aws-iam-no-policy-wildcards",
+			"rule_description": "IAM policy should avoid use of wildcards and instead apply the principle of least privilege",
+			"rule_provider": "aws",
+			"rule_service": "iam",
+			"impact": "Overly permissive policies may grant access to sensitive resources",
+			"resolution": "Specify the exact permissions required, and to which resources they should apply instead of using wildcards.",
+			"links": [
+				"https://aquasecurity.github.io/tfsec/v1.28.11/checks/aws/iam/no-policy-wildcards/",
+				"https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/iam_policy_document"
+			],
+			"description": "IAM policy document uses sensitive action 'logs:CreateLogGroup' on wildcarded resource 'arn:aws:logs:us-east-1:123456789012:*'",
+			"severity": "HIGH",
+			"warning": false,
+			"status": 0,
+			"resource": "aws_iam_role_policy.app_policy",
+			"location": {
+				"filename": "D:\\CloudGuardAI\\evaluation\\dataset\\clean\\clean_11_iam_minimal.tf",
+				"start_line": 21,
+				"end_line": 21
+			}
+		},
+		{
+			"rule_id": "AVD-AWS-0066",
+			"long_id": "aws-lambda-enable-tracing",
+			"rule_description": "Lambda functions should have X-Ray tracing enabled",
+			"rule_provider": "aws",
+			"rule_service": "lambda",
+			"impact": "Without full tracing enabled it is difficult to trace the flow of logs",
+			"resolution": "Enable tracing",
+			"links": [
+				"https://aquasecurity.github.io/tfsec/v1.28.11/checks/aws/lambda/enable-tracing/",
+				"https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/lambda_function#mode"
+			],
+			"description": "Function does not have tracing enabled.",
+			"severity": "LOW",
+			"warning": false,
+			"status": 0,
+			"resource": "aws_lambda_function.processor",
+			"location": {
+				"filename": "D:\\CloudGuardAI\\evaluation\\dataset\\clean\\clean_15_lambda_ssm.tf",
+				"start_line": 1,
+				"end_line": 22
+			}
+		},
+		{
+			"rule_id": "AVD-AWS-0177",
+			"long_id": "aws-rds-enable-deletion-protection",
+			"rule_description": "RDS Deletion Protection Disabled",
+			"rule_provider": "aws",
+			"rule_service": "rds",
+			"impact": "",
+			"resolution": "Modify the RDS instances to enable deletion protection.",
+			"links": [
+				"https://aquasecurity.github.io/tfsec/v1.28.11/checks/aws/rds/enable-deletion-protection/"
+			],
+			"description": "Instance does not have Deletion Protection enabled",
+			"severity": "MEDIUM",
+			"warning": false,
+			"status": 0,
+			"resource": "aws_db_instance.database",
+			"location": {
+				"filename": "D:\\CloudGuardAI\\evaluation\\dataset\\clean\\clean_25_sg_db_restricted.tf",
+				"start_line": 19,
+				"end_line": 40
+			}
+		},
+		{
+			"rule_id": "AVD-AWS-0177",
+			"long_id": "aws-rds-enable-deletion-protection",
+			"rule_description": "RDS Deletion Protection Disabled",
+			"rule_provider": "aws",
+			"rule_service": "rds",
+			"impact": "",
+			"resolution": "Modify the RDS instances to enable deletion protection.",
+			"links": [
+				"https://aquasecurity.github.io/tfsec/v1.28.11/checks/aws/rds/enable-deletion-protection/"
+			],
+			"description": "Instance does not have Deletion Protection enabled",
+			"severity": "MEDIUM",
+			"warning": false,
+			"status": 0,
+			"resource": "aws_db_instance.backend_db",
+			"location": {
+				"filename": "D:\\CloudGuardAI\\evaluation\\dataset\\clean\\clean_21_full_stack_secure.tf",
+				"start_line": 50,
+				"end_line": 68
+			}
+		},
+		{
+			"rule_id": "AVD-AWS-0177",
+			"long_id": "aws-rds-enable-deletion-protection",
+			"rule_description": "RDS Deletion Protection Disabled",
+			"rule_provider": "aws",
+			"rule_service": "rds",
+			"impact": "",
+			"resolution": "Modify the RDS instances to enable deletion protection.",
+			"links": [
+				"https://aquasecurity.github.io/tfsec/v1.28.11/checks/aws/rds/enable-deletion-protection/"
+			],
+			"description": "Instance does not have Deletion Protection enabled",
+			"severity": "MEDIUM",
+			"warning": false,
+			"status": 0,
+			"resource": "aws_db_instance.main",
+			"location": {
+				"filename": "D:\\CloudGuardAI\\evaluation\\dataset\\clean\\clean_09_db_private_encrypted.tf",
+				"start_line": 1,
+				"end_line": 25
+			}
+		},
+		{
+			"rule_id": "AVD-AWS-0176",
+			"long_id": "aws-rds-enable-iam-auth",
+			"rule_description": "RDS IAM Database Authentication Disabled",
+			"rule_provider": "aws",
+			"rule_service": "rds",
+			"impact": "",
+			"resolution": "Modify the PostgreSQL and MySQL type RDS instances to enable IAM database authentication.",
+			"links": [
+				"https://aquasecurity.github.io/tfsec/v1.28.11/checks/aws/rds/enable-iam-auth/"
+			],
+			"description": "Instance does not have IAM Authentication enabled",
+			"severity": "MEDIUM",
+			"warning": false,
+			"status": 0,
+			"resource": "aws_db_instance.database",
+			"location": {
+				"filename": "D:\\CloudGuardAI\\evaluation\\dataset\\clean\\clean_25_sg_db_restricted.tf",
+				"start_line": 19,
+				"end_line": 40
+			}
+		},
+		{
+			"rule_id": "AVD-AWS-0176",
+			"long_id": "aws-rds-enable-iam-auth",
+			"rule_description": "RDS IAM Database Authentication Disabled",
+			"rule_provider": "aws",
+			"rule_service": "rds",
+			"impact": "",
+			"resolution": "Modify the PostgreSQL and MySQL type RDS instances to enable IAM database authentication.",
+			"links": [
+				"https://aquasecurity.github.io/tfsec/v1.28.11/checks/aws/rds/enable-iam-auth/"
+			],
+			"description": "Instance does not have IAM Authentication enabled",
+			"severity": "MEDIUM",
+			"warning": false,
+			"status": 0,
+			"resource": "aws_db_instance.backend_db",
+			"location": {
+				"filename": "D:\\CloudGuardAI\\evaluation\\dataset\\clean\\clean_21_full_stack_secure.tf",
+				"start_line": 50,
+				"end_line": 68
+			}
+		},
+		{
+			"rule_id": "AVD-AWS-0176",
+			"long_id": "aws-rds-enable-iam-auth",
+			"rule_description": "RDS IAM Database Authentication Disabled",
+			"rule_provider": "aws",
+			"rule_service": "rds",
+			"impact": "",
+			"resolution": "Modify the PostgreSQL and MySQL type RDS instances to enable IAM database authentication.",
+			"links": [
+				"https://aquasecurity.github.io/tfsec/v1.28.11/checks/aws/rds/enable-iam-auth/"
+			],
+			"description": "Instance does not have IAM Authentication enabled",
+			"severity": "MEDIUM",
+			"warning": false,
+			"status": 0,
+			"resource": "aws_db_instance.analytics",
+			"location": {
+				"filename": "D:\\CloudGuardAI\\evaluation\\dataset\\clean\\clean_10_db_complete.tf",
+				"start_line": 1,
+				"end_line": 25
+			}
+		},
+		{
+			"rule_id": "AVD-AWS-0176",
+			"long_id": "aws-rds-enable-iam-auth",
+			"rule_description": "RDS IAM Database Authentication Disabled",
+			"rule_provider": "aws",
+			"rule_service": "rds",
+			"impact": "",
+			"resolution": "Modify the PostgreSQL and MySQL type RDS instances to enable IAM database authentication.",
+			"links": [
+				"https://aquasecurity.github.io/tfsec/v1.28.11/checks/aws/rds/enable-iam-auth/"
+			],
+			"description": "Instance does not have IAM Authentication enabled",
+			"severity": "MEDIUM",
+			"warning": false,
+			"status": 0,
+			"resource": "aws_db_instance.main",
+			"location": {
+				"filename": "D:\\CloudGuardAI\\evaluation\\dataset\\clean\\clean_09_db_private_encrypted.tf",
+				"start_line": 1,
+				"end_line": 25
+			}
+		},
+		{
+			"rule_id": "AVD-AWS-0133",
+			"long_id": "aws-rds-enable-performance-insights",
+			"rule_description": "Enable Performance Insights to detect potential problems",
+			"rule_provider": "aws",
+			"rule_service": "rds",
+			"impact": "Without adequate monitoring, performance related issues may go unreported and potentially lead to compromise.",
+			"resolution": "Enable performance insights",
+			"links": [
+				"https://aquasecurity.github.io/tfsec/v1.28.11/checks/aws/rds/enable-performance-insights/",
+				"https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/rds_cluster_instance#performance_insights_kms_key_id",
+				"https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/db_instance#performance_insights_kms_key_id"
+			],
+			"description": "Instance does not have performance insights enabled.",
+			"severity": "LOW",
+			"warning": false,
+			"status": 0,
+			"resource": "aws_db_instance.database",
+			"location": {
+				"filename": "D:\\CloudGuardAI\\evaluation\\dataset\\clean\\clean_25_sg_db_restricted.tf",
+				"start_line": 19,
+				"end_line": 40
+			}
+		},
+		{
+			"rule_id": "AVD-AWS-0133",
+			"long_id": "aws-rds-enable-performance-insights",
+			"rule_description": "Enable Performance Insights to detect potential problems",
+			"rule_provider": "aws",
+			"rule_service": "rds",
+			"impact": "Without adequate monitoring, performance related issues may go unreported and potentially lead to compromise.",
+			"resolution": "Enable performance insights",
+			"links": [
+				"https://aquasecurity.github.io/tfsec/v1.28.11/checks/aws/rds/enable-performance-insights/",
+				"https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/rds_cluster_instance#performance_insights_kms_key_id",
+				"https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/db_instance#performance_insights_kms_key_id"
+			],
+			"description": "Instance does not have performance insights enabled.",
+			"severity": "LOW",
+			"warning": false,
+			"status": 0,
+			"resource": "aws_db_instance.backend_db",
+			"location": {
+				"filename": "D:\\CloudGuardAI\\evaluation\\dataset\\clean\\clean_21_full_stack_secure.tf",
+				"start_line": 50,
+				"end_line": 68
+			}
+		},
+		{
+			"rule_id": "AVD-AWS-0133",
+			"long_id": "aws-rds-enable-performance-insights",
+			"rule_description": "Enable Performance Insights to detect potential problems",
+			"rule_provider": "aws",
+			"rule_service": "rds",
+			"impact": "Without adequate monitoring, performance related issues may go unreported and potentially lead to compromise.",
+			"resolution": "Enable performance insights",
+			"links": [
+				"https://aquasecurity.github.io/tfsec/v1.28.11/checks/aws/rds/enable-performance-insights/",
+				"https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/rds_cluster_instance#performance_insights_kms_key_id",
+				"https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/db_instance#performance_insights_kms_key_id"
+			],
+			"description": "Instance does not have performance insights enabled.",
+			"severity": "LOW",
+			"warning": false,
+			"status": 0,
+			"resource": "aws_db_instance.analytics",
+			"location": {
+				"filename": "D:\\CloudGuardAI\\evaluation\\dataset\\clean\\clean_10_db_complete.tf",
+				"start_line": 1,
+				"end_line": 25
+			}
+		},
+		{
+			"rule_id": "AVD-AWS-0133",
+			"long_id": "aws-rds-enable-performance-insights",
+			"rule_description": "Enable Performance Insights to detect potential problems",
+			"rule_provider": "aws",
+			"rule_service": "rds",
+			"impact": "Without adequate monitoring, performance related issues may go unreported and potentially lead to compromise.",
+			"resolution": "Enable performance insights",
+			"links": [
+				"https://aquasecurity.github.io/tfsec/v1.28.11/checks/aws/rds/enable-performance-insights/",
+				"https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/rds_cluster_instance#performance_insights_kms_key_id",
+				"https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/db_instance#performance_insights_kms_key_id"
+			],
+			"description": "Instance does not have performance insights enabled.",
+			"severity": "LOW",
+			"warning": false,
+			"status": 0,
+			"resource": "aws_db_instance.main",
+			"location": {
+				"filename": "D:\\CloudGuardAI\\evaluation\\dataset\\clean\\clean_09_db_private_encrypted.tf",
+				"start_line": 1,
+				"end_line": 25
+			}
+		},
+		{
+			"rule_id": "AVD-AWS-0077",
+			"long_id": "aws-rds-specify-backup-retention",
+			"rule_description": "RDS Cluster and RDS instance should have backup retention longer than default 1 day",
+			"rule_provider": "aws",
+			"rule_service": "rds",
+			"impact": "Potential loss of data and short opportunity for recovery",
+			"resolution": "Explicitly set the retention period to greater than the default",
+			"links": [
+				"https://aquasecurity.github.io/tfsec/v1.28.11/checks/aws/rds/specify-backup-retention/",
+				"https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/rds_cluster#backup_retention_period",
+				"https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/db_instance#backup_retention_period"
+			],
+			"description": "Instance has very low backup retention period.",
+			"severity": "MEDIUM",
+			"warning": false,
+			"status": 0,
+			"resource": "aws_db_instance.database",
+			"location": {
+				"filename": "D:\\CloudGuardAI\\evaluation\\dataset\\clean\\clean_25_sg_db_restricted.tf",
+				"start_line": 19,
+				"end_line": 40
+			}
+		},
+		{
+			"rule_id": "AVD-AWS-0077",
+			"long_id": "aws-rds-specify-backup-retention",
+			"rule_description": "RDS Cluster and RDS instance should have backup retention longer than default 1 day",
+			"rule_provider": "aws",
+			"rule_service": "rds",
+			"impact": "Potential loss of data and short opportunity for recovery",
+			"resolution": "Explicitly set the retention period to greater than the default",
+			"links": [
+				"https://aquasecurity.github.io/tfsec/v1.28.11/checks/aws/rds/specify-backup-retention/",
+				"https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/rds_cluster#backup_retention_period",
+				"https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/db_instance#backup_retention_period"
+			],
+			"description": "Instance has very low backup retention period.",
+			"severity": "MEDIUM",
+			"warning": false,
+			"status": 0,
+			"resource": "aws_db_instance.backend_db",
+			"location": {
+				"filename": "D:\\CloudGuardAI\\evaluation\\dataset\\clean\\clean_21_full_stack_secure.tf",
+				"start_line": 50,
+				"end_line": 68
+			}
+		},
+		{
+			"rule_id": "AVD-AWS-0086",
+			"long_id": "aws-s3-block-public-acls",
+			"rule_description": "S3 Access block should block public ACL",
+			"rule_provider": "aws",
+			"rule_service": "s3",
+			"impact": "PUT calls with public ACLs specified can make objects public",
+			"resolution": "Enable blocking any PUT calls with a public ACL specified",
+			"links": [
+				"https://aquasecurity.github.io/tfsec/v1.28.11/checks/aws/s3/block-public-acls/",
+				"https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/s3_bucket_public_access_block#block_public_acls"
+			],
+			"description": "No public access block so not blocking public acls",
+			"severity": "HIGH",
+			"warning": false,
+			"status": 0,
+			"resource": "aws_s3_bucket.app_data",
+			"location": {
+				"filename": "D:\\CloudGuardAI\\evaluation\\dataset\\clean\\clean_21_full_stack_secure.tf",
+				"start_line": 36,
+				"end_line": 48
+			}
+		},
+		{
+			"rule_id": "AVD-AWS-0086",
+			"long_id": "aws-s3-block-public-acls",
+			"rule_description": "S3 Access block should block public ACL",
+			"rule_provider": "aws",
+			"rule_service": "s3",
+			"impact": "PUT calls with public ACLs specified can make objects public",
+			"resolution": "Enable blocking any PUT calls with a public ACL specified",
+			"links": [
+				"https://aquasecurity.github.io/tfsec/v1.28.11/checks/aws/s3/block-public-acls/",
+				"https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/s3_bucket_public_access_block#block_public_acls"
+			],
+			"description": "No public access block so not blocking public acls",
+			"severity": "HIGH",
+			"warning": false,
+			"status": 0,
+			"resource": "aws_s3_bucket.complete_bucket",
+			"location": {
+				"filename": "D:\\CloudGuardAI\\evaluation\\dataset\\clean\\clean_08_s3_complete.tf",
+				"start_line": 1,
+				"end_line": 35
+			}
+		},
+		{
+			"rule_id": "AVD-AWS-0086",
+			"long_id": "aws-s3-block-public-acls",
+			"rule_description": "S3 Access block should block public ACL",
+			"rule_provider": "aws",
+			"rule_service": "s3",
+			"impact": "PUT calls with public ACLs specified can make objects public",
+			"resolution": "Enable blocking any PUT calls with a public ACL specified",
+			"links": [
+				"https://aquasecurity.github.io/tfsec/v1.28.11/checks/aws/s3/block-public-acls/",
+				"https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/s3_bucket_public_access_block#block_public_acls"
+			],
+			"description": "No public access block so not blocking public acls",
+			"severity": "HIGH",
+			"warning": false,
+			"status": 0,
+			"resource": "aws_s3_bucket.versioned_data",
+			"location": {
+				"filename": "D:\\CloudGuardAI\\evaluation\\dataset\\clean\\clean_07_s3_versioned.tf",
+				"start_line": 1,
+				"end_line": 18
+			}
+		},
+		{
+			"rule_id": "AVD-AWS-0086",
+			"long_id": "aws-s3-block-public-acls",
+			"rule_description": "S3 Access block should block public ACL",
+			"rule_provider": "aws",
+			"rule_service": "s3",
+			"impact": "PUT calls with public ACLs specified can make objects public",
+			"resolution": "Enable blocking any PUT calls with a public ACL specified",
+			"links": [
+				"https://aquasecurity.github.io/tfsec/v1.28.11/checks/aws/s3/block-public-acls/",
+				"https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/s3_bucket_public_access_block#block_public_acls"
+			],
+			"description": "No public access block so not blocking public acls",
+			"severity": "HIGH",
+			"warning": false,
+			"status": 0,
+			"resource": "aws_s3_bucket.encrypted_store",
+			"location": {
+				"filename": "D:\\CloudGuardAI\\evaluation\\dataset\\clean\\clean_06_s3_encrypted.tf",
+				"start_line": 1,
+				"end_line": 23
+			}
+		},
+		{
+			"rule_id": "AVD-AWS-0086",
+			"long_id": "aws-s3-block-public-acls",
+			"rule_description": "S3 Access block should block public ACL",
+			"rule_provider": "aws",
+			"rule_service": "s3",
+			"impact": "PUT calls with public ACLs specified can make objects public",
+			"resolution": "Enable blocking any PUT calls with a public ACL specified",
+			"links": [
+				"https://aquasecurity.github.io/tfsec/v1.28.11/checks/aws/s3/block-public-acls/",
+				"https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/s3_bucket_public_access_block#block_public_acls"
+			],
+			"description": "No public access block so not blocking public acls",
+			"severity": "HIGH",
+			"warning": false,
+			"status": 0,
+			"resource": "aws_s3_bucket.private_data",
+			"location": {
+				"filename": "D:\\CloudGuardAI\\evaluation\\dataset\\clean\\clean_05_s3_private.tf",
+				"start_line": 1,
+				"end_line": 14
+			}
+		},
+		{
+			"rule_id": "AVD-AWS-0087",
+			"long_id": "aws-s3-block-public-policy",
+			"rule_description": "S3 Access block should block public policy",
+			"rule_provider": "aws",
+			"rule_service": "s3",
+			"impact": "Users could put a policy that allows public access",
+			"resolution": "Prevent policies that allow public access being PUT",
+			"links": [
+				"https://aquasecurity.github.io/tfsec/v1.28.11/checks/aws/s3/block-public-policy/",
+				"https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/s3_bucket_public_access_block#block_public_policy"
+			],
+			"description": "No public access block so not blocking public policies",
+			"severity": "HIGH",
+			"warning": false,
+			"status": 0,
+			"resource": "aws_s3_bucket.app_data",
+			"location": {
+				"filename": "D:\\CloudGuardAI\\evaluation\\dataset\\clean\\clean_21_full_stack_secure.tf",
+				"start_line": 36,
+				"end_line": 48
+			}
+		},
+		{
+			"rule_id": "AVD-AWS-0087",
+			"long_id": "aws-s3-block-public-policy",
+			"rule_description": "S3 Access block should block public policy",
+			"rule_provider": "aws",
+			"rule_service": "s3",
+			"impact": "Users could put a policy that allows public access",
+			"resolution": "Prevent policies that allow public access being PUT",
+			"links": [
+				"https://aquasecurity.github.io/tfsec/v1.28.11/checks/aws/s3/block-public-policy/",
+				"https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/s3_bucket_public_access_block#block_public_policy"
+			],
+			"description": "No public access block so not blocking public policies",
+			"severity": "HIGH",
+			"warning": false,
+			"status": 0,
+			"resource": "aws_s3_bucket.complete_bucket",
+			"location": {
+				"filename": "D:\\CloudGuardAI\\evaluation\\dataset\\clean\\clean_08_s3_complete.tf",
+				"start_line": 1,
+				"end_line": 35
+			}
+		},
+		{
+			"rule_id": "AVD-AWS-0087",
+			"long_id": "aws-s3-block-public-policy",
+			"rule_description": "S3 Access block should block public policy",
+			"rule_provider": "aws",
+			"rule_service": "s3",
+			"impact": "Users could put a policy that allows public access",
+			"resolution": "Prevent policies that allow public access being PUT",
+			"links": [
+				"https://aquasecurity.github.io/tfsec/v1.28.11/checks/aws/s3/block-public-policy/",
+				"https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/s3_bucket_public_access_block#block_public_policy"
+			],
+			"description": "No public access block so not blocking public policies",
+			"severity": "HIGH",
+			"warning": false,
+			"status": 0,
+			"resource": "aws_s3_bucket.versioned_data",
+			"location": {
+				"filename": "D:\\CloudGuardAI\\evaluation\\dataset\\clean\\clean_07_s3_versioned.tf",
+				"start_line": 1,
+				"end_line": 18
+			}
+		},
+		{
+			"rule_id": "AVD-AWS-0087",
+			"long_id": "aws-s3-block-public-policy",
+			"rule_description": "S3 Access block should block public policy",
+			"rule_provider": "aws",
+			"rule_service": "s3",
+			"impact": "Users could put a policy that allows public access",
+			"resolution": "Prevent policies that allow public access being PUT",
+			"links": [
+				"https://aquasecurity.github.io/tfsec/v1.28.11/checks/aws/s3/block-public-policy/",
+				"https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/s3_bucket_public_access_block#block_public_policy"
+			],
+			"description": "No public access block so not blocking public policies",
+			"severity": "HIGH",
+			"warning": false,
+			"status": 0,
+			"resource": "aws_s3_bucket.encrypted_store",
+			"location": {
+				"filename": "D:\\CloudGuardAI\\evaluation\\dataset\\clean\\clean_06_s3_encrypted.tf",
+				"start_line": 1,
+				"end_line": 23
+			}
+		},
+		{
+			"rule_id": "AVD-AWS-0087",
+			"long_id": "aws-s3-block-public-policy",
+			"rule_description": "S3 Access block should block public policy",
+			"rule_provider": "aws",
+			"rule_service": "s3",
+			"impact": "Users could put a policy that allows public access",
+			"resolution": "Prevent policies that allow public access being PUT",
+			"links": [
+				"https://aquasecurity.github.io/tfsec/v1.28.11/checks/aws/s3/block-public-policy/",
+				"https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/s3_bucket_public_access_block#block_public_policy"
+			],
+			"description": "No public access block so not blocking public policies",
+			"severity": "HIGH",
+			"warning": false,
+			"status": 0,
+			"resource": "aws_s3_bucket.private_data",
+			"location": {
+				"filename": "D:\\CloudGuardAI\\evaluation\\dataset\\clean\\clean_05_s3_private.tf",
+				"start_line": 1,
+				"end_line": 14
+			}
+		},
+		{
+			"rule_id": "AVD-AWS-0088",
+			"long_id": "aws-s3-enable-bucket-encryption",
+			"rule_description": "Unencrypted S3 bucket.",
+			"rule_provider": "aws",
+			"rule_service": "s3",
+			"impact": "The bucket objects could be read if compromised",
+			"resolution": "Configure bucket encryption",
+			"links": [
+				"https://aquasecurity.github.io/tfsec/v1.28.11/checks/aws/s3/enable-bucket-encryption/",
+				"https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/s3_bucket#enable-default-server-side-encryption"
+			],
+			"description": "Bucket does not have encryption enabled",
+			"severity": "HIGH",
+			"warning": false,
+			"status": 0,
+			"resource": "aws_s3_bucket.app_data",
+			"location": {
+				"filename": "D:\\CloudGuardAI\\evaluation\\dataset\\clean\\clean_21_full_stack_secure.tf",
+				"start_line": 36,
+				"end_line": 48
+			}
+		},
+		{
+			"rule_id": "AVD-AWS-0088",
+			"long_id": "aws-s3-enable-bucket-encryption",
+			"rule_description": "Unencrypted S3 bucket.",
+			"rule_provider": "aws",
+			"rule_service": "s3",
+			"impact": "The bucket objects could be read if compromised",
+			"resolution": "Configure bucket encryption",
+			"links": [
+				"https://aquasecurity.github.io/tfsec/v1.28.11/checks/aws/s3/enable-bucket-encryption/",
+				"https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/s3_bucket#enable-default-server-side-encryption"
+			],
+			"description": "Bucket does not have encryption enabled",
+			"severity": "HIGH",
+			"warning": false,
+			"status": 0,
+			"resource": "aws_s3_bucket.versioned_data",
+			"location": {
+				"filename": "D:\\CloudGuardAI\\evaluation\\dataset\\clean\\clean_07_s3_versioned.tf",
+				"start_line": 1,
+				"end_line": 18
+			}
+		},
+		{
+			"rule_id": "AVD-AWS-0088",
+			"long_id": "aws-s3-enable-bucket-encryption",
+			"rule_description": "Unencrypted S3 bucket.",
+			"rule_provider": "aws",
+			"rule_service": "s3",
+			"impact": "The bucket objects could be read if compromised",
+			"resolution": "Configure bucket encryption",
+			"links": [
+				"https://aquasecurity.github.io/tfsec/v1.28.11/checks/aws/s3/enable-bucket-encryption/",
+				"https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/s3_bucket#enable-default-server-side-encryption"
+			],
+			"description": "Bucket does not have encryption enabled",
+			"severity": "HIGH",
+			"warning": false,
+			"status": 0,
+			"resource": "aws_s3_bucket.private_data",
+			"location": {
+				"filename": "D:\\CloudGuardAI\\evaluation\\dataset\\clean\\clean_05_s3_private.tf",
+				"start_line": 1,
+				"end_line": 14
+			}
+		},
+		{
+			"rule_id": "AVD-AWS-0090",
+			"long_id": "aws-s3-enable-versioning",
+			"rule_description": "S3 Data should be versioned",
+			"rule_provider": "aws",
+			"rule_service": "s3",
+			"impact": "Deleted or modified data would not be recoverable",
+			"resolution": "Enable versioning to protect against accidental/malicious removal or modification",
+			"links": [
+				"https://aquasecurity.github.io/tfsec/v1.28.11/checks/aws/s3/enable-versioning/",
+				"https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/s3_bucket#versioning"
+			],
+			"description": "Bucket does not have versioning enabled",
+			"severity": "MEDIUM",
+			"warning": false,
+			"status": 0,
+			"resource": "aws_s3_bucket.app_data",
+			"location": {
+				"filename": "D:\\CloudGuardAI\\evaluation\\dataset\\clean\\clean_21_full_stack_secure.tf",
+				"start_line": 36,
+				"end_line": 48
+			}
+		},
+		{
+			"rule_id": "AVD-AWS-0090",
+			"long_id": "aws-s3-enable-versioning",
+			"rule_description": "S3 Data should be versioned",
+			"rule_provider": "aws",
+			"rule_service": "s3",
+			"impact": "Deleted or modified data would not be recoverable",
+			"resolution": "Enable versioning to protect against accidental/malicious removal or modification",
+			"links": [
+				"https://aquasecurity.github.io/tfsec/v1.28.11/checks/aws/s3/enable-versioning/",
+				"https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/s3_bucket#versioning"
+			],
+			"description": "Bucket does not have versioning enabled",
+			"severity": "MEDIUM",
+			"warning": false,
+			"status": 0,
+			"resource": "aws_s3_bucket.encrypted_store",
+			"location": {
+				"filename": "D:\\CloudGuardAI\\evaluation\\dataset\\clean\\clean_06_s3_encrypted.tf",
+				"start_line": 1,
+				"end_line": 23
+			}
+		},
+		{
+			"rule_id": "AVD-AWS-0090",
+			"long_id": "aws-s3-enable-versioning",
+			"rule_description": "S3 Data should be versioned",
+			"rule_provider": "aws",
+			"rule_service": "s3",
+			"impact": "Deleted or modified data would not be recoverable",
+			"resolution": "Enable versioning to protect against accidental/malicious removal or modification",
+			"links": [
+				"https://aquasecurity.github.io/tfsec/v1.28.11/checks/aws/s3/enable-versioning/",
+				"https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/s3_bucket#versioning"
+			],
+			"description": "Bucket does not have versioning enabled",
+			"severity": "MEDIUM",
+			"warning": false,
+			"status": 0,
+			"resource": "aws_s3_bucket.private_data",
+			"location": {
+				"filename": "D:\\CloudGuardAI\\evaluation\\dataset\\clean\\clean_05_s3_private.tf",
+				"start_line": 1,
+				"end_line": 14
+			}
+		},
+		{
+			"rule_id": "AVD-AWS-0132",
+			"long_id": "aws-s3-encryption-customer-key",
+			"rule_description": "S3 encryption should use Customer Managed Keys",
+			"rule_provider": "aws",
+			"rule_service": "s3",
+			"impact": "Using AWS managed keys does not allow for fine grained control",
+			"resolution": "Enable encryption using customer managed keys",
+			"links": [
+				"https://aquasecurity.github.io/tfsec/v1.28.11/checks/aws/s3/encryption-customer-key/",
+				"https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/s3_bucket#enable-default-server-side-encryption"
+			],
+			"description": "Bucket does not encrypt data with a customer managed key.",
+			"severity": "HIGH",
+			"warning": false,
+			"status": 0,
+			"resource": "aws_s3_bucket.app_data",
+			"location": {
+				"filename": "D:\\CloudGuardAI\\evaluation\\dataset\\clean\\clean_21_full_stack_secure.tf",
+				"start_line": 36,
+				"end_line": 48
+			}
+		},
+		{
+			"rule_id": "AVD-AWS-0132",
+			"long_id": "aws-s3-encryption-customer-key",
+			"rule_description": "S3 encryption should use Customer Managed Keys",
+			"rule_provider": "aws",
+			"rule_service": "s3",
+			"impact": "Using AWS managed keys does not allow for fine grained control",
+			"resolution": "Enable encryption using customer managed keys",
+			"links": [
+				"https://aquasecurity.github.io/tfsec/v1.28.11/checks/aws/s3/encryption-customer-key/",
+				"https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/s3_bucket#enable-default-server-side-encryption"
+			],
+			"description": "Bucket does not encrypt data with a customer managed key.",
+			"severity": "HIGH",
+			"warning": false,
+			"status": 0,
+			"resource": "aws_s3_bucket.versioned_data",
+			"location": {
+				"filename": "D:\\CloudGuardAI\\evaluation\\dataset\\clean\\clean_07_s3_versioned.tf",
+				"start_line": 1,
+				"end_line": 18
+			}
+		},
+		{
+			"rule_id": "AVD-AWS-0132",
+			"long_id": "aws-s3-encryption-customer-key",
+			"rule_description": "S3 encryption should use Customer Managed Keys",
+			"rule_provider": "aws",
+			"rule_service": "s3",
+			"impact": "Using AWS managed keys does not allow for fine grained control",
+			"resolution": "Enable encryption using customer managed keys",
+			"links": [
+				"https://aquasecurity.github.io/tfsec/v1.28.11/checks/aws/s3/encryption-customer-key/",
+				"https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/s3_bucket#enable-default-server-side-encryption"
+			],
+			"description": "Bucket does not encrypt data with a customer managed key.",
+			"severity": "HIGH",
+			"warning": false,
+			"status": 0,
+			"resource": "aws_s3_bucket.private_data",
+			"location": {
+				"filename": "D:\\CloudGuardAI\\evaluation\\dataset\\clean\\clean_05_s3_private.tf",
+				"start_line": 1,
+				"end_line": 14
+			}
+		},
+		{
+			"rule_id": "AVD-AWS-0091",
+			"long_id": "aws-s3-ignore-public-acls",
+			"rule_description": "S3 Access Block should Ignore Public Acl",
+			"rule_provider": "aws",
+			"rule_service": "s3",
+			"impact": "PUT calls with public ACLs specified can make objects public",
+			"resolution": "Enable ignoring the application of public ACLs in PUT calls",
+			"links": [
+				"https://aquasecurity.github.io/tfsec/v1.28.11/checks/aws/s3/ignore-public-acls/",
+				"https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/s3_bucket_public_access_block#ignore_public_acls"
+			],
+			"description": "No public access block so not ignoring public acls",
+			"severity": "HIGH",
+			"warning": false,
+			"status": 0,
+			"resource": "aws_s3_bucket.app_data",
+			"location": {
+				"filename": "D:\\CloudGuardAI\\evaluation\\dataset\\clean\\clean_21_full_stack_secure.tf",
+				"start_line": 36,
+				"end_line": 48
+			}
+		},
+		{
+			"rule_id": "AVD-AWS-0091",
+			"long_id": "aws-s3-ignore-public-acls",
+			"rule_description": "S3 Access Block should Ignore Public Acl",
+			"rule_provider": "aws",
+			"rule_service": "s3",
+			"impact": "PUT calls with public ACLs specified can make objects public",
+			"resolution": "Enable ignoring the application of public ACLs in PUT calls",
+			"links": [
+				"https://aquasecurity.github.io/tfsec/v1.28.11/checks/aws/s3/ignore-public-acls/",
+				"https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/s3_bucket_public_access_block#ignore_public_acls"
+			],
+			"description": "No public access block so not ignoring public acls",
+			"severity": "HIGH",
+			"warning": false,
+			"status": 0,
+			"resource": "aws_s3_bucket.complete_bucket",
+			"location": {
+				"filename": "D:\\CloudGuardAI\\evaluation\\dataset\\clean\\clean_08_s3_complete.tf",
+				"start_line": 1,
+				"end_line": 35
+			}
+		},
+		{
+			"rule_id": "AVD-AWS-0091",
+			"long_id": "aws-s3-ignore-public-acls",
+			"rule_description": "S3 Access Block should Ignore Public Acl",
+			"rule_provider": "aws",
+			"rule_service": "s3",
+			"impact": "PUT calls with public ACLs specified can make objects public",
+			"resolution": "Enable ignoring the application of public ACLs in PUT calls",
+			"links": [
+				"https://aquasecurity.github.io/tfsec/v1.28.11/checks/aws/s3/ignore-public-acls/",
+				"https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/s3_bucket_public_access_block#ignore_public_acls"
+			],
+			"description": "No public access block so not ignoring public acls",
+			"severity": "HIGH",
+			"warning": false,
+			"status": 0,
+			"resource": "aws_s3_bucket.versioned_data",
+			"location": {
+				"filename": "D:\\CloudGuardAI\\evaluation\\dataset\\clean\\clean_07_s3_versioned.tf",
+				"start_line": 1,
+				"end_line": 18
+			}
+		},
+		{
+			"rule_id": "AVD-AWS-0091",
+			"long_id": "aws-s3-ignore-public-acls",
+			"rule_description": "S3 Access Block should Ignore Public Acl",
+			"rule_provider": "aws",
+			"rule_service": "s3",
+			"impact": "PUT calls with public ACLs specified can make objects public",
+			"resolution": "Enable ignoring the application of public ACLs in PUT calls",
+			"links": [
+				"https://aquasecurity.github.io/tfsec/v1.28.11/checks/aws/s3/ignore-public-acls/",
+				"https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/s3_bucket_public_access_block#ignore_public_acls"
+			],
+			"description": "No public access block so not ignoring public acls",
+			"severity": "HIGH",
+			"warning": false,
+			"status": 0,
+			"resource": "aws_s3_bucket.encrypted_store",
+			"location": {
+				"filename": "D:\\CloudGuardAI\\evaluation\\dataset\\clean\\clean_06_s3_encrypted.tf",
+				"start_line": 1,
+				"end_line": 23
+			}
+		},
+		{
+			"rule_id": "AVD-AWS-0091",
+			"long_id": "aws-s3-ignore-public-acls",
+			"rule_description": "S3 Access Block should Ignore Public Acl",
+			"rule_provider": "aws",
+			"rule_service": "s3",
+			"impact": "PUT calls with public ACLs specified can make objects public",
+			"resolution": "Enable ignoring the application of public ACLs in PUT calls",
+			"links": [
+				"https://aquasecurity.github.io/tfsec/v1.28.11/checks/aws/s3/ignore-public-acls/",
+				"https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/s3_bucket_public_access_block#ignore_public_acls"
+			],
+			"description": "No public access block so not ignoring public acls",
+			"severity": "HIGH",
+			"warning": false,
+			"status": 0,
+			"resource": "aws_s3_bucket.private_data",
+			"location": {
+				"filename": "D:\\CloudGuardAI\\evaluation\\dataset\\clean\\clean_05_s3_private.tf",
+				"start_line": 1,
+				"end_line": 14
+			}
+		},
+		{
+			"rule_id": "AVD-AWS-0093",
+			"long_id": "aws-s3-no-public-buckets",
+			"rule_description": "S3 Access block should restrict public bucket to limit access",
+			"rule_provider": "aws",
+			"rule_service": "s3",
+			"impact": "Public buckets can be accessed by anyone",
+			"resolution": "Limit the access to public buckets to only the owner or AWS Services (eg; CloudFront)",
+			"links": [
+				"https://aquasecurity.github.io/tfsec/v1.28.11/checks/aws/s3/no-public-buckets/",
+				"https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/s3_bucket_public_access_block#restrict_public_buckets┬í"
+			],
+			"description": "No public access block so not restricting public buckets",
+			"severity": "HIGH",
+			"warning": false,
+			"status": 0,
+			"resource": "aws_s3_bucket.app_data",
+			"location": {
+				"filename": "D:\\CloudGuardAI\\evaluation\\dataset\\clean\\clean_21_full_stack_secure.tf",
+				"start_line": 36,
+				"end_line": 48
+			}
+		},
+		{
+			"rule_id": "AVD-AWS-0093",
+			"long_id": "aws-s3-no-public-buckets",
+			"rule_description": "S3 Access block should restrict public bucket to limit access",
+			"rule_provider": "aws",
+			"rule_service": "s3",
+			"impact": "Public buckets can be accessed by anyone",
+			"resolution": "Limit the access to public buckets to only the owner or AWS Services (eg; CloudFront)",
+			"links": [
+				"https://aquasecurity.github.io/tfsec/v1.28.11/checks/aws/s3/no-public-buckets/",
+				"https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/s3_bucket_public_access_block#restrict_public_buckets┬í"
+			],
+			"description": "No public access block so not restricting public buckets",
+			"severity": "HIGH",
+			"warning": false,
+			"status": 0,
+			"resource": "aws_s3_bucket.complete_bucket",
+			"location": {
+				"filename": "D:\\CloudGuardAI\\evaluation\\dataset\\clean\\clean_08_s3_complete.tf",
+				"start_line": 1,
+				"end_line": 35
+			}
+		},
+		{
+			"rule_id": "AVD-AWS-0093",
+			"long_id": "aws-s3-no-public-buckets",
+			"rule_description": "S3 Access block should restrict public bucket to limit access",
+			"rule_provider": "aws",
+			"rule_service": "s3",
+			"impact": "Public buckets can be accessed by anyone",
+			"resolution": "Limit the access to public buckets to only the owner or AWS Services (eg; CloudFront)",
+			"links": [
+				"https://aquasecurity.github.io/tfsec/v1.28.11/checks/aws/s3/no-public-buckets/",
+				"https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/s3_bucket_public_access_block#restrict_public_buckets┬í"
+			],
+			"description": "No public access block so not restricting public buckets",
+			"severity": "HIGH",
+			"warning": false,
+			"status": 0,
+			"resource": "aws_s3_bucket.versioned_data",
+			"location": {
+				"filename": "D:\\CloudGuardAI\\evaluation\\dataset\\clean\\clean_07_s3_versioned.tf",
+				"start_line": 1,
+				"end_line": 18
+			}
+		},
+		{
+			"rule_id": "AVD-AWS-0093",
+			"long_id": "aws-s3-no-public-buckets",
+			"rule_description": "S3 Access block should restrict public bucket to limit access",
+			"rule_provider": "aws",
+			"rule_service": "s3",
+			"impact": "Public buckets can be accessed by anyone",
+			"resolution": "Limit the access to public buckets to only the owner or AWS Services (eg; CloudFront)",
+			"links": [
+				"https://aquasecurity.github.io/tfsec/v1.28.11/checks/aws/s3/no-public-buckets/",
+				"https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/s3_bucket_public_access_block#restrict_public_buckets┬í"
+			],
+			"description": "No public access block so not restricting public buckets",
+			"severity": "HIGH",
+			"warning": false,
+			"status": 0,
+			"resource": "aws_s3_bucket.encrypted_store",
+			"location": {
+				"filename": "D:\\CloudGuardAI\\evaluation\\dataset\\clean\\clean_06_s3_encrypted.tf",
+				"start_line": 1,
+				"end_line": 23
+			}
+		},
+		{
+			"rule_id": "AVD-AWS-0093",
+			"long_id": "aws-s3-no-public-buckets",
+			"rule_description": "S3 Access block should restrict public bucket to limit access",
+			"rule_provider": "aws",
+			"rule_service": "s3",
+			"impact": "Public buckets can be accessed by anyone",
+			"resolution": "Limit the access to public buckets to only the owner or AWS Services (eg; CloudFront)",
+			"links": [
+				"https://aquasecurity.github.io/tfsec/v1.28.11/checks/aws/s3/no-public-buckets/",
+				"https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/s3_bucket_public_access_block#restrict_public_buckets┬í"
+			],
+			"description": "No public access block so not restricting public buckets",
+			"severity": "HIGH",
+			"warning": false,
+			"status": 0,
+			"resource": "aws_s3_bucket.private_data",
+			"location": {
+				"filename": "D:\\CloudGuardAI\\evaluation\\dataset\\clean\\clean_05_s3_private.tf",
+				"start_line": 1,
+				"end_line": 14
+			}
+		},
+		{
+			"rule_id": "AVD-AWS-0094",
+			"long_id": "aws-s3-specify-public-access-block",
+			"rule_description": "S3 buckets should each define an aws_s3_bucket_public_access_block",
+			"rule_provider": "aws",
+			"rule_service": "s3",
+			"impact": "Public access policies may be applied to sensitive data buckets",
+			"resolution": "Define a aws_s3_bucket_public_access_block for the given bucket to control public access policies",
+			"links": [
+				"https://aquasecurity.github.io/tfsec/v1.28.11/checks/aws/s3/specify-public-access-block/",
+				"https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/s3_bucket_public_access_block#bucket"
+			],
+			"description": "Bucket does not have a corresponding public access block.",
+			"severity": "LOW",
+			"warning": false,
+			"status": 0,
+			"resource": "aws_s3_bucket.app_data",
+			"location": {
+				"filename": "D:\\CloudGuardAI\\evaluation\\dataset\\clean\\clean_21_full_stack_secure.tf",
+				"start_line": 36,
+				"end_line": 48
+			}
+		},
+		{
+			"rule_id": "AVD-AWS-0094",
+			"long_id": "aws-s3-specify-public-access-block",
+			"rule_description": "S3 buckets should each define an aws_s3_bucket_public_access_block",
+			"rule_provider": "aws",
+			"rule_service": "s3",
+			"impact": "Public access policies may be applied to sensitive data buckets",
+			"resolution": "Define a aws_s3_bucket_public_access_block for the given bucket to control public access policies",
+			"links": [
+				"https://aquasecurity.github.io/tfsec/v1.28.11/checks/aws/s3/specify-public-access-block/",
+				"https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/s3_bucket_public_access_block#bucket"
+			],
+			"description": "Bucket does not have a corresponding public access block.",
+			"severity": "LOW",
+			"warning": false,
+			"status": 0,
+			"resource": "aws_s3_bucket.complete_bucket",
+			"location": {
+				"filename": "D:\\CloudGuardAI\\evaluation\\dataset\\clean\\clean_08_s3_complete.tf",
+				"start_line": 1,
+				"end_line": 35
+			}
+		},
+		{
+			"rule_id": "AVD-AWS-0094",
+			"long_id": "aws-s3-specify-public-access-block",
+			"rule_description": "S3 buckets should each define an aws_s3_bucket_public_access_block",
+			"rule_provider": "aws",
+			"rule_service": "s3",
+			"impact": "Public access policies may be applied to sensitive data buckets",
+			"resolution": "Define a aws_s3_bucket_public_access_block for the given bucket to control public access policies",
+			"links": [
+				"https://aquasecurity.github.io/tfsec/v1.28.11/checks/aws/s3/specify-public-access-block/",
+				"https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/s3_bucket_public_access_block#bucket"
+			],
+			"description": "Bucket does not have a corresponding public access block.",
+			"severity": "LOW",
+			"warning": false,
+			"status": 0,
+			"resource": "aws_s3_bucket.versioned_data",
+			"location": {
+				"filename": "D:\\CloudGuardAI\\evaluation\\dataset\\clean\\clean_07_s3_versioned.tf",
+				"start_line": 1,
+				"end_line": 18
+			}
+		},
+		{
+			"rule_id": "AVD-AWS-0094",
+			"long_id": "aws-s3-specify-public-access-block",
+			"rule_description": "S3 buckets should each define an aws_s3_bucket_public_access_block",
+			"rule_provider": "aws",
+			"rule_service": "s3",
+			"impact": "Public access policies may be applied to sensitive data buckets",
+			"resolution": "Define a aws_s3_bucket_public_access_block for the given bucket to control public access policies",
+			"links": [
+				"https://aquasecurity.github.io/tfsec/v1.28.11/checks/aws/s3/specify-public-access-block/",
+				"https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/s3_bucket_public_access_block#bucket"
+			],
+			"description": "Bucket does not have a corresponding public access block.",
+			"severity": "LOW",
+			"warning": false,
+			"status": 0,
+			"resource": "aws_s3_bucket.encrypted_store",
+			"location": {
+				"filename": "D:\\CloudGuardAI\\evaluation\\dataset\\clean\\clean_06_s3_encrypted.tf",
+				"start_line": 1,
+				"end_line": 23
+			}
+		},
+		{
+			"rule_id": "AVD-AWS-0094",
+			"long_id": "aws-s3-specify-public-access-block",
+			"rule_description": "S3 buckets should each define an aws_s3_bucket_public_access_block",
+			"rule_provider": "aws",
+			"rule_service": "s3",
+			"impact": "Public access policies may be applied to sensitive data buckets",
+			"resolution": "Define a aws_s3_bucket_public_access_block for the given bucket to control public access policies",
+			"links": [
+				"https://aquasecurity.github.io/tfsec/v1.28.11/checks/aws/s3/specify-public-access-block/",
+				"https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/s3_bucket_public_access_block#bucket"
+			],
+			"description": "Bucket does not have a corresponding public access block.",
+			"severity": "LOW",
+			"warning": false,
+			"status": 0,
+			"resource": "aws_s3_bucket.private_data",
+			"location": {
+				"filename": "D:\\CloudGuardAI\\evaluation\\dataset\\clean\\clean_05_s3_private.tf",
+				"start_line": 1,
+				"end_line": 14
+			}
+		}
+	]
+}

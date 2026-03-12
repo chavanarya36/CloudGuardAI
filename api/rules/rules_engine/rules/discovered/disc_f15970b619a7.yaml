@@ -1,0 +1,16 @@
+# Auto-discovered rule — generated 2026-02-23T11:21:42.589310
+# Based on 8 occurrences across 8 scans
+# Original: Weak authentication - password in plaintext
+
+**Impact:** This could allow full system compromise, data breach, or unauth
+rules:
+  - id: DISC_F15970B619A7
+    description: "[Auto-Discovered] Weak authentication - password in plaintext
+
+**Impact:** This could allow full system compromise, da"
+    severity: CRITICAL
+    file_types: [".tf", ".yaml", ".yml", ".json"]
+    match:
+      regex: "infrastructure.*authentication"
+    references:
+      - "https://cloudguard.ai/discovered-patterns/f15970b619a7"

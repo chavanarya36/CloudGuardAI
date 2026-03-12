@@ -1,0 +1,16 @@
+# Auto-discovered rule — generated 2026-03-11T07:58:46.751366
+# Based on 3 occurrences across 3 scans
+# Original: IAM policy grants Action=* on Resource=*, equivalent to full admin access
+
+**Impact:** This could allow full system comp
+rules:
+  - id: DISC_035015EB07D1
+    description: "[Auto-Discovered] IAM policy grants Action=* on Resource=*, equivalent to full admin access
+
+**Impact:** This could al"
+    severity: CRITICAL
+    file_types: [".tf", ".yaml", ".yml", ".json"]
+    match:
+      regex: "infrastructure.*unauthorized"
+    references:
+      - "https://cloudguard.ai/discovered-patterns/035015eb07d1"

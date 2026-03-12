@@ -1,0 +1,3037 @@
+{
+  "timestamp": "2026-03-04T23:12:18.123530",
+  "summary": {
+    "files_analyzed": 4,
+    "total_before": 150,
+    "total_after": 33,
+    "total_fixes": 83,
+    "reduction_pct": 78.0,
+    "before_by_severity": {
+      "CRITICAL": 83,
+      "HIGH": 44,
+      "MEDIUM": 21,
+      "LOW": 2,
+      "INFO": 0
+    },
+    "after_by_severity": {
+      "CRITICAL": 4,
+      "HIGH": 15,
+      "MEDIUM": 14,
+      "LOW": 0,
+      "INFO": 0
+    }
+  },
+  "per_file": [
+    {
+      "file": "terragoat_s3.tf",
+      "before": {
+        "total_findings": 25,
+        "by_severity": {
+          "CRITICAL": 14,
+          "HIGH": 3,
+          "MEDIUM": 8,
+          "LOW": 0,
+          "INFO": 0
+        },
+        "findings": [
+          {
+            "rule_id": "AWS_CIS_IAM_WILDCARD_POLICY",
+            "file_path": "D:\\CloudGuardAI\\evaluation\\case_study\\terragoat_s3.tf",
+            "resource": "",
+            "severity": "CRITICAL",
+            "title": "Aws Cis Iam Wildcard Policy",
+            "description": "IAM policy grants Action=* on Resource=*, equivalent to full admin access",
+            "references": [
+              "CIS AWS 1.22",
+              "https://docs.aws.amazon.com/IAM/latest/UserGuide/best-practices.html"
+            ],
+            "code_snippet": "Action   = \"*\"               # VULN: Full admin wildcard",
+            "line": 100
+          },
+          {
+            "rule_id": "AWS_CIS_S3_PUBLIC_ACL",
+            "file_path": "D:\\CloudGuardAI\\evaluation\\case_study\\terragoat_s3.tf",
+            "resource": "",
+            "severity": "CRITICAL",
+            "title": "Aws Cis S3 Public Acl",
+            "description": "S3 bucket has public-read ACL which allows unrestricted public access",
+            "references": [
+              "CIS AWS 2.1.5",
+              "https://docs.aws.amazon.com/AmazonS3/latest/userguide/acl-overview.html"
+            ],
+            "code_snippet": "acl    = \"public-read\"             # VULN: Public read",
+            "line": 32
+          },
+          {
+            "rule_id": "AWS_CIS_S3_PUBLIC_ACL",
+            "file_path": "D:\\CloudGuardAI\\evaluation\\case_study\\terragoat_s3.tf",
+            "resource": "",
+            "severity": "CRITICAL",
+            "title": "Aws Cis S3 Public Acl",
+            "description": "S3 bucket has public-read ACL which allows unrestricted public access",
+            "references": [
+              "CIS AWS 2.1.5",
+              "https://docs.aws.amazon.com/AmazonS3/latest/userguide/acl-overview.html"
+            ],
+            "code_snippet": "acl    = \"public-read\"             # VULN: overly open for a content bucket",
+            "line": 52
+          },
+          {
+            "rule_id": "AWS_CIS_S3_PUBLIC_WRITE",
+            "file_path": "D:\\CloudGuardAI\\evaluation\\case_study\\terragoat_s3.tf",
+            "resource": "",
+            "severity": "CRITICAL",
+            "title": "Aws Cis S3 Public Write",
+            "description": "S3 bucket has public-read-write ACL which allows anyone to modify objects",
+            "references": [
+              "CIS AWS 2.1.5"
+            ],
+            "code_snippet": "acl    = \"public-read-write\"       # VULN: Public read-write",
+            "line": 17
+          },
+          {
+            "rule_id": "AWS_BP_HARDCODED_SECRET",
+            "file_path": "D:\\CloudGuardAI\\evaluation\\case_study\\terragoat_s3.tf",
+            "resource": "",
+            "severity": "CRITICAL",
+            "title": "Aws Bp Hardcoded Secret",
+            "description": "Hardcoded secret or API key detected",
+            "references": [
+              "AWS Security Best Practices"
+            ],
+            "code_snippet": "secret_key = \"wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY\"",
+            "line": 11
+          },
+          {
+            "rule_id": "AWS_BP_HARDCODED_ACCESS_KEY",
+            "file_path": "D:\\CloudGuardAI\\evaluation\\case_study\\terragoat_s3.tf",
+            "resource": "",
+            "severity": "CRITICAL",
+            "title": "Aws Bp Hardcoded Access Key",
+            "description": "AWS access key appears to be hardcoded",
+            "references": [
+              "AWS Security Best Practices"
+            ],
+            "code_snippet": "access_key = \"AKIAIOSFODNN7EXAMPLE\"",
+            "line": 10
+          },
+          {
+            "rule_id": "TF_HARDCODED_ENV_SECRET",
+            "file_path": "D:\\CloudGuardAI\\evaluation\\case_study\\terragoat_s3.tf",
+            "resource": "",
+            "severity": "CRITICAL",
+            "title": "Tf Hardcoded Env Secret",
+            "description": "Secret or API key is hardcoded in an environment variable definition",
+            "references": [
+              "CWE-798",
+              "OWASP IaC A2"
+            ],
+            "code_snippet": "secret_key = \"wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY\"",
+            "line": 11
+          },
+          {
+            "rule_id": "TF_HARDCODED_CREDENTIALS",
+            "file_path": "D:\\CloudGuardAI\\evaluation\\case_study\\terragoat_s3.tf",
+            "resource": "",
+            "severity": "CRITICAL",
+            "title": "Tf Hardcoded Credentials",
+            "description": "Hardcoded credentials detected in Terraform configuration",
+            "references": [
+              "Terraform Security Best Practices"
+            ],
+            "code_snippet": "access_key = \"AKIAIOSFODNN7EXAMPLE\"",
+            "line": 10
+          },
+          {
+            "rule_id": "TF_PUBLIC_S3",
+            "file_path": "D:\\CloudGuardAI\\evaluation\\case_study\\terragoat_s3.tf",
+            "resource": "",
+            "severity": "CRITICAL",
+            "title": "Tf Public S3",
+            "description": "S3 bucket configured with public access",
+            "references": [
+              "Terraform Security Best Practices"
+            ],
+            "code_snippet": "acl    = \"public-read-write\"       # VULN: Public read-write",
+            "line": 17
+          },
+          {
+            "rule_id": "TF_PUBLIC_S3",
+            "file_path": "D:\\CloudGuardAI\\evaluation\\case_study\\terragoat_s3.tf",
+            "resource": "",
+            "severity": "CRITICAL",
+            "title": "Tf Public S3",
+            "description": "S3 bucket configured with public access",
+            "references": [
+              "Terraform Security Best Practices"
+            ],
+            "code_snippet": "acl    = \"public-read\"             # VULN: Public read",
+            "line": 32
+          },
+          {
+            "rule_id": "TF_PUBLIC_S3",
+            "file_path": "D:\\CloudGuardAI\\evaluation\\case_study\\terragoat_s3.tf",
+            "resource": "",
+            "severity": "CRITICAL",
+            "title": "Tf Public S3",
+            "description": "S3 bucket configured with public access",
+            "references": [
+              "Terraform Security Best Practices"
+            ],
+            "code_snippet": "acl    = \"public-read\"             # VULN: overly open for a content bucket",
+            "line": 52
+          },
+          {
+            "rule_id": "attack_path",
+            "check_id": "attack_path",
+            "severity": "CRITICAL",
+            "title": "GNN detected critical risk attack path",
+            "description": "\ud83d\udea8 CRITICAL RISK: GNN detected high probability (98.8%) of attack paths in infrastructure. Critical resources identified: aws_iam_policy.data_engineer_policy, aws_s3_bucket.ml_artifacts, aws_s3_bucket.backups. These nodes have high attention scores indicating they are key points in potential attack chains.",
+            "category": "gnn",
+            "scanner": "gnn",
+            "line_number": null,
+            "code_snippet": "",
+            "resource": "",
+            "remediation": "\ud83d\udea8 URGENT: Critical attack paths detected.\n\nRecommended actions:\n1. Review security of critical resources: aws_iam_policy.data_engineer_policy, aws_s3_bucket.ml_artifacts, aws_s3_bucket.backups\n2. Implement network segmentation to break attack chains\n3. Add security controls at critical nodes:\n   - Enable encryption at rest and in transit\n   - Restrict network access (security groups, NACLs)\n   - Enable authentication and authorization\n   - Add monitoring and logging\n4. Apply principle of least privilege to IAM roles/policies\n5. Remove public access where not required\n\n\u26a0\ufe0f  Consider redesigning infrastructure architecture to eliminate attack paths.",
+            "confidence": "high",
+            "transformer_fix": "[ resource \" aws_iam_role_policy \" \" [ \" { \n Action = \" ( aws_iam_role_policy : : : : \" : : : tcp \" aws_iam_role_policy : : : : : : : : : [ \" aws_iam_role_policy : : : : : : : : : : : : rule : : : ] ] ] \n : : : Resource \" : : : : : : [ \" aws_iam_role_policy : : : : : : : : : : : : : : : : Action : : : : : : : : : : : : : : : : : : : : : : : : : : : : : : : : : : :",
+            "transformer_fix_available": true
+          },
+          {
+            "rule_id": "SECRET_AWS_ACCESS_KEY",
+            "check_id": "SECRET_AWS_ACCESS_KEY",
+            "severity": "CRITICAL",
+            "title": "AWS Access Key",
+            "description": "Hardcoded AWS Access Key ID detected. This poses a critical security risk as credentials should never be hardcoded.",
+            "category": "secrets",
+            "scanner": "secrets",
+            "line_number": 10,
+            "code_snippet": "access_key = \"AKIA****************\"",
+            "resource": "",
+            "remediation": "",
+            "confidence": 0.8,
+            "transformer_fix": "= true \n } \n } \n }",
+            "transformer_fix_available": true
+          },
+          {
+            "rule_id": "SECRET_AWS_SECRET_KEY",
+            "check_id": "SECRET_AWS_SECRET_KEY",
+            "severity": "CRITICAL",
+            "title": "AWS Secret Access Key",
+            "description": "Potential AWS Secret Access Key detected. This poses a critical security risk as credentials should never be hardcoded.",
+            "category": "secrets",
+            "scanner": "secrets",
+            "line_number": 11,
+            "code_snippet": "secret_key = \"wJa********************",
+            "resource": "",
+            "remediation": "",
+            "confidence": 0.8,
+            "transformer_fix": "= true \n } \n } \n } \n engine = \" \" \n associate_public_ip_address = true \n deletion_window_in_days = true \n }",
+            "transformer_fix_available": true
+          },
+          {
+            "rule_id": "critical_resource",
+            "check_id": "critical_resource",
+            "severity": "HIGH",
+            "title": "Critical infrastructure node: aws_iam_policy.data_engineer_policy",
+            "description": "GNN attention mechanism identified aws_iam_policy.data_engineer_policy as a critical point in potential attack paths. This resource has high importance in the infrastructure attack graph.",
+            "category": "gnn",
+            "scanner": "gnn",
+            "line_number": null,
+            "code_snippet": "",
+            "resource": "aws_iam_policy.data_engineer_policy",
+            "remediation": "Review security configuration of aws_iam_policy.data_engineer_policy. Ensure proper access controls, encryption, and network isolation.",
+            "confidence": "high",
+            "transformer_fix": "Action resource \" aws_iam_role_policy \" \" : \" policy : : : : : ( ( tcp \" resource \" ] \n [ \" tcp \" ] \n resource [ \" \" aws_iam_role_policy \" : : : : : : : : : : : : : : : ] \n : : \" aws_iam_role_policy : ( : : : : : aws_iam_role_policy \" \" var \" : : 443 [ \" resource \" aws_iam_role_policy \" : ( aws_iam_role_policy : : : : : : : : : : : ] : : Action : : : : : : : : : : : : : : : : : : : : : : : : : : : : : :",
+            "transformer_fix_available": true
+          },
+          {
+            "rule_id": "CVE",
+            "check_id": "CVE",
+            "severity": "HIGH",
+            "title": "CVE-2021-3178 in terraform-provider-aws 3.0.0",
+            "description": "AWS provider allows overly permissive IAM policies. CVSS: 7.5.",
+            "category": "cve",
+            "scanner": "cve",
+            "line_number": null,
+            "code_snippet": "",
+            "resource": "",
+            "remediation": "",
+            "confidence": 0.8,
+            "transformer_fix": "Action resource \" aws_iam_role_policy \" \" : \" { \n policy : : : : : : : : : : : : : : : : ] aws_iam_role_policy \" : : : : : : : : : : : : : : : : : : : : policy : : : : : : : : : : : : \" : : : : [ \" aws_iam_role_policy : : : : : : aws_iam_role_policy \" aws_iam_role_policy \" : : : : ingress ] policy : : : aws_iam_role_policy ] : : : : : : : : : : : : Action : : : : : : : : : : : : : : : : : \" ] ]",
+            "transformer_fix_available": true
+          },
+          {
+            "rule_id": "CIS_2_1_1",
+            "check_id": "CIS_2_1_1",
+            "severity": "HIGH",
+            "title": "S3 Bucket Encryption Not Enabled",
+            "description": "S3 bucket 'data_lake_raw' does not have server-side encryption enabled. CIS Benchmark 2.1.1 requires encryption at rest.",
+            "category": "compliance",
+            "scanner": "compliance",
+            "line_number": null,
+            "code_snippet": "",
+            "resource": "arn:aws:s3:::data_lake_raw",
+            "remediation": "",
+            "confidence": 0.8,
+            "transformer_fix": "\" resource \" aws_iam_role_policy \" \" : : : : ingress { \n from_port : : : : : : : : : : Action : : \" ] \" ] \n egress ( : : : : : : : : : : : : : : : : : : : ingress ] \n aws_iam_role_policy : : : : : : : aws_iam_role_policy : : : : : : : : protocol : \" : : : : : aws_iam_role_policy : : : : : : \" ] aws_iam_role_policy \" tcp \" : : : : : : aws_iam_role_policy : : : : : : : : : : : ] : : : : [ : : : : : :",
+            "transformer_fix_available": true
+          },
+          {
+            "rule_id": "AWS_BP_S3_NO_LOGGING",
+            "file_path": "D:\\CloudGuardAI\\evaluation\\case_study\\terragoat_s3.tf",
+            "resource": "",
+            "severity": "MEDIUM",
+            "title": "Aws Bp S3 No Logging",
+            "description": "S3 bucket logging is not configured",
+            "references": [
+              "AWS S3 Best Practices"
+            ],
+            "code_snippet": "resource \"aws_s3_bucket\" \"data_lake_raw\" {",
+            "line": 15
+          },
+          {
+            "rule_id": "AWS_BP_S3_NO_LOGGING",
+            "file_path": "D:\\CloudGuardAI\\evaluation\\case_study\\terragoat_s3.tf",
+            "resource": "",
+            "severity": "MEDIUM",
+            "title": "Aws Bp S3 No Logging",
+            "description": "S3 bucket logging is not configured",
+            "references": [
+              "AWS S3 Best Practices"
+            ],
+            "code_snippet": "resource \"aws_s3_bucket\" \"data_lake_processed\" {",
+            "line": 30
+          },
+          {
+            "rule_id": "AWS_BP_S3_NO_LOGGING",
+            "file_path": "D:\\CloudGuardAI\\evaluation\\case_study\\terragoat_s3.tf",
+            "resource": "",
+            "severity": "MEDIUM",
+            "title": "Aws Bp S3 No Logging",
+            "description": "S3 bucket logging is not configured",
+            "references": [
+              "AWS S3 Best Practices"
+            ],
+            "code_snippet": "resource \"aws_s3_bucket\" \"ml_artifacts\" {",
+            "line": 40
+          },
+          {
+            "rule_id": "AWS_BP_S3_NO_LOGGING",
+            "file_path": "D:\\CloudGuardAI\\evaluation\\case_study\\terragoat_s3.tf",
+            "resource": "",
+            "severity": "MEDIUM",
+            "title": "Aws Bp S3 No Logging",
+            "description": "S3 bucket logging is not configured",
+            "references": [
+              "AWS S3 Best Practices"
+            ],
+            "code_snippet": "resource \"aws_s3_bucket\" \"website\" {",
+            "line": 50
+          },
+          {
+            "rule_id": "AWS_BP_S3_NO_LOGGING",
+            "file_path": "D:\\CloudGuardAI\\evaluation\\case_study\\terragoat_s3.tf",
+            "resource": "",
+            "severity": "MEDIUM",
+            "title": "Aws Bp S3 No Logging",
+            "description": "S3 bucket logging is not configured",
+            "references": [
+              "AWS S3 Best Practices"
+            ],
+            "code_snippet": "resource \"aws_s3_bucket\" \"backups\" {",
+            "line": 68
+          },
+          {
+            "rule_id": "TF_VERSIONING_DISABLED",
+            "file_path": "D:\\CloudGuardAI\\evaluation\\case_study\\terragoat_s3.tf",
+            "resource": "",
+            "severity": "MEDIUM",
+            "title": "Tf Versioning Disabled",
+            "description": "S3 bucket versioning is disabled",
+            "references": [
+              "Terraform Security Best Practices"
+            ],
+            "code_snippet": "enabled = false                  # VULN: No versioning",
+            "line": 20
+          },
+          {
+            "rule_id": "TF_VERSIONING_DISABLED",
+            "file_path": "D:\\CloudGuardAI\\evaluation\\case_study\\terragoat_s3.tf",
+            "resource": "",
+            "severity": "MEDIUM",
+            "title": "Tf Versioning Disabled",
+            "description": "S3 bucket versioning is disabled",
+            "references": [
+              "Terraform Security Best Practices"
+            ],
+            "code_snippet": "enabled = false                  # VULN: No versioning",
+            "line": 35
+          },
+          {
+            "rule_id": "CIS_2_1_2",
+            "check_id": "CIS_2_1_2",
+            "severity": "MEDIUM",
+            "title": "S3 Bucket Logging Not Enabled",
+            "description": "S3 bucket 'data_lake_raw' does not have access logging enabled. CIS Benchmark 2.1.2 requires logging for audit trails.",
+            "category": "compliance",
+            "scanner": "compliance",
+            "line_number": null,
+            "code_snippet": "",
+            "resource": "arn:aws:s3:::data_lake_raw",
+            "remediation": "",
+            "confidence": 0.8
+          }
+        ]
+      },
+      "remediation": {
+        "changes_applied": 21,
+        "changes": [
+          {
+            "finding_id": "AWS_CIS_IAM_WILDCARD_POLICY",
+            "rule_id": "AWS_CIS_IAM_WILDCARD_POLICY",
+            "severity": "CRITICAL",
+            "description": "Replace wildcard IAM Action with least-privilege permissions",
+            "category": ""
+          },
+          {
+            "finding_id": "AWS_CIS_IAM_WILDCARD_POLICY",
+            "rule_id": "AWS_CIS_IAM_WILDCARD_POLICY",
+            "severity": "CRITICAL",
+            "description": "Replace s3:* wildcard with least-privilege S3 actions",
+            "category": ""
+          },
+          {
+            "finding_id": "AWS_CIS_S3_PUBLIC_ACL",
+            "rule_id": "AWS_CIS_S3_PUBLIC_ACL",
+            "severity": "CRITICAL",
+            "description": "Change S3 bucket ACL from public to private",
+            "category": ""
+          },
+          {
+            "finding_id": "AWS_CIS_S3_PUBLIC_ACL",
+            "rule_id": "AWS_CIS_S3_PUBLIC_ACL",
+            "severity": "CRITICAL",
+            "description": "Change S3 bucket ACL from public to private",
+            "category": ""
+          },
+          {
+            "finding_id": "AWS_CIS_S3_PUBLIC_WRITE",
+            "rule_id": "AWS_CIS_S3_PUBLIC_WRITE",
+            "severity": "CRITICAL",
+            "description": "Change S3 bucket ACL from public to private",
+            "category": ""
+          },
+          {
+            "finding_id": "AWS_BP_HARDCODED_ACCESS_KEY",
+            "rule_id": "AWS_BP_HARDCODED_ACCESS_KEY",
+            "severity": "CRITICAL",
+            "description": "Replace hardcoded AWS access key with variable reference",
+            "category": ""
+          },
+          {
+            "finding_id": "SECRET_AWS_SECRET_KEY",
+            "rule_id": "SECRET_AWS_SECRET_KEY",
+            "severity": "CRITICAL",
+            "description": "Replace hardcoded AWS secret key with variable reference",
+            "category": "secrets"
+          },
+          {
+            "finding_id": "TF_VERSIONING_DISABLED",
+            "rule_id": "TF_VERSIONING_DISABLED",
+            "severity": "MEDIUM",
+            "description": "Enable S3 bucket versioning",
+            "category": ""
+          },
+          {
+            "finding_id": "TF_VERSIONING_DISABLED",
+            "rule_id": "TF_VERSIONING_DISABLED",
+            "severity": "MEDIUM",
+            "description": "Enable S3 bucket versioning",
+            "category": ""
+          },
+          {
+            "finding_id": "cors_wildcard_origin",
+            "rule_id": "PATTERN_CORS_WILDCARD_ORIGIN",
+            "severity": "MEDIUM",
+            "description": "Restrict CORS allowed_origins from wildcard to specific domain",
+            "category": "pattern_scan"
+          },
+          {
+            "finding_id": "cors_wildcard_headers",
+            "rule_id": "PATTERN_CORS_WILDCARD_HEADERS",
+            "severity": "MEDIUM",
+            "description": "Restrict CORS allowed_headers from wildcard to specific headers",
+            "category": "pattern_scan"
+          },
+          {
+            "finding_id": "add_data_lake_raw_pab",
+            "rule_id": "AUTO_ADD_SECURITY_BLOCK",
+            "severity": "HIGH",
+            "description": "Add public access block for S3 bucket 'data_lake_raw'",
+            "category": "missing_config"
+          },
+          {
+            "finding_id": "add_data_lake_processed_pab",
+            "rule_id": "AUTO_ADD_SECURITY_BLOCK",
+            "severity": "HIGH",
+            "description": "Add public access block for S3 bucket 'data_lake_processed'",
+            "category": "missing_config"
+          },
+          {
+            "finding_id": "add_ml_artifacts_pab",
+            "rule_id": "AUTO_ADD_SECURITY_BLOCK",
+            "severity": "HIGH",
+            "description": "Add public access block for S3 bucket 'ml_artifacts'",
+            "category": "missing_config"
+          },
+          {
+            "finding_id": "add_website_pab",
+            "rule_id": "AUTO_ADD_SECURITY_BLOCK",
+            "severity": "HIGH",
+            "description": "Add public access block for S3 bucket 'website'",
+            "category": "missing_config"
+          },
+          {
+            "finding_id": "add_backups_pab",
+            "rule_id": "AUTO_ADD_SECURITY_BLOCK",
+            "severity": "HIGH",
+            "description": "Add public access block for S3 bucket 'backups'",
+            "category": "missing_config"
+          },
+          {
+            "finding_id": "add_data_lake_raw_logging",
+            "rule_id": "AUTO_ADD_SECURITY_BLOCK",
+            "severity": "HIGH",
+            "description": "Enable access logging for S3 bucket 'data_lake_raw'",
+            "category": "missing_config"
+          },
+          {
+            "finding_id": "add_data_lake_processed_logging",
+            "rule_id": "AUTO_ADD_SECURITY_BLOCK",
+            "severity": "HIGH",
+            "description": "Enable access logging for S3 bucket 'data_lake_processed'",
+            "category": "missing_config"
+          },
+          {
+            "finding_id": "add_ml_artifacts_logging",
+            "rule_id": "AUTO_ADD_SECURITY_BLOCK",
+            "severity": "HIGH",
+            "description": "Enable access logging for S3 bucket 'ml_artifacts'",
+            "category": "missing_config"
+          },
+          {
+            "finding_id": "add_website_logging",
+            "rule_id": "AUTO_ADD_SECURITY_BLOCK",
+            "severity": "HIGH",
+            "description": "Enable access logging for S3 bucket 'website'",
+            "category": "missing_config"
+          },
+          {
+            "finding_id": "add_backups_logging",
+            "rule_id": "AUTO_ADD_SECURITY_BLOCK",
+            "severity": "HIGH",
+            "description": "Enable access logging for S3 bucket 'backups'",
+            "category": "missing_config"
+          }
+        ],
+        "stats": {
+          "total_remediations": 21,
+          "by_severity": {
+            "CRITICAL": 7,
+            "MEDIUM": 4,
+            "HIGH": 10
+          },
+          "by_category": {
+            "other": 8,
+            "secrets": 1,
+            "pattern_scan": 2,
+            "missing_config": 10
+          },
+          "critical_fixed": 7,
+          "high_fixed": 10
+        }
+      },
+      "after": {
+        "total_findings": 8,
+        "by_severity": {
+          "CRITICAL": 0,
+          "HIGH": 2,
+          "MEDIUM": 6,
+          "LOW": 0,
+          "INFO": 0
+        },
+        "findings": [
+          {
+            "rule_id": "CVE",
+            "severity": "HIGH",
+            "title": "CVE-2021-3178 in terraform-provider-aws 3.0.0"
+          },
+          {
+            "rule_id": "CIS_2_1_1",
+            "severity": "HIGH",
+            "title": "S3 Bucket Encryption Not Enabled"
+          },
+          {
+            "rule_id": "AWS_BP_S3_NO_LOGGING",
+            "severity": "MEDIUM",
+            "title": "Aws Bp S3 No Logging"
+          },
+          {
+            "rule_id": "AWS_BP_S3_NO_LOGGING",
+            "severity": "MEDIUM",
+            "title": "Aws Bp S3 No Logging"
+          },
+          {
+            "rule_id": "AWS_BP_S3_NO_LOGGING",
+            "severity": "MEDIUM",
+            "title": "Aws Bp S3 No Logging"
+          },
+          {
+            "rule_id": "AWS_BP_S3_NO_LOGGING",
+            "severity": "MEDIUM",
+            "title": "Aws Bp S3 No Logging"
+          },
+          {
+            "rule_id": "AWS_BP_S3_NO_LOGGING",
+            "severity": "MEDIUM",
+            "title": "Aws Bp S3 No Logging"
+          },
+          {
+            "rule_id": "CIS_2_1_2",
+            "severity": "MEDIUM",
+            "title": "S3 Bucket Logging Not Enabled"
+          }
+        ]
+      },
+      "reduction_pct": 68.0
+    },
+    {
+      "file": "terragoat_eks_db.tf",
+      "before": {
+        "total_findings": 37,
+        "by_severity": {
+          "CRITICAL": 23,
+          "HIGH": 10,
+          "MEDIUM": 3,
+          "LOW": 1,
+          "INFO": 0
+        },
+        "findings": [
+          {
+            "rule_id": "AWS_CIS_IAM_WILDCARD_POLICY",
+            "file_path": "D:\\CloudGuardAI\\evaluation\\case_study\\terragoat_eks_db.tf",
+            "resource": "",
+            "severity": "CRITICAL",
+            "title": "Aws Cis Iam Wildcard Policy",
+            "description": "IAM policy grants Action=* on Resource=*, equivalent to full admin access",
+            "references": [
+              "CIS AWS 1.22",
+              "https://docs.aws.amazon.com/IAM/latest/UserGuide/best-practices.html"
+            ],
+            "code_snippet": "Action   = \"*\"            # VULN: Full admin wildcard",
+            "line": 150
+          },
+          {
+            "rule_id": "AWS_CIS_SG_0_0_0_0",
+            "file_path": "D:\\CloudGuardAI\\evaluation\\case_study\\terragoat_eks_db.tf",
+            "resource": "",
+            "severity": "CRITICAL",
+            "title": "Aws Cis Sg 0 0 0 0",
+            "description": "Security group allows unrestricted access from 0.0.0.0/0",
+            "references": [
+              "CIS AWS 4.1",
+              "https://docs.aws.amazon.com/securityhub/latest/userguide/securityhub-cis-controls.html"
+            ],
+            "code_snippet": "cidr_blocks = [\"0.0.0.0/0\"]",
+            "line": 24
+          },
+          {
+            "rule_id": "AWS_CIS_SG_0_0_0_0",
+            "file_path": "D:\\CloudGuardAI\\evaluation\\case_study\\terragoat_eks_db.tf",
+            "resource": "",
+            "severity": "CRITICAL",
+            "title": "Aws Cis Sg 0 0 0 0",
+            "description": "Security group allows unrestricted access from 0.0.0.0/0",
+            "references": [
+              "CIS AWS 4.1",
+              "https://docs.aws.amazon.com/securityhub/latest/userguide/securityhub-cis-controls.html"
+            ],
+            "code_snippet": "cidr_blocks = [\"0.0.0.0/0\"]",
+            "line": 33
+          },
+          {
+            "rule_id": "AWS_CIS_SG_0_0_0_0",
+            "file_path": "D:\\CloudGuardAI\\evaluation\\case_study\\terragoat_eks_db.tf",
+            "resource": "",
+            "severity": "CRITICAL",
+            "title": "Aws Cis Sg 0 0 0 0",
+            "description": "Security group allows unrestricted access from 0.0.0.0/0",
+            "references": [
+              "CIS AWS 4.1",
+              "https://docs.aws.amazon.com/securityhub/latest/userguide/securityhub-cis-controls.html"
+            ],
+            "code_snippet": "cidr_blocks = [\"0.0.0.0/0\"]",
+            "line": 42
+          },
+          {
+            "rule_id": "AWS_CIS_SG_0_0_0_0",
+            "file_path": "D:\\CloudGuardAI\\evaluation\\case_study\\terragoat_eks_db.tf",
+            "resource": "",
+            "severity": "CRITICAL",
+            "title": "Aws Cis Sg 0 0 0 0",
+            "description": "Security group allows unrestricted access from 0.0.0.0/0",
+            "references": [
+              "CIS AWS 4.1",
+              "https://docs.aws.amazon.com/securityhub/latest/userguide/securityhub-cis-controls.html"
+            ],
+            "code_snippet": "cidr_blocks = [\"0.0.0.0/0\"]",
+            "line": 51
+          },
+          {
+            "rule_id": "AWS_CIS_SG_0_0_0_0",
+            "file_path": "D:\\CloudGuardAI\\evaluation\\case_study\\terragoat_eks_db.tf",
+            "resource": "",
+            "severity": "CRITICAL",
+            "title": "Aws Cis Sg 0 0 0 0",
+            "description": "Security group allows unrestricted access from 0.0.0.0/0",
+            "references": [
+              "CIS AWS 4.1",
+              "https://docs.aws.amazon.com/securityhub/latest/userguide/securityhub-cis-controls.html"
+            ],
+            "code_snippet": "cidr_blocks = [\"0.0.0.0/0\"]",
+            "line": 69
+          },
+          {
+            "rule_id": "AWS_CIS_SG_0_0_0_0",
+            "file_path": "D:\\CloudGuardAI\\evaluation\\case_study\\terragoat_eks_db.tf",
+            "resource": "",
+            "severity": "CRITICAL",
+            "title": "Aws Cis Sg 0 0 0 0",
+            "description": "Security group allows unrestricted access from 0.0.0.0/0",
+            "references": [
+              "CIS AWS 4.1",
+              "https://docs.aws.amazon.com/securityhub/latest/userguide/securityhub-cis-controls.html"
+            ],
+            "code_snippet": "cidr_blocks = [\"0.0.0.0/0\"]",
+            "line": 77
+          },
+          {
+            "rule_id": "AWS_CIS_DB_PUBLIC",
+            "file_path": "D:\\CloudGuardAI\\evaluation\\case_study\\terragoat_eks_db.tf",
+            "resource": "",
+            "severity": "CRITICAL",
+            "title": "Aws Cis Db Public",
+            "description": "Database instance is publicly accessible",
+            "references": [
+              "CIS AWS 4.15"
+            ],
+            "code_snippet": "publicly_accessible    = true                          # VULN: Public database",
+            "line": 92
+          },
+          {
+            "rule_id": "AWS_OWASP_A05_MISCONFIG_SG",
+            "file_path": "D:\\CloudGuardAI\\evaluation\\case_study\\terragoat_eks_db.tf",
+            "resource": "",
+            "severity": "CRITICAL",
+            "title": "Aws Owasp A05 Misconfig Sg",
+            "description": "Security misconfiguration - overly permissive security group",
+            "references": [
+              "OWASP A05:2021"
+            ],
+            "code_snippet": "from_port   = 0",
+            "line": 48
+          },
+          {
+            "rule_id": "AWS_OWASP_A05_MISCONFIG_SG",
+            "file_path": "D:\\CloudGuardAI\\evaluation\\case_study\\terragoat_eks_db.tf",
+            "resource": "",
+            "severity": "CRITICAL",
+            "title": "Aws Owasp A05 Misconfig Sg",
+            "description": "Security misconfiguration - overly permissive security group",
+            "references": [
+              "OWASP A05:2021"
+            ],
+            "code_snippet": "from_port   = 0",
+            "line": 74
+          },
+          {
+            "rule_id": "AWS_OWASP_A07_AUTH_FAILURE",
+            "file_path": "D:\\CloudGuardAI\\evaluation\\case_study\\terragoat_eks_db.tf",
+            "resource": "",
+            "severity": "CRITICAL",
+            "title": "Aws Owasp A07 Auth Failure",
+            "description": "Weak authentication - password in plaintext",
+            "references": [
+              "OWASP A07:2021"
+            ],
+            "code_snippet": "password               = \"Pr0duction!DB#2024Secure\"   # VULN: Hardcoded password",
+            "line": 91
+          },
+          {
+            "rule_id": "AWS_BP_HARDCODED_PASSWORD",
+            "file_path": "D:\\CloudGuardAI\\evaluation\\case_study\\terragoat_eks_db.tf",
+            "resource": "",
+            "severity": "CRITICAL",
+            "title": "Aws Bp Hardcoded Password",
+            "description": "Hardcoded password detected in infrastructure code",
+            "references": [
+              "AWS Security Best Practices",
+              "https://docs.aws.amazon.com/secretsmanager/latest/userguide/intro.html"
+            ],
+            "code_snippet": "password               = \"Pr0duction!DB#2024Secure\"   # VULN: Hardcoded password",
+            "line": 91
+          },
+          {
+            "rule_id": "TF_HARDCODED_CREDENTIALS",
+            "file_path": "D:\\CloudGuardAI\\evaluation\\case_study\\terragoat_eks_db.tf",
+            "resource": "",
+            "severity": "CRITICAL",
+            "title": "Tf Hardcoded Credentials",
+            "description": "Hardcoded credentials detected in Terraform configuration",
+            "references": [
+              "Terraform Security Best Practices"
+            ],
+            "code_snippet": "password               = \"Pr0duction!DB#2024Secure\"   # VULN: Hardcoded password",
+            "line": 91
+          },
+          {
+            "rule_id": "TF_OPEN_SECURITY_GROUP",
+            "file_path": "D:\\CloudGuardAI\\evaluation\\case_study\\terragoat_eks_db.tf",
+            "resource": "",
+            "severity": "CRITICAL",
+            "title": "Tf Open Security Group",
+            "description": "Security group with unrestricted inbound access (0.0.0.0/0)",
+            "references": [
+              "Terraform Security Best Practices"
+            ],
+            "code_snippet": "cidr_blocks = [\"0.0.0.0/0\"]",
+            "line": 24
+          },
+          {
+            "rule_id": "TF_OPEN_SECURITY_GROUP",
+            "file_path": "D:\\CloudGuardAI\\evaluation\\case_study\\terragoat_eks_db.tf",
+            "resource": "",
+            "severity": "CRITICAL",
+            "title": "Tf Open Security Group",
+            "description": "Security group with unrestricted inbound access (0.0.0.0/0)",
+            "references": [
+              "Terraform Security Best Practices"
+            ],
+            "code_snippet": "cidr_blocks = [\"0.0.0.0/0\"]",
+            "line": 33
+          },
+          {
+            "rule_id": "TF_OPEN_SECURITY_GROUP",
+            "file_path": "D:\\CloudGuardAI\\evaluation\\case_study\\terragoat_eks_db.tf",
+            "resource": "",
+            "severity": "CRITICAL",
+            "title": "Tf Open Security Group",
+            "description": "Security group with unrestricted inbound access (0.0.0.0/0)",
+            "references": [
+              "Terraform Security Best Practices"
+            ],
+            "code_snippet": "cidr_blocks = [\"0.0.0.0/0\"]",
+            "line": 42
+          },
+          {
+            "rule_id": "TF_OPEN_SECURITY_GROUP",
+            "file_path": "D:\\CloudGuardAI\\evaluation\\case_study\\terragoat_eks_db.tf",
+            "resource": "",
+            "severity": "CRITICAL",
+            "title": "Tf Open Security Group",
+            "description": "Security group with unrestricted inbound access (0.0.0.0/0)",
+            "references": [
+              "Terraform Security Best Practices"
+            ],
+            "code_snippet": "cidr_blocks = [\"0.0.0.0/0\"]",
+            "line": 51
+          },
+          {
+            "rule_id": "TF_OPEN_SECURITY_GROUP",
+            "file_path": "D:\\CloudGuardAI\\evaluation\\case_study\\terragoat_eks_db.tf",
+            "resource": "",
+            "severity": "CRITICAL",
+            "title": "Tf Open Security Group",
+            "description": "Security group with unrestricted inbound access (0.0.0.0/0)",
+            "references": [
+              "Terraform Security Best Practices"
+            ],
+            "code_snippet": "cidr_blocks = [\"0.0.0.0/0\"]",
+            "line": 69
+          },
+          {
+            "rule_id": "TF_OPEN_SECURITY_GROUP",
+            "file_path": "D:\\CloudGuardAI\\evaluation\\case_study\\terragoat_eks_db.tf",
+            "resource": "",
+            "severity": "CRITICAL",
+            "title": "Tf Open Security Group",
+            "description": "Security group with unrestricted inbound access (0.0.0.0/0)",
+            "references": [
+              "Terraform Security Best Practices"
+            ],
+            "code_snippet": "cidr_blocks = [\"0.0.0.0/0\"]",
+            "line": 77
+          },
+          {
+            "rule_id": "attack_path",
+            "check_id": "attack_path",
+            "severity": "CRITICAL",
+            "title": "GNN detected critical risk attack path",
+            "description": "\ud83d\udea8 CRITICAL RISK: GNN detected high probability (93.9%) of attack paths in infrastructure. Critical resources identified: aws_db_instance.platform_db, aws_iam_policy.eks_admin_policy, aws_security_group.rds_sg. These nodes have high attention scores indicating they are key points in potential attack chains.",
+            "category": "gnn",
+            "scanner": "gnn",
+            "line_number": null,
+            "code_snippet": "",
+            "resource": "",
+            "remediation": "\ud83d\udea8 URGENT: Critical attack paths detected.\n\nRecommended actions:\n1. Review security of critical resources: aws_db_instance.platform_db, aws_iam_policy.eks_admin_policy, aws_security_group.rds_sg\n2. Implement network segmentation to break attack chains\n3. Add security controls at critical nodes:\n   - Enable encryption at rest and in transit\n   - Restrict network access (security groups, NACLs)\n   - Enable authentication and authorization\n   - Add monitoring and logging\n4. Apply principle of least privilege to IAM roles/policies\n5. Remove public access where not required\n\n\u26a0\ufe0f  Consider redesigning infrastructure architecture to eliminate attack paths.",
+            "confidence": "high",
+            "transformer_fix": "443 resource \" aws_iam_role_policy : \" : : : : : : : aws_iam_role_policy : policy : : : : : : : : : : : : : : : : : : : : : : : : : : : : : \" : \" \" aws_iam_role_policy : \" : : : \" ] \" ] ] aws_iam_role_policy ] aws_iam_role_policy \" : : : ] var : : : : : : : : : : : : : : : aws_iam_role_policy \" bucket : : : : : : : : : : : : : : : : : : : : : ] : : : : : : : tcp \"",
+            "transformer_fix_available": true
+          },
+          {
+            "rule_id": "SECRET_AWS_ACCESS_KEY",
+            "check_id": "SECRET_AWS_ACCESS_KEY",
+            "severity": "CRITICAL",
+            "title": "AWS Access Key",
+            "description": "Hardcoded AWS Access Key ID detected. This poses a critical security risk as credentials should never be hardcoded.",
+            "category": "secrets",
+            "scanner": "secrets",
+            "line_number": 117,
+            "code_snippet": "export AWS_ACCESS_KEY_ID=\"AKIA****************\"",
+            "resource": "",
+            "remediation": "",
+            "confidence": 0.8,
+            "transformer_fix": "= true \n } \n } \n } \n description = \" \" \n enable_key_rotation = true \n deletion_window_in_days = aws_subnet . . arn \n }",
+            "transformer_fix_available": true
+          },
+          {
+            "rule_id": "SECRET_AWS_SECRET_KEY",
+            "check_id": "SECRET_AWS_SECRET_KEY",
+            "severity": "CRITICAL",
+            "title": "AWS Secret Access Key",
+            "description": "Potential AWS Secret Access Key detected. This poses a critical security risk as credentials should never be hardcoded.",
+            "category": "secrets",
+            "scanner": "secrets",
+            "line_number": 118,
+            "code_snippet": "export AWS_********************",
+            "resource": "",
+            "remediation": "",
+            "confidence": 0.8,
+            "transformer_fix": "= true \n } \n \" \" { \n ami = \n encrypted = true \n resource \" aws_s3_bucket_versioning \" \" \" { \n bucket = aws_s3_bucket . \n } \n block_public_acls = true",
+            "transformer_fix_available": true
+          },
+          {
+            "rule_id": "CIS_4_1",
+            "check_id": "CIS_4_1",
+            "severity": "CRITICAL",
+            "title": "SSH Open to Internet",
+            "description": "Security group 'eks_cluster_sg' allows SSH access (port 22) from the internet (0.0.0.0/0). CIS Benchmark 4.1 prohibits this.",
+            "category": "compliance",
+            "scanner": "compliance",
+            "line_number": null,
+            "code_snippet": "",
+            "resource": "eks_cluster_sg",
+            "remediation": "",
+            "confidence": 0.8,
+            "transformer_fix": ": aws_iam_role_policy ] aws_iam_role_policy \" \" : : Action : : : : ( aws_iam_role_policy : : : \" \" aws_iam_role_policy : : \" [ \" \" : : : : : : : : : : : : : : : : : \" ) : : : : : : : : : : : : protocol : : : : from_port \" ] : : : : : : : : : : ] aws_iam_role_policy : : : : : resource \" \" : : : : : : : : : protocol [ : : : : : : : \" : : : [ : : : : : : :",
+            "transformer_fix_available": true
+          },
+          {
+            "rule_id": "AWS_CIS_DB_UNENCRYPTED",
+            "file_path": "D:\\CloudGuardAI\\evaluation\\case_study\\terragoat_eks_db.tf",
+            "resource": "",
+            "severity": "HIGH",
+            "title": "Aws Cis Db Unencrypted",
+            "description": "Database storage encryption is disabled",
+            "references": [
+              "CIS AWS 2.3.1"
+            ],
+            "code_snippet": "storage_encrypted      = false                         # VULN: Unencrypted storage",
+            "line": 93
+          },
+          {
+            "rule_id": "AWS_OWASP_A02_CRYPTO_FAILURE",
+            "file_path": "D:\\CloudGuardAI\\evaluation\\case_study\\terragoat_eks_db.tf",
+            "resource": "",
+            "severity": "HIGH",
+            "title": "Aws Owasp A02 Crypto Failure",
+            "description": "Encryption not enabled for sensitive data storage",
+            "references": [
+              "OWASP A02:2021"
+            ],
+            "code_snippet": "storage_encrypted      = false                         # VULN: Unencrypted storage",
+            "line": 93
+          },
+          {
+            "rule_id": "AWS_OWASP_A02_CRYPTO_FAILURE",
+            "file_path": "D:\\CloudGuardAI\\evaluation\\case_study\\terragoat_eks_db.tf",
+            "resource": "",
+            "severity": "HIGH",
+            "title": "Aws Owasp A02 Crypto Failure",
+            "description": "Encryption not enabled for sensitive data storage",
+            "references": [
+              "OWASP A02:2021"
+            ],
+            "code_snippet": "encrypted         = false    # VULN: Unencrypted EBS volume",
+            "line": 134
+          },
+          {
+            "rule_id": "NO_HARDCODED_SECRET",
+            "file_path": "D:\\CloudGuardAI\\evaluation\\case_study\\terragoat_eks_db.tf",
+            "resource": "",
+            "severity": "HIGH",
+            "title": "No Hardcoded Secret",
+            "description": "Hardcoded secrets should not appear in IaC files",
+            "references": [
+              "OWASP IaC A2"
+            ],
+            "code_snippet": "password               = \"Pr0duction!DB#2024Secure\"   # VULN: Hardcoded password",
+            "line": 91
+          },
+          {
+            "rule_id": "NO_HARDCODED_SECRET",
+            "file_path": "D:\\CloudGuardAI\\evaluation\\case_study\\terragoat_eks_db.tf",
+            "resource": "",
+            "severity": "HIGH",
+            "title": "No Hardcoded Secret",
+            "description": "Hardcoded secrets should not appear in IaC files",
+            "references": [
+              "OWASP IaC A2"
+            ],
+            "code_snippet": "export JWT_SECRET=\"my-super-secret-jwt-key-do-not-share\"",
+            "line": 119
+          },
+          {
+            "rule_id": "TF_UNENCRYPTED_EBS",
+            "file_path": "D:\\CloudGuardAI\\evaluation\\case_study\\terragoat_eks_db.tf",
+            "resource": "",
+            "severity": "HIGH",
+            "title": "Tf Unencrypted Ebs",
+            "description": "EBS volume encryption is not enabled",
+            "references": [
+              "Terraform Security Best Practices"
+            ],
+            "code_snippet": "resource \"aws_ebs_volume\" \"db_data\" {",
+            "line": 131
+          },
+          {
+            "rule_id": "TF_UNENCRYPTED_RDS",
+            "file_path": "D:\\CloudGuardAI\\evaluation\\case_study\\terragoat_eks_db.tf",
+            "resource": "",
+            "severity": "HIGH",
+            "title": "Tf Unencrypted Rds",
+            "description": "RDS instance storage encryption is not enabled",
+            "references": [
+              "Terraform Security Best Practices"
+            ],
+            "code_snippet": "resource \"aws_db_instance\" \"platform_db\" {",
+            "line": 82
+          },
+          {
+            "rule_id": "critical_resource",
+            "check_id": "critical_resource",
+            "severity": "HIGH",
+            "title": "Critical infrastructure node: aws_db_instance.platform_db",
+            "description": "GNN attention mechanism identified aws_db_instance.platform_db as a critical point in potential attack paths. This resource has high importance in the infrastructure attack graph.",
+            "category": "gnn",
+            "scanner": "gnn",
+            "line_number": null,
+            "code_snippet": "",
+            "resource": "aws_db_instance.platform_db",
+            "remediation": "Review security configuration of aws_db_instance.platform_db. Ensure proper access controls, encryption, and network isolation.",
+            "confidence": "high",
+            "transformer_fix": "policy aws_iam_role_policy \" aws_iam_role_policy \" \" \" aws_iam_role_policy : \" : : : : : egress aws_iam_role_policy : : : [ : : \" var var ( aws_iam_role_policy : : : : : : : \" aws_iam_role_policy : : : : : : \" \n aws_iam_role_policy : : : : : : : : \" \" : \" : : : : ingress ] aws_iam_role_policy : : : : : : : : : : : : : : : : : : : [ : : : : : : : : : : : : : : : : : : :",
+            "transformer_fix_available": true
+          },
+          {
+            "rule_id": "CVE",
+            "check_id": "CVE",
+            "severity": "HIGH",
+            "title": "CVE-2021-3178 in terraform-provider-aws 3.0.0",
+            "description": "AWS provider allows overly permissive IAM policies. CVSS: 7.5.",
+            "category": "cve",
+            "scanner": "cve",
+            "line_number": null,
+            "code_snippet": "",
+            "resource": "",
+            "remediation": "",
+            "confidence": 0.8,
+            "transformer_fix": ": : : aws_iam_role_policy \" \" : : : : : : : : : : : : ] aws_iam_role_policy [ \" \" [ \" : : [ aws_iam_role_policy \" \" : \" aws_iam_role_policy : [ \" ] : \" ] : : : : : : : [ \" ( aws_iam_role_policy [ \" acl : : \" aws_iam_role_policy ] : : \" aws_iam_role_policy [ \" ] \n resource \" aws_iam_role_policy \" : : : : : : : : : aws_iam_role_policy : : [ \" aws_iam_role_policy : : : : ] : \" : : \" ] ] ] ] aws_iam_role_policy aws_lambda_function : ] ] ] : : : [ : : : \"",
+            "transformer_fix_available": true
+          },
+          {
+            "rule_id": "CIS_1_4",
+            "check_id": "CIS_1_4",
+            "severity": "HIGH",
+            "title": "MFA Not Enabled for IAM User",
+            "description": "IAM user 'ci_cd_user' does not have MFA enabled. CIS Benchmark 1.4 requires MFA for all IAM users.",
+            "category": "compliance",
+            "scanner": "compliance",
+            "line_number": null,
+            "code_snippet": "",
+            "resource": "arn:aws:iam::123456789012:user/ci_cd_user",
+            "remediation": "",
+            "confidence": 0.8,
+            "transformer_fix": "( resource \" aws_iam_role_policy \" \" : : : ] var . policy ( aws_iam_role_policy : : : : : : : : [ tcp \" : ( aws_iam_role_policy ] [ \" aws_iam_role_policy \" : : : : : : : : : var : : : : : : : : : ) : [ \" \" private \" aws_iam_role_policy \" : tcp \" ( aws_iam_role_policy : : : resource \" aws_iam_role_policy \" aws_iam_role_policy \" \" : : [ \" tcp \" ] : \" : aws_iam_role_policy : : egress : \" ] aws_iam_role_policy \" aws_iam_role_policy aws_iam_role_policy : : ] ] \n : : : : : : : : : : : : var ] ] aws_iam_role_policy : : : : :",
+            "transformer_fix_available": true
+          },
+          {
+            "rule_id": "AWS_BP_SKIP_FINAL_SNAPSHOT",
+            "file_path": "D:\\CloudGuardAI\\evaluation\\case_study\\terragoat_eks_db.tf",
+            "resource": "",
+            "severity": "MEDIUM",
+            "title": "Aws Bp Skip Final Snapshot",
+            "description": "Database configured to skip final snapshot on deletion",
+            "references": [
+              "AWS RDS Best Practices"
+            ],
+            "code_snippet": "skip_final_snapshot    = true                           # VULN: No final snapshot",
+            "line": 94
+          },
+          {
+            "rule_id": "AWS_BP_EGRESS_ALL",
+            "file_path": "D:\\CloudGuardAI\\evaluation\\case_study\\terragoat_eks_db.tf",
+            "resource": "",
+            "severity": "MEDIUM",
+            "title": "Aws Bp Egress All",
+            "description": "Security group allows all egress traffic",
+            "references": [
+              "AWS VPC Best Practices"
+            ],
+            "code_snippet": "protocol    = \"-1\"",
+            "line": 50
+          },
+          {
+            "rule_id": "AWS_BP_EGRESS_ALL",
+            "file_path": "D:\\CloudGuardAI\\evaluation\\case_study\\terragoat_eks_db.tf",
+            "resource": "",
+            "severity": "MEDIUM",
+            "title": "Aws Bp Egress All",
+            "description": "Security group allows all egress traffic",
+            "references": [
+              "AWS VPC Best Practices"
+            ],
+            "code_snippet": "protocol    = \"-1\"",
+            "line": 76
+          },
+          {
+            "rule_id": "AWS_BP_EC2_NO_MONITORING",
+            "file_path": "D:\\CloudGuardAI\\evaluation\\case_study\\terragoat_eks_db.tf",
+            "resource": "",
+            "severity": "LOW",
+            "title": "Aws Bp Ec2 No Monitoring",
+            "description": "EC2 detailed monitoring is disabled",
+            "references": [
+              "AWS EC2 Best Practices"
+            ],
+            "code_snippet": "monitoring                  = false   # VULN: No detailed monitoring",
+            "line": 112
+          }
+        ]
+      },
+      "remediation": {
+        "changes_applied": 19,
+        "changes": [
+          {
+            "finding_id": "AWS_CIS_IAM_WILDCARD_POLICY",
+            "rule_id": "AWS_CIS_IAM_WILDCARD_POLICY",
+            "severity": "CRITICAL",
+            "description": "Replace wildcard IAM Action with least-privilege permissions",
+            "category": ""
+          },
+          {
+            "finding_id": "AWS_CIS_SG_0_0_0_0",
+            "rule_id": "AWS_CIS_SG_0_0_0_0",
+            "severity": "CRITICAL",
+            "description": "Restrict SSH access from 0.0.0.0/0 to internal CIDR",
+            "category": ""
+          },
+          {
+            "finding_id": "AWS_CIS_DB_PUBLIC",
+            "rule_id": "AWS_CIS_DB_PUBLIC",
+            "severity": "CRITICAL",
+            "description": "Disable public accessibility for RDS instance",
+            "category": ""
+          },
+          {
+            "finding_id": "AWS_BP_HARDCODED_PASSWORD",
+            "rule_id": "AWS_BP_HARDCODED_PASSWORD",
+            "severity": "CRITICAL",
+            "description": "Replace hardcoded database password with variable/secrets manager",
+            "category": ""
+          },
+          {
+            "finding_id": "TF_HARDCODED_CREDENTIALS",
+            "rule_id": "TF_HARDCODED_CREDENTIALS",
+            "severity": "CRITICAL",
+            "description": "Replace hardcoded environment secret with Secrets Manager reference",
+            "category": ""
+          },
+          {
+            "finding_id": "AWS_CIS_DB_UNENCRYPTED",
+            "rule_id": "AWS_CIS_DB_UNENCRYPTED",
+            "severity": "HIGH",
+            "description": "Enable storage encryption for RDS instance",
+            "category": ""
+          },
+          {
+            "finding_id": "AWS_CIS_DB_UNENCRYPTED",
+            "rule_id": "AWS_CIS_DB_UNENCRYPTED",
+            "severity": "HIGH",
+            "description": "Enable EBS volume encryption",
+            "category": ""
+          },
+          {
+            "finding_id": "AWS_BP_SKIP_FINAL_SNAPSHOT",
+            "rule_id": "AWS_BP_SKIP_FINAL_SNAPSHOT",
+            "severity": "MEDIUM",
+            "description": "Enable final snapshot on RDS deletion",
+            "category": ""
+          },
+          {
+            "finding_id": "AWS_BP_EGRESS_ALL",
+            "rule_id": "AWS_BP_EGRESS_ALL",
+            "severity": "MEDIUM",
+            "description": "Restrict unrestricted egress to internal CIDR",
+            "category": ""
+          },
+          {
+            "finding_id": "AWS_BP_EGRESS_ALL",
+            "rule_id": "AWS_BP_EGRESS_ALL",
+            "severity": "MEDIUM",
+            "description": "Restrict unrestricted egress to internal CIDR",
+            "category": ""
+          },
+          {
+            "finding_id": "AWS_BP_EC2_NO_MONITORING",
+            "rule_id": "AWS_BP_EC2_NO_MONITORING",
+            "severity": "LOW",
+            "description": "Enable detailed monitoring for EC2 instance",
+            "category": ""
+          },
+          {
+            "finding_id": "hardcoded_env_aws_key",
+            "rule_id": "PATTERN_HARDCODED_ENV_AWS_KEY",
+            "severity": "MEDIUM",
+            "description": "Remove hardcoded AWS key from user_data, use instance profile",
+            "category": "pattern_scan"
+          },
+          {
+            "finding_id": "hardcoded_env_aws_secret",
+            "rule_id": "PATTERN_HARDCODED_ENV_AWS_SECRET",
+            "severity": "MEDIUM",
+            "description": "Remove hardcoded AWS secret from user_data, use instance profile",
+            "category": "pattern_scan"
+          },
+          {
+            "finding_id": "hardcoded_userdata_db_url",
+            "rule_id": "PATTERN_HARDCODED_USERDATA_DB_URL",
+            "severity": "MEDIUM",
+            "description": "Replace hardcoded DATABASE_URL with SSM parameter lookup",
+            "category": "pattern_scan"
+          },
+          {
+            "finding_id": "sg_k8s_api_open",
+            "rule_id": "PATTERN_SG_K8S_API_OPEN",
+            "severity": "MEDIUM",
+            "description": "Restrict Kubernetes API access to internal CIDR",
+            "category": "pattern_scan"
+          },
+          {
+            "finding_id": "sg_nodeport_open",
+            "rule_id": "PATTERN_SG_NODEPORT_OPEN",
+            "severity": "MEDIUM",
+            "description": "Restrict NodePort range to internal CIDR",
+            "category": "pattern_scan"
+          },
+          {
+            "finding_id": "sg_db_port_open",
+            "rule_id": "PATTERN_SG_DB_PORT_OPEN",
+            "severity": "MEDIUM",
+            "description": "Restrict database port to application subnet CIDR",
+            "category": "pattern_scan"
+          },
+          {
+            "finding_id": "rds_no_backup",
+            "rule_id": "PATTERN_RDS_NO_BACKUP",
+            "severity": "MEDIUM",
+            "description": "Increase backup retention period to 35 days",
+            "category": "pattern_scan"
+          },
+          {
+            "finding_id": "log_short_retention",
+            "rule_id": "PATTERN_LOG_SHORT_RETENTION",
+            "severity": "MEDIUM",
+            "description": "Increase CloudWatch log retention to 365 days",
+            "category": "pattern_scan"
+          }
+        ],
+        "stats": {
+          "total_remediations": 19,
+          "by_severity": {
+            "CRITICAL": 5,
+            "HIGH": 2,
+            "MEDIUM": 11,
+            "LOW": 1
+          },
+          "by_category": {
+            "other": 11,
+            "pattern_scan": 8
+          },
+          "critical_fixed": 5,
+          "high_fixed": 2
+        }
+      },
+      "after": {
+        "total_findings": 6,
+        "by_severity": {
+          "CRITICAL": 2,
+          "HIGH": 2,
+          "MEDIUM": 2,
+          "LOW": 0,
+          "INFO": 0
+        },
+        "findings": [
+          {
+            "rule_id": "AWS_OWASP_A05_MISCONFIG_SG",
+            "severity": "CRITICAL",
+            "title": "Aws Owasp A05 Misconfig Sg"
+          },
+          {
+            "rule_id": "AWS_OWASP_A05_MISCONFIG_SG",
+            "severity": "CRITICAL",
+            "title": "Aws Owasp A05 Misconfig Sg"
+          },
+          {
+            "rule_id": "CVE",
+            "severity": "HIGH",
+            "title": "CVE-2021-3178 in terraform-provider-aws 3.0.0"
+          },
+          {
+            "rule_id": "CIS_1_4",
+            "severity": "HIGH",
+            "title": "MFA Not Enabled for IAM User"
+          },
+          {
+            "rule_id": "AWS_BP_EGRESS_ALL",
+            "severity": "MEDIUM",
+            "title": "Aws Bp Egress All"
+          },
+          {
+            "rule_id": "AWS_BP_EGRESS_ALL",
+            "severity": "MEDIUM",
+            "title": "Aws Bp Egress All"
+          }
+        ]
+      },
+      "reduction_pct": 83.8
+    },
+    {
+      "file": "terragoat_lambda.tf",
+      "before": {
+        "total_findings": 38,
+        "by_severity": {
+          "CRITICAL": 18,
+          "HIGH": 15,
+          "MEDIUM": 5,
+          "LOW": 0,
+          "INFO": 0
+        },
+        "findings": [
+          {
+            "rule_id": "AWS_CIS_IAM_WILDCARD_POLICY",
+            "file_path": "D:\\CloudGuardAI\\evaluation\\case_study\\terragoat_lambda.tf",
+            "resource": "",
+            "severity": "CRITICAL",
+            "title": "Aws Cis Iam Wildcard Policy",
+            "description": "IAM policy grants Action=* on Resource=*, equivalent to full admin access",
+            "references": [
+              "CIS AWS 1.22",
+              "https://docs.aws.amazon.com/IAM/latest/UserGuide/best-practices.html"
+            ],
+            "code_snippet": "Action   = \"*\"                     # VULN: Wildcard - full AWS admin",
+            "line": 79
+          },
+          {
+            "rule_id": "AWS_CIS_SG_0_0_0_0",
+            "file_path": "D:\\CloudGuardAI\\evaluation\\case_study\\terragoat_lambda.tf",
+            "resource": "",
+            "severity": "CRITICAL",
+            "title": "Aws Cis Sg 0 0 0 0",
+            "description": "Security group allows unrestricted access from 0.0.0.0/0",
+            "references": [
+              "CIS AWS 4.1",
+              "https://docs.aws.amazon.com/securityhub/latest/userguide/securityhub-cis-controls.html"
+            ],
+            "code_snippet": "cidr_blocks = [\"0.0.0.0/0\"]     # VULN: All ports open",
+            "line": 139
+          },
+          {
+            "rule_id": "AWS_CIS_SG_0_0_0_0",
+            "file_path": "D:\\CloudGuardAI\\evaluation\\case_study\\terragoat_lambda.tf",
+            "resource": "",
+            "severity": "CRITICAL",
+            "title": "Aws Cis Sg 0 0 0 0",
+            "description": "Security group allows unrestricted access from 0.0.0.0/0",
+            "references": [
+              "CIS AWS 4.1",
+              "https://docs.aws.amazon.com/securityhub/latest/userguide/securityhub-cis-controls.html"
+            ],
+            "code_snippet": "cidr_blocks = [\"0.0.0.0/0\"]     # VULN: Unrestricted egress",
+            "line": 146
+          },
+          {
+            "rule_id": "AWS_CIS_S3_PUBLIC_ACL",
+            "file_path": "D:\\CloudGuardAI\\evaluation\\case_study\\terragoat_lambda.tf",
+            "resource": "",
+            "severity": "CRITICAL",
+            "title": "Aws Cis S3 Public Acl",
+            "description": "S3 bucket has public-read ACL which allows unrestricted public access",
+            "references": [
+              "CIS AWS 2.1.5",
+              "https://docs.aws.amazon.com/AmazonS3/latest/userguide/acl-overview.html"
+            ],
+            "code_snippet": "acl    = \"public-read\"           # VULN: Payment receipts publicly readable!",
+            "line": 110
+          },
+          {
+            "rule_id": "AWS_CIS_SG_ALL_PORTS",
+            "file_path": "D:\\CloudGuardAI\\evaluation\\case_study\\terragoat_lambda.tf",
+            "resource": "",
+            "severity": "CRITICAL",
+            "title": "Aws Cis Sg All Ports",
+            "description": "Security group allows access to all ports (0-65535)",
+            "references": [
+              "CIS AWS 4.1"
+            ],
+            "code_snippet": "to_port     = 65535",
+            "line": 137
+          },
+          {
+            "rule_id": "AWS_CIS_DB_PUBLIC",
+            "file_path": "D:\\CloudGuardAI\\evaluation\\case_study\\terragoat_lambda.tf",
+            "resource": "",
+            "severity": "CRITICAL",
+            "title": "Aws Cis Db Public",
+            "description": "Database instance is publicly accessible",
+            "references": [
+              "CIS AWS 4.15"
+            ],
+            "code_snippet": "publicly_accessible = true                          # VULN: Public database",
+            "line": 160
+          },
+          {
+            "rule_id": "AWS_OWASP_A05_MISCONFIG_SG",
+            "file_path": "D:\\CloudGuardAI\\evaluation\\case_study\\terragoat_lambda.tf",
+            "resource": "",
+            "severity": "CRITICAL",
+            "title": "Aws Owasp A05 Misconfig Sg",
+            "description": "Security misconfiguration - overly permissive security group",
+            "references": [
+              "OWASP A05:2021"
+            ],
+            "code_snippet": "from_port   = 0",
+            "line": 136
+          },
+          {
+            "rule_id": "AWS_OWASP_A05_MISCONFIG_SG",
+            "file_path": "D:\\CloudGuardAI\\evaluation\\case_study\\terragoat_lambda.tf",
+            "resource": "",
+            "severity": "CRITICAL",
+            "title": "Aws Owasp A05 Misconfig Sg",
+            "description": "Security misconfiguration - overly permissive security group",
+            "references": [
+              "OWASP A05:2021"
+            ],
+            "code_snippet": "from_port   = 0",
+            "line": 143
+          },
+          {
+            "rule_id": "AWS_OWASP_A07_AUTH_FAILURE",
+            "file_path": "D:\\CloudGuardAI\\evaluation\\case_study\\terragoat_lambda.tf",
+            "resource": "",
+            "severity": "CRITICAL",
+            "title": "Aws Owasp A07 Auth Failure",
+            "description": "Weak authentication - password in plaintext",
+            "references": [
+              "OWASP A07:2021"
+            ],
+            "code_snippet": "password            = \"FinTech#DB!Prod2024\"        # VULN: Hardcoded password",
+            "line": 159
+          },
+          {
+            "rule_id": "AWS_BP_HARDCODED_PASSWORD",
+            "file_path": "D:\\CloudGuardAI\\evaluation\\case_study\\terragoat_lambda.tf",
+            "resource": "",
+            "severity": "CRITICAL",
+            "title": "Aws Bp Hardcoded Password",
+            "description": "Hardcoded password detected in infrastructure code",
+            "references": [
+              "AWS Security Best Practices",
+              "https://docs.aws.amazon.com/secretsmanager/latest/userguide/intro.html"
+            ],
+            "code_snippet": "password            = \"FinTech#DB!Prod2024\"        # VULN: Hardcoded password",
+            "line": 159
+          },
+          {
+            "rule_id": "TF_HARDCODED_ENV_SECRET",
+            "file_path": "D:\\CloudGuardAI\\evaluation\\case_study\\terragoat_lambda.tf",
+            "resource": "",
+            "severity": "CRITICAL",
+            "title": "Tf Hardcoded Env Secret",
+            "description": "Secret or API key is hardcoded in an environment variable definition",
+            "references": [
+              "CWE-798",
+              "OWASP IaC A2"
+            ],
+            "code_snippet": "API_KEY               = \"api-key-production-12345-abcdef\"    # VULN: Hardcoded API key",
+            "line": 51
+          },
+          {
+            "rule_id": "TF_HARDCODED_CREDENTIALS",
+            "file_path": "D:\\CloudGuardAI\\evaluation\\case_study\\terragoat_lambda.tf",
+            "resource": "",
+            "severity": "CRITICAL",
+            "title": "Tf Hardcoded Credentials",
+            "description": "Hardcoded credentials detected in Terraform configuration",
+            "references": [
+              "Terraform Security Best Practices"
+            ],
+            "code_snippet": "password            = \"FinTech#DB!Prod2024\"        # VULN: Hardcoded password",
+            "line": 159
+          },
+          {
+            "rule_id": "TF_OPEN_SECURITY_GROUP",
+            "file_path": "D:\\CloudGuardAI\\evaluation\\case_study\\terragoat_lambda.tf",
+            "resource": "",
+            "severity": "CRITICAL",
+            "title": "Tf Open Security Group",
+            "description": "Security group with unrestricted inbound access (0.0.0.0/0)",
+            "references": [
+              "Terraform Security Best Practices"
+            ],
+            "code_snippet": "cidr_blocks = [\"0.0.0.0/0\"]     # VULN: All ports open",
+            "line": 139
+          },
+          {
+            "rule_id": "TF_OPEN_SECURITY_GROUP",
+            "file_path": "D:\\CloudGuardAI\\evaluation\\case_study\\terragoat_lambda.tf",
+            "resource": "",
+            "severity": "CRITICAL",
+            "title": "Tf Open Security Group",
+            "description": "Security group with unrestricted inbound access (0.0.0.0/0)",
+            "references": [
+              "Terraform Security Best Practices"
+            ],
+            "code_snippet": "cidr_blocks = [\"0.0.0.0/0\"]     # VULN: Unrestricted egress",
+            "line": 146
+          },
+          {
+            "rule_id": "TF_PUBLIC_S3",
+            "file_path": "D:\\CloudGuardAI\\evaluation\\case_study\\terragoat_lambda.tf",
+            "resource": "",
+            "severity": "CRITICAL",
+            "title": "Tf Public S3",
+            "description": "S3 bucket configured with public access",
+            "references": [
+              "Terraform Security Best Practices"
+            ],
+            "code_snippet": "acl    = \"public-read\"           # VULN: Payment receipts publicly readable!",
+            "line": 110
+          },
+          {
+            "rule_id": "attack_path",
+            "check_id": "attack_path",
+            "severity": "CRITICAL",
+            "title": "GNN detected critical risk attack path",
+            "description": "\ud83d\udea8 CRITICAL RISK: GNN detected high probability (92.5%) of attack paths in infrastructure. Critical resources identified: aws_db_instance.payment_db, aws_dynamodb_table.transactions, aws_iam_role.lambda_exec. These nodes have high attention scores indicating they are key points in potential attack chains.",
+            "category": "gnn",
+            "scanner": "gnn",
+            "line_number": null,
+            "code_snippet": "",
+            "resource": "",
+            "remediation": "\ud83d\udea8 URGENT: Critical attack paths detected.\n\nRecommended actions:\n1. Review security of critical resources: aws_db_instance.payment_db, aws_dynamodb_table.transactions, aws_iam_role.lambda_exec\n2. Implement network segmentation to break attack chains\n3. Add security controls at critical nodes:\n   - Enable encryption at rest and in transit\n   - Restrict network access (security groups, NACLs)\n   - Enable authentication and authorization\n   - Add monitoring and logging\n4. Apply principle of least privilege to IAM roles/policies\n5. Remove public access where not required\n\n\u26a0\ufe0f  Consider redesigning infrastructure architecture to eliminate attack paths.",
+            "confidence": "high",
+            "transformer_fix": ": : \" aws_iam_role_policy \" [ : \" tcp \" aws_iam_role_policy : : : : : : : : resource \" aws_iam_role_policy aws_iam_role_policy \" private : : aws_iam_role_policy \" ] \n Resources aws_iam_role_policy : : : : : : : : : : : : : : : \" aws_iam_role_policy : \" : ] aws_iam_role_policy : : : : : : : : : : : : : : : : : : : : : : : : : \" ] : : : policy : : : : : : : : : : : : : : : : ] : : : : : : : : : : : : : : : : : :",
+            "transformer_fix_available": true
+          },
+          {
+            "rule_id": "CIS_4_1",
+            "check_id": "CIS_4_1",
+            "severity": "CRITICAL",
+            "title": "SSH Open to Internet",
+            "description": "Security group 'lambda_sg' allows SSH access (port 22) from the internet (0.0.0.0/0). CIS Benchmark 4.1 prohibits this.",
+            "category": "compliance",
+            "scanner": "compliance",
+            "line_number": null,
+            "code_snippet": "",
+            "resource": "lambda_sg",
+            "remediation": "",
+            "confidence": 0.8,
+            "transformer_fix": "( resource \" aws_iam_role_policy \" \" \" Resource : : : : [ \" : : aws_iam_role_policy ( 443 : : : : : : : : : : : : : : : : : : : : : : : : [ \" \" ] ) ] \" aws_iam_role_policy ( aws_iam_role_policy : : : : : : \" ] Action : \" : : : ( : : ] ] aws_iam_role_policy \" : : : : : : : : : : : aws_iam_role_policy \" : : : : : ( aws_iam_role_policy : : : : : : : : : : : : : : : : : \" \" : : : :",
+            "transformer_fix_available": true
+          },
+          {
+            "rule_id": "CIS_4_2",
+            "check_id": "CIS_4_2",
+            "severity": "CRITICAL",
+            "title": "RDP Open to Internet",
+            "description": "Security group 'lambda_sg' allows RDP access (port 3389) from the internet (0.0.0.0/0). CIS Benchmark 4.2 prohibits this.",
+            "category": "compliance",
+            "scanner": "compliance",
+            "line_number": null,
+            "code_snippet": "",
+            "resource": "lambda_sg",
+            "remediation": "",
+            "confidence": 0.8,
+            "transformer_fix": ": : : aws_iam_role_policy \" \" : : : : ] \n ( ( \n aws_iam_role_policy aws_iam_role_policy : \" [ \" [ \" : : : : : \" ] \n : : : : : : : : : : : : : : : : : : : : : : : : : : \" aws_iam_role_policy \" aws_iam_role_policy : : ] ( aws_iam_role_policy policy : : : : : : : : : : : : ( tcp \" ] locals [ : : Action : : : : : : ] aws_iam_role_policy : : : : : : : : : 443 : : : : : : : [ : : : : : :",
+            "transformer_fix_available": true
+          },
+          {
+            "rule_id": "AWS_CIS_DB_UNENCRYPTED",
+            "file_path": "D:\\CloudGuardAI\\evaluation\\case_study\\terragoat_lambda.tf",
+            "resource": "",
+            "severity": "HIGH",
+            "title": "Aws Cis Db Unencrypted",
+            "description": "Database storage encryption is disabled",
+            "references": [
+              "CIS AWS 2.3.1"
+            ],
+            "code_snippet": "storage_encrypted   = false                         # VULN: Unencrypted storage",
+            "line": 161
+          },
+          {
+            "rule_id": "AWS_OWASP_A02_CRYPTO_FAILURE",
+            "file_path": "D:\\CloudGuardAI\\evaluation\\case_study\\terragoat_lambda.tf",
+            "resource": "",
+            "severity": "HIGH",
+            "title": "Aws Owasp A02 Crypto Failure",
+            "description": "Encryption not enabled for sensitive data storage",
+            "references": [
+              "OWASP A02:2021"
+            ],
+            "code_snippet": "storage_encrypted   = false                         # VULN: Unencrypted storage",
+            "line": 161
+          },
+          {
+            "rule_id": "NO_HARDCODED_SECRET",
+            "file_path": "D:\\CloudGuardAI\\evaluation\\case_study\\terragoat_lambda.tf",
+            "resource": "",
+            "severity": "HIGH",
+            "title": "No Hardcoded Secret",
+            "description": "Hardcoded secrets should not appear in IaC files",
+            "references": [
+              "OWASP IaC A2"
+            ],
+            "code_snippet": "DB_PASSWORD          = \"PaymentDB!Prod#2024\"                # VULN: Hardcoded DB password",
+            "line": 26
+          },
+          {
+            "rule_id": "NO_HARDCODED_SECRET",
+            "file_path": "D:\\CloudGuardAI\\evaluation\\case_study\\terragoat_lambda.tf",
+            "resource": "",
+            "severity": "HIGH",
+            "title": "No Hardcoded Secret",
+            "description": "Hardcoded secrets should not appear in IaC files",
+            "references": [
+              "OWASP IaC A2"
+            ],
+            "code_snippet": "JWT_SIGNING_SECRET   = \"jwt-hmac-secret-production-key\"     # VULN: Hardcoded JWT secret",
+            "line": 28
+          },
+          {
+            "rule_id": "NO_HARDCODED_SECRET",
+            "file_path": "D:\\CloudGuardAI\\evaluation\\case_study\\terragoat_lambda.tf",
+            "resource": "",
+            "severity": "HIGH",
+            "title": "No Hardcoded Secret",
+            "description": "Hardcoded secrets should not appear in IaC files",
+            "references": [
+              "OWASP IaC A2"
+            ],
+            "code_snippet": "PLAID_CLIENT_SECRET  = \"plaid_secret_prod_abc123def456\"     # VULN: Hardcoded Plaid secret",
+            "line": 29
+          },
+          {
+            "rule_id": "NO_HARDCODED_SECRET",
+            "file_path": "D:\\CloudGuardAI\\evaluation\\case_study\\terragoat_lambda.tf",
+            "resource": "",
+            "severity": "HIGH",
+            "title": "No Hardcoded Secret",
+            "description": "Hardcoded secrets should not appear in IaC files",
+            "references": [
+              "OWASP IaC A2"
+            ],
+            "code_snippet": "COGNITO_CLIENT_SECRET = \"cognito-secret-abc123xyz789\"       # VULN: Hardcoded secret",
+            "line": 49
+          },
+          {
+            "rule_id": "NO_HARDCODED_SECRET",
+            "file_path": "D:\\CloudGuardAI\\evaluation\\case_study\\terragoat_lambda.tf",
+            "resource": "",
+            "severity": "HIGH",
+            "title": "No Hardcoded Secret",
+            "description": "Hardcoded secrets should not appear in IaC files",
+            "references": [
+              "OWASP IaC A2"
+            ],
+            "code_snippet": "REDIS_PASSWORD        = \"redis!Prod2024#Cache\"               # VULN: Hardcoded password",
+            "line": 50
+          },
+          {
+            "rule_id": "NO_HARDCODED_SECRET",
+            "file_path": "D:\\CloudGuardAI\\evaluation\\case_study\\terragoat_lambda.tf",
+            "resource": "",
+            "severity": "HIGH",
+            "title": "No Hardcoded Secret",
+            "description": "Hardcoded secrets should not appear in IaC files",
+            "references": [
+              "OWASP IaC A2"
+            ],
+            "code_snippet": "API_KEY               = \"api-key-production-12345-abcdef\"    # VULN: Hardcoded API key",
+            "line": 51
+          },
+          {
+            "rule_id": "NO_HARDCODED_SECRET",
+            "file_path": "D:\\CloudGuardAI\\evaluation\\case_study\\terragoat_lambda.tf",
+            "resource": "",
+            "severity": "HIGH",
+            "title": "No Hardcoded Secret",
+            "description": "Hardcoded secrets should not appear in IaC files",
+            "references": [
+              "OWASP IaC A2"
+            ],
+            "code_snippet": "password            = \"FinTech#DB!Prod2024\"        # VULN: Hardcoded password",
+            "line": 159
+          },
+          {
+            "rule_id": "TF_UNENCRYPTED_RDS",
+            "file_path": "D:\\CloudGuardAI\\evaluation\\case_study\\terragoat_lambda.tf",
+            "resource": "",
+            "severity": "HIGH",
+            "title": "Tf Unencrypted Rds",
+            "description": "RDS instance storage encryption is not enabled",
+            "references": [
+              "Terraform Security Best Practices"
+            ],
+            "code_snippet": "resource \"aws_db_instance\" \"payment_db\" {",
+            "line": 151
+          },
+          {
+            "rule_id": "TF_WIDE_PORT_RANGE",
+            "file_path": "D:\\CloudGuardAI\\evaluation\\case_study\\terragoat_lambda.tf",
+            "resource": "",
+            "severity": "HIGH",
+            "title": "Tf Wide Port Range",
+            "description": "Security group allows wide port range (0-65535)",
+            "references": [
+              "Terraform Security Best Practices"
+            ],
+            "code_snippet": "to_port     = 65535",
+            "line": 137
+          },
+          {
+            "rule_id": "critical_resource",
+            "check_id": "critical_resource",
+            "severity": "HIGH",
+            "title": "Critical infrastructure node: aws_db_instance.payment_db",
+            "description": "GNN attention mechanism identified aws_db_instance.payment_db as a critical point in potential attack paths. This resource has high importance in the infrastructure attack graph.",
+            "category": "gnn",
+            "scanner": "gnn",
+            "line_number": null,
+            "code_snippet": "",
+            "resource": "aws_db_instance.payment_db",
+            "remediation": "Review security configuration of aws_db_instance.payment_db. Ensure proper access controls, encryption, and network isolation.",
+            "confidence": "high",
+            "transformer_fix": "Action resource \" aws_iam_role_policy \" \" \" { \n egress aws_iam_role_policy \" private \" aws_iam_role_policy : : : \" aws_lambda_function \" : [ : : \" aws_iam_role_policy : \" aws_iam_role_policy : : : : : : : \" \n aws_iam_role_policy ] \n aws_iam_role_policy \" : : ] \n protocol : : : \" \" aws_iam_role_policy \" aws_iam_role_policy \" : ) ] aws_iam_role_policy \" aws_iam_role_policy \" aws_iam_role_policy : : \" tcp \" aws_security_group \" [ \" \" \" ] : \" ] : \" : : : \" aws_iam_role_policy ] ] \n ) policy : : : : \" aws_iam_role_policy : : : Action : : : : ingress : : :",
+            "transformer_fix_available": true
+          },
+          {
+            "rule_id": "SECRET_GENERIC_API_KEY",
+            "check_id": "SECRET_GENERIC_API_KEY",
+            "severity": "HIGH",
+            "title": "API Key",
+            "description": "Potential API key detected. This poses a critical security risk as credentials should never be hardcoded.",
+            "category": "secrets",
+            "scanner": "secrets",
+            "line_number": 51,
+            "code_snippet": "API_********************    # VULN: Hardcoded API key",
+            "resource": "",
+            "remediation": "",
+            "confidence": 0.8,
+            "transformer_fix": "= \" aws_db_instance \" \" \" { \n engine = \n aws_ebs_volume \n publicly_accessible = \n storage_encrypted = \n }",
+            "transformer_fix_available": true
+          },
+          {
+            "rule_id": "CVE",
+            "check_id": "CVE",
+            "severity": "HIGH",
+            "title": "CVE-2021-3178 in terraform-provider-aws 3.0.0",
+            "description": "AWS provider allows overly permissive IAM policies. CVSS: 7.5.",
+            "category": "cve",
+            "scanner": "cve",
+            "line_number": null,
+            "code_snippet": "",
+            "resource": "",
+            "remediation": "",
+            "confidence": 0.8,
+            "transformer_fix": "( resource \" aws_iam_role_policy : : : : : : egress { \n 22 : : : : : : : : [ \" : \" ] \n ] \n aws_iam_role_policy : : : : : : : : : : ( ] ] ] \n ] \n Action [ ] \n tcp \" ] : : : : : \" aws_iam_role_policy : : : : : : [ aws_iam_role_policy : : : : ] \n [ \" aws_iam_role_policy : : : : : : : \" ] ] [ ] ) : : : : : : : : : : : : : ] [ : : ] : : : : : : : : : : : :",
+            "transformer_fix_available": true
+          },
+          {
+            "rule_id": "CIS_2_1_1",
+            "check_id": "CIS_2_1_1",
+            "severity": "HIGH",
+            "title": "S3 Bucket Encryption Not Enabled",
+            "description": "S3 bucket 'payment_receipts' does not have server-side encryption enabled. CIS Benchmark 2.1.1 requires encryption at rest.",
+            "category": "compliance",
+            "scanner": "compliance",
+            "line_number": null,
+            "code_snippet": "",
+            "resource": "arn:aws:s3:::payment_receipts",
+            "remediation": "",
+            "confidence": 0.8,
+            "transformer_fix": "\" ( : [ \" \" \" aws_iam_role_policy : : : from_port : : : ] resource \" aws_s3_bucket_server_side_encryption_configuration \" \" aws_iam_role_policy tcp \" ] \n [ aws_iam_role_policy \" : : : : : : : : : : : var : : : : : \" aws_iam_role_policy \" aws_iam_role_policy : \" : : : : : : : : : : : Action : : : : : : : : : : : : ingress Action : Action : : : : resource \" : Action : : : : : : : : : : : [ \" : : : : : : Action : : : var aws_iam_role_policy : : :",
+            "transformer_fix_available": true
+          },
+          {
+            "rule_id": "AWS_BP_S3_NO_LOGGING",
+            "file_path": "D:\\CloudGuardAI\\evaluation\\case_study\\terragoat_lambda.tf",
+            "resource": "",
+            "severity": "MEDIUM",
+            "title": "Aws Bp S3 No Logging",
+            "description": "S3 bucket logging is not configured",
+            "references": [
+              "AWS S3 Best Practices"
+            ],
+            "code_snippet": "resource \"aws_s3_bucket\" \"payment_receipts\" {",
+            "line": 108
+          },
+          {
+            "rule_id": "AWS_BP_SKIP_FINAL_SNAPSHOT",
+            "file_path": "D:\\CloudGuardAI\\evaluation\\case_study\\terragoat_lambda.tf",
+            "resource": "",
+            "severity": "MEDIUM",
+            "title": "Aws Bp Skip Final Snapshot",
+            "description": "Database configured to skip final snapshot on deletion",
+            "references": [
+              "AWS RDS Best Practices"
+            ],
+            "code_snippet": "skip_final_snapshot = true                           # VULN: No final snapshot",
+            "line": 162
+          },
+          {
+            "rule_id": "AWS_BP_EGRESS_ALL",
+            "file_path": "D:\\CloudGuardAI\\evaluation\\case_study\\terragoat_lambda.tf",
+            "resource": "",
+            "severity": "MEDIUM",
+            "title": "Aws Bp Egress All",
+            "description": "Security group allows all egress traffic",
+            "references": [
+              "AWS VPC Best Practices"
+            ],
+            "code_snippet": "protocol    = \"-1\"",
+            "line": 145
+          },
+          {
+            "rule_id": "TF_VERSIONING_DISABLED",
+            "file_path": "D:\\CloudGuardAI\\evaluation\\case_study\\terragoat_lambda.tf",
+            "resource": "",
+            "severity": "MEDIUM",
+            "title": "Tf Versioning Disabled",
+            "description": "S3 bucket versioning is disabled",
+            "references": [
+              "Terraform Security Best Practices"
+            ],
+            "code_snippet": "enabled = false                # VULN: No versioning on financial data",
+            "line": 113
+          },
+          {
+            "rule_id": "CIS_2_1_2",
+            "check_id": "CIS_2_1_2",
+            "severity": "MEDIUM",
+            "title": "S3 Bucket Logging Not Enabled",
+            "description": "S3 bucket 'payment_receipts' does not have access logging enabled. CIS Benchmark 2.1.2 requires logging for audit trails.",
+            "category": "compliance",
+            "scanner": "compliance",
+            "line_number": null,
+            "code_snippet": "",
+            "resource": "arn:aws:s3:::payment_receipts",
+            "remediation": "",
+            "confidence": 0.8
+          }
+        ]
+      },
+      "remediation": {
+        "changes_applied": 23,
+        "changes": [
+          {
+            "finding_id": "AWS_CIS_IAM_WILDCARD_POLICY",
+            "rule_id": "AWS_CIS_IAM_WILDCARD_POLICY",
+            "severity": "CRITICAL",
+            "description": "Replace wildcard IAM Action with least-privilege permissions",
+            "category": ""
+          },
+          {
+            "finding_id": "AWS_CIS_SG_0_0_0_0",
+            "rule_id": "AWS_CIS_SG_0_0_0_0",
+            "severity": "CRITICAL",
+            "description": "Replace all-ports-open with HTTPS-only from restricted CIDR",
+            "category": ""
+          },
+          {
+            "finding_id": "AWS_CIS_S3_PUBLIC_ACL",
+            "rule_id": "AWS_CIS_S3_PUBLIC_ACL",
+            "severity": "CRITICAL",
+            "description": "Change S3 bucket ACL from public to private",
+            "category": ""
+          },
+          {
+            "finding_id": "AWS_CIS_DB_PUBLIC",
+            "rule_id": "AWS_CIS_DB_PUBLIC",
+            "severity": "CRITICAL",
+            "description": "Disable public accessibility for RDS instance",
+            "category": ""
+          },
+          {
+            "finding_id": "AWS_BP_HARDCODED_PASSWORD",
+            "rule_id": "AWS_BP_HARDCODED_PASSWORD",
+            "severity": "CRITICAL",
+            "description": "Replace hardcoded database password with variable/secrets manager",
+            "category": ""
+          },
+          {
+            "finding_id": "TF_HARDCODED_ENV_SECRET",
+            "rule_id": "TF_HARDCODED_ENV_SECRET",
+            "severity": "CRITICAL",
+            "description": "Replace hardcoded environment secret with Secrets Manager reference",
+            "category": ""
+          },
+          {
+            "finding_id": "TF_HARDCODED_CREDENTIALS",
+            "rule_id": "TF_HARDCODED_CREDENTIALS",
+            "severity": "CRITICAL",
+            "description": "Replace hardcoded environment secret with Secrets Manager reference",
+            "category": ""
+          },
+          {
+            "finding_id": "AWS_CIS_DB_UNENCRYPTED",
+            "rule_id": "AWS_CIS_DB_UNENCRYPTED",
+            "severity": "HIGH",
+            "description": "Enable storage encryption for RDS instance",
+            "category": ""
+          },
+          {
+            "finding_id": "NO_HARDCODED_SECRET",
+            "rule_id": "NO_HARDCODED_SECRET",
+            "severity": "HIGH",
+            "description": "Replace hardcoded environment secret with Secrets Manager reference",
+            "category": ""
+          },
+          {
+            "finding_id": "NO_HARDCODED_SECRET",
+            "rule_id": "NO_HARDCODED_SECRET",
+            "severity": "HIGH",
+            "description": "Replace hardcoded environment secret with Secrets Manager reference",
+            "category": ""
+          },
+          {
+            "finding_id": "NO_HARDCODED_SECRET",
+            "rule_id": "NO_HARDCODED_SECRET",
+            "severity": "HIGH",
+            "description": "Replace hardcoded environment secret with Secrets Manager reference",
+            "category": ""
+          },
+          {
+            "finding_id": "NO_HARDCODED_SECRET",
+            "rule_id": "NO_HARDCODED_SECRET",
+            "severity": "HIGH",
+            "description": "Replace hardcoded environment secret with Secrets Manager reference",
+            "category": ""
+          },
+          {
+            "finding_id": "NO_HARDCODED_SECRET",
+            "rule_id": "NO_HARDCODED_SECRET",
+            "severity": "HIGH",
+            "description": "Replace hardcoded environment secret with Secrets Manager reference",
+            "category": ""
+          },
+          {
+            "finding_id": "AWS_BP_SKIP_FINAL_SNAPSHOT",
+            "rule_id": "AWS_BP_SKIP_FINAL_SNAPSHOT",
+            "severity": "MEDIUM",
+            "description": "Enable final snapshot on RDS deletion",
+            "category": ""
+          },
+          {
+            "finding_id": "AWS_BP_EGRESS_ALL",
+            "rule_id": "AWS_BP_EGRESS_ALL",
+            "severity": "MEDIUM",
+            "description": "Restrict unrestricted egress to internal CIDR",
+            "category": ""
+          },
+          {
+            "finding_id": "TF_VERSIONING_DISABLED",
+            "rule_id": "TF_VERSIONING_DISABLED",
+            "severity": "MEDIUM",
+            "description": "Enable S3 bucket versioning",
+            "category": ""
+          },
+          {
+            "finding_id": "rds_no_backup",
+            "rule_id": "PATTERN_RDS_NO_BACKUP",
+            "severity": "MEDIUM",
+            "description": "Increase backup retention period to 35 days",
+            "category": "pattern_scan"
+          },
+          {
+            "finding_id": "log_short_retention",
+            "rule_id": "PATTERN_LOG_SHORT_RETENTION",
+            "severity": "MEDIUM",
+            "description": "Increase CloudWatch log retention to 365 days",
+            "category": "pattern_scan"
+          },
+          {
+            "finding_id": "debug_in_prod",
+            "rule_id": "PATTERN_DEBUG_IN_PROD",
+            "severity": "MEDIUM",
+            "description": "Change LOG_LEVEL from DEBUG to WARN in production",
+            "category": "pattern_scan"
+          },
+          {
+            "finding_id": "sns_no_encryption",
+            "rule_id": "PATTERN_SNS_NO_ENCRYPTION",
+            "severity": "MEDIUM",
+            "description": "Add KMS encryption to SNS topic",
+            "category": "pattern_scan"
+          },
+          {
+            "finding_id": "add_payment_receipts",
+            "rule_id": "AUTO_ADD_SECURITY_BLOCK",
+            "severity": "HIGH",
+            "description": "Add S3 server-side encryption configuration",
+            "category": "missing_config"
+          },
+          {
+            "finding_id": "add_payment_receipts_pab",
+            "rule_id": "AUTO_ADD_SECURITY_BLOCK",
+            "severity": "HIGH",
+            "description": "Add public access block for S3 bucket 'payment_receipts'",
+            "category": "missing_config"
+          },
+          {
+            "finding_id": "add_payment_receipts_logging",
+            "rule_id": "AUTO_ADD_SECURITY_BLOCK",
+            "severity": "HIGH",
+            "description": "Enable access logging for S3 bucket 'payment_receipts'",
+            "category": "missing_config"
+          }
+        ],
+        "stats": {
+          "total_remediations": 23,
+          "by_severity": {
+            "CRITICAL": 7,
+            "HIGH": 9,
+            "MEDIUM": 7
+          },
+          "by_category": {
+            "other": 16,
+            "pattern_scan": 4,
+            "missing_config": 3
+          },
+          "critical_fixed": 7,
+          "high_fixed": 9
+        }
+      },
+      "after": {
+        "total_findings": 8,
+        "by_severity": {
+          "CRITICAL": 1,
+          "HIGH": 4,
+          "MEDIUM": 3,
+          "LOW": 0,
+          "INFO": 0
+        },
+        "findings": [
+          {
+            "rule_id": "AWS_OWASP_A05_MISCONFIG_SG",
+            "severity": "CRITICAL",
+            "title": "Aws Owasp A05 Misconfig Sg"
+          },
+          {
+            "rule_id": "NO_HARDCODED_SECRET",
+            "severity": "HIGH",
+            "title": "No Hardcoded Secret"
+          },
+          {
+            "rule_id": "SECRET_GENERIC_PASSWORD",
+            "severity": "HIGH",
+            "title": "Hardcoded Password"
+          },
+          {
+            "rule_id": "CVE",
+            "severity": "HIGH",
+            "title": "CVE-2021-3178 in terraform-provider-aws 3.0.0"
+          },
+          {
+            "rule_id": "CIS_2_1_1",
+            "severity": "HIGH",
+            "title": "S3 Bucket Encryption Not Enabled"
+          },
+          {
+            "rule_id": "AWS_BP_S3_NO_LOGGING",
+            "severity": "MEDIUM",
+            "title": "Aws Bp S3 No Logging"
+          },
+          {
+            "rule_id": "AWS_BP_EGRESS_ALL",
+            "severity": "MEDIUM",
+            "title": "Aws Bp Egress All"
+          },
+          {
+            "rule_id": "CIS_2_1_2",
+            "severity": "MEDIUM",
+            "title": "S3 Bucket Logging Not Enabled"
+          }
+        ]
+      },
+      "reduction_pct": 78.9
+    },
+    {
+      "file": "real_world_webapp.tf",
+      "before": {
+        "total_findings": 50,
+        "by_severity": {
+          "CRITICAL": 28,
+          "HIGH": 16,
+          "MEDIUM": 5,
+          "LOW": 1,
+          "INFO": 0
+        },
+        "findings": [
+          {
+            "rule_id": "AWS_CIS_IAM_WILDCARD_POLICY",
+            "file_path": "D:\\CloudGuardAI\\evaluation\\case_study\\real_world_webapp.tf",
+            "resource": "",
+            "severity": "CRITICAL",
+            "title": "Aws Cis Iam Wildcard Policy",
+            "description": "IAM policy grants Action=* on Resource=*, equivalent to full admin access",
+            "references": [
+              "CIS AWS 1.22",
+              "https://docs.aws.amazon.com/IAM/latest/UserGuide/best-practices.html"
+            ],
+            "code_snippet": "Action   = \"*\"           # Wildcard IAM policy",
+            "line": 93
+          },
+          {
+            "rule_id": "AWS_CIS_SG_0_0_0_0",
+            "file_path": "D:\\CloudGuardAI\\evaluation\\case_study\\real_world_webapp.tf",
+            "resource": "",
+            "severity": "CRITICAL",
+            "title": "Aws Cis Sg 0 0 0 0",
+            "description": "Security group allows unrestricted access from 0.0.0.0/0",
+            "references": [
+              "CIS AWS 4.1",
+              "https://docs.aws.amazon.com/securityhub/latest/userguide/securityhub-cis-controls.html"
+            ],
+            "code_snippet": "cidr_blocks = [\"0.0.0.0/0\"]  # SSH open to world",
+            "line": 19
+          },
+          {
+            "rule_id": "AWS_CIS_SG_0_0_0_0",
+            "file_path": "D:\\CloudGuardAI\\evaluation\\case_study\\real_world_webapp.tf",
+            "resource": "",
+            "severity": "CRITICAL",
+            "title": "Aws Cis Sg 0 0 0 0",
+            "description": "Security group allows unrestricted access from 0.0.0.0/0",
+            "references": [
+              "CIS AWS 4.1",
+              "https://docs.aws.amazon.com/securityhub/latest/userguide/securityhub-cis-controls.html"
+            ],
+            "code_snippet": "cidr_blocks = [\"0.0.0.0/0\"]  # RDP open to world",
+            "line": 26
+          },
+          {
+            "rule_id": "AWS_CIS_SG_0_0_0_0",
+            "file_path": "D:\\CloudGuardAI\\evaluation\\case_study\\real_world_webapp.tf",
+            "resource": "",
+            "severity": "CRITICAL",
+            "title": "Aws Cis Sg 0 0 0 0",
+            "description": "Security group allows unrestricted access from 0.0.0.0/0",
+            "references": [
+              "CIS AWS 4.1",
+              "https://docs.aws.amazon.com/securityhub/latest/userguide/securityhub-cis-controls.html"
+            ],
+            "code_snippet": "cidr_blocks = [\"0.0.0.0/0\"]  # All ports open",
+            "line": 33
+          },
+          {
+            "rule_id": "AWS_CIS_SG_0_0_0_0",
+            "file_path": "D:\\CloudGuardAI\\evaluation\\case_study\\real_world_webapp.tf",
+            "resource": "",
+            "severity": "CRITICAL",
+            "title": "Aws Cis Sg 0 0 0 0",
+            "description": "Security group allows unrestricted access from 0.0.0.0/0",
+            "references": [
+              "CIS AWS 4.1",
+              "https://docs.aws.amazon.com/securityhub/latest/userguide/securityhub-cis-controls.html"
+            ],
+            "code_snippet": "cidr_blocks = [\"0.0.0.0/0\"]  # Unrestricted egress",
+            "line": 40
+          },
+          {
+            "rule_id": "AWS_CIS_S3_PUBLIC_ACL",
+            "file_path": "D:\\CloudGuardAI\\evaluation\\case_study\\real_world_webapp.tf",
+            "resource": "",
+            "severity": "CRITICAL",
+            "title": "Aws Cis S3 Public Acl",
+            "description": "S3 bucket has public-read ACL which allows unrestricted public access",
+            "references": [
+              "CIS AWS 2.1.5",
+              "https://docs.aws.amazon.com/AmazonS3/latest/userguide/acl-overview.html"
+            ],
+            "code_snippet": "acl    = \"public-read\"  # Publicly readable",
+            "line": 64
+          },
+          {
+            "rule_id": "AWS_CIS_SG_ALL_PORTS",
+            "file_path": "D:\\CloudGuardAI\\evaluation\\case_study\\real_world_webapp.tf",
+            "resource": "",
+            "severity": "CRITICAL",
+            "title": "Aws Cis Sg All Ports",
+            "description": "Security group allows access to all ports (0-65535)",
+            "references": [
+              "CIS AWS 4.1"
+            ],
+            "code_snippet": "to_port     = 65535",
+            "line": 31
+          },
+          {
+            "rule_id": "AWS_CIS_DB_PUBLIC",
+            "file_path": "D:\\CloudGuardAI\\evaluation\\case_study\\real_world_webapp.tf",
+            "resource": "",
+            "severity": "CRITICAL",
+            "title": "Aws Cis Db Public",
+            "description": "Database instance is publicly accessible",
+            "references": [
+              "CIS AWS 4.15"
+            ],
+            "code_snippet": "publicly_accessible    = true                      # Public DB",
+            "line": 80
+          },
+          {
+            "rule_id": "AWS_OWASP_A05_MISCONFIG_SG",
+            "file_path": "D:\\CloudGuardAI\\evaluation\\case_study\\real_world_webapp.tf",
+            "resource": "",
+            "severity": "CRITICAL",
+            "title": "Aws Owasp A05 Misconfig Sg",
+            "description": "Security misconfiguration - overly permissive security group",
+            "references": [
+              "OWASP A05:2021"
+            ],
+            "code_snippet": "from_port   = 0",
+            "line": 30
+          },
+          {
+            "rule_id": "AWS_OWASP_A05_MISCONFIG_SG",
+            "file_path": "D:\\CloudGuardAI\\evaluation\\case_study\\real_world_webapp.tf",
+            "resource": "",
+            "severity": "CRITICAL",
+            "title": "Aws Owasp A05 Misconfig Sg",
+            "description": "Security misconfiguration - overly permissive security group",
+            "references": [
+              "OWASP A05:2021"
+            ],
+            "code_snippet": "from_port   = 0",
+            "line": 37
+          },
+          {
+            "rule_id": "AWS_OWASP_A07_AUTH_FAILURE",
+            "file_path": "D:\\CloudGuardAI\\evaluation\\case_study\\real_world_webapp.tf",
+            "resource": "",
+            "severity": "CRITICAL",
+            "title": "Aws Owasp A07 Auth Failure",
+            "description": "Weak authentication - password in plaintext",
+            "references": [
+              "OWASP A07:2021"
+            ],
+            "code_snippet": "password               = \"HardcodedPassword123!\"  # Hardcoded password",
+            "line": 79
+          },
+          {
+            "rule_id": "AWS_BP_HARDCODED_PASSWORD",
+            "file_path": "D:\\CloudGuardAI\\evaluation\\case_study\\real_world_webapp.tf",
+            "resource": "",
+            "severity": "CRITICAL",
+            "title": "Aws Bp Hardcoded Password",
+            "description": "Hardcoded password detected in infrastructure code",
+            "references": [
+              "AWS Security Best Practices",
+              "https://docs.aws.amazon.com/secretsmanager/latest/userguide/intro.html"
+            ],
+            "code_snippet": "password               = \"HardcodedPassword123!\"  # Hardcoded password",
+            "line": 79
+          },
+          {
+            "rule_id": "AWS_BP_HARDCODED_SECRET",
+            "file_path": "D:\\CloudGuardAI\\evaluation\\case_study\\real_world_webapp.tf",
+            "resource": "",
+            "severity": "CRITICAL",
+            "title": "Aws Bp Hardcoded Secret",
+            "description": "Hardcoded secret or API key detected",
+            "references": [
+              "AWS Security Best Practices"
+            ],
+            "code_snippet": "secret_key = \"wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY\"",
+            "line": 7
+          },
+          {
+            "rule_id": "AWS_BP_HARDCODED_ACCESS_KEY",
+            "file_path": "D:\\CloudGuardAI\\evaluation\\case_study\\real_world_webapp.tf",
+            "resource": "",
+            "severity": "CRITICAL",
+            "title": "Aws Bp Hardcoded Access Key",
+            "description": "AWS access key appears to be hardcoded",
+            "references": [
+              "AWS Security Best Practices"
+            ],
+            "code_snippet": "access_key = \"AKIAIOSFODNN7EXAMPLE\"",
+            "line": 6
+          },
+          {
+            "rule_id": "TF_HARDCODED_ENV_SECRET",
+            "file_path": "D:\\CloudGuardAI\\evaluation\\case_study\\real_world_webapp.tf",
+            "resource": "",
+            "severity": "CRITICAL",
+            "title": "Tf Hardcoded Env Secret",
+            "description": "Secret or API key is hardcoded in an environment variable definition",
+            "references": [
+              "CWE-798",
+              "OWASP IaC A2"
+            ],
+            "code_snippet": "secret_key = \"wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY\"",
+            "line": 7
+          },
+          {
+            "rule_id": "TF_HARDCODED_ENV_SECRET",
+            "file_path": "D:\\CloudGuardAI\\evaluation\\case_study\\real_world_webapp.tf",
+            "resource": "",
+            "severity": "CRITICAL",
+            "title": "Tf Hardcoded Env Secret",
+            "description": "Secret or API key is hardcoded in an environment variable definition",
+            "references": [
+              "CWE-798",
+              "OWASP IaC A2"
+            ],
+            "code_snippet": "export API_KEY=\"sk-proj-abc123def456ghi789\"",
+            "line": 54
+          },
+          {
+            "rule_id": "TF_HARDCODED_CREDENTIALS",
+            "file_path": "D:\\CloudGuardAI\\evaluation\\case_study\\real_world_webapp.tf",
+            "resource": "",
+            "severity": "CRITICAL",
+            "title": "Tf Hardcoded Credentials",
+            "description": "Hardcoded credentials detected in Terraform configuration",
+            "references": [
+              "Terraform Security Best Practices"
+            ],
+            "code_snippet": "access_key = \"AKIAIOSFODNN7EXAMPLE\"",
+            "line": 6
+          },
+          {
+            "rule_id": "TF_HARDCODED_CREDENTIALS",
+            "file_path": "D:\\CloudGuardAI\\evaluation\\case_study\\real_world_webapp.tf",
+            "resource": "",
+            "severity": "CRITICAL",
+            "title": "Tf Hardcoded Credentials",
+            "description": "Hardcoded credentials detected in Terraform configuration",
+            "references": [
+              "Terraform Security Best Practices"
+            ],
+            "code_snippet": "password               = \"HardcodedPassword123!\"  # Hardcoded password",
+            "line": 79
+          },
+          {
+            "rule_id": "TF_OPEN_SECURITY_GROUP",
+            "file_path": "D:\\CloudGuardAI\\evaluation\\case_study\\real_world_webapp.tf",
+            "resource": "",
+            "severity": "CRITICAL",
+            "title": "Tf Open Security Group",
+            "description": "Security group with unrestricted inbound access (0.0.0.0/0)",
+            "references": [
+              "Terraform Security Best Practices"
+            ],
+            "code_snippet": "cidr_blocks = [\"0.0.0.0/0\"]  # SSH open to world",
+            "line": 19
+          },
+          {
+            "rule_id": "TF_OPEN_SECURITY_GROUP",
+            "file_path": "D:\\CloudGuardAI\\evaluation\\case_study\\real_world_webapp.tf",
+            "resource": "",
+            "severity": "CRITICAL",
+            "title": "Tf Open Security Group",
+            "description": "Security group with unrestricted inbound access (0.0.0.0/0)",
+            "references": [
+              "Terraform Security Best Practices"
+            ],
+            "code_snippet": "cidr_blocks = [\"0.0.0.0/0\"]  # RDP open to world",
+            "line": 26
+          },
+          {
+            "rule_id": "TF_OPEN_SECURITY_GROUP",
+            "file_path": "D:\\CloudGuardAI\\evaluation\\case_study\\real_world_webapp.tf",
+            "resource": "",
+            "severity": "CRITICAL",
+            "title": "Tf Open Security Group",
+            "description": "Security group with unrestricted inbound access (0.0.0.0/0)",
+            "references": [
+              "Terraform Security Best Practices"
+            ],
+            "code_snippet": "cidr_blocks = [\"0.0.0.0/0\"]  # All ports open",
+            "line": 33
+          },
+          {
+            "rule_id": "TF_OPEN_SECURITY_GROUP",
+            "file_path": "D:\\CloudGuardAI\\evaluation\\case_study\\real_world_webapp.tf",
+            "resource": "",
+            "severity": "CRITICAL",
+            "title": "Tf Open Security Group",
+            "description": "Security group with unrestricted inbound access (0.0.0.0/0)",
+            "references": [
+              "Terraform Security Best Practices"
+            ],
+            "code_snippet": "cidr_blocks = [\"0.0.0.0/0\"]  # Unrestricted egress",
+            "line": 40
+          },
+          {
+            "rule_id": "TF_PUBLIC_S3",
+            "file_path": "D:\\CloudGuardAI\\evaluation\\case_study\\real_world_webapp.tf",
+            "resource": "",
+            "severity": "CRITICAL",
+            "title": "Tf Public S3",
+            "description": "S3 bucket configured with public access",
+            "references": [
+              "Terraform Security Best Practices"
+            ],
+            "code_snippet": "acl    = \"public-read\"  # Publicly readable",
+            "line": 64
+          },
+          {
+            "rule_id": "attack_path",
+            "check_id": "attack_path",
+            "severity": "CRITICAL",
+            "title": "GNN detected critical risk attack path",
+            "description": "\ud83d\udea8 CRITICAL RISK: GNN detected high probability (95.7%) of attack paths in infrastructure. Critical resources identified: aws_db_instance.main_db, aws_iam_role.lambda_role, aws_iam_policy.admin_policy. These nodes have high attention scores indicating they are key points in potential attack chains.",
+            "category": "gnn",
+            "scanner": "gnn",
+            "line_number": null,
+            "code_snippet": "",
+            "resource": "",
+            "remediation": "\ud83d\udea8 URGENT: Critical attack paths detected.\n\nRecommended actions:\n1. Review security of critical resources: aws_db_instance.main_db, aws_iam_role.lambda_role, aws_iam_policy.admin_policy\n2. Implement network segmentation to break attack chains\n3. Add security controls at critical nodes:\n   - Enable encryption at rest and in transit\n   - Restrict network access (security groups, NACLs)\n   - Enable authentication and authorization\n   - Add monitoring and logging\n4. Apply principle of least privilege to IAM roles/policies\n5. Remove public access where not required\n\n\u26a0\ufe0f  Consider redesigning infrastructure architecture to eliminate attack paths.",
+            "confidence": "high",
+            "transformer_fix": "[ [ \" aws_iam_role_policy \" \" \" \" \" \" \" ] \n aws_iam_role_policy ] \" \" \" : \" ] resource \" : \" ] \n : : ] \n ) : \" : \" \n : : \" protocol : \" \" \" \" \" : \" \" aws_iam_role_policy \" \" : \" aws_iam_role_policy : \" \" \" \" \" \" : ( : : : \" \" : \" \"",
+            "transformer_fix_available": true
+          },
+          {
+            "rule_id": "SECRET_AWS_ACCESS_KEY",
+            "check_id": "SECRET_AWS_ACCESS_KEY",
+            "severity": "CRITICAL",
+            "title": "AWS Access Key",
+            "description": "Hardcoded AWS Access Key ID detected. This poses a critical security risk as credentials should never be hardcoded.",
+            "category": "secrets",
+            "scanner": "secrets",
+            "line_number": 6,
+            "code_snippet": "access_key = \"AKIA****************\"",
+            "resource": "",
+            "remediation": "",
+            "confidence": 0.8,
+            "transformer_fix": "= true \n } \n } \n } \n engine = \" \" \n associate_public_ip_address = true \n subnet_id = true \n }",
+            "transformer_fix_available": true
+          },
+          {
+            "rule_id": "SECRET_AWS_SECRET_KEY",
+            "check_id": "SECRET_AWS_SECRET_KEY",
+            "severity": "CRITICAL",
+            "title": "AWS Secret Access Key",
+            "description": "Potential AWS Secret Access Key detected. This poses a critical security risk as credentials should never be hardcoded.",
+            "category": "secrets",
+            "scanner": "secrets",
+            "line_number": 7,
+            "code_snippet": "secret_key = \"wJa********************",
+            "resource": "",
+            "remediation": "",
+            "confidence": 0.8,
+            "transformer_fix": "= true \n } \n } \n } \n engine = \n encrypted = true \n } \n deletion_window_in_days = true \n }",
+            "transformer_fix_available": true
+          },
+          {
+            "rule_id": "CIS_4_1",
+            "check_id": "CIS_4_1",
+            "severity": "CRITICAL",
+            "title": "SSH Open to Internet",
+            "description": "Security group 'web_sg' allows SSH access (port 22) from the internet (0.0.0.0/0). CIS Benchmark 4.1 prohibits this.",
+            "category": "compliance",
+            "scanner": "compliance",
+            "line_number": null,
+            "code_snippet": "",
+            "resource": "web_sg",
+            "remediation": "",
+            "confidence": 0.8,
+            "transformer_fix": ": : : \" \" ] ) : \" \" \" \" \" \" : : : \" \" : : : \" [ \" \" : : \" tcp \" : : \" : ] \n : \" \" \" \" \" \" : ] \" \" ] : : : : \" \" : \" \" : : : \" : : : : \" : \"",
+            "transformer_fix_available": true
+          },
+          {
+            "rule_id": "CIS_4_2",
+            "check_id": "CIS_4_2",
+            "severity": "CRITICAL",
+            "title": "RDP Open to Internet",
+            "description": "Security group 'web_sg' allows RDP access (port 3389) from the internet (0.0.0.0/0). CIS Benchmark 4.2 prohibits this.",
+            "category": "compliance",
+            "scanner": "compliance",
+            "line_number": null,
+            "code_snippet": "",
+            "resource": "web_sg",
+            "remediation": "",
+            "confidence": 0.8,
+            "transformer_fix": "\" resource \" aws_iam_role_policy \" \" \" \" ] \n ( : ] \" \" \" \" \" \" : \" : : : : : : \" \" ] \" : : \" \" \" \" \" : \" : \" : \" \" tcp \" \" aws_iam_role_policy \" aws_iam_role_policy \" : \" : : : : : ] ) : \" \" : : \" ] ] ] [ \" \" \"",
+            "transformer_fix_available": true
+          },
+          {
+            "rule_id": "AWS_CIS_DB_UNENCRYPTED",
+            "file_path": "D:\\CloudGuardAI\\evaluation\\case_study\\real_world_webapp.tf",
+            "resource": "",
+            "severity": "HIGH",
+            "title": "Aws Cis Db Unencrypted",
+            "description": "Database storage encryption is disabled",
+            "references": [
+              "CIS AWS 2.3.1"
+            ],
+            "code_snippet": "storage_encrypted      = false                     # Unencrypted storage",
+            "line": 81
+          },
+          {
+            "rule_id": "AWS_OWASP_A02_CRYPTO_FAILURE",
+            "file_path": "D:\\CloudGuardAI\\evaluation\\case_study\\real_world_webapp.tf",
+            "resource": "",
+            "severity": "HIGH",
+            "title": "Aws Owasp A02 Crypto Failure",
+            "description": "Encryption not enabled for sensitive data storage",
+            "references": [
+              "OWASP A02:2021"
+            ],
+            "code_snippet": "storage_encrypted      = false                     # Unencrypted storage",
+            "line": 81
+          },
+          {
+            "rule_id": "AWS_OWASP_A02_CRYPTO_FAILURE",
+            "file_path": "D:\\CloudGuardAI\\evaluation\\case_study\\real_world_webapp.tf",
+            "resource": "",
+            "severity": "HIGH",
+            "title": "Aws Owasp A02 Crypto Failure",
+            "description": "Encryption not enabled for sensitive data storage",
+            "references": [
+              "OWASP A02:2021"
+            ],
+            "code_snippet": "encrypted         = false  # Unencrypted EBS",
+            "line": 107
+          },
+          {
+            "rule_id": "NO_HARDCODED_SECRET",
+            "file_path": "D:\\CloudGuardAI\\evaluation\\case_study\\real_world_webapp.tf",
+            "resource": "",
+            "severity": "HIGH",
+            "title": "No Hardcoded Secret",
+            "description": "Hardcoded secrets should not appear in IaC files",
+            "references": [
+              "OWASP IaC A2"
+            ],
+            "code_snippet": "export DB_PASSWORD=\"SuperSecret123!\"",
+            "line": 53
+          },
+          {
+            "rule_id": "NO_HARDCODED_SECRET",
+            "file_path": "D:\\CloudGuardAI\\evaluation\\case_study\\real_world_webapp.tf",
+            "resource": "",
+            "severity": "HIGH",
+            "title": "No Hardcoded Secret",
+            "description": "Hardcoded secrets should not appear in IaC files",
+            "references": [
+              "OWASP IaC A2"
+            ],
+            "code_snippet": "export API_KEY=\"sk-proj-abc123def456ghi789\"",
+            "line": 54
+          },
+          {
+            "rule_id": "NO_HARDCODED_SECRET",
+            "file_path": "D:\\CloudGuardAI\\evaluation\\case_study\\real_world_webapp.tf",
+            "resource": "",
+            "severity": "HIGH",
+            "title": "No Hardcoded Secret",
+            "description": "Hardcoded secrets should not appear in IaC files",
+            "references": [
+              "OWASP IaC A2"
+            ],
+            "code_snippet": "password               = \"HardcodedPassword123!\"  # Hardcoded password",
+            "line": 79
+          },
+          {
+            "rule_id": "NO_HARDCODED_SECRET",
+            "file_path": "D:\\CloudGuardAI\\evaluation\\case_study\\real_world_webapp.tf",
+            "resource": "",
+            "severity": "HIGH",
+            "title": "No Hardcoded Secret",
+            "description": "Hardcoded secrets should not appear in IaC files",
+            "references": [
+              "OWASP IaC A2"
+            ],
+            "code_snippet": "DB_PASSWORD = \"LambdaDbPass456!\"",
+            "line": 121
+          },
+          {
+            "rule_id": "NO_HARDCODED_SECRET",
+            "file_path": "D:\\CloudGuardAI\\evaluation\\case_study\\real_world_webapp.tf",
+            "resource": "",
+            "severity": "HIGH",
+            "title": "No Hardcoded Secret",
+            "description": "Hardcoded secrets should not appear in IaC files",
+            "references": [
+              "OWASP IaC A2"
+            ],
+            "code_snippet": "API_SECRET  = \"super-secret-api-key-12345\"",
+            "line": 122
+          },
+          {
+            "rule_id": "TF_UNENCRYPTED_EBS",
+            "file_path": "D:\\CloudGuardAI\\evaluation\\case_study\\real_world_webapp.tf",
+            "resource": "",
+            "severity": "HIGH",
+            "title": "Tf Unencrypted Ebs",
+            "description": "EBS volume encryption is not enabled",
+            "references": [
+              "Terraform Security Best Practices"
+            ],
+            "code_snippet": "resource \"aws_ebs_volume\" \"data_vol\" {",
+            "line": 104
+          },
+          {
+            "rule_id": "TF_UNENCRYPTED_RDS",
+            "file_path": "D:\\CloudGuardAI\\evaluation\\case_study\\real_world_webapp.tf",
+            "resource": "",
+            "severity": "HIGH",
+            "title": "Tf Unencrypted Rds",
+            "description": "RDS instance storage encryption is not enabled",
+            "references": [
+              "Terraform Security Best Practices"
+            ],
+            "code_snippet": "resource \"aws_db_instance\" \"main_db\" {",
+            "line": 72
+          },
+          {
+            "rule_id": "TF_WIDE_PORT_RANGE",
+            "file_path": "D:\\CloudGuardAI\\evaluation\\case_study\\real_world_webapp.tf",
+            "resource": "",
+            "severity": "HIGH",
+            "title": "Tf Wide Port Range",
+            "description": "Security group allows wide port range (0-65535)",
+            "references": [
+              "Terraform Security Best Practices"
+            ],
+            "code_snippet": "to_port     = 65535",
+            "line": 31
+          },
+          {
+            "rule_id": "critical_resource",
+            "check_id": "critical_resource",
+            "severity": "HIGH",
+            "title": "Critical infrastructure node: aws_db_instance.main_db",
+            "description": "GNN attention mechanism identified aws_db_instance.main_db as a critical point in potential attack paths. This resource has high importance in the infrastructure attack graph.",
+            "category": "gnn",
+            "scanner": "gnn",
+            "line_number": null,
+            "code_snippet": "",
+            "resource": "aws_db_instance.main_db",
+            "remediation": "Review security configuration of aws_db_instance.main_db. Ensure proper access controls, encryption, and network isolation.",
+            "confidence": "high",
+            "transformer_fix": "\" policy : : : ) ] : : \" \" \n : : : : : \" \" var ] \" : : : : : : \" : : : \" : \" \" : : : ( \" : : \" \" \" \" [ \" ] ] ] : : : : ] \" ] \" ] \" \" : : : \" \" : \" : \" \" :",
+            "transformer_fix_available": true
+          },
+          {
+            "rule_id": "SECRET_GENERIC_API_KEY",
+            "check_id": "SECRET_GENERIC_API_KEY",
+            "severity": "HIGH",
+            "title": "API Key",
+            "description": "Potential API key detected. This poses a critical security risk as credentials should never be hardcoded.",
+            "category": "secrets",
+            "scanner": "secrets",
+            "line_number": 54,
+            "code_snippet": "export API_********************",
+            "resource": "",
+            "remediation": "",
+            "confidence": 0.8,
+            "transformer_fix": "= true \n } \n } \n } \n ami = \" \" \n associate_public_ip_address = true \n . \" \n }",
+            "transformer_fix_available": true
+          },
+          {
+            "rule_id": "CVE",
+            "check_id": "CVE",
+            "severity": "HIGH",
+            "title": "CVE-2021-3178 in terraform-provider-aws 3.0.0",
+            "description": "AWS provider allows overly permissive IAM policies. CVSS: 7.5.",
+            "category": "cve",
+            "scanner": "cve",
+            "line_number": null,
+            "code_snippet": "",
+            "resource": "",
+            "remediation": "",
+            "confidence": 0.8,
+            "transformer_fix": "aws_iam_role_policy ) \" aws_iam_role_policy \" \" \" tcp : \" \n : [ : \" \" : \" \" \" \" : : : var \" \" : \" : \" [ \" ) \" : ] ] \" : \" ] \" : \" : : ] : : \" ] ] aws_iam_role_policy \" \n ( : : : : \" \" : \" : : : \" : \" : : :",
+            "transformer_fix_available": true
+          },
+          {
+            "rule_id": "CIS_1_4",
+            "check_id": "CIS_1_4",
+            "severity": "HIGH",
+            "title": "MFA Not Enabled for IAM User",
+            "description": "IAM user 'deploy_user' does not have MFA enabled. CIS Benchmark 1.4 requires MFA for all IAM users.",
+            "category": "compliance",
+            "scanner": "compliance",
+            "line_number": null,
+            "code_snippet": "",
+            "resource": "arn:aws:iam::123456789012:user/deploy_user",
+            "remediation": "",
+            "confidence": 0.8,
+            "transformer_fix": "\" ] \" ) \" \" \" \" \" : ] ] ) aws_iam_role_policy \" ] ] \n \" ] \n cidr_blocks : : : : : : : \" aws_iam_role_policy \" : : \" : : \" \" : : \" ] \n : \" : \" \" \" \" \" : \" \" ] ] : : : : \" : : : \" : [ : \" \" : [ policy : : \" :",
+            "transformer_fix_available": true
+          },
+          {
+            "rule_id": "CIS_2_1_1",
+            "check_id": "CIS_2_1_1",
+            "severity": "HIGH",
+            "title": "S3 Bucket Encryption Not Enabled",
+            "description": "S3 bucket 'app_data' does not have server-side encryption enabled. CIS Benchmark 2.1.1 requires encryption at rest.",
+            "category": "compliance",
+            "scanner": "compliance",
+            "line_number": null,
+            "code_snippet": "",
+            "resource": "arn:aws:s3:::app_data",
+            "remediation": "",
+            "confidence": 0.8,
+            "transformer_fix": "\" \" tcp \" \" \" \" : : from_port \" \n \" aws_iam_role_policy aws_iam_role_policy egress : \" : aws_iam_role_policy \" ] [ \" ] \n : : : \" : : \" : : : aws_iam_role_policy aws_iam_role_policy \" ] ] \n ] \n aws_iam_role_policy : : \" \" : \" cidr_blocks : \" ] aws_iam_role_policy ] \" : : \" \" : \" \" \" \" : : : \" : aws_iam_role_policy : : : : [ : : \" policy : : :",
+            "transformer_fix_available": true
+          },
+          {
+            "rule_id": "AWS_BP_S3_NO_LOGGING",
+            "file_path": "D:\\CloudGuardAI\\evaluation\\case_study\\real_world_webapp.tf",
+            "resource": "",
+            "severity": "MEDIUM",
+            "title": "Aws Bp S3 No Logging",
+            "description": "S3 bucket logging is not configured",
+            "references": [
+              "AWS S3 Best Practices"
+            ],
+            "code_snippet": "resource \"aws_s3_bucket\" \"app_data\" {",
+            "line": 62
+          },
+          {
+            "rule_id": "AWS_BP_SKIP_FINAL_SNAPSHOT",
+            "file_path": "D:\\CloudGuardAI\\evaluation\\case_study\\real_world_webapp.tf",
+            "resource": "",
+            "severity": "MEDIUM",
+            "title": "Aws Bp Skip Final Snapshot",
+            "description": "Database configured to skip final snapshot on deletion",
+            "references": [
+              "AWS RDS Best Practices"
+            ],
+            "code_snippet": "skip_final_snapshot    = true                       # Skip snapshot on delete",
+            "line": 82
+          },
+          {
+            "rule_id": "AWS_BP_EGRESS_ALL",
+            "file_path": "D:\\CloudGuardAI\\evaluation\\case_study\\real_world_webapp.tf",
+            "resource": "",
+            "severity": "MEDIUM",
+            "title": "Aws Bp Egress All",
+            "description": "Security group allows all egress traffic",
+            "references": [
+              "AWS VPC Best Practices"
+            ],
+            "code_snippet": "protocol    = \"-1\"",
+            "line": 39
+          },
+          {
+            "rule_id": "TF_VERSIONING_DISABLED",
+            "file_path": "D:\\CloudGuardAI\\evaluation\\case_study\\real_world_webapp.tf",
+            "resource": "",
+            "severity": "MEDIUM",
+            "title": "Tf Versioning Disabled",
+            "description": "S3 bucket versioning is disabled",
+            "references": [
+              "Terraform Security Best Practices"
+            ],
+            "code_snippet": "enabled = false  # No versioning",
+            "line": 67
+          },
+          {
+            "rule_id": "CIS_2_1_2",
+            "check_id": "CIS_2_1_2",
+            "severity": "MEDIUM",
+            "title": "S3 Bucket Logging Not Enabled",
+            "description": "S3 bucket 'app_data' does not have access logging enabled. CIS Benchmark 2.1.2 requires logging for audit trails.",
+            "category": "compliance",
+            "scanner": "compliance",
+            "line_number": null,
+            "code_snippet": "",
+            "resource": "arn:aws:s3:::app_data",
+            "remediation": "",
+            "confidence": 0.8
+          },
+          {
+            "rule_id": "AWS_BP_EC2_NO_MONITORING",
+            "file_path": "D:\\CloudGuardAI\\evaluation\\case_study\\real_world_webapp.tf",
+            "resource": "",
+            "severity": "LOW",
+            "title": "Aws Bp Ec2 No Monitoring",
+            "description": "EC2 detailed monitoring is disabled",
+            "references": [
+              "AWS EC2 Best Practices"
+            ],
+            "code_snippet": "monitoring             = false  # No detailed monitoring",
+            "line": 48
+          }
+        ]
+      },
+      "remediation": {
+        "changes_applied": 20,
+        "changes": [
+          {
+            "finding_id": "AWS_CIS_IAM_WILDCARD_POLICY",
+            "rule_id": "AWS_CIS_IAM_WILDCARD_POLICY",
+            "severity": "CRITICAL",
+            "description": "Replace wildcard IAM Action with least-privilege permissions",
+            "category": ""
+          },
+          {
+            "finding_id": "AWS_CIS_SG_0_0_0_0",
+            "rule_id": "AWS_CIS_SG_0_0_0_0",
+            "severity": "CRITICAL",
+            "description": "Restrict SSH access from 0.0.0.0/0 to internal CIDR",
+            "category": ""
+          },
+          {
+            "finding_id": "AWS_CIS_SG_0_0_0_0",
+            "rule_id": "AWS_CIS_SG_0_0_0_0",
+            "severity": "CRITICAL",
+            "description": "Replace all-ports-open with HTTPS-only from restricted CIDR",
+            "category": ""
+          },
+          {
+            "finding_id": "AWS_CIS_S3_PUBLIC_ACL",
+            "rule_id": "AWS_CIS_S3_PUBLIC_ACL",
+            "severity": "CRITICAL",
+            "description": "Change S3 bucket ACL from public to private",
+            "category": ""
+          },
+          {
+            "finding_id": "AWS_CIS_DB_PUBLIC",
+            "rule_id": "AWS_CIS_DB_PUBLIC",
+            "severity": "CRITICAL",
+            "description": "Disable public accessibility for RDS instance",
+            "category": ""
+          },
+          {
+            "finding_id": "AWS_BP_HARDCODED_PASSWORD",
+            "rule_id": "AWS_BP_HARDCODED_PASSWORD",
+            "severity": "CRITICAL",
+            "description": "Replace hardcoded database password with variable/secrets manager",
+            "category": ""
+          },
+          {
+            "finding_id": "AWS_BP_HARDCODED_SECRET",
+            "rule_id": "AWS_BP_HARDCODED_SECRET",
+            "severity": "CRITICAL",
+            "description": "Replace hardcoded environment secret with Secrets Manager reference",
+            "category": ""
+          },
+          {
+            "finding_id": "AWS_BP_HARDCODED_ACCESS_KEY",
+            "rule_id": "AWS_BP_HARDCODED_ACCESS_KEY",
+            "severity": "CRITICAL",
+            "description": "Replace hardcoded AWS access key with variable reference",
+            "category": ""
+          },
+          {
+            "finding_id": "SECRET_AWS_SECRET_KEY",
+            "rule_id": "SECRET_AWS_SECRET_KEY",
+            "severity": "CRITICAL",
+            "description": "Replace hardcoded AWS secret key with variable reference",
+            "category": "secrets"
+          },
+          {
+            "finding_id": "AWS_CIS_DB_UNENCRYPTED",
+            "rule_id": "AWS_CIS_DB_UNENCRYPTED",
+            "severity": "HIGH",
+            "description": "Enable storage encryption for RDS instance",
+            "category": ""
+          },
+          {
+            "finding_id": "AWS_CIS_DB_UNENCRYPTED",
+            "rule_id": "AWS_CIS_DB_UNENCRYPTED",
+            "severity": "HIGH",
+            "description": "Enable EBS volume encryption",
+            "category": ""
+          },
+          {
+            "finding_id": "AWS_BP_SKIP_FINAL_SNAPSHOT",
+            "rule_id": "AWS_BP_SKIP_FINAL_SNAPSHOT",
+            "severity": "MEDIUM",
+            "description": "Enable final snapshot on RDS deletion",
+            "category": ""
+          },
+          {
+            "finding_id": "AWS_BP_EGRESS_ALL",
+            "rule_id": "AWS_BP_EGRESS_ALL",
+            "severity": "MEDIUM",
+            "description": "Restrict unrestricted egress to internal CIDR",
+            "category": ""
+          },
+          {
+            "finding_id": "TF_VERSIONING_DISABLED",
+            "rule_id": "TF_VERSIONING_DISABLED",
+            "severity": "MEDIUM",
+            "description": "Enable S3 bucket versioning",
+            "category": ""
+          },
+          {
+            "finding_id": "AWS_BP_EC2_NO_MONITORING",
+            "rule_id": "AWS_BP_EC2_NO_MONITORING",
+            "severity": "LOW",
+            "description": "Enable detailed monitoring for EC2 instance",
+            "category": ""
+          },
+          {
+            "finding_id": "sg_rdp_open",
+            "rule_id": "PATTERN_SG_RDP_OPEN",
+            "severity": "MEDIUM",
+            "description": "Restrict RDP access from 0.0.0.0/0 to internal CIDR",
+            "category": "pattern_scan"
+          },
+          {
+            "finding_id": "rds_no_backup",
+            "rule_id": "PATTERN_RDS_NO_BACKUP",
+            "severity": "MEDIUM",
+            "description": "Increase backup retention period to 35 days",
+            "category": "pattern_scan"
+          },
+          {
+            "finding_id": "add_app_data",
+            "rule_id": "AUTO_ADD_SECURITY_BLOCK",
+            "severity": "HIGH",
+            "description": "Add S3 server-side encryption configuration",
+            "category": "missing_config"
+          },
+          {
+            "finding_id": "add_app_data_pab",
+            "rule_id": "AUTO_ADD_SECURITY_BLOCK",
+            "severity": "HIGH",
+            "description": "Add public access block for S3 bucket 'app_data'",
+            "category": "missing_config"
+          },
+          {
+            "finding_id": "add_app_data_logging",
+            "rule_id": "AUTO_ADD_SECURITY_BLOCK",
+            "severity": "HIGH",
+            "description": "Enable access logging for S3 bucket 'app_data'",
+            "category": "missing_config"
+          }
+        ],
+        "stats": {
+          "total_remediations": 20,
+          "by_severity": {
+            "CRITICAL": 9,
+            "HIGH": 5,
+            "MEDIUM": 5,
+            "LOW": 1
+          },
+          "by_category": {
+            "other": 14,
+            "secrets": 1,
+            "pattern_scan": 2,
+            "missing_config": 3
+          },
+          "critical_fixed": 9,
+          "high_fixed": 5
+        }
+      },
+      "after": {
+        "total_findings": 11,
+        "by_severity": {
+          "CRITICAL": 1,
+          "HIGH": 7,
+          "MEDIUM": 3,
+          "LOW": 0,
+          "INFO": 0
+        },
+        "findings": [
+          {
+            "rule_id": "AWS_OWASP_A05_MISCONFIG_SG",
+            "severity": "CRITICAL",
+            "title": "Aws Owasp A05 Misconfig Sg"
+          },
+          {
+            "rule_id": "NO_HARDCODED_SECRET",
+            "severity": "HIGH",
+            "title": "No Hardcoded Secret"
+          },
+          {
+            "rule_id": "NO_HARDCODED_SECRET",
+            "severity": "HIGH",
+            "title": "No Hardcoded Secret"
+          },
+          {
+            "rule_id": "NO_HARDCODED_SECRET",
+            "severity": "HIGH",
+            "title": "No Hardcoded Secret"
+          },
+          {
+            "rule_id": "SECRET_GENERIC_PASSWORD",
+            "severity": "HIGH",
+            "title": "Hardcoded Password"
+          },
+          {
+            "rule_id": "CVE",
+            "severity": "HIGH",
+            "title": "CVE-2021-3178 in terraform-provider-aws 3.0.0"
+          },
+          {
+            "rule_id": "CIS_1_4",
+            "severity": "HIGH",
+            "title": "MFA Not Enabled for IAM User"
+          },
+          {
+            "rule_id": "CIS_2_1_1",
+            "severity": "HIGH",
+            "title": "S3 Bucket Encryption Not Enabled"
+          },
+          {
+            "rule_id": "AWS_BP_S3_NO_LOGGING",
+            "severity": "MEDIUM",
+            "title": "Aws Bp S3 No Logging"
+          },
+          {
+            "rule_id": "AWS_BP_EGRESS_ALL",
+            "severity": "MEDIUM",
+            "title": "Aws Bp Egress All"
+          },
+          {
+            "rule_id": "CIS_2_1_2",
+            "severity": "MEDIUM",
+            "title": "S3 Bucket Logging Not Enabled"
+          }
+        ]
+      },
+      "reduction_pct": 78.0
+    }
+  ]
+}

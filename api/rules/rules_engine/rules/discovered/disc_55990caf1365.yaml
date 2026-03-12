@@ -1,0 +1,16 @@
+# Auto-discovered rule — generated 2026-03-11T07:55:37.210339
+# Based on 5 occurrences across 5 scans
+# Original: Detected a 2-hop attack path from aws_instance.web_server to aws_db_instance.database.
+
+**Attack Chain:** web_server → d
+rules:
+  - id: DISC_55990CAF1365
+    description: "[Auto-Discovered] Detected a 2-hop attack path from aws_instance.web_server to aws_db_instance.database.
+
+**Attack Cha"
+    severity: CRITICAL
+    file_types: [".tf", ".yaml", ".yml", ".json"]
+    match:
+      regex: "aws_db_instance.*aws_instance"
+    references:
+      - "https://cloudguard.ai/discovered-patterns/55990caf1365"

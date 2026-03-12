@@ -1,0 +1,14 @@
+# Auto-discovered rule — generated 2026-02-23T11:21:42.689059
+# Based on 6 occurrences across 6 scans
+# Original: S3 bucket 'data_backup' does not have access logging enabled. CIS Benchmark 2.1.2 requires logging for audit trails.
+
+**
+rules:
+  - id: DISC_DEA18EE15D82
+    description: "[Auto-Discovered] S3 bucket 'data_backup' does not have access logging enabled. CIS Benchmark 2.1.2 requires logging f"
+    severity: MEDIUM
+    file_types: [".tf", ".yaml", ".yml", ".json"]
+    match:
+      regex: "data_backup.*information"
+    references:
+      - "https://cloudguard.ai/discovered-patterns/dea18ee15d82"

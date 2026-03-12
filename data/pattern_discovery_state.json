@@ -1,1 +1,1390 @@
-{"patterns": {}, "model_state": null, "scan_count": 0}
+{
+  "patterns": {},
+  "054db4a76908": {
+    "signature": "054db4a76908",
+    "sample_description": "test",
+    "sample_rule_id": "R1",
+    "severity": "HIGH",
+    "scan_ids": [
+      1
+    ],
+    "count": 11,
+    "first_seen": "2026-03-02T18:05:54.232927",
+    "last_seen": "2026-03-03T12:37:05.898014",
+    "rule_generated": false,
+    "affected_resources": [],
+    "affected_files": [],
+    "rule_ids_involved": [
+      "R1"
+    ],
+    "example_findings": [
+      {
+        "description": "test",
+        "title": "",
+        "severity": "HIGH",
+        "resource": "",
+        "file": "",
+        "rule_id": "R1",
+        "line_number": null,
+        "code_snippet": "",
+        "scanner": "",
+        "scan_id": 1
+      }
+    ],
+    "scanners_involved": [],
+    "categories": [],
+    "remediation_guidance": [],
+    "risk_explanation": "This pattern has been detected 11 times across 1 scan(s), affecting 0 unique resource(s) in 0 file(s). Severity: HIGH. Detected by: ."
+  },
+  "94a9146dcfc9": {
+    "signature": "94a9146dcfc9",
+    "sample_description": "AWS provider allows overly permissive IAM policies. CVSS: 7.5.\n\n**Impact:** This could lead to significant data exposure, privilege escalation, or service disruption.",
+    "sample_rule_id": "CVE",
+    "severity": "HIGH",
+    "scan_ids": [
+      1,
+      2
+    ],
+    "count": 4,
+    "first_seen": "2026-03-07T08:30:14.632027",
+    "last_seen": "2026-03-08T18:42:28.286194",
+    "rule_generated": false,
+    "affected_resources": [],
+    "affected_files": [
+      "HIGH_risk.tf",
+      "s3.tf",
+      "neptune.tf"
+    ],
+    "rule_ids_involved": [
+      "CVE"
+    ],
+    "example_findings": [
+      {
+        "description": "AWS provider allows overly permissive IAM policies. CVSS: 7.5.\n\n**Impact:** This could lead to significant data exposure, privilege escalation, or service disruption.",
+        "title": "CVE-2021-3178 in terraform-provider-aws 3.0.0",
+        "severity": "HIGH",
+        "resource": "",
+        "file": "HIGH_risk.tf",
+        "rule_id": "CVE",
+        "line_number": null,
+        "code_snippet": "",
+        "scanner": "CVE",
+        "scan_id": 1
+      }
+    ],
+    "scanners_involved": [
+      "CVE"
+    ],
+    "categories": [
+      "cve"
+    ],
+    "remediation_guidance": [
+      "Upgrade the affected dependency to the fixed version",
+      "Run dependency audit (npm audit fix / pip-audit / snyk)",
+      "Review release notes for breaking changes before upgrading",
+      "Pin dependency versions and enable automated update PRs",
+      "Upgrade terraform-provider-aws to 3.22.0"
+    ],
+    "risk_explanation": "This pattern has been detected 4 times across 2 scan(s), affecting 0 unique resource(s) in 3 file(s). Severity: HIGH. Detected by: CVE."
+  },
+  "a1bf1f8aad75": {
+    "signature": "a1bf1f8aad75",
+    "sample_description": "S3 bucket 'public_bucket' does not have server-side encryption enabled. CIS Benchmark 2.1.1 requires encryption at rest.\n\n**Impact:** This could lead to significant data exposure, privilege escalation",
+    "sample_rule_id": "CIS_2_1_1",
+    "severity": "HIGH",
+    "scan_ids": [
+      1
+    ],
+    "count": 5,
+    "first_seen": "2026-03-07T08:30:14.632027",
+    "last_seen": "2026-03-08T18:35:15.808618",
+    "rule_generated": false,
+    "affected_resources": [
+      "arn:aws:s3:::public_bucket",
+      "arn:aws:s3:::data",
+      "arn:aws:s3:::financials",
+      "arn:aws:s3:::operations"
+    ],
+    "affected_files": [
+      "HIGH_risk.tf",
+      "s3.tf"
+    ],
+    "rule_ids_involved": [
+      "CIS_2_1_1"
+    ],
+    "example_findings": [
+      {
+        "description": "S3 bucket 'public_bucket' does not have server-side encryption enabled. CIS Benchmark 2.1.1 requires encryption at rest.\n\n**Impact:** This could lead to significant data exposure, privilege escalation, or service disruption.",
+        "title": "S3 Bucket Encryption Not Enabled",
+        "severity": "HIGH",
+        "resource": "arn:aws:s3:::public_bucket",
+        "file": "HIGH_risk.tf",
+        "rule_id": "CIS_2_1_1",
+        "line_number": null,
+        "code_snippet": "",
+        "scanner": "Compliance",
+        "scan_id": 1
+      },
+      {
+        "description": "S3 bucket 'data' does not have server-side encryption enabled. CIS Benchmark 2.1.1 requires encryption at rest.\n\n**Impact:** This could lead to significant data exposure, privilege escalation, or service disruption.",
+        "title": "S3 Bucket Encryption Not Enabled",
+        "severity": "HIGH",
+        "resource": "arn:aws:s3:::data",
+        "file": "s3.tf",
+        "rule_id": "",
+        "line_number": 1,
+        "code_snippet": "resource \"aws_s3_bucket\" \"data\" {\r\n  # bucket is public\r\n  # bucket is not encrypted\r\n  # bucket does not have access logs\r\n  # bucket does not have versioning\r\n  # ... (truncated)",
+        "scanner": "Compliance",
+        "scan_id": 1
+      },
+      {
+        "description": "S3 bucket 'financials' does not have server-side encryption enabled. CIS Benchmark 2.1.1 requires encryption at rest.\n\n**Impact:** This could lead to significant data exposure, privilege escalation, or service disruption.",
+        "title": "S3 Bucket Encryption Not Enabled",
+        "severity": "HIGH",
+        "resource": "arn:aws:s3:::financials",
+        "file": "s3.tf",
+        "rule_id": "",
+        "line_number": 42,
+        "code_snippet": "resource \"aws_s3_bucket\" \"financials\" {\r\n  # bucket is not encrypted\r\n  # bucket does not have access logs\r\n  # bucket does not have versioning\r\n  bucket        = \"${local.resource_prefix.value}-financials\"\r\n  # ... (truncated)",
+        "scanner": "Compliance",
+        "scan_id": 1
+      },
+      {
+        "description": "S3 bucket 'operations' does not have server-side encryption enabled. CIS Benchmark 2.1.1 requires encryption at rest.\n\n**Impact:** This could lead to significant data exposure, privilege escalation, or service disruption.",
+        "title": "S3 Bucket Encryption Not Enabled",
+        "severity": "HIGH",
+        "resource": "arn:aws:s3:::operations",
+        "file": "s3.tf",
+        "rule_id": "",
+        "line_number": 65,
+        "code_snippet": "resource \"aws_s3_bucket\" \"operations\" {\r\n  # bucket is not encrypted\r\n  # bucket does not have access logs\r\n  bucket = \"${local.resource_prefix.value}-operations\"\r\n  acl    = \"private\"\r\n  # ... (truncated)",
+        "scanner": "Compliance",
+        "scan_id": 1
+      }
+    ],
+    "scanners_involved": [
+      "Compliance"
+    ],
+    "categories": [
+      "compliance"
+    ],
+    "remediation_guidance": [
+      "Review the CIS Benchmark control referenced in this finding",
+      "Update the Terraform resource to meet the compliance requirement",
+      "Enable encryption, logging, or access controls as specified",
+      "Validate compliance with terraform plan and manual review",
+      "Enable S3 bucket encryption",
+      "Use AWS KMS or S3-managed keys (SSE-S3)",
+      "Configure default encryption for the bucket",
+      "Update bucket policy to require encrypted uploads"
+    ],
+    "risk_explanation": "This pattern has been detected 5 times across 1 scan(s), affecting 4 unique resource(s) in 2 file(s). Severity: HIGH. Detected by: Compliance."
+  },
+  "e9bab3175f1c": {
+    "signature": "e9bab3175f1c",
+    "sample_description": "S3 bucket 'public_bucket' does not have access logging enabled. CIS Benchmark 2.1.2 requires logging for audit trails.\n\n**Impact:** This could enable partial information disclosure or weaken the secur",
+    "sample_rule_id": "CIS_2_1_2",
+    "severity": "MEDIUM",
+    "scan_ids": [
+      1
+    ],
+    "count": 5,
+    "first_seen": "2026-03-07T08:30:14.632027",
+    "last_seen": "2026-03-08T18:35:15.808618",
+    "rule_generated": false,
+    "affected_resources": [
+      "arn:aws:s3:::public_bucket",
+      "arn:aws:s3:::financials",
+      "arn:aws:s3:::operations",
+      "arn:aws:s3:::logs"
+    ],
+    "affected_files": [
+      "HIGH_risk.tf",
+      "s3.tf"
+    ],
+    "rule_ids_involved": [
+      "CIS_2_1_2"
+    ],
+    "example_findings": [
+      {
+        "description": "S3 bucket 'public_bucket' does not have access logging enabled. CIS Benchmark 2.1.2 requires logging for audit trails.\n\n**Impact:** This could enable partial information disclosure or weaken the security posture.",
+        "title": "S3 Bucket Logging Not Enabled",
+        "severity": "MEDIUM",
+        "resource": "arn:aws:s3:::public_bucket",
+        "file": "HIGH_risk.tf",
+        "rule_id": "CIS_2_1_2",
+        "line_number": null,
+        "code_snippet": "",
+        "scanner": "Compliance",
+        "scan_id": 1
+      },
+      {
+        "description": "S3 bucket 'financials' does not have access logging enabled. CIS Benchmark 2.1.2 requires logging for audit trails.\n\n**Impact:** This could enable partial information disclosure or weaken the security posture.",
+        "title": "S3 Bucket Logging Not Enabled",
+        "severity": "MEDIUM",
+        "resource": "arn:aws:s3:::financials",
+        "file": "s3.tf",
+        "rule_id": "",
+        "line_number": 42,
+        "code_snippet": "resource \"aws_s3_bucket\" \"financials\" {\r\n  # bucket is not encrypted\r\n  # bucket does not have access logs\r\n  # bucket does not have versioning\r\n  bucket        = \"${local.resource_prefix.value}-financials\"\r\n  # ... (truncated)",
+        "scanner": "Compliance",
+        "scan_id": 1
+      },
+      {
+        "description": "S3 bucket 'operations' does not have access logging enabled. CIS Benchmark 2.1.2 requires logging for audit trails.\n\n**Impact:** This could enable partial information disclosure or weaken the security posture.",
+        "title": "S3 Bucket Logging Not Enabled",
+        "severity": "MEDIUM",
+        "resource": "arn:aws:s3:::operations",
+        "file": "s3.tf",
+        "rule_id": "",
+        "line_number": 65,
+        "code_snippet": "resource \"aws_s3_bucket\" \"operations\" {\r\n  # bucket is not encrypted\r\n  # bucket does not have access logs\r\n  bucket = \"${local.resource_prefix.value}-operations\"\r\n  acl    = \"private\"\r\n  # ... (truncated)",
+        "scanner": "Compliance",
+        "scan_id": 1
+      },
+      {
+        "description": "S3 bucket 'logs' does not have access logging enabled. CIS Benchmark 2.1.2 requires logging for audit trails.\n\n**Impact:** This could enable partial information disclosure or weaken the security posture.",
+        "title": "S3 Bucket Logging Not Enabled",
+        "severity": "MEDIUM",
+        "resource": "arn:aws:s3:::logs",
+        "file": "s3.tf",
+        "rule_id": "",
+        "line_number": 113,
+        "code_snippet": "resource \"aws_s3_bucket\" \"logs\" {\r\n  bucket = \"${local.resource_prefix.value}-logs\"\r\n  acl    = \"log-delivery-write\"\r\n  versioning {\r\n    enabled = true\r\n  # ... (truncated)",
+        "scanner": "Compliance",
+        "scan_id": 1
+      }
+    ],
+    "scanners_involved": [
+      "Compliance"
+    ],
+    "categories": [
+      "compliance"
+    ],
+    "remediation_guidance": [
+      "Review the CIS Benchmark control referenced in this finding",
+      "Update the Terraform resource to meet the compliance requirement",
+      "Enable encryption, logging, or access controls as specified",
+      "Validate compliance with terraform plan and manual review",
+      "Enable S3 bucket access logging",
+      "Configure a target bucket for logs",
+      "Set appropriate log file prefix",
+      "Review logs regularly for security events"
+    ],
+    "risk_explanation": "This pattern has been detected 5 times across 1 scan(s), affecting 4 unique resource(s) in 2 file(s). Severity: MEDIUM. Detected by: Compliance."
+  },
+  "43accab55d1c": {
+    "signature": "43accab55d1c",
+    "sample_description": "Security group 'open_sg' allows SSH access (port 22) from the internet (0.0.0.0/0). CIS Benchmark 4.1 prohibits this.\n\n**Impact:** This could allow full system compromise, data breach, or unauthorized",
+    "sample_rule_id": "CIS_4_1",
+    "severity": "CRITICAL",
+    "scan_ids": [
+      1
+    ],
+    "count": 2,
+    "first_seen": "2026-03-07T08:30:14.632027",
+    "last_seen": "2026-03-07T08:30:14.632027",
+    "rule_generated": false,
+    "affected_resources": [
+      "open_sg"
+    ],
+    "affected_files": [
+      "HIGH_risk.tf"
+    ],
+    "rule_ids_involved": [
+      "CIS_4_1"
+    ],
+    "example_findings": [
+      {
+        "description": "Security group 'open_sg' allows SSH access (port 22) from the internet (0.0.0.0/0). CIS Benchmark 4.1 prohibits this.\n\n**Impact:** This could allow full system compromise, data breach, or unauthorized access to production infrastructure.",
+        "title": "SSH Open to Internet",
+        "severity": "CRITICAL",
+        "resource": "open_sg",
+        "file": "HIGH_risk.tf",
+        "rule_id": "CIS_4_1",
+        "line_number": null,
+        "code_snippet": "",
+        "scanner": "Compliance",
+        "scan_id": 1
+      }
+    ],
+    "scanners_involved": [
+      "Compliance"
+    ],
+    "categories": [
+      "compliance"
+    ],
+    "remediation_guidance": [
+      "Review the CIS Benchmark control referenced in this finding",
+      "Update the Terraform resource to meet the compliance requirement",
+      "Enable encryption, logging, or access controls as specified",
+      "Validate compliance with terraform plan and manual review",
+      "Restrict SSH access to specific IP ranges",
+      "Use VPN or bastion host for SSH access",
+      "Remove 0.0.0.0/0 from CIDR blocks",
+      "Implement AWS Systems Manager Session Manager as alternative"
+    ],
+    "risk_explanation": "This pattern has been detected 2 times across 1 scan(s), affecting 1 unique resource(s) in 1 file(s). Severity: CRITICAL. Detected by: Compliance."
+  },
+  "9e811541f0a6": {
+    "signature": "9e811541f0a6",
+    "sample_description": "Detected a 2-hop attack path from aws_s3_bucket_public_access_block.public_bucket_block to aws_s3_bucket.public_bucket.\n\n**Attack Chain:** public_bucket_block \u2192 public_bucket\n\nAttacker enters via **aw",
+    "sample_rule_id": "AP-001",
+    "severity": "MEDIUM",
+    "scan_ids": [
+      1
+    ],
+    "count": 1,
+    "first_seen": "2026-03-07T08:30:14.633617",
+    "last_seen": "2026-03-07T08:30:14.633617",
+    "rule_generated": false,
+    "affected_resources": [
+      "aws_s3_bucket_public_access_block.public_bucket_block"
+    ],
+    "affected_files": [
+      "HIGH_risk.tf"
+    ],
+    "rule_ids_involved": [
+      "AP-001"
+    ],
+    "example_findings": [
+      {
+        "description": "Detected a 2-hop attack path from aws_s3_bucket_public_access_block.public_bucket_block to aws_s3_bucket.public_bucket.\n\n**Attack Chain:** public_bucket_block \u2192 public_bucket\n\nAttacker enters via **aws_s3_bucket_public_access_block.public_bucket_block**\n\u2192 Traverses to **aws_s3_bucket.public_bucket** (accesses_bucket)\n  \u21b3 S3 bucket publicly readable\n  \ud83c\udfaf **HIGH-VALUE TARGET REACHED**\n\n**Impact:** This could enable partial information disclosure or weaken the security posture.",
+        "title": "Attack Path: public_bucket_block \u2192 public_bucket",
+        "severity": "MEDIUM",
+        "resource": "aws_s3_bucket_public_access_block.public_bucket_block",
+        "file": "HIGH_risk.tf",
+        "rule_id": "AP-001",
+        "line_number": null,
+        "code_snippet": "",
+        "scanner": "GNN",
+        "scan_id": 1
+      }
+    ],
+    "scanners_involved": [
+      "GNN"
+    ],
+    "categories": [
+      "gnn"
+    ],
+    "remediation_guidance": [
+      "[aws_s3_bucket.public_bucket] Remove public ACL; use bucket policies for access control",
+      "Apply principle of least privilege across all connected resources.",
+      "Add monitoring and alerting for the identified attack path."
+    ],
+    "risk_explanation": "This pattern has been detected 1 times across 1 scan(s), affecting 1 unique resource(s) in 1 file(s). Severity: MEDIUM. Detected by: GNN."
+  },
+  "3126697cd7c5": {
+    "signature": "3126697cd7c5",
+    "sample_description": "Resource **aws_security_group.open_sg** has vulnerability: Unrestricted ingress (0.0.0.0/0). This resource is part of the infrastructure attack graph and may enable lateral movement or data exfiltrati",
+    "sample_rule_id": "GNN_AWS_SECURITY_GROUP_OPEN_SG",
+    "severity": "HIGH",
+    "scan_ids": [
+      1
+    ],
+    "count": 1,
+    "first_seen": "2026-03-07T08:30:14.633617",
+    "last_seen": "2026-03-07T08:30:14.633617",
+    "rule_generated": false,
+    "affected_resources": [
+      "aws_security_group.open_sg"
+    ],
+    "affected_files": [
+      "HIGH_risk.tf"
+    ],
+    "rule_ids_involved": [
+      "GNN_AWS_SECURITY_GROUP_OPEN_SG"
+    ],
+    "example_findings": [
+      {
+        "description": "Resource **aws_security_group.open_sg** has vulnerability: Unrestricted ingress (0.0.0.0/0). This resource is part of the infrastructure attack graph and may enable lateral movement or data exfiltration.\n\n**Impact:** This could lead to significant data exposure, privilege escalation, or service disruption.",
+        "title": "[open_sg] Unrestricted ingress (0.0.0.0/0)",
+        "severity": "HIGH",
+        "resource": "aws_security_group.open_sg",
+        "file": "HIGH_risk.tf",
+        "rule_id": "GNN_AWS_SECURITY_GROUP_OPEN_SG",
+        "line_number": 19,
+        "code_snippet": "",
+        "scanner": "GNN",
+        "scan_id": 1
+      }
+    ],
+    "scanners_involved": [
+      "GNN"
+    ],
+    "categories": [
+      "gnn"
+    ],
+    "remediation_guidance": [
+      "Restrict CIDR blocks to specific IP ranges"
+    ],
+    "risk_explanation": "This pattern has been detected 1 times across 1 scan(s), affecting 1 unique resource(s) in 1 file(s). Severity: HIGH. Detected by: GNN."
+  },
+  "91aa7179c00f": {
+    "signature": "91aa7179c00f",
+    "sample_description": "Resource **aws_security_group.open_sg** has vulnerability: All ports open. This resource is part of the infrastructure attack graph and may enable lateral movement or data exfiltration.\n\n**Impact:** T",
+    "sample_rule_id": "GNN_AWS_SECURITY_GROUP_OPEN_SG",
+    "severity": "CRITICAL",
+    "scan_ids": [
+      1
+    ],
+    "count": 1,
+    "first_seen": "2026-03-07T08:30:14.633617",
+    "last_seen": "2026-03-07T08:30:14.633617",
+    "rule_generated": false,
+    "affected_resources": [
+      "aws_security_group.open_sg"
+    ],
+    "affected_files": [
+      "HIGH_risk.tf"
+    ],
+    "rule_ids_involved": [
+      "GNN_AWS_SECURITY_GROUP_OPEN_SG"
+    ],
+    "example_findings": [
+      {
+        "description": "Resource **aws_security_group.open_sg** has vulnerability: All ports open. This resource is part of the infrastructure attack graph and may enable lateral movement or data exfiltration.\n\n**Impact:** This could allow full system compromise, data breach, or unauthorized access to production infrastructure.",
+        "title": "[open_sg] All ports open",
+        "severity": "CRITICAL",
+        "resource": "aws_security_group.open_sg",
+        "file": "HIGH_risk.tf",
+        "rule_id": "GNN_AWS_SECURITY_GROUP_OPEN_SG",
+        "line_number": 19,
+        "code_snippet": "",
+        "scanner": "GNN",
+        "scan_id": 1
+      }
+    ],
+    "scanners_involved": [
+      "GNN"
+    ],
+    "categories": [
+      "gnn"
+    ],
+    "remediation_guidance": [
+      "Limit port ranges to necessary services only"
+    ],
+    "risk_explanation": "This pattern has been detected 1 times across 1 scan(s), affecting 1 unique resource(s) in 1 file(s). Severity: CRITICAL. Detected by: GNN."
+  },
+  "b7683e88e1a5": {
+    "signature": "b7683e88e1a5",
+    "sample_description": "Resource **aws_security_group.open_sg** has vulnerability: All protocols allowed. This resource is part of the infrastructure attack graph and may enable lateral movement or data exfiltration.\n\n**Impa",
+    "sample_rule_id": "GNN_AWS_SECURITY_GROUP_OPEN_SG",
+    "severity": "HIGH",
+    "scan_ids": [
+      1
+    ],
+    "count": 1,
+    "first_seen": "2026-03-07T08:30:14.633617",
+    "last_seen": "2026-03-07T08:30:14.633617",
+    "rule_generated": false,
+    "affected_resources": [
+      "aws_security_group.open_sg"
+    ],
+    "affected_files": [
+      "HIGH_risk.tf"
+    ],
+    "rule_ids_involved": [
+      "GNN_AWS_SECURITY_GROUP_OPEN_SG"
+    ],
+    "example_findings": [
+      {
+        "description": "Resource **aws_security_group.open_sg** has vulnerability: All protocols allowed. This resource is part of the infrastructure attack graph and may enable lateral movement or data exfiltration.\n\n**Impact:** This could lead to significant data exposure, privilege escalation, or service disruption.",
+        "title": "[open_sg] All protocols allowed",
+        "severity": "HIGH",
+        "resource": "aws_security_group.open_sg",
+        "file": "HIGH_risk.tf",
+        "rule_id": "GNN_AWS_SECURITY_GROUP_OPEN_SG",
+        "line_number": 19,
+        "code_snippet": "",
+        "scanner": "GNN",
+        "scan_id": 1
+      }
+    ],
+    "scanners_involved": [
+      "GNN"
+    ],
+    "categories": [
+      "gnn"
+    ],
+    "remediation_guidance": [
+      "Restrict to specific protocols (tcp, udp)"
+    ],
+    "risk_explanation": "This pattern has been detected 1 times across 1 scan(s), affecting 1 unique resource(s) in 1 file(s). Severity: HIGH. Detected by: GNN."
+  },
+  "8ed7aecd4af5": {
+    "signature": "8ed7aecd4af5",
+    "sample_description": "Resource **aws_s3_bucket.public_bucket** has vulnerability: S3 bucket publicly readable. This resource is part of the infrastructure attack graph and may enable lateral movement or data exfiltration.\n",
+    "sample_rule_id": "GNN_AWS_S3_BUCKET_PUBLIC_BUCKET",
+    "severity": "CRITICAL",
+    "scan_ids": [
+      1
+    ],
+    "count": 1,
+    "first_seen": "2026-03-07T08:30:14.633617",
+    "last_seen": "2026-03-07T08:30:14.633617",
+    "rule_generated": false,
+    "affected_resources": [
+      "aws_s3_bucket.public_bucket"
+    ],
+    "affected_files": [
+      "HIGH_risk.tf"
+    ],
+    "rule_ids_involved": [
+      "GNN_AWS_S3_BUCKET_PUBLIC_BUCKET"
+    ],
+    "example_findings": [
+      {
+        "description": "Resource **aws_s3_bucket.public_bucket** has vulnerability: S3 bucket publicly readable. This resource is part of the infrastructure attack graph and may enable lateral movement or data exfiltration.\n\n**Impact:** This could allow full system compromise, data breach, or unauthorized access to production infrastructure.",
+        "title": "[public_bucket] S3 bucket publicly readable",
+        "severity": "CRITICAL",
+        "resource": "aws_s3_bucket.public_bucket",
+        "file": "HIGH_risk.tf",
+        "rule_id": "GNN_AWS_S3_BUCKET_PUBLIC_BUCKET",
+        "line_number": 48,
+        "code_snippet": "",
+        "scanner": "GNN",
+        "scan_id": 1
+      }
+    ],
+    "scanners_involved": [
+      "GNN"
+    ],
+    "categories": [
+      "gnn"
+    ],
+    "remediation_guidance": [
+      "Remove public ACL; use bucket policies for access control"
+    ],
+    "risk_explanation": "This pattern has been detected 1 times across 1 scan(s), affecting 1 unique resource(s) in 1 file(s). Severity: CRITICAL. Detected by: GNN."
+  },
+  "81090e64d7ee": {
+    "signature": "81090e64d7ee",
+    "sample_description": "S3 bucket logging is not configured\n\n**Impact:** This could enable partial information disclosure or weaken the security posture.",
+    "sample_rule_id": "AWS_BP_S3_NO_LOGGING",
+    "severity": "MEDIUM",
+    "scan_ids": [
+      1
+    ],
+    "count": 4,
+    "first_seen": "2026-03-08T18:35:15.808618",
+    "last_seen": "2026-03-08T18:35:15.808618",
+    "rule_generated": false,
+    "affected_resources": [],
+    "affected_files": [
+      "s3.tf"
+    ],
+    "rule_ids_involved": [
+      "AWS_BP_S3_NO_LOGGING"
+    ],
+    "example_findings": [
+      {
+        "description": "S3 bucket logging is not configured\n\n**Impact:** This could enable partial information disclosure or weaken the security posture.",
+        "title": "Aws Bp S3 No Logging",
+        "severity": "MEDIUM",
+        "resource": "",
+        "file": "s3.tf",
+        "rule_id": "AWS_BP_S3_NO_LOGGING",
+        "line_number": null,
+        "code_snippet": "resource \"aws_s3_bucket\" \"data\" {",
+        "scanner": "Rules",
+        "scan_id": 1
+      }
+    ],
+    "scanners_involved": [
+      "Rules"
+    ],
+    "categories": [
+      "rules"
+    ],
+    "remediation_guidance": [
+      "Review the flagged configuration block",
+      "Apply least-privilege and defense-in-depth principles",
+      "Validate changes with terraform plan before applying",
+      "Add automated policy checks in your CI/CD pipeline"
+    ],
+    "risk_explanation": "This pattern has been detected 4 times across 1 scan(s), affecting 0 unique resource(s) in 1 file(s). Severity: MEDIUM. Detected by: Rules."
+  },
+  "bad80dd7a5f6": {
+    "signature": "bad80dd7a5f6",
+    "sample_description": "S3 bucket 'data_science' does not have server-side encryption enabled. CIS Benchmark 2.1.1 requires encryption at rest.\n\n**Impact:** This could lead to significant data exposure, privilege escalation,",
+    "sample_rule_id": "",
+    "severity": "HIGH",
+    "scan_ids": [
+      1
+    ],
+    "count": 1,
+    "first_seen": "2026-03-08T18:35:15.808618",
+    "last_seen": "2026-03-08T18:35:15.808618",
+    "rule_generated": false,
+    "affected_resources": [
+      "arn:aws:s3:::data_science"
+    ],
+    "affected_files": [
+      "s3.tf"
+    ],
+    "rule_ids_involved": [],
+    "example_findings": [
+      {
+        "description": "S3 bucket 'data_science' does not have server-side encryption enabled. CIS Benchmark 2.1.1 requires encryption at rest.\n\n**Impact:** This could lead to significant data exposure, privilege escalation, or service disruption.",
+        "title": "S3 Bucket Encryption Not Enabled",
+        "severity": "HIGH",
+        "resource": "arn:aws:s3:::data_science",
+        "file": "s3.tf",
+        "rule_id": "",
+        "line_number": 89,
+        "code_snippet": "resource \"aws_s3_bucket\" \"data_science\" {\r\n  # bucket is not encrypted\r\n  bucket = \"${local.resource_prefix.value}-data-science\"\r\n  acl    = \"private\"\r\n  versioning {\r\n  # ... (truncated)",
+        "scanner": "Compliance",
+        "scan_id": 1
+      }
+    ],
+    "scanners_involved": [
+      "Compliance"
+    ],
+    "categories": [
+      "compliance"
+    ],
+    "remediation_guidance": [
+      "Enable S3 bucket encryption",
+      "Use AWS KMS or S3-managed keys (SSE-S3)",
+      "Configure default encryption for the bucket",
+      "Update bucket policy to require encrypted uploads"
+    ],
+    "risk_explanation": "This pattern has been detected 1 times across 1 scan(s), affecting 1 unique resource(s) in 1 file(s). Severity: HIGH. Detected by: Compliance."
+  },
+  "b341641b3c73": {
+    "signature": "b341641b3c73",
+    "sample_description": "S3 bucket 'data' does not have access logging enabled. CIS Benchmark 2.1.2 requires logging for audit trails.\n\n**Impact:** This could enable partial information disclosure or weaken the security postu",
+    "sample_rule_id": "",
+    "severity": "MEDIUM",
+    "scan_ids": [
+      1
+    ],
+    "count": 1,
+    "first_seen": "2026-03-08T18:35:15.808618",
+    "last_seen": "2026-03-08T18:35:15.808618",
+    "rule_generated": false,
+    "affected_resources": [
+      "arn:aws:s3:::data"
+    ],
+    "affected_files": [
+      "s3.tf"
+    ],
+    "rule_ids_involved": [],
+    "example_findings": [
+      {
+        "description": "S3 bucket 'data' does not have access logging enabled. CIS Benchmark 2.1.2 requires logging for audit trails.\n\n**Impact:** This could enable partial information disclosure or weaken the security posture.",
+        "title": "S3 Bucket Logging Not Enabled",
+        "severity": "MEDIUM",
+        "resource": "arn:aws:s3:::data",
+        "file": "s3.tf",
+        "rule_id": "",
+        "line_number": 1,
+        "code_snippet": "resource \"aws_s3_bucket\" \"data\" {\r\n  # bucket is public\r\n  # bucket is not encrypted\r\n  # bucket does not have access logs\r\n  # bucket does not have versioning\r\n  # ... (truncated)",
+        "scanner": "Compliance",
+        "scan_id": 1
+      }
+    ],
+    "scanners_involved": [
+      "Compliance"
+    ],
+    "categories": [
+      "compliance"
+    ],
+    "remediation_guidance": [
+      "Enable S3 bucket access logging",
+      "Configure a target bucket for logs",
+      "Set appropriate log file prefix",
+      "Review logs regularly for security events"
+    ],
+    "risk_explanation": "This pattern has been detected 1 times across 1 scan(s), affecting 1 unique resource(s) in 1 file(s). Severity: MEDIUM. Detected by: Compliance."
+  },
+  "2453312bae3b": {
+    "signature": "2453312bae3b",
+    "sample_description": "Machine learning model detected potential security issues with 70.0% risk score and 40.0% confidence.\n\n**Impact:** This could lead to significant data exposure, privilege escalation, or service disrup",
+    "sample_rule_id": "",
+    "severity": "HIGH",
+    "scan_ids": [
+      1
+    ],
+    "count": 1,
+    "first_seen": "2026-03-08T18:35:15.808618",
+    "last_seen": "2026-03-08T18:35:15.808618",
+    "rule_generated": false,
+    "affected_resources": [],
+    "affected_files": [
+      "s3.tf"
+    ],
+    "rule_ids_involved": [],
+    "example_findings": [
+      {
+        "description": "Machine learning model detected potential security issues with 70.0% risk score and 40.0% confidence.\n\n**Impact:** This could lead to significant data exposure, privilege escalation, or service disruption.",
+        "title": "ML-Detected Security Risk (HIGH)",
+        "severity": "HIGH",
+        "resource": "",
+        "file": "s3.tf",
+        "rule_id": "",
+        "line_number": null,
+        "code_snippet": "",
+        "scanner": "ML",
+        "scan_id": 1
+      }
+    ],
+    "scanners_involved": [
+      "ML"
+    ],
+    "categories": [
+      "ml"
+    ],
+    "remediation_guidance": [
+      "Review the file for security misconfigurations flagged by ML model",
+      "Cross-reference with rules and compliance findings",
+      "Apply remediation steps from the most critical related findings"
+    ],
+    "risk_explanation": "This pattern has been detected 1 times across 1 scan(s), affecting 0 unique resource(s) in 1 file(s). Severity: HIGH. Detected by: ML."
+  },
+  "505247d01927": {
+    "signature": "505247d01927",
+    "sample_description": "Rule CVE flagged this IaC resource as HIGH. Description: AWS provider allows overly permissive IAM policies. CVSS: 7.5.. Location: <unknown>. This finding was generated by static analysis of the IaC f",
+    "sample_rule_id": "",
+    "severity": "HIGH",
+    "scan_ids": [
+      1,
+      2
+    ],
+    "count": 3,
+    "first_seen": "2026-03-08T18:35:15.808618",
+    "last_seen": "2026-03-08T18:42:28.288453",
+    "rule_generated": false,
+    "affected_resources": [],
+    "affected_files": [
+      "s3.tf",
+      "neptune.tf"
+    ],
+    "rule_ids_involved": [
+      "CVE"
+    ],
+    "example_findings": [
+      {
+        "description": "Rule CVE flagged this IaC resource as HIGH. Description: AWS provider allows overly permissive IAM policies. CVSS: 7.5.. Location: <unknown>. This finding was generated by static analysis of the IaC file.\n\n**Impact:** This could lead to significant data exposure, privilege escalation, or service disruption.",
+        "title": "LLM: CVE-2021-3178 in terraform-provider-aws 3.0.0",
+        "severity": "HIGH",
+        "resource": "",
+        "file": "s3.tf",
+        "rule_id": "",
+        "line_number": null,
+        "code_snippet": "",
+        "scanner": "LLM",
+        "scan_id": 1
+      }
+    ],
+    "scanners_involved": [
+      "LLM"
+    ],
+    "categories": [
+      "llm"
+    ],
+    "remediation_guidance": [
+      "Review the flagged configuration block",
+      "Apply least-privilege and defense-in-depth principles",
+      "Validate changes with terraform plan before applying",
+      "Add automated policy checks in your CI/CD pipeline"
+    ],
+    "risk_explanation": "This pattern has been detected 3 times across 2 scan(s), affecting 0 unique resource(s) in 2 file(s). Severity: HIGH. Detected by: LLM."
+  },
+  "8ac117e04638": {
+    "signature": "8ac117e04638",
+    "sample_description": "Rule CIS_2_1_1 flagged this IaC resource as HIGH. Description: S3 bucket 'data' does not have server-side encryption enabled. CIS Benchmark 2.1.1 requires encryption at rest.. Location: <unknown>. Thi",
+    "sample_rule_id": "",
+    "severity": "HIGH",
+    "scan_ids": [
+      1
+    ],
+    "count": 3,
+    "first_seen": "2026-03-08T18:35:15.809618",
+    "last_seen": "2026-03-08T18:35:15.809618",
+    "rule_generated": false,
+    "affected_resources": [],
+    "affected_files": [
+      "s3.tf"
+    ],
+    "rule_ids_involved": [],
+    "example_findings": [
+      {
+        "description": "Rule CIS_2_1_1 flagged this IaC resource as HIGH. Description: S3 bucket 'data' does not have server-side encryption enabled. CIS Benchmark 2.1.1 requires encryption at rest.. Location: <unknown>. This finding was generated by static analysis of the IaC file.\n\n**Impact:** This could lead to significant data exposure, privilege escalation, or service disruption.",
+        "title": "LLM: S3 Bucket Encryption Not Enabled",
+        "severity": "HIGH",
+        "resource": "",
+        "file": "s3.tf",
+        "rule_id": "",
+        "line_number": null,
+        "code_snippet": "",
+        "scanner": "LLM",
+        "scan_id": 1
+      },
+      {
+        "description": "Rule CIS_2_1_1 flagged this IaC resource as HIGH. Description: S3 bucket 'financials' does not have server-side encryption enabled. CIS Benchmark 2.1.1 requires encryption at rest.. Location: <unknown>. This finding was generated by static analysis of the IaC file.\n\n**Impact:** This could lead to significant data exposure, privilege escalation, or service disruption.",
+        "title": "LLM: S3 Bucket Encryption Not Enabled",
+        "severity": "HIGH",
+        "resource": "",
+        "file": "s3.tf",
+        "rule_id": "",
+        "line_number": null,
+        "code_snippet": "",
+        "scanner": "LLM",
+        "scan_id": 1
+      },
+      {
+        "description": "Rule CIS_2_1_1 flagged this IaC resource as HIGH. Description: S3 bucket 'operations' does not have server-side encryption enabled. CIS Benchmark 2.1.1 requires encryption at rest.. Location: <unknown>. This finding was generated by static analysis of the IaC file.\n\n**Impact:** This could lead to significant data exposure, privilege escalation, or service disruption.",
+        "title": "LLM: S3 Bucket Encryption Not Enabled",
+        "severity": "HIGH",
+        "resource": "",
+        "file": "s3.tf",
+        "rule_id": "",
+        "line_number": null,
+        "code_snippet": "",
+        "scanner": "LLM",
+        "scan_id": 1
+      }
+    ],
+    "scanners_involved": [
+      "LLM"
+    ],
+    "categories": [
+      "llm"
+    ],
+    "remediation_guidance": [
+      "Review the flagged configuration block",
+      "Apply least-privilege and defense-in-depth principles",
+      "Validate changes with terraform plan before applying",
+      "Add automated policy checks in your CI/CD pipeline"
+    ],
+    "risk_explanation": "This pattern has been detected 3 times across 1 scan(s), affecting 0 unique resource(s) in 1 file(s). Severity: HIGH. Detected by: LLM."
+  },
+  "704feedc23fc": {
+    "signature": "704feedc23fc",
+    "sample_description": "Rule CIS_2_1_1 flagged this IaC resource as HIGH. Description: S3 bucket 'data_science' does not have server-side encryption enabled. CIS Benchmark 2.1.1 requires encryption at rest.. Location: <unkno",
+    "sample_rule_id": "",
+    "severity": "HIGH",
+    "scan_ids": [
+      1
+    ],
+    "count": 1,
+    "first_seen": "2026-03-08T18:35:15.809618",
+    "last_seen": "2026-03-08T18:35:15.809618",
+    "rule_generated": false,
+    "affected_resources": [],
+    "affected_files": [
+      "s3.tf"
+    ],
+    "rule_ids_involved": [],
+    "example_findings": [
+      {
+        "description": "Rule CIS_2_1_1 flagged this IaC resource as HIGH. Description: S3 bucket 'data_science' does not have server-side encryption enabled. CIS Benchmark 2.1.1 requires encryption at rest.. Location: <unknown>. This finding was generated by static analysis of the IaC file.\n\n**Impact:** This could lead to significant data exposure, privilege escalation, or service disruption.",
+        "title": "LLM: S3 Bucket Encryption Not Enabled",
+        "severity": "HIGH",
+        "resource": "",
+        "file": "s3.tf",
+        "rule_id": "",
+        "line_number": null,
+        "code_snippet": "",
+        "scanner": "LLM",
+        "scan_id": 1
+      }
+    ],
+    "scanners_involved": [
+      "LLM"
+    ],
+    "categories": [
+      "llm"
+    ],
+    "remediation_guidance": [
+      "Review the flagged configuration block",
+      "Apply least-privilege and defense-in-depth principles",
+      "Validate changes with terraform plan before applying",
+      "Add automated policy checks in your CI/CD pipeline"
+    ],
+    "risk_explanation": "This pattern has been detected 1 times across 1 scan(s), affecting 0 unique resource(s) in 1 file(s). Severity: HIGH. Detected by: LLM."
+  },
+  "909bef9b0672": {
+    "signature": "909bef9b0672",
+    "sample_description": "Database instance is publicly accessible\n\n**Impact:** This could allow full system compromise, data breach, or unauthorized access to production infrastructure.",
+    "sample_rule_id": "AWS_CIS_DB_PUBLIC",
+    "severity": "CRITICAL",
+    "scan_ids": [
+      2
+    ],
+    "count": 1,
+    "first_seen": "2026-03-08T18:42:28.286194",
+    "last_seen": "2026-03-08T18:42:28.286194",
+    "rule_generated": false,
+    "affected_resources": [],
+    "affected_files": [
+      "neptune.tf"
+    ],
+    "rule_ids_involved": [
+      "AWS_CIS_DB_PUBLIC"
+    ],
+    "example_findings": [
+      {
+        "description": "Database instance is publicly accessible\n\n**Impact:** This could allow full system compromise, data breach, or unauthorized access to production infrastructure.",
+        "title": "Aws Cis Db Public",
+        "severity": "CRITICAL",
+        "resource": "",
+        "file": "neptune.tf",
+        "rule_id": "AWS_CIS_DB_PUBLIC",
+        "line_number": null,
+        "code_snippet": "#publicly_accessible                = true # No longer supported, API returns create error. See https://docs.aws.amazon.com/neptune/latest/userguide/api-instances.html#CreateDBInstance",
+        "scanner": "Rules",
+        "scan_id": 2
+      }
+    ],
+    "scanners_involved": [
+      "Rules"
+    ],
+    "categories": [
+      "rules"
+    ],
+    "remediation_guidance": [
+      "Review the flagged configuration block",
+      "Apply least-privilege and defense-in-depth principles",
+      "Validate changes with terraform plan before applying",
+      "Add automated policy checks in your CI/CD pipeline"
+    ],
+    "risk_explanation": "This pattern has been detected 1 times across 1 scan(s), affecting 0 unique resource(s) in 1 file(s). Severity: CRITICAL. Detected by: Rules."
+  },
+  "1a5f29664184": {
+    "signature": "1a5f29664184",
+    "sample_description": "Database storage encryption is disabled\n\n**Impact:** This could lead to significant data exposure, privilege escalation, or service disruption.",
+    "sample_rule_id": "AWS_CIS_DB_UNENCRYPTED",
+    "severity": "HIGH",
+    "scan_ids": [
+      2
+    ],
+    "count": 1,
+    "first_seen": "2026-03-08T18:42:28.286194",
+    "last_seen": "2026-03-08T18:42:28.286194",
+    "rule_generated": false,
+    "affected_resources": [],
+    "affected_files": [
+      "neptune.tf"
+    ],
+    "rule_ids_involved": [
+      "AWS_CIS_DB_UNENCRYPTED"
+    ],
+    "example_findings": [
+      {
+        "description": "Database storage encryption is disabled\n\n**Impact:** This could lead to significant data exposure, privilege escalation, or service disruption.",
+        "title": "Aws Cis Db Unencrypted",
+        "severity": "HIGH",
+        "resource": "",
+        "file": "neptune.tf",
+        "rule_id": "AWS_CIS_DB_UNENCRYPTED",
+        "line_number": null,
+        "code_snippet": "storage_encrypted                   = false",
+        "scanner": "Rules",
+        "scan_id": 2
+      }
+    ],
+    "scanners_involved": [
+      "Rules"
+    ],
+    "categories": [
+      "rules"
+    ],
+    "remediation_guidance": [
+      "Review the flagged configuration block",
+      "Apply least-privilege and defense-in-depth principles",
+      "Validate changes with terraform plan before applying",
+      "Add automated policy checks in your CI/CD pipeline"
+    ],
+    "risk_explanation": "This pattern has been detected 1 times across 1 scan(s), affecting 0 unique resource(s) in 1 file(s). Severity: HIGH. Detected by: Rules."
+  },
+  "97b91f264efb": {
+    "signature": "97b91f264efb",
+    "sample_description": "Encryption not enabled for sensitive data storage\n\n**Impact:** This could lead to significant data exposure, privilege escalation, or service disruption.",
+    "sample_rule_id": "AWS_OWASP_A02_CRYPTO_FAILURE",
+    "severity": "HIGH",
+    "scan_ids": [
+      2
+    ],
+    "count": 1,
+    "first_seen": "2026-03-08T18:42:28.286194",
+    "last_seen": "2026-03-08T18:42:28.286194",
+    "rule_generated": false,
+    "affected_resources": [],
+    "affected_files": [
+      "neptune.tf"
+    ],
+    "rule_ids_involved": [
+      "AWS_OWASP_A02_CRYPTO_FAILURE"
+    ],
+    "example_findings": [
+      {
+        "description": "Encryption not enabled for sensitive data storage\n\n**Impact:** This could lead to significant data exposure, privilege escalation, or service disruption.",
+        "title": "Aws Owasp A02 Crypto Failure",
+        "severity": "HIGH",
+        "resource": "",
+        "file": "neptune.tf",
+        "rule_id": "AWS_OWASP_A02_CRYPTO_FAILURE",
+        "line_number": null,
+        "code_snippet": "storage_encrypted                   = false",
+        "scanner": "Rules",
+        "scan_id": 2
+      }
+    ],
+    "scanners_involved": [
+      "Rules"
+    ],
+    "categories": [
+      "rules"
+    ],
+    "remediation_guidance": [
+      "Review the flagged configuration block",
+      "Apply least-privilege and defense-in-depth principles",
+      "Validate changes with terraform plan before applying",
+      "Add automated policy checks in your CI/CD pipeline"
+    ],
+    "risk_explanation": "This pattern has been detected 1 times across 1 scan(s), affecting 0 unique resource(s) in 1 file(s). Severity: HIGH. Detected by: Rules."
+  },
+  "f4798340182f": {
+    "signature": "f4798340182f",
+    "sample_description": "Database configured to skip final snapshot on deletion\n\n**Impact:** This could enable partial information disclosure or weaken the security posture.",
+    "sample_rule_id": "AWS_BP_SKIP_FINAL_SNAPSHOT",
+    "severity": "MEDIUM",
+    "scan_ids": [
+      2
+    ],
+    "count": 1,
+    "first_seen": "2026-03-08T18:42:28.286194",
+    "last_seen": "2026-03-08T18:42:28.286194",
+    "rule_generated": false,
+    "affected_resources": [],
+    "affected_files": [
+      "neptune.tf"
+    ],
+    "rule_ids_involved": [
+      "AWS_BP_SKIP_FINAL_SNAPSHOT"
+    ],
+    "example_findings": [
+      {
+        "description": "Database configured to skip final snapshot on deletion\n\n**Impact:** This could enable partial information disclosure or weaken the security posture.",
+        "title": "Aws Bp Skip Final Snapshot",
+        "severity": "MEDIUM",
+        "resource": "",
+        "file": "neptune.tf",
+        "rule_id": "AWS_BP_SKIP_FINAL_SNAPSHOT",
+        "line_number": null,
+        "code_snippet": "skip_final_snapshot                 = true",
+        "scanner": "Rules",
+        "scan_id": 2
+      }
+    ],
+    "scanners_involved": [
+      "Rules"
+    ],
+    "categories": [
+      "rules"
+    ],
+    "remediation_guidance": [
+      "Review the flagged configuration block",
+      "Apply least-privilege and defense-in-depth principles",
+      "Validate changes with terraform plan before applying",
+      "Add automated policy checks in your CI/CD pipeline"
+    ],
+    "risk_explanation": "This pattern has been detected 1 times across 1 scan(s), affecting 0 unique resource(s) in 1 file(s). Severity: MEDIUM. Detected by: Rules."
+  },
+  "6dc0e20dd318": {
+    "signature": "6dc0e20dd318",
+    "sample_description": "S3 bucket versioning is disabled\n\n**Impact:** This could enable partial information disclosure or weaken the security posture.",
+    "sample_rule_id": "TF_VERSIONING_DISABLED",
+    "severity": "MEDIUM",
+    "scan_ids": [
+      2
+    ],
+    "count": 1,
+    "first_seen": "2026-03-08T18:42:28.286194",
+    "last_seen": "2026-03-08T18:42:28.286194",
+    "rule_generated": false,
+    "affected_resources": [],
+    "affected_files": [
+      "neptune.tf"
+    ],
+    "rule_ids_involved": [
+      "TF_VERSIONING_DISABLED"
+    ],
+    "example_findings": [
+      {
+        "description": "S3 bucket versioning is disabled\n\n**Impact:** This could enable partial information disclosure or weaken the security posture.",
+        "title": "Tf Versioning Disabled",
+        "severity": "MEDIUM",
+        "resource": "",
+        "file": "neptune.tf",
+        "rule_id": "TF_VERSIONING_DISABLED",
+        "line_number": null,
+        "code_snippet": "iam_database_authentication_enabled = false",
+        "scanner": "Rules",
+        "scan_id": 2
+      }
+    ],
+    "scanners_involved": [
+      "Rules"
+    ],
+    "categories": [
+      "rules"
+    ],
+    "remediation_guidance": [
+      "Review the flagged configuration block",
+      "Apply least-privilege and defense-in-depth principles",
+      "Validate changes with terraform plan before applying",
+      "Add automated policy checks in your CI/CD pipeline"
+    ],
+    "risk_explanation": "This pattern has been detected 1 times across 1 scan(s), affecting 0 unique resource(s) in 1 file(s). Severity: MEDIUM. Detected by: Rules."
+  },
+  "48734817efa2": {
+    "signature": "48734817efa2",
+    "sample_description": "Machine learning model detected potential security issues with 50.0% risk score and 40.0% confidence.\n\n**Impact:** This could enable partial information disclosure or weaken the security posture.",
+    "sample_rule_id": "ML_PREDICTION",
+    "severity": "MEDIUM",
+    "scan_ids": [
+      2
+    ],
+    "count": 2,
+    "first_seen": "2026-03-08T18:42:28.286194",
+    "last_seen": "2026-03-08T18:42:28.286194",
+    "rule_generated": false,
+    "affected_resources": [],
+    "affected_files": [
+      "neptune.tf"
+    ],
+    "rule_ids_involved": [
+      "ML_PREDICTION"
+    ],
+    "example_findings": [
+      {
+        "description": "Machine learning model detected potential security issues with 50.0% risk score and 40.0% confidence.\n\n**Impact:** This could enable partial information disclosure or weaken the security posture.",
+        "title": "ML-Detected Security Risk (MEDIUM)",
+        "severity": "MEDIUM",
+        "resource": "",
+        "file": "neptune.tf",
+        "rule_id": "ML_PREDICTION",
+        "line_number": null,
+        "code_snippet": "",
+        "scanner": "ML",
+        "scan_id": 2
+      }
+    ],
+    "scanners_involved": [
+      "ML"
+    ],
+    "categories": [
+      "ml"
+    ],
+    "remediation_guidance": [
+      "Review the file for security misconfigurations flagged by ML model",
+      "Cross-reference with rules and compliance findings",
+      "Apply remediation steps from the most critical related findings"
+    ],
+    "risk_explanation": "This pattern has been detected 2 times across 1 scan(s), affecting 0 unique resource(s) in 1 file(s). Severity: MEDIUM. Detected by: ML."
+  },
+  "993ab3ff9d43": {
+    "signature": "993ab3ff9d43",
+    "sample_description": "Rule AWS_CIS_DB_PUBLIC flagged this IaC resource as CRITICAL. Description: Database instance is publicly accessible. Location: <unknown>. This finding was generated by static analysis of the IaC file.",
+    "sample_rule_id": "AWS_CIS_DB_PUBLIC",
+    "severity": "CRITICAL",
+    "scan_ids": [
+      2
+    ],
+    "count": 3,
+    "first_seen": "2026-03-08T18:42:28.286194",
+    "last_seen": "2026-03-08T18:42:28.288453",
+    "rule_generated": false,
+    "affected_resources": [],
+    "affected_files": [
+      "neptune.tf"
+    ],
+    "rule_ids_involved": [
+      "AWS_CIS_DB_PUBLIC"
+    ],
+    "example_findings": [
+      {
+        "description": "Rule AWS_CIS_DB_PUBLIC flagged this IaC resource as CRITICAL. Description: Database instance is publicly accessible. Location: <unknown>. This finding was generated by static analysis of the IaC file.\n\n**Impact:** This could allow full system compromise, data breach, or unauthorized access to production infrastructure.",
+        "title": "LLM: Aws Cis Db Public",
+        "severity": "CRITICAL",
+        "resource": "",
+        "file": "neptune.tf",
+        "rule_id": "AWS_CIS_DB_PUBLIC",
+        "line_number": null,
+        "code_snippet": "",
+        "scanner": "LLM",
+        "scan_id": 2
+      },
+      {
+        "description": "Rule AWS_CIS_DB_PUBLIC flagged this IaC resource as CRITICAL. Description: Rule AWS_CIS_DB_PUBLIC flagged this IaC resource as CRITICAL. Description: Database instance is publicly accessible. Location: <unknown>. This finding was generated by static analysis of the IaC file.. Location: <unknown>. This finding was generated by static analysis of the IaC file.\n\n**Impact:** This could allow full system compromise, data breach, or unauthorized access to production infrastructure.",
+        "title": "LLM: LLM: Aws Cis Db Public",
+        "severity": "CRITICAL",
+        "resource": "",
+        "file": "neptune.tf",
+        "rule_id": "",
+        "line_number": null,
+        "code_snippet": "",
+        "scanner": "LLM",
+        "scan_id": 2
+      }
+    ],
+    "scanners_involved": [
+      "LLM"
+    ],
+    "categories": [
+      "llm"
+    ],
+    "remediation_guidance": [
+      "Review the flagged configuration block",
+      "Apply least-privilege and defense-in-depth principles",
+      "Validate changes with terraform plan before applying",
+      "Add automated policy checks in your CI/CD pipeline"
+    ],
+    "risk_explanation": "This pattern has been detected 3 times across 1 scan(s), affecting 0 unique resource(s) in 1 file(s). Severity: CRITICAL. Detected by: LLM."
+  },
+  "ab34d2c658a5": {
+    "signature": "ab34d2c658a5",
+    "sample_description": "Rule AWS_CIS_DB_UNENCRYPTED flagged this IaC resource as HIGH. Description: Database storage encryption is disabled. Location: <unknown>. This finding was generated by static analysis of the IaC file.",
+    "sample_rule_id": "AWS_CIS_DB_UNENCRYPTED",
+    "severity": "HIGH",
+    "scan_ids": [
+      2
+    ],
+    "count": 2,
+    "first_seen": "2026-03-08T18:42:28.286194",
+    "last_seen": "2026-03-08T18:42:28.288453",
+    "rule_generated": false,
+    "affected_resources": [],
+    "affected_files": [
+      "neptune.tf"
+    ],
+    "rule_ids_involved": [
+      "AWS_CIS_DB_UNENCRYPTED"
+    ],
+    "example_findings": [
+      {
+        "description": "Rule AWS_CIS_DB_UNENCRYPTED flagged this IaC resource as HIGH. Description: Database storage encryption is disabled. Location: <unknown>. This finding was generated by static analysis of the IaC file.\n\n**Impact:** This could lead to significant data exposure, privilege escalation, or service disruption.",
+        "title": "LLM: Aws Cis Db Unencrypted",
+        "severity": "HIGH",
+        "resource": "",
+        "file": "neptune.tf",
+        "rule_id": "AWS_CIS_DB_UNENCRYPTED",
+        "line_number": null,
+        "code_snippet": "",
+        "scanner": "LLM",
+        "scan_id": 2
+      }
+    ],
+    "scanners_involved": [
+      "LLM"
+    ],
+    "categories": [
+      "llm"
+    ],
+    "remediation_guidance": [
+      "Review the flagged configuration block",
+      "Apply least-privilege and defense-in-depth principles",
+      "Validate changes with terraform plan before applying",
+      "Add automated policy checks in your CI/CD pipeline"
+    ],
+    "risk_explanation": "This pattern has been detected 2 times across 1 scan(s), affecting 0 unique resource(s) in 1 file(s). Severity: HIGH. Detected by: LLM."
+  },
+  "d70fdf2283b7": {
+    "signature": "d70fdf2283b7",
+    "sample_description": "Rule AWS_OWASP_A02_CRYPTO_FAILURE flagged this IaC resource as HIGH. Description: Encryption not enabled for sensitive data storage. Location: <unknown>. This finding was generated by static analysis ",
+    "sample_rule_id": "AWS_OWASP_A02_CRYPTO_FAILURE",
+    "severity": "HIGH",
+    "scan_ids": [
+      2
+    ],
+    "count": 2,
+    "first_seen": "2026-03-08T18:42:28.286194",
+    "last_seen": "2026-03-08T18:42:28.288453",
+    "rule_generated": false,
+    "affected_resources": [],
+    "affected_files": [
+      "neptune.tf"
+    ],
+    "rule_ids_involved": [
+      "AWS_OWASP_A02_CRYPTO_FAILURE"
+    ],
+    "example_findings": [
+      {
+        "description": "Rule AWS_OWASP_A02_CRYPTO_FAILURE flagged this IaC resource as HIGH. Description: Encryption not enabled for sensitive data storage. Location: <unknown>. This finding was generated by static analysis of the IaC file.\n\n**Impact:** This could lead to significant data exposure, privilege escalation, or service disruption.",
+        "title": "LLM: Aws Owasp A02 Crypto Failure",
+        "severity": "HIGH",
+        "resource": "",
+        "file": "neptune.tf",
+        "rule_id": "AWS_OWASP_A02_CRYPTO_FAILURE",
+        "line_number": null,
+        "code_snippet": "",
+        "scanner": "LLM",
+        "scan_id": 2
+      }
+    ],
+    "scanners_involved": [
+      "LLM"
+    ],
+    "categories": [
+      "llm"
+    ],
+    "remediation_guidance": [
+      "Review the flagged configuration block",
+      "Apply least-privilege and defense-in-depth principles",
+      "Validate changes with terraform plan before applying",
+      "Add automated policy checks in your CI/CD pipeline"
+    ],
+    "risk_explanation": "This pattern has been detected 2 times across 1 scan(s), affecting 0 unique resource(s) in 1 file(s). Severity: HIGH. Detected by: LLM."
+  },
+  "af0a614207de": {
+    "signature": "af0a614207de",
+    "sample_description": "Rule AWS_BP_SKIP_FINAL_SNAPSHOT flagged this IaC resource as MEDIUM. Description: Database configured to skip final snapshot on deletion. Location: <unknown>. This finding was generated by static anal",
+    "sample_rule_id": "AWS_BP_SKIP_FINAL_SNAPSHOT",
+    "severity": "MEDIUM",
+    "scan_ids": [
+      2
+    ],
+    "count": 1,
+    "first_seen": "2026-03-08T18:42:28.286194",
+    "last_seen": "2026-03-08T18:42:28.286194",
+    "rule_generated": false,
+    "affected_resources": [],
+    "affected_files": [
+      "neptune.tf"
+    ],
+    "rule_ids_involved": [
+      "AWS_BP_SKIP_FINAL_SNAPSHOT"
+    ],
+    "example_findings": [
+      {
+        "description": "Rule AWS_BP_SKIP_FINAL_SNAPSHOT flagged this IaC resource as MEDIUM. Description: Database configured to skip final snapshot on deletion. Location: <unknown>. This finding was generated by static analysis of the IaC file.\n\n**Impact:** This could enable partial information disclosure or weaken the security posture.",
+        "title": "LLM: Aws Bp Skip Final Snapshot",
+        "severity": "MEDIUM",
+        "resource": "",
+        "file": "neptune.tf",
+        "rule_id": "AWS_BP_SKIP_FINAL_SNAPSHOT",
+        "line_number": null,
+        "code_snippet": "",
+        "scanner": "LLM",
+        "scan_id": 2
+      }
+    ],
+    "scanners_involved": [
+      "LLM"
+    ],
+    "categories": [
+      "llm"
+    ],
+    "remediation_guidance": [
+      "Review the flagged configuration block",
+      "Apply least-privilege and defense-in-depth principles",
+      "Validate changes with terraform plan before applying",
+      "Add automated policy checks in your CI/CD pipeline"
+    ],
+    "risk_explanation": "This pattern has been detected 1 times across 1 scan(s), affecting 0 unique resource(s) in 1 file(s). Severity: MEDIUM. Detected by: LLM."
+  }
+}

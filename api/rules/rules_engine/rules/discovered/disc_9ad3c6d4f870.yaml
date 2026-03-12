@@ -1,0 +1,12 @@
+# Auto-discovered rule — generated 2026-03-11T07:55:38.184763
+# Based on 4 occurrences across 4 scans
+# Original: Resource **aws_instance.web_host** has vulnerability: Secrets in user_data. This resource is part of the infrastructure 
+rules:
+  - id: DISC_9AD3C6D4F870
+    description: "[Auto-Discovered] Resource **aws_instance.web_host** has vulnerability: Secrets in user_data. This resource is part of"
+    severity: CRITICAL
+    file_types: [".tf", ".yaml", ".yml", ".json"]
+    match:
+      regex: "infrastructure.*vulnerability"
+    references:
+      - "https://cloudguard.ai/discovered-patterns/9ad3c6d4f870"

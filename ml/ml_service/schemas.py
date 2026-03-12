@@ -51,6 +51,7 @@ class ExplainRequest(BaseModel):
 
 class ExplainedFinding(Finding):
     llm_explanation: Optional[str] = None
+    llm_impact: Optional[str] = None
     llm_remediation: Optional[str] = None
 
 

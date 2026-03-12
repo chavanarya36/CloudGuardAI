@@ -28,7 +28,9 @@ rules:
     severity: MEDIUM
     file_types: ["terraform"]
     match:
-      not_contains: "logging {"
+      terraform_block:
+        type: aws_s3_bucket
+        missing_attribute: logging
     references: ["AWS S3 Best Practices"]
 
   - id: AWS_BP_SKIP_FINAL_SNAPSHOT
@@ -46,6 +48,14 @@ rules:
     match:
       regex: 'monitoring\s*=\s*false'
     references: ["AWS EC2 Best Practices"]
+
+  - id: AWS_BP_SSM_PLAINTEXT_SECRET
+    description: SSM parameter stores secret as plaintext String instead of SecureString
+    severity: HIGH
+    file_types: ["terraform"]
+    match:
+      regex: 'type\s*=\s*"String"'
+    references: ["AWS SSM Best Practices", "https://docs.aws.amazon.com/systems-manager/latest/userguide/sysman-paramstore-securestring.html"]
 
   - id: AWS_BP_EGRESS_ALL
     description: Security group allows all egress traffic

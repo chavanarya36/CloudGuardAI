@@ -4,5 +4,21 @@ rules:
     severity: HIGH
     file_types: ["terraform", "yaml", "json", "bicep"]
     match:
-      regex: '(?i)(password|secret|api[_-]?key)\s*='
+      regex: '(?i)(password|secret|api[_-]?key)\s*=\s*"[^"]{8,}"'
     references: ["OWASP IaC A2"]
+
+  - id: TF_EMBEDDED_PRIVATE_KEY
+    description: Private key material (PEM block) is embedded directly in the configuration
+    severity: CRITICAL
+    file_types: ["terraform", "yaml", "json"]
+    match:
+      regex: '-----BEGIN.*PRIVATE KEY-----'
+    references: ["CWE-321", "OWASP IaC A2"]
+
+  - id: TF_HARDCODED_ENV_SECRET
+    description: Secret or API key is hardcoded in an environment variable definition
+    severity: CRITICAL
+    file_types: ["terraform", "yaml", "json"]
+    match:
+      regex: '(?i)\b(API_KEY|SECRET_KEY|API_SECRET_KEY|AUTH_TOKEN|ACCESS_TOKEN)\s*=\s*"[^"]{8,}"'
+    references: ["CWE-798", "OWASP IaC A2"]

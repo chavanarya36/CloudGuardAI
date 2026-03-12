@@ -236,14 +236,14 @@ class AdaptiveRuleWeights:
     def _load(self) -> Dict[str, Dict[str, Any]]:
         if self.path.exists():
             try:
-                with open(self.path, "r") as f:
+                with open(self.path, "r", encoding="utf-8") as f:
                     return json.load(f)
             except Exception:
                 return {}
         return {}
 
     def save(self):
-        with open(self.path, "w") as f:
+        with open(self.path, "w", encoding="utf-8") as f:
             json.dump(self.weights, f, indent=2)
 
     def record_feedback(self, rule_id: str, feedback_type: str):
@@ -336,15 +336,19 @@ class PatternDiscoveryEngine:
         p = self._state_path()
         if p.exists():
             try:
-                with open(p, "r") as f:
-                    self._pattern_counts = json.load(f)
+                with open(p, "r", encoding="utf-8") as f:
+                    raw = json.load(f)
+                # Only keep entries that are proper dicts (filter out nulls / stale keys)
+                self._pattern_counts = {
+                    k: v for k, v in raw.items() if isinstance(v, dict)
+                }
             except Exception:
                 self._pattern_counts = {}
 
     def _save_state(self):
         p = self._state_path()
         p.parent.mkdir(parents=True, exist_ok=True)
-        with open(p, "w") as f:
+        with open(p, "w", encoding="utf-8") as f:
             json.dump(self._pattern_counts, f, indent=2)
 
     def _signature(self, finding: Dict[str, Any]) -> str:
@@ -515,7 +519,7 @@ rules:
 """
 
         rule_path = self.RULES_DIR / f"{rule_id.lower()}.yaml"
-        with open(rule_path, "w") as f:
+        with open(rule_path, "w", encoding="utf-8") as f:
             f.write(rule_content)
 
         # Mark as generated
@@ -698,7 +702,7 @@ class LearningTelemetry:
     def _load(self) -> List[Dict[str, Any]]:
         if self.path.exists():
             try:
-                with open(self.path, "r") as f:
+                with open(self.path, "r", encoding="utf-8") as f:
                     data = json.load(f)
                     return data if isinstance(data, list) else []
             except Exception:
@@ -708,7 +712,7 @@ class LearningTelemetry:
     def _save(self):
         # Keep last 1000 events
         self.events = self.events[-1000:]
-        with open(self.path, "w") as f:
+        with open(self.path, "w", encoding="utf-8") as f:
             json.dump(self.events, f, indent=2)
 
     def log(self, event_type: str, details: Dict[str, Any]):

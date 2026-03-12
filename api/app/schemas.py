@@ -44,6 +44,7 @@ class FindingResponse(BaseModel):
     line_number: Optional[int] = None
     code_snippet: Optional[str] = None
     resource: Optional[str] = None
+    detection_method: Optional[str] = None  # Explainability: how the scanner detected this
     llm_explanation: Optional[str] = None
     llm_explanation_short: Optional[str] = None  # Added for enriched schema
     llm_remediation: Optional[str] = None
@@ -59,6 +60,18 @@ class FindingResponse(BaseModel):
     control_id: Optional[str] = None  # For compliance findings (e.g., CIS 1.4)
     remediation_steps: Optional[List[str]] = None  # Step-by-step remediation
     references: Optional[List[str]] = None  # External references
+    # Unified reasoning fields
+    ranking_score: Optional[float] = None
+    reasoning_summary: Optional[str] = None
+    part_of_attack_path: Optional[bool] = None
+    attack_path_context: Optional[Dict[str, Any]] = None
+    # RL Auto-Fix Agent fields
+    rl_fix_action: Optional[str] = None
+    rl_fix_applied: Optional[bool] = None
+    rl_fixed_code: Optional[str] = None
+    # Transformer Secure Code Generator fields
+    transformer_fix: Optional[str] = None
+    transformer_fix_available: Optional[bool] = None
     # Deduplication fields (Phase 2, Step 2.4)
     finding_hash: Optional[str] = None
     first_seen: Optional[datetime] = None
@@ -100,6 +113,12 @@ class ScanResponse(BaseModel):
     scanner_breakdown: Optional[Dict[str, int]] = None  # Findings count per scanner category
     # GNN attack path graph data
     gnn_graph_data: Optional[Dict[str, Any]] = None
+    # GNN model scan-level risk score (real PyTorch GAT inference)
+    gnn_risk_score: Optional[float] = None
+    # Which scanners actually ran during this scan
+    scanners_used: Optional[List[str]] = None
+    # Recommended finding display order (indices sorted by ranking_score)
+    recommended_finding_order: Optional[List[int]] = None
 
     model_config = ConfigDict(from_attributes=True, protected_namespaces=())
 

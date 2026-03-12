@@ -12,11 +12,10 @@ echo [1/5] Stopping existing services...
 for /f "tokens=2" %%a in ('tasklist /fi "WINDOWTITLE eq CloudGuard*" /fo list ^| findstr PID') do taskkill /PID %%a /F >nul 2>&1
 timeout /t 2 /nobreak >nul
 
-REM Clean and recreate database
-echo [2/5] Recreating database...
+REM Initialize database (preserves existing data)
+echo [2/5] Initializing database...
 cd /d "%PROJECT_ROOT%api"
-if exist cloudguard.db del /F cloudguard.db
-python -c "from app.database import engine, Base; from app.models import Scan, Finding, Feedback, ModelVersion; Base.metadata.create_all(bind=engine); print('✓ Database created')"
+python -c "from app.database import engine, Base; from app.models import Scan, Finding, Feedback, ModelVersion; Base.metadata.create_all(bind=engine); print('✓ Database ready')"
 python seed_model.py
 
 REM Start API Service

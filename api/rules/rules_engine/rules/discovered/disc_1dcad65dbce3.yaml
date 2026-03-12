@@ -1,0 +1,16 @@
+# Auto-discovered rule — generated 2026-03-11T07:55:36.750424
+# Based on 9 occurrences across 6 scans
+# Original: Detected a 2-hop attack path from aws_security_group.db_sg to aws_db_instance.database.
+
+**Attack Chain:** db_sg → datab
+rules:
+  - id: DISC_1DCAD65DBCE3
+    description: "[Auto-Discovered] Detected a 2-hop attack path from aws_security_group.db_sg to aws_db_instance.database.
+
+**Attack Ch"
+    severity: CRITICAL
+    file_types: [".tf", ".yaml", ".yml", ".json"]
+    match:
+      regex: "aws_security_group.*aws_db_instance"
+    references:
+      - "https://cloudguard.ai/discovered-patterns/1dcad65dbce3"

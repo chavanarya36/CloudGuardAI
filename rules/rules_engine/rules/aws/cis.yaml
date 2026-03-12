@@ -1,4 +1,12 @@
 rules:
+  - id: AWS_CIS_IAM_WILDCARD_POLICY
+    description: IAM policy grants Action=* on Resource=*, equivalent to full admin access
+    severity: CRITICAL
+    file_types: ["terraform"]
+    match:
+      regex: 'Action\s*=\s*"\*"'
+    references: ["CIS AWS 1.22", "https://docs.aws.amazon.com/IAM/latest/UserGuide/best-practices.html"]
+
   - id: AWS_CIS_SG_0_0_0_0
     description: Security group allows unrestricted access from 0.0.0.0/0
     severity: CRITICAL

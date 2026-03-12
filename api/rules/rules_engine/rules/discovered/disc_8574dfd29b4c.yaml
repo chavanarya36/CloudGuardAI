@@ -1,0 +1,16 @@
+# Auto-discovered rule — generated 2026-03-11T07:55:37.389655
+# Based on 4 occurrences across 4 scans
+# Original: Detected a 2-hop attack path from aws_instance.web_server to aws_iam_role.admin_role.
+
+**Attack Chain:** web_server → ad
+rules:
+  - id: DISC_8574DFD29B4C
+    description: "[Auto-Discovered] Detected a 2-hop attack path from aws_instance.web_server to aws_iam_role.admin_role.
+
+**Attack Chai"
+    severity: MEDIUM
+    file_types: [".tf", ".yaml", ".yml", ".json"]
+    match:
+      regex: "aws_iam_role.*aws_instance"
+    references:
+      - "https://cloudguard.ai/discovered-patterns/8574dfd29b4c"

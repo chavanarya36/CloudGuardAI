@@ -167,21 +167,59 @@ def json_path_match(rule: Rule, path: Path, content: str) -> List[Finding]:
     return yaml_path_match(rule, path, content)
 
 
-def terraform_block_match(rule: Rule, path: Path, content: str) -> List[Finding]:
-    """Very small heuristic Terraform block matcher.
+def _extract_block(lines: list[str], start_idx: int) -> str:
+    """Extract content of a Terraform block starting from a resource declaration line.
 
-    Looks for text patterns like `resource "aws_s3_bucket"` when
-    terraform_block contains a `type` key.
+    Tracks brace nesting from ``start_idx`` until the matching ``}`` is found
+    and returns all lines within that block (inclusive).
+    """
+    depth = 0
+    collecting = False
+    block_lines: list[str] = []
+
+    for i in range(start_idx, len(lines)):
+        line = lines[i]
+        for ch in line:
+            if ch == "{":
+                depth += 1
+                collecting = True
+            elif ch == "}":
+                depth -= 1
+                if depth == 0 and collecting:
+                    block_lines.append(line)
+                    return "\n".join(block_lines)
+        if collecting:
+            block_lines.append(line)
+
+    return "\n".join(block_lines)
+
+
+def terraform_block_match(rule: Rule, path: Path, content: str) -> List[Finding]:
+    """Heuristic Terraform block matcher with ``missing_attribute`` support.
+
+    When the rule specifies ``missing_attribute``, the matcher extracts the
+    full resource block and fires only if the attribute is absent or
+    explicitly set to ``false``.  Without ``missing_attribute`` the rule
+    fires on every matching resource declaration (original behaviour).
     """
 
     block = rule.match.terraform_block or {}
     block_type = block.get("type")
     if not block_type:
         return []
-    pattern = f"resource \"{block_type}\""
+
+    missing_attr = block.get("missing_attribute")
+    pattern = f'resource "{block_type}"'
     findings: List[Finding] = []
-    for line_no, line in _iter_lines(content):
-        if pattern in line:
+    lines = content.splitlines()
+
+    for i, line in enumerate(lines):
+        if pattern not in line:
+            continue
+        line_no = i + 1  # 1-based
+
+        if missing_attr is None:
+            # No missing_attribute check — fire on resource type match
             findings.append(
                 Finding(
                     rule_id=rule.id,
@@ -193,5 +231,36 @@ def terraform_block_match(rule: Rule, path: Path, content: str) -> List[Finding]
                     references=rule.references,
                 )
             )
+            continue
+
+        # Extract the full resource block content
+        block_content = _extract_block(lines, i)
+
+        # Check whether the attribute is present.
+        # Handles boolean attrs (encrypted = true) and sub-blocks (logging {).
+        attr_as_bool = re.search(
+            rf'^\s*{re.escape(missing_attr)}\s*=\s*true\b',
+            block_content,
+            re.MULTILINE,
+        )
+        attr_as_block = re.search(
+            rf'^\s*{re.escape(missing_attr)}\s*\{{',
+            block_content,
+            re.MULTILINE,
+        )
+        if not attr_as_bool and not attr_as_block:
+            # Attribute is either missing entirely or set to false → fire
+            findings.append(
+                Finding(
+                    rule_id=rule.id,
+                    severity=rule.severity,
+                    description=rule.description,
+                    file_path=str(path),
+                    line=line_no,
+                    evidence=line.strip(),
+                    references=rule.references,
+                )
+            )
+
     return findings
 

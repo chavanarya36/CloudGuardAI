@@ -1,5 +1,6 @@
 """Database configuration and service layer"""
 import os
+from pathlib import Path
 from typing import Optional, List, Dict, Any
 from datetime import datetime, timedelta
 from sqlalchemy import create_engine, desc
@@ -17,12 +18,23 @@ except ImportError:
         # Fallback for when models aren't yet created
         Scan = Finding = Feedback = ModelVersion = None
 
+# Resolve database path to an absolute location so the DB file is always
+# in api/ regardless of the working directory the process starts from.
+_API_DIR = Path(__file__).resolve().parent.parent  # api/
+_DEFAULT_DB_PATH = _API_DIR / "cloudguard.db"
+_DEFAULT_DB_URL = f"sqlite:///{_DEFAULT_DB_PATH}"
+
 try:
     from app.config import settings
-    DATABASE_URL = settings.database_url
+    _raw_url = settings.database_url
+    # If the configured URL is the default relative SQLite path, replace
+    # it with the absolute version so the file always lands in api/.
+    if _raw_url == "sqlite:///./cloudguard.db":
+        DATABASE_URL = _DEFAULT_DB_URL
+    else:
+        DATABASE_URL = _raw_url
 except (ImportError, AttributeError):
-    # Fallback to environment variable or SQLite
-    DATABASE_URL = os.getenv("DATABASE_URL", "sqlite:///./cloudguard.db")
+    DATABASE_URL = os.getenv("DATABASE_URL", _DEFAULT_DB_URL)
 
 # Create engine with appropriate settings
 if DATABASE_URL.startswith("sqlite"):

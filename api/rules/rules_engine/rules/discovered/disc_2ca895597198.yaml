@@ -1,0 +1,14 @@
+# Auto-discovered rule — generated 2026-02-23T11:21:42.664944
+# Based on 6 occurrences across 6 scans
+# Original: Potential hardcoded password detected. This poses a critical security risk as credentials should never be hardcoded.
+
+**
+rules:
+  - id: DISC_2CA895597198
+    description: "[Auto-Discovered] Potential hardcoded password detected. This poses a critical security risk as credentials should nev"
+    severity: HIGH
+    file_types: [".tf", ".yaml", ".yml", ".json"]
+    match:
+      regex: "significant.*credentials"
+    references:
+      - "https://cloudguard.ai/discovered-patterns/2ca895597198"

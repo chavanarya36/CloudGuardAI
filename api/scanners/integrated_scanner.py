@@ -35,6 +35,26 @@ try:
 except ImportError:
     GNN_AVAILABLE = False
 
+# Try to import Transformer secure code generator
+try:
+    import sys as _sys
+    _sys.path.insert(0, str(Path(__file__).parent.parent.parent))
+    from ml.models.transformer_code_gen import IaCSecureCodeGenerator
+    _transformer_generator = None
+    def _get_transformer():
+        global _transformer_generator
+        if _transformer_generator is None:
+            model_path = Path(__file__).parent.parent.parent / "ml" / "models_artifacts" / "transformer_secure_codegen.pt"
+            _transformer_generator = IaCSecureCodeGenerator(
+                model_path=str(model_path) if model_path.exists() else None
+            )
+        return _transformer_generator
+    TRANSFORMER_AVAILABLE = True
+except ImportError:
+    TRANSFORMER_AVAILABLE = False
+    def _get_transformer():
+        return None
+
 
 class IntegratedSecurityScanner:
     """
@@ -118,15 +138,31 @@ class IntegratedSecurityScanner:
         config = {
             'security_groups': [],
             's3': {'buckets': []},
-            'iam': {'users': []}
+            'iam': {'users': []},
+            'oci_storage': {'buckets': []},
         }
         
+        # Helper: compute line number from character offset
+        def _line_at(offset):
+            return content[:offset].count('\n') + 1
+
+        # Helper: extract a short code snippet from the match
+        def _snippet(match, max_lines=5):
+            block = match.group(0)
+            lines = block.split('\n')
+            if len(lines) > max_lines:
+                return '\n'.join(lines[:max_lines]) + '\n  # ... (truncated)'
+            return block
+
         # ── Extract security group blocks ─────────────────────────
         # More lenient regex: stop at the next top-level resource or end
         sg_pattern = r'resource\s+"aws_security_group"\s+"([^"]+)"\s*\{(.*?)(?=\nresource\s|\Z)'
         for match in re.finditer(sg_pattern, content, re.DOTALL):
             sg_name = match.group(1)
             sg_content = match.group(2)
+            sg_start_line = _line_at(match.start())
+            sg_end_line = _line_at(match.end())
+            sg_snippet = _snippet(match)
             
             ingress_rules = []
             ingress_pattern = r'ingress\s*\{([^}]*?)\}'
@@ -152,17 +188,18 @@ class IntegratedSecurityScanner:
             config['security_groups'].append({
                 'name': sg_name,
                 'id': sg_name,
-                'ingress_rules': ingress_rules
+                'ingress_rules': ingress_rules,
+                'start_line': sg_start_line,
+                'end_line': sg_end_line,
+                'block_snippet': sg_snippet,
             })
 
         # ── Fallback: detect inline SG-like patterns even without
         #    a proper "resource" block – e.g. ingress { ... 0.0.0.0/0 }
         if not config['security_groups']:
             # Look for any ingress block with 0.0.0.0/0
-            inline_ingress = re.findall(
-                r'ingress\s*\{([^}]+)\}', content, re.DOTALL
-            )
-            for rule_content in inline_ingress:
+            for rule_match in re.finditer(r'ingress\s*\{([^}]+)\}', content, re.DOTALL):
+                rule_content = rule_match.group(1)
                 if '0.0.0.0/0' in rule_content:
                     port_match = re.search(r'from_port\s*=\s*(\d+)', rule_content)
                     to_port_match = re.search(r'to_port\s*=\s*(\d+)', rule_content)
@@ -181,7 +218,10 @@ class IntegratedSecurityScanner:
                         config['security_groups'].append({
                             'name': 'inline_sg',
                             'id': 'inline_sg',
-                            'ingress_rules': [rule]
+                            'ingress_rules': [rule],
+                            'start_line': _line_at(rule_match.start()),
+                            'end_line': _line_at(rule_match.end()),
+                            'block_snippet': _snippet(rule_match),
                         })
         
         # ── Extract S3 bucket blocks ──────────────────────────────
@@ -197,7 +237,10 @@ class IntegratedSecurityScanner:
                 'name': bucket_name,
                 'arn': f'arn:aws:s3:::{bucket_name}',
                 'encryption_enabled': encryption_enabled,
-                'logging_enabled': logging_enabled
+                'logging_enabled': logging_enabled,
+                'start_line': _line_at(match.start()),
+                'end_line': _line_at(match.end()),
+                'block_snippet': _snippet(match),
             })
 
         # Fallback: detect S3 bucket resources even with alternate naming
@@ -205,13 +248,52 @@ class IntegratedSecurityScanner:
             # If there are S3 buckets but parser missed them
             has_encryption = 'server_side_encryption' in content or 'sse_algorithm' in content
             has_logging = 'logging' in content and 'target_bucket' in content
+            # Find approximate location of the first aws_s3_bucket mention
+            fb_match = re.search(r'aws_s3_bucket', content)
+            fb_line = _line_at(fb_match.start()) if fb_match else None
             config['s3']['buckets'].append({
                 'name': 'detected_bucket',
                 'arn': 'arn:aws:s3:::detected_bucket',
                 'encryption_enabled': has_encryption,
-                'logging_enabled': has_logging
+                'logging_enabled': has_logging,
+                'start_line': fb_line,
+                'end_line': fb_line,
+                'block_snippet': '(fallback detection — resource block could not be fully parsed)',
             })
         
+        # ── Extract OCI Object Storage buckets ─────────────────
+        oci_bucket_pattern = r'resource\s+"oci_objectstorage_bucket"\s+"([^"]+)"\s*\{(.*?)(?=\nresource\s|\Z)'
+        for match in re.finditer(oci_bucket_pattern, content, re.DOTALL):
+            bucket_name = match.group(1)
+            bucket_content = match.group(2)
+
+            # access_type: "NoPublicAccess" is safe; anything else is public
+            access_match = re.search(r'access_type\s*=\s*"([^"]+)"', bucket_content)
+            access_type = access_match.group(1) if access_match else 'NoPublicAccess'
+
+            events_match = re.search(r'object_events_enabled\s*=\s*(true|false)', bucket_content, re.IGNORECASE)
+            events_enabled = events_match and events_match.group(1).lower() == 'true'
+
+            has_cmk = 'kms_key_id' in bucket_content
+            # Only count real versioning attributes, not comments
+            has_versioning = bool(re.search(r'^\s*versioning\s*=', bucket_content, re.MULTILINE))
+
+            # Extract human-readable name if present
+            name_match = re.search(r'name\s*=\s*"([^"]+)"', bucket_content)
+            display_name = name_match.group(1) if name_match else bucket_name
+
+            config['oci_storage']['buckets'].append({
+                'name': bucket_name,
+                'display_name': display_name,
+                'access_type': access_type,
+                'events_enabled': events_enabled,
+                'encryption_cmk': has_cmk,
+                'versioning_enabled': has_versioning,
+                'start_line': _line_at(match.start()),
+                'end_line': _line_at(match.end()),
+                'block_snippet': _snippet(match),
+            })
+
         # ── Extract IAM users ─────────────────────────────────────
         iam_pattern = r'resource\s+"aws_iam_user"\s+"([^"]+)"\s*\{(.*?)(?=\nresource\s|\Z)'
         for match in re.finditer(iam_pattern, content, re.DOTALL):
@@ -223,7 +305,10 @@ class IntegratedSecurityScanner:
             config['iam']['users'].append({
                 'name': user_name,
                 'arn': f'arn:aws:iam::123456789012:user/{user_name}',
-                'mfa_enabled': mfa_enabled
+                'mfa_enabled': mfa_enabled,
+                'start_line': _line_at(match.start()),
+                'end_line': _line_at(match.end()),
+                'block_snippet': _snippet(match),
             })
         
         return config
@@ -345,6 +430,7 @@ class IntegratedSecurityScanner:
                         'description': f'Machine learning model detected potential security issues with {risk_score:.1%} risk score and {confidence:.1%} confidence.',
                         'risk_score': risk_score,
                         'confidence': confidence,
+                        'detection_method': f'Ensemble ML model (heuristic/gradient-boosted) analyzed full file content. Risk score: {risk_score:.1%}, prediction: {prediction}, confidence: {confidence:.1%}.',
                         'remediation': 'Review file for security misconfigurations flagged by ML analysis.'
                     }]
                 return []
@@ -383,7 +469,7 @@ class IntegratedSecurityScanner:
                     "file_content": content,
                     "findings": findings_to_explain
                 },
-                timeout=10.0  # LLM inference needs more time
+                timeout=120.0  # Local LLM inference ~10s per finding
             )
             
             if response.status_code == 200:
@@ -393,14 +479,19 @@ class IntegratedSecurityScanner:
                 # Convert to standard format - these are enhanced findings
                 llm_findings = []
                 for finding in explained:
+                    desc = finding.get('llm_explanation', finding.get('description', ''))
+                    impact = finding.get('llm_impact', '')
+                    if impact:
+                        desc = f"{desc}\n\nImpact: {impact}"
                     llm_findings.append({
                         'type': finding.get('rule_id', 'LLM_ENHANCED'),
                         'severity': finding.get('severity', 'MEDIUM'),
                         'category': 'llm',
                         'scanner': 'llm',
                         'title': f"LLM: {finding.get('title', 'Enhanced Security Analysis')}",
-                        'description': finding.get('llm_explanation', finding.get('description', '')),
+                        'description': desc,
                         'remediation': finding.get('llm_remediation', ''),
+                        'detection_method': 'Re-analysis of existing scanner finding by LLM reasoning engine (Ollama qwen3 local or OpenAI).',
                         'original_finding': finding
                     })
                 return llm_findings
@@ -422,6 +513,39 @@ class IntegratedSecurityScanner:
             logger.error("LLM scanner error: %s", e)
             return []
     
+    def generate_secure_fix(self, content: str, finding: Dict) -> Optional[str]:
+        """
+        Use the trained Transformer to generate a secure code fix for a finding.
+        Only attempted for CRITICAL/HIGH severity findings on Terraform files.
+        
+        Returns:
+            Secure code suggestion string, or None if not available.
+        """
+        if not TRANSFORMER_AVAILABLE:
+            return None
+        severity = finding.get('severity', '').upper()
+        if severity not in ('CRITICAL', 'HIGH'):
+            return None
+        try:
+            generator = _get_transformer()
+            if generator is None:
+                return None
+            # Extract a relevant code snippet (use finding's code_snippet or first 500 chars)
+            snippet = finding.get('code_snippet', '') or content[:500]
+            if not snippet.strip():
+                return None
+            secure_code = generator.generate_secure_code(
+                snippet, max_length=128, temperature=0.7
+            )
+            # Only return if the output looks meaningful (more than just special tokens)
+            meaningful_tokens = [t for t in secure_code.split() if not t.startswith('<')]
+            if len(meaningful_tokens) >= 3:
+                return secure_code
+            return None
+        except Exception as e:
+            logger.debug("Transformer fix generation failed: %s", e)
+            return None
+
     def calculate_risk_score(self, all_findings: List[Dict]) -> float:
         """
         Calculate unified risk score based on all findings
@@ -545,7 +669,7 @@ class IntegratedSecurityScanner:
         # 0. GNN Scanner (NEW: Novel AI feature)
         start = datetime.now()
         if self.gnn_scanner and self.gnn_scanner.available:
-            findings['gnn'] = self.gnn_scanner.scan_file(file_path)
+            findings['gnn'] = self.gnn_scanner.scan_file(file_path, content=content)
             scanner_timings['gnn'] = (datetime.now() - start).total_seconds()
             logger.info("GNN scanner: %d findings in %.2fs", len(findings['gnn']), scanner_timings['gnn'])
         else:
@@ -723,7 +847,7 @@ class IntegratedSecurityScanner:
         for scanner_name, scanner_findings in findings_by_scanner.items():
             for finding in scanner_findings:
                 # Normalize finding format for API
-                all_findings.append({
+                normalized = {
                     'rule_id': finding.get('type', finding.get('rule_id', f'{scanner_name.upper()}_FINDING')),
                     'check_id': finding.get('type', finding.get('check_id', '')),
                     'severity': finding.get('severity', 'MEDIUM').upper(),
@@ -736,7 +860,25 @@ class IntegratedSecurityScanner:
                     'resource': finding.get('resource', ''),
                     'remediation': finding.get('remediation', ''),
                     'confidence': finding.get('confidence', finding.get('certainty', 0.8))
-                })
+                }
+                # Preserve scanner-specific rich fields
+                if finding.get('remediation_steps'):
+                    normalized['remediation_steps'] = finding['remediation_steps']
+                if finding.get('compliance_framework'):
+                    normalized['compliance_framework'] = finding['compliance_framework']
+                if finding.get('control_id'):
+                    normalized['control_id'] = finding['control_id']
+                if finding.get('references'):
+                    normalized['references'] = finding['references']
+                if finding.get('detection_method'):
+                    normalized['detection_method'] = finding['detection_method']
+                # Attach Transformer-generated secure code fix for CRITICAL/HIGH findings
+                if normalized['severity'] in ('CRITICAL', 'HIGH'):
+                    secure_fix = self.generate_secure_fix(content, finding)
+                    if secure_fix:
+                        normalized['transformer_fix'] = secure_fix
+                        normalized['transformer_fix_available'] = True
+                all_findings.append(normalized)
         
         # --- Apply adaptive rule weights (lower confidence of noisy rules) ---
         try:

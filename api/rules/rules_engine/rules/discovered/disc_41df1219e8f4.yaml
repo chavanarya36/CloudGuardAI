@@ -1,0 +1,16 @@
+# Auto-discovered rule — generated 2026-03-11T07:55:37.482050
+# Based on 16 occurrences across 8 scans
+# Original: Azure provider storage account key exposure. CVSS: 8.1.
+
+**Impact:** This could lead to significant data exposure, privi
+rules:
+  - id: DISC_41DF1219E8F4
+    description: "[Auto-Discovered] Azure provider storage account key exposure. CVSS: 8.1.
+
+**Impact:** This could lead to significant "
+    severity: HIGH
+    file_types: [".tf", ".yaml", ".yml", ".json"]
+    match:
+      regex: "significant.*escalation"
+    references:
+      - "https://cloudguard.ai/discovered-patterns/41df1219e8f4"

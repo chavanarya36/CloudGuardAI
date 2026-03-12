@@ -570,8 +570,8 @@ def analyze_attack_paths(content: str, filename: str = "") -> Dict[str, Any]:
     findings = []
     for path in attack_paths:
         findings.append({
-            "scanner": "gnn",
-            "category": "gnn",
+            "scanner": "attack_path",
+            "category": "attack_path",
             "type": "attack_path",
             "severity": path["severity"],
             "confidence": 0.85 if path["severity_score"] >= 5 else 0.7,
@@ -599,8 +599,8 @@ def analyze_attack_paths(content: str, filename: str = "") -> Dict[str, Any]:
     for r in resources:
         for v in vulns_by_resource.get(r["full_name"], []):
             findings.append({
-                "scanner": "gnn",
-                "category": "gnn",
+                "scanner": "attack_path",
+                "category": "attack_path",
                 "type": "critical_resource",
                 "severity": v["severity"],
                 "confidence": 0.9,

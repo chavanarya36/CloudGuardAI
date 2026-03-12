@@ -1,0 +1,16 @@
+# Auto-discovered rule — generated 2026-03-07T12:38:58.516573
+# Based on 5 occurrences across 3 scans
+# Original: S3 bucket versioning is disabled
+
+**Impact:** This could enable partial information disclosure or weaken the security po
+rules:
+  - id: DISC_6DC0E20DD318
+    description: "[Auto-Discovered] S3 bucket versioning is disabled
+
+**Impact:** This could enable partial information disclosure or we"
+    severity: MEDIUM
+    file_types: [".tf", ".yaml", ".yml", ".json"]
+    match:
+      regex: "information.*versioning"
+    references:
+      - "https://cloudguard.ai/discovered-patterns/6dc0e20dd318"

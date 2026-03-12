@@ -1,0 +1,763 @@
+{
+  "metadata": {
+    "version": "1.0",
+    "created": "2026-02-24",
+    "description": "Instance-level vulnerability labels for CloudGuardAI evaluation dataset. Ground truth is human-verified; expected_findings are traced from exact rule regex patterns in the rules engine.",
+    "total_files": 50,
+    "vulnerable_files": 25,
+    "clean_files": 25,
+    "total_ground_truth_instances": 46,
+    "scanner_scope": "rules_engine (28 YAML rules across 5 files + 1 generic rule = 29 rules total)",
+    "methodology": "Each rule regex was manually traced line-by-line against each file. Line numbers are 1-indexed. All regex matchers in matcher.py are line-by-line except not_contains (file-level) and terraform_block (line-by-line on resource declaration lines).",
+    "label_schema": {
+      "ground_truth": "Human-verified vulnerability instances. Each entry is a distinct security issue at a specific location. These define what a correct scanner SHOULD detect.",
+      "expected_findings": "Predicted rules engine output based on exact regex tracing. tp=true means the finding corresponds to a real vulnerability. tp=false means the rule fires incorrectly (false positive).",
+      "detection_gap": "When true on a ground_truth entry, means NO rule in the rules engine produces a tp=true finding for this vulnerability."
+    }
+  },
+
+  "known_rule_issues": [
+    {
+      "rule_id": "AWS_BP_S3_NO_LOGGING",
+      "type": "excessive_false_positives",
+      "description": "Uses not_contains matcher checking for string 'logging {' in entire file. Fires on ALL .tf files that lack this string, including non-S3 files (security groups, EC2, IAM, etc.). Produces ~40 FP findings across the 50-file dataset."
+    },
+    {
+      "rule_id": "TF_UNENCRYPTED_RDS",
+      "type": "broken_matcher",
+      "description": "Uses terraform_block matcher with type=aws_db_instance and missing_attribute=storage_encrypted. But terraform_block_match() in matcher.py only checks if 'resource \"aws_db_instance\"' appears — it NEVER checks missing_attribute. Fires on ALL aws_db_instance resources regardless of encryption status."
+    },
+    {
+      "rule_id": "TF_UNENCRYPTED_EBS",
+      "type": "broken_matcher",
+      "description": "Same bug as TF_UNENCRYPTED_RDS. Fires on ALL aws_ebs_volume resources regardless of whether encrypted=true is present."
+    },
+    {
+      "rule_id": "AWS_CIS_S3_VERSIONING_DISABLED",
+      "type": "dead_rule",
+      "description": "Regex 'versioning\\s*\\{[^}]*enabled\\s*=\\s*false' is multiline but regex_match() applies it line-by-line. Since 'versioning {' and 'enabled = false' are always on separate lines in standard Terraform, this rule NEVER fires."
+    },
+    {
+      "rule_id": "TF_SKIP_SNAPSHOT",
+      "type": "brittle_matcher",
+      "description": "Uses contains matcher with literal 'skip_final_snapshot  = true' (DOUBLE space). Only fires when Terraform formatting happens to use exactly two spaces before '='. Standard single-space formatting is missed."
+    },
+    {
+      "rule_id": "NO_HARDCODED_SECRET",
+      "type": "excessive_false_positives",
+      "description": "Case-insensitive regex '(?i)(password|secret|api[_-]?key)\\s*=' matches attribute NAMES, not values. Fires on 'password = var.db_password' (variable reference) just as readily as 'password = \"hardcoded\"'. Produces FPs on all files with password attributes regardless of whether the value is actually hardcoded."
+    },
+    {
+      "rule_id": "AWS_CIS_S3_PUBLIC_ACL",
+      "type": "over_matching",
+      "description": "Regex 'acl\\s*=\\s*\"public-read\"' also matches 'public-read-write' since regex.search finds partial matches. Not necessarily wrong (public-read-write IS public-read), but causes duplicate detection with AWS_CIS_S3_PUBLIC_WRITE."
+    },
+    {
+      "rule_id": "AWS_OWASP_A05_MISCONFIG_SG",
+      "type": "imprecise",
+      "description": "Regex 'from_port\\s*=\\s*0' fires on egress rules as well as ingress. Egress from_port=0 with protocol=-1 is a different concern than ingress from_port=0."
+    },
+    {
+      "rule_id": "TF_VERSIONING_DISABLED",
+      "type": "imprecise",
+      "description": "Regex 'enabled\\s*=\\s*false' matches ANY line with this pattern, not just S3 versioning blocks. Could fire on CloudFront, lifecycle rules, or other resources with enabled=false attributes."
+    }
+  ],
+
+  "detection_gaps": [
+    {
+      "vulnerability": "wildcard-iam-policy",
+      "description": "No rules engine rule detects Action='*' Resource='*' in IAM policies. Affects vuln_17, vuln_23.",
+      "affected_files": ["vulnerable/vuln_17_iam_wildcard.tf", "vulnerable/vuln_23_multi_full_stack.tf"]
+    },
+    {
+      "vulnerability": "embedded-private-key",
+      "description": "No rules engine rule detects PEM private key blocks. Only the secrets scanner (separate from rules engine) would catch this via PEM header pattern.",
+      "affected_files": ["vulnerable/vuln_15_creds_private_key.tf"]
+    },
+    {
+      "vulnerability": "hardcoded-ssm-value",
+      "description": "SSM parameter with type='String' (not SecureString) and hardcoded value= is not caught. No rule checks 'value =' attribute.",
+      "affected_files": ["vulnerable/vuln_14_creds_secret_value.tf"]
+    },
+    {
+      "vulnerability": "public-ec2-ip",
+      "description": "No rule detects associate_public_ip_address=true.",
+      "affected_files": ["vulnerable/vuln_19_ec2_public_unmonitored.tf", "vulnerable/vuln_23_multi_full_stack.tf"]
+    },
+    {
+      "vulnerability": "missing-s3-encryption",
+      "description": "No rule detects absence of server_side_encryption_configuration on S3 buckets. The existing encryption rules only flag explicit 'encrypted=false', not missing encryption config.",
+      "affected_files": ["vulnerable/vuln_08_s3_no_encryption.tf"]
+    },
+    {
+      "vulnerability": "uppercase-env-var-secrets",
+      "description": "Case-sensitive rules (AWS_BP_HARDCODED_PASSWORD, AWS_OWASP_A07_AUTH_FAILURE, TF_HARDCODED_CREDENTIALS) miss environment variable style secrets like DB_PASSWORD='...' and API_KEY='...' because they use uppercase. Only NO_HARDCODED_SECRET (case-insensitive) catches some of these.",
+      "affected_files": ["vulnerable/vuln_21_lambda_secrets.tf", "vulnerable/vuln_23_multi_full_stack.tf"]
+    },
+    {
+      "vulnerability": "secret-key-attribute",
+      "description": "The attribute name 'secret_key' is not caught by TF_HARDCODED_CREDENTIALS because 'secret' is followed by '_key' not by '\\s*='. AWS_BP_HARDCODED_SECRET catches it via 'secret[_-]?key' pattern.",
+      "affected_files": ["vulnerable/vuln_13_creds_aws_key.tf"]
+    }
+  ],
+
+  "files": {
+
+    "vulnerable/vuln_01_sg_ssh_open.tf": {
+      "category": "vulnerable",
+      "description": "Security group allowing SSH from 0.0.0.0/0",
+      "ground_truth": [
+        {"id": "GT-001", "line": 11, "vulnerability": "ssh-open-to-internet", "severity": "CRITICAL", "cwe": "CWE-284", "description": "Security group allows SSH (port 22) inbound from 0.0.0.0/0"}
+      ],
+      "expected_findings": [
+        {"rule_id": "AWS_CIS_SG_0_0_0_0", "line": 11, "severity": "CRITICAL", "tp": true},
+        {"rule_id": "TF_OPEN_SECURITY_GROUP", "line": 11, "severity": "CRITICAL", "tp": true},
+        {"rule_id": "AWS_BP_S3_NO_LOGGING", "line": 1, "severity": "MEDIUM", "tp": false, "note": "Not an S3 file"}
+      ]
+    },
+
+    "vulnerable/vuln_02_sg_rdp_open.tf": {
+      "category": "vulnerable",
+      "description": "Security group allowing RDP from 0.0.0.0/0",
+      "ground_truth": [
+        {"id": "GT-002", "line": 11, "vulnerability": "rdp-open-to-internet", "severity": "CRITICAL", "cwe": "CWE-284", "description": "Security group allows RDP (port 3389) inbound from 0.0.0.0/0"}
+      ],
+      "expected_findings": [
+        {"rule_id": "AWS_CIS_SG_0_0_0_0", "line": 11, "severity": "CRITICAL", "tp": true},
+        {"rule_id": "TF_OPEN_SECURITY_GROUP", "line": 11, "severity": "CRITICAL", "tp": true},
+        {"rule_id": "AWS_BP_S3_NO_LOGGING", "line": 1, "severity": "MEDIUM", "tp": false, "note": "Not an S3 file"}
+      ]
+    },
+
+    "vulnerable/vuln_03_sg_all_ports.tf": {
+      "category": "vulnerable",
+      "description": "Security group opening all TCP ports (0-65535) from 0.0.0.0/0",
+      "ground_truth": [
+        {"id": "GT-003", "line": 8, "vulnerability": "all-ports-open-to-internet", "severity": "CRITICAL", "cwe": "CWE-284", "description": "Security group allows all TCP ports (0-65535) inbound from 0.0.0.0/0"}
+      ],
+      "expected_findings": [
+        {"rule_id": "AWS_CIS_SG_0_0_0_0", "line": 11, "severity": "CRITICAL", "tp": true},
+        {"rule_id": "AWS_CIS_SG_ALL_PORTS", "line": 9, "severity": "CRITICAL", "tp": true},
+        {"rule_id": "AWS_OWASP_A05_MISCONFIG_SG", "line": 8, "severity": "CRITICAL", "tp": true},
+        {"rule_id": "TF_OPEN_SECURITY_GROUP", "line": 11, "severity": "CRITICAL", "tp": true},
+        {"rule_id": "TF_WIDE_PORT_RANGE", "line": 9, "severity": "HIGH", "tp": true},
+        {"rule_id": "AWS_BP_S3_NO_LOGGING", "line": 1, "severity": "MEDIUM", "tp": false, "note": "Not an S3 file"}
+      ]
+    },
+
+    "vulnerable/vuln_04_sg_egress_all.tf": {
+      "category": "vulnerable",
+      "description": "Security group with unrestricted egress (protocol -1, 0.0.0.0/0)",
+      "ground_truth": [
+        {"id": "GT-004", "line": 17, "vulnerability": "unrestricted-egress", "severity": "MEDIUM", "cwe": "CWE-284", "description": "Security group allows all outbound traffic via protocol=-1 to 0.0.0.0/0"}
+      ],
+      "expected_findings": [
+        {"rule_id": "AWS_CIS_SG_0_0_0_0", "line": 18, "severity": "CRITICAL", "tp": true},
+        {"rule_id": "TF_OPEN_SECURITY_GROUP", "line": 18, "severity": "CRITICAL", "tp": true},
+        {"rule_id": "AWS_OWASP_A05_MISCONFIG_SG", "line": 15, "severity": "CRITICAL", "tp": true, "note": "Fires on egress from_port=0, arguably imprecise"},
+        {"rule_id": "AWS_BP_EGRESS_ALL", "line": 17, "severity": "MEDIUM", "tp": true},
+        {"rule_id": "AWS_BP_S3_NO_LOGGING", "line": 1, "severity": "MEDIUM", "tp": false, "note": "Not an S3 file"}
+      ]
+    },
+
+    "vulnerable/vuln_05_s3_public_read.tf": {
+      "category": "vulnerable",
+      "description": "S3 bucket with public-read ACL and no logging",
+      "ground_truth": [
+        {"id": "GT-005a", "line": 3, "vulnerability": "s3-public-read", "severity": "CRITICAL", "cwe": "CWE-284", "description": "S3 bucket ACL set to public-read allowing unrestricted read access"},
+        {"id": "GT-005b", "line": 1, "vulnerability": "s3-no-logging", "severity": "MEDIUM", "cwe": "CWE-778", "description": "S3 bucket has no access logging configured"}
+      ],
+      "expected_findings": [
+        {"rule_id": "AWS_CIS_S3_PUBLIC_ACL", "line": 3, "severity": "CRITICAL", "tp": true},
+        {"rule_id": "TF_PUBLIC_S3", "line": 3, "severity": "CRITICAL", "tp": true},
+        {"rule_id": "AWS_BP_S3_NO_LOGGING", "line": 1, "severity": "MEDIUM", "tp": true}
+      ]
+    },
+
+    "vulnerable/vuln_06_s3_public_write.tf": {
+      "category": "vulnerable",
+      "description": "S3 bucket with public-read-write ACL and no logging",
+      "ground_truth": [
+        {"id": "GT-006a", "line": 3, "vulnerability": "s3-public-write", "severity": "CRITICAL", "cwe": "CWE-284", "description": "S3 bucket ACL set to public-read-write allowing unrestricted read/write access"},
+        {"id": "GT-006b", "line": 1, "vulnerability": "s3-no-logging", "severity": "MEDIUM", "cwe": "CWE-778", "description": "S3 bucket has no access logging configured"}
+      ],
+      "expected_findings": [
+        {"rule_id": "AWS_CIS_S3_PUBLIC_WRITE", "line": 3, "severity": "CRITICAL", "tp": true},
+        {"rule_id": "AWS_CIS_S3_PUBLIC_ACL", "line": 3, "severity": "CRITICAL", "tp": true, "note": "Regex 'public-read' also matches 'public-read-write' prefix"},
+        {"rule_id": "TF_PUBLIC_S3", "line": 3, "severity": "CRITICAL", "tp": true},
+        {"rule_id": "AWS_BP_S3_NO_LOGGING", "line": 1, "severity": "MEDIUM", "tp": true}
+      ]
+    },
+
+    "vulnerable/vuln_07_s3_versioning_off.tf": {
+      "category": "vulnerable",
+      "description": "S3 bucket with versioning explicitly disabled (but has logging)",
+      "ground_truth": [
+        {"id": "GT-007", "line": 6, "vulnerability": "s3-versioning-disabled", "severity": "HIGH", "cwe": "CWE-693", "description": "S3 bucket versioning explicitly set to false, preventing object version recovery"}
+      ],
+      "expected_findings": [
+        {"rule_id": "TF_VERSIONING_DISABLED", "line": 6, "severity": "MEDIUM", "tp": true}
+      ],
+      "notes": "AWS_CIS_S3_VERSIONING_DISABLED does NOT fire — its multiline regex cannot match across lines when applied line-by-line. File HAS 'logging {' so AWS_BP_S3_NO_LOGGING correctly does not fire."
+    },
+
+    "vulnerable/vuln_08_s3_no_encryption.tf": {
+      "category": "vulnerable",
+      "description": "S3 bucket missing server-side encryption configuration and logging",
+      "ground_truth": [
+        {"id": "GT-008a", "line": 1, "vulnerability": "s3-no-encryption", "severity": "HIGH", "cwe": "CWE-311", "description": "S3 bucket has no server_side_encryption_configuration block", "detection_gap": true},
+        {"id": "GT-008b", "line": 1, "vulnerability": "s3-no-logging", "severity": "MEDIUM", "cwe": "CWE-778", "description": "S3 bucket has no access logging configured"}
+      ],
+      "expected_findings": [
+        {"rule_id": "AWS_BP_S3_NO_LOGGING", "line": 1, "severity": "MEDIUM", "tp": true}
+      ],
+      "notes": "No rule detects absence of encryption config — only explicit 'encrypted=false' is caught. GT-008a is a detection gap."
+    },
+
+    "vulnerable/vuln_09_db_public.tf": {
+      "category": "vulnerable",
+      "description": "Database instance with publicly_accessible=true",
+      "ground_truth": [
+        {"id": "GT-009", "line": 8, "vulnerability": "db-publicly-accessible", "severity": "CRITICAL", "cwe": "CWE-284", "description": "RDS instance is publicly accessible from the internet"}
+      ],
+      "expected_findings": [
+        {"rule_id": "AWS_CIS_DB_PUBLIC", "line": 8, "severity": "CRITICAL", "tp": true},
+        {"rule_id": "TF_UNENCRYPTED_RDS", "line": 1, "severity": "HIGH", "tp": false, "note": "terraform_block_match fires on resource type; DB has storage_encrypted=true"},
+        {"rule_id": "NO_HARDCODED_SECRET", "line": 11, "severity": "HIGH", "tp": false, "note": "Matches 'password = var.db_password' — value is a variable reference, not hardcoded"},
+        {"rule_id": "AWS_BP_S3_NO_LOGGING", "line": 1, "severity": "MEDIUM", "tp": false, "note": "Not an S3 file"}
+      ]
+    },
+
+    "vulnerable/vuln_10_db_unencrypted.tf": {
+      "category": "vulnerable",
+      "description": "Database instance with storage_encrypted=false",
+      "ground_truth": [
+        {"id": "GT-010", "line": 7, "vulnerability": "db-unencrypted-storage", "severity": "HIGH", "cwe": "CWE-311", "description": "RDS instance storage encryption is explicitly disabled"}
+      ],
+      "expected_findings": [
+        {"rule_id": "AWS_CIS_DB_UNENCRYPTED", "line": 7, "severity": "HIGH", "tp": true},
+        {"rule_id": "AWS_OWASP_A02_CRYPTO_FAILURE", "line": 7, "severity": "HIGH", "tp": true},
+        {"rule_id": "TF_UNENCRYPTED_RDS", "line": 1, "severity": "HIGH", "tp": true, "note": "Fires on resource type — coincidentally correct since DB IS unencrypted"},
+        {"rule_id": "NO_HARDCODED_SECRET", "line": 11, "severity": "HIGH", "tp": false, "note": "Matches 'password = var.db_password' — variable reference"},
+        {"rule_id": "AWS_BP_S3_NO_LOGGING", "line": 1, "severity": "MEDIUM", "tp": false, "note": "Not an S3 file"}
+      ]
+    },
+
+    "vulnerable/vuln_11_db_hardcoded_pw.tf": {
+      "category": "vulnerable",
+      "description": "Database instance with hardcoded password in plaintext",
+      "ground_truth": [
+        {"id": "GT-011", "line": 11, "vulnerability": "hardcoded-db-password", "severity": "CRITICAL", "cwe": "CWE-798", "description": "Database password hardcoded as plaintext string 'SuperSecret123!'"}
+      ],
+      "expected_findings": [
+        {"rule_id": "AWS_BP_HARDCODED_PASSWORD", "line": 11, "severity": "CRITICAL", "tp": true},
+        {"rule_id": "AWS_OWASP_A07_AUTH_FAILURE", "line": 11, "severity": "CRITICAL", "tp": true},
+        {"rule_id": "TF_HARDCODED_CREDENTIALS", "line": 11, "severity": "CRITICAL", "tp": true},
+        {"rule_id": "NO_HARDCODED_SECRET", "line": 11, "severity": "HIGH", "tp": true},
+        {"rule_id": "TF_UNENCRYPTED_RDS", "line": 1, "severity": "HIGH", "tp": false, "note": "DB has storage_encrypted=true"},
+        {"rule_id": "AWS_BP_S3_NO_LOGGING", "line": 1, "severity": "MEDIUM", "tp": false, "note": "Not an S3 file"}
+      ]
+    },
+
+    "vulnerable/vuln_12_db_skip_snapshot.tf": {
+      "category": "vulnerable",
+      "description": "Database configured to skip final snapshot on deletion",
+      "ground_truth": [
+        {"id": "GT-012", "line": 12, "vulnerability": "skip-final-snapshot", "severity": "MEDIUM", "cwe": "CWE-693", "description": "RDS instance will not create a final snapshot on deletion, risking data loss"}
+      ],
+      "expected_findings": [
+        {"rule_id": "AWS_BP_SKIP_FINAL_SNAPSHOT", "line": 12, "severity": "MEDIUM", "tp": true},
+        {"rule_id": "TF_SKIP_SNAPSHOT", "line": 12, "severity": "MEDIUM", "tp": true, "note": "File uses double-space formatting matching the contains pattern"},
+        {"rule_id": "TF_UNENCRYPTED_RDS", "line": 1, "severity": "HIGH", "tp": false, "note": "DB has storage_encrypted=true"},
+        {"rule_id": "NO_HARDCODED_SECRET", "line": 11, "severity": "HIGH", "tp": false, "note": "Matches 'password = var.db_password' — variable reference"},
+        {"rule_id": "AWS_BP_S3_NO_LOGGING", "line": 1, "severity": "MEDIUM", "tp": false, "note": "Not an S3 file"}
+      ]
+    },
+
+    "vulnerable/vuln_13_creds_aws_key.tf": {
+      "category": "vulnerable",
+      "description": "AWS provider with hardcoded access key and secret key",
+      "ground_truth": [
+        {"id": "GT-013a", "line": 3, "vulnerability": "hardcoded-aws-access-key", "severity": "CRITICAL", "cwe": "CWE-798", "description": "AWS access key ID hardcoded in provider configuration"},
+        {"id": "GT-013b", "line": 4, "vulnerability": "hardcoded-aws-secret-key", "severity": "CRITICAL", "cwe": "CWE-798", "description": "AWS secret access key hardcoded in provider configuration"}
+      ],
+      "expected_findings": [
+        {"rule_id": "AWS_BP_HARDCODED_ACCESS_KEY", "line": 3, "severity": "CRITICAL", "tp": true},
+        {"rule_id": "AWS_BP_HARDCODED_SECRET", "line": 4, "severity": "CRITICAL", "tp": true},
+        {"rule_id": "TF_HARDCODED_CREDENTIALS", "line": 3, "severity": "CRITICAL", "tp": true, "note": "Matches 'access_key' keyword; does NOT fire on L4 because 'secret_key' doesn't match any alternation followed by \\s*="},
+        {"rule_id": "AWS_BP_S3_NO_LOGGING", "line": 1, "severity": "MEDIUM", "tp": false, "note": "Not an S3 file"}
+      ],
+      "notes": "NO_HARDCODED_SECRET does NOT fire — 'access_key' and 'secret_key' don't match its patterns (password|secret|api[_-]?key). The 'secret' in 'secret_key' matches but '_key' follows instead of '\\s*=', failing the regex."
+    },
+
+    "vulnerable/vuln_14_creds_secret_value.tf": {
+      "category": "vulnerable",
+      "description": "SSM parameter and Secrets Manager with hardcoded secret values",
+      "ground_truth": [
+        {"id": "GT-014a", "line": 4, "vulnerability": "hardcoded-ssm-secret", "severity": "CRITICAL", "cwe": "CWE-798", "description": "SSM parameter stores plaintext secret with type=String instead of SecureString", "detection_gap": true},
+        {"id": "GT-014b", "line": 15, "vulnerability": "hardcoded-password-in-secret", "severity": "CRITICAL", "cwe": "CWE-798", "description": "Hardcoded database password inside Secrets Manager secret version"}
+      ],
+      "expected_findings": [
+        {"rule_id": "AWS_BP_HARDCODED_PASSWORD", "line": 15, "severity": "CRITICAL", "tp": true},
+        {"rule_id": "AWS_OWASP_A07_AUTH_FAILURE", "line": 15, "severity": "CRITICAL", "tp": true},
+        {"rule_id": "TF_HARDCODED_CREDENTIALS", "line": 15, "severity": "CRITICAL", "tp": true},
+        {"rule_id": "NO_HARDCODED_SECRET", "line": 15, "severity": "HIGH", "tp": true},
+        {"rule_id": "AWS_BP_S3_NO_LOGGING", "line": 1, "severity": "MEDIUM", "tp": false, "note": "Not an S3 file"}
+      ],
+      "notes": "GT-014a (SSM value=) is a detection gap — no rule checks the 'value' attribute. The hardcoded API key in L4 is completely missed by rules engine."
+    },
+
+    "vulnerable/vuln_15_creds_private_key.tf": {
+      "category": "vulnerable",
+      "description": "Embedded RSA private key in local_file resource",
+      "ground_truth": [
+        {"id": "GT-015", "line": 14, "vulnerability": "embedded-private-key", "severity": "CRITICAL", "cwe": "CWE-321", "description": "RSA private key PEM block embedded directly in Terraform configuration", "detection_gap": true}
+      ],
+      "expected_findings": [
+        {"rule_id": "AWS_BP_S3_NO_LOGGING", "line": 1, "severity": "MEDIUM", "tp": false, "note": "Not an S3 file"}
+      ],
+      "notes": "Complete detection gap for rules engine. Private key PEM blocks are only detected by the secrets scanner (separate subsystem). No rule checks for '-----BEGIN RSA PRIVATE KEY-----'."
+    },
+
+    "vulnerable/vuln_16_creds_password.tf": {
+      "category": "vulnerable",
+      "description": "EC2 instance with hardcoded SSH connection password",
+      "ground_truth": [
+        {"id": "GT-016", "line": 13, "vulnerability": "hardcoded-connection-password", "severity": "CRITICAL", "cwe": "CWE-798", "description": "SSH connection block contains hardcoded password for provisioner access"}
+      ],
+      "expected_findings": [
+        {"rule_id": "AWS_BP_HARDCODED_PASSWORD", "line": 13, "severity": "CRITICAL", "tp": true},
+        {"rule_id": "AWS_OWASP_A07_AUTH_FAILURE", "line": 13, "severity": "CRITICAL", "tp": true},
+        {"rule_id": "TF_HARDCODED_CREDENTIALS", "line": 13, "severity": "CRITICAL", "tp": true},
+        {"rule_id": "NO_HARDCODED_SECRET", "line": 13, "severity": "HIGH", "tp": true},
+        {"rule_id": "AWS_BP_S3_NO_LOGGING", "line": 1, "severity": "MEDIUM", "tp": false, "note": "Not an S3 file"}
+      ]
+    },
+
+    "vulnerable/vuln_17_iam_wildcard.tf": {
+      "category": "vulnerable",
+      "description": "IAM role policy with Action=* Resource=* (full admin)",
+      "ground_truth": [
+        {"id": "GT-017", "line": 25, "vulnerability": "iam-wildcard-policy", "severity": "CRITICAL", "cwe": "CWE-250", "description": "IAM policy grants Action='*' on Resource='*', equivalent to full admin access", "detection_gap": true}
+      ],
+      "expected_findings": [
+        {"rule_id": "AWS_BP_S3_NO_LOGGING", "line": 1, "severity": "MEDIUM", "tp": false, "note": "Not an S3 file"}
+      ],
+      "notes": "Complete detection gap. No rules engine rule checks for wildcard IAM policies (Action=*, Resource=*). Only the attack path analyzer might flag this."
+    },
+
+    "vulnerable/vuln_18_iam_root.tf": {
+      "category": "vulnerable",
+      "description": "IAM policy referencing root account ARN",
+      "ground_truth": [
+        {"id": "GT-018", "line": 12, "vulnerability": "iam-root-account-access", "severity": "CRITICAL", "cwe": "CWE-250", "description": "IAM policy grants access to root account ARN, violating least-privilege principle"}
+      ],
+      "expected_findings": [
+        {"rule_id": "AWS_CIS_IAM_ROOT_ACCESS", "line": 12, "severity": "CRITICAL", "tp": true},
+        {"rule_id": "AWS_BP_S3_NO_LOGGING", "line": 1, "severity": "MEDIUM", "tp": false, "note": "Not an S3 file"}
+      ]
+    },
+
+    "vulnerable/vuln_19_ec2_public_unmonitored.tf": {
+      "category": "vulnerable",
+      "description": "EC2 instance with public IP and monitoring disabled",
+      "ground_truth": [
+        {"id": "GT-019a", "line": 4, "vulnerability": "ec2-public-ip", "severity": "HIGH", "cwe": "CWE-284", "description": "EC2 instance has associate_public_ip_address=true, exposing it directly to internet", "detection_gap": true},
+        {"id": "GT-019b", "line": 5, "vulnerability": "ec2-monitoring-disabled", "severity": "LOW", "cwe": "CWE-778", "description": "EC2 detailed monitoring is disabled"}
+      ],
+      "expected_findings": [
+        {"rule_id": "AWS_BP_EC2_NO_MONITORING", "line": 5, "severity": "LOW", "tp": true},
+        {"rule_id": "AWS_BP_S3_NO_LOGGING", "line": 1, "severity": "MEDIUM", "tp": false, "note": "Not an S3 file"}
+      ],
+      "notes": "GT-019a is a detection gap — no rule checks for associate_public_ip_address=true."
+    },
+
+    "vulnerable/vuln_20_ebs_unencrypted.tf": {
+      "category": "vulnerable",
+      "description": "EBS volume without encryption attribute",
+      "ground_truth": [
+        {"id": "GT-020", "line": 1, "vulnerability": "ebs-unencrypted", "severity": "HIGH", "cwe": "CWE-311", "description": "EBS volume has no encrypted attribute, defaulting to unencrypted"}
+      ],
+      "expected_findings": [
+        {"rule_id": "TF_UNENCRYPTED_EBS", "line": 1, "severity": "HIGH", "tp": true, "note": "terraform_block_match fires on resource type — coincidentally correct as volume IS unencrypted"},
+        {"rule_id": "AWS_BP_S3_NO_LOGGING", "line": 1, "severity": "MEDIUM", "tp": false, "note": "Not an S3 file"}
+      ]
+    },
+
+    "vulnerable/vuln_21_lambda_secrets.tf": {
+      "category": "vulnerable",
+      "description": "Lambda function with hardcoded secrets in environment variables",
+      "ground_truth": [
+        {"id": "GT-021a", "line": 14, "vulnerability": "hardcoded-env-password", "severity": "CRITICAL", "cwe": "CWE-798", "description": "Database password hardcoded in Lambda environment variable DB_PASSWORD"},
+        {"id": "GT-021b", "line": 15, "vulnerability": "hardcoded-env-api-key", "severity": "CRITICAL", "cwe": "CWE-798", "description": "API key hardcoded in Lambda environment variable API_KEY"}
+      ],
+      "expected_findings": [
+        {"rule_id": "NO_HARDCODED_SECRET", "line": 14, "severity": "HIGH", "tp": true, "note": "Case-insensitive regex matches DB_PASSWORD="},
+        {"rule_id": "NO_HARDCODED_SECRET", "line": 15, "severity": "HIGH", "tp": true, "note": "Case-insensitive regex matches API_KEY= via api[_-]?key pattern"},
+        {"rule_id": "AWS_BP_S3_NO_LOGGING", "line": 1, "severity": "MEDIUM", "tp": false, "note": "Not an S3 file"}
+      ],
+      "notes": "Case-sensitive rules (AWS_BP_HARDCODED_PASSWORD, AWS_OWASP_A07_AUTH_FAILURE, TF_HARDCODED_CREDENTIALS) do NOT fire because attribute names use UPPERCASE (DB_PASSWORD, API_KEY). Only NO_HARDCODED_SECRET (case-insensitive) catches these."
+    },
+
+    "vulnerable/vuln_22_multi_open_sg_to_db.tf": {
+      "category": "vulnerable",
+      "description": "Multi-resource: open security group + exposed unencrypted DB with hardcoded password",
+      "ground_truth": [
+        {"id": "GT-022a", "line": 11, "vulnerability": "sg-open-to-internet", "severity": "CRITICAL", "cwe": "CWE-284", "description": "Database security group allows MySQL (3306) from 0.0.0.0/0"},
+        {"id": "GT-022b", "line": 25, "vulnerability": "db-publicly-accessible", "severity": "CRITICAL", "cwe": "CWE-284", "description": "Database instance is publicly accessible"},
+        {"id": "GT-022c", "line": 26, "vulnerability": "db-unencrypted-storage", "severity": "HIGH", "cwe": "CWE-311", "description": "Database storage encryption is disabled"},
+        {"id": "GT-022d", "line": 29, "vulnerability": "hardcoded-db-password", "severity": "CRITICAL", "cwe": "CWE-798", "description": "Database password hardcoded as 'DatabaseP@ss123'"},
+        {"id": "GT-022e", "line": 30, "vulnerability": "skip-final-snapshot", "severity": "MEDIUM", "cwe": "CWE-693", "description": "Database will skip final snapshot on deletion"}
+      ],
+      "expected_findings": [
+        {"rule_id": "AWS_CIS_SG_0_0_0_0", "line": 11, "severity": "CRITICAL", "tp": true},
+        {"rule_id": "TF_OPEN_SECURITY_GROUP", "line": 11, "severity": "CRITICAL", "tp": true},
+        {"rule_id": "AWS_CIS_DB_PUBLIC", "line": 25, "severity": "CRITICAL", "tp": true},
+        {"rule_id": "AWS_CIS_DB_UNENCRYPTED", "line": 26, "severity": "HIGH", "tp": true},
+        {"rule_id": "AWS_OWASP_A02_CRYPTO_FAILURE", "line": 26, "severity": "HIGH", "tp": true},
+        {"rule_id": "AWS_BP_HARDCODED_PASSWORD", "line": 29, "severity": "CRITICAL", "tp": true},
+        {"rule_id": "AWS_OWASP_A07_AUTH_FAILURE", "line": 29, "severity": "CRITICAL", "tp": true},
+        {"rule_id": "TF_HARDCODED_CREDENTIALS", "line": 29, "severity": "CRITICAL", "tp": true},
+        {"rule_id": "NO_HARDCODED_SECRET", "line": 29, "severity": "HIGH", "tp": true},
+        {"rule_id": "AWS_BP_SKIP_FINAL_SNAPSHOT", "line": 30, "severity": "MEDIUM", "tp": true},
+        {"rule_id": "TF_SKIP_SNAPSHOT", "line": 30, "severity": "MEDIUM", "tp": true, "note": "Double-space formatting matches contains pattern"},
+        {"rule_id": "TF_UNENCRYPTED_RDS", "line": 19, "severity": "HIGH", "tp": true, "note": "Coincidentally correct — DB IS unencrypted"},
+        {"rule_id": "AWS_BP_S3_NO_LOGGING", "line": 1, "severity": "MEDIUM", "tp": false, "note": "Not an S3 file"}
+      ]
+    },
+
+    "vulnerable/vuln_23_multi_full_stack.tf": {
+      "category": "vulnerable",
+      "description": "Multi-resource full stack with numerous vulnerabilities across SG, EC2, S3, RDS, IAM",
+      "ground_truth": [
+        {"id": "GT-023a", "line": 7, "vulnerability": "all-ports-open-to-internet", "severity": "CRITICAL", "cwe": "CWE-284", "description": "Web security group allows all TCP ports (0-65535) inbound from 0.0.0.0/0"},
+        {"id": "GT-023b", "line": 16, "vulnerability": "unrestricted-egress", "severity": "MEDIUM", "cwe": "CWE-284", "description": "Security group allows all egress via protocol=-1"},
+        {"id": "GT-023c", "line": 24, "vulnerability": "ec2-public-ip", "severity": "HIGH", "cwe": "CWE-284", "description": "EC2 instance has public IP address", "detection_gap": true},
+        {"id": "GT-023d", "line": 25, "vulnerability": "ec2-monitoring-disabled", "severity": "LOW", "cwe": "CWE-778", "description": "EC2 detailed monitoring disabled"},
+        {"id": "GT-023e", "line": 31, "vulnerability": "hardcoded-secret-in-userdata", "severity": "CRITICAL", "cwe": "CWE-798", "description": "DB password hardcoded in EC2 user_data script"},
+        {"id": "GT-023f", "line": 32, "vulnerability": "hardcoded-secret-in-userdata", "severity": "CRITICAL", "cwe": "CWE-798", "description": "API secret key hardcoded in EC2 user_data script"},
+        {"id": "GT-023g", "line": 43, "vulnerability": "s3-public-read", "severity": "CRITICAL", "cwe": "CWE-284", "description": "S3 bucket with public-read ACL"},
+        {"id": "GT-023h", "line": 55, "vulnerability": "db-publicly-accessible", "severity": "CRITICAL", "cwe": "CWE-284", "description": "Database instance is publicly accessible"},
+        {"id": "GT-023i", "line": 56, "vulnerability": "db-unencrypted-storage", "severity": "HIGH", "cwe": "CWE-311", "description": "Database storage encryption disabled"},
+        {"id": "GT-023j", "line": 59, "vulnerability": "hardcoded-db-password", "severity": "CRITICAL", "cwe": "CWE-798", "description": "Database password hardcoded as 'Pr0dDBP@ssw0rd!'"},
+        {"id": "GT-023k", "line": 60, "vulnerability": "skip-final-snapshot", "severity": "MEDIUM", "cwe": "CWE-693", "description": "Database will skip final snapshot"},
+        {"id": "GT-023l", "line": 90, "vulnerability": "iam-wildcard-policy", "severity": "CRITICAL", "cwe": "CWE-250", "description": "IAM policy grants Action=* Resource=* full admin", "detection_gap": true}
+      ],
+      "expected_findings": [
+        {"rule_id": "AWS_CIS_SG_0_0_0_0", "line": 10, "severity": "CRITICAL", "tp": true},
+        {"rule_id": "AWS_CIS_SG_0_0_0_0", "line": 17, "severity": "CRITICAL", "tp": true},
+        {"rule_id": "AWS_CIS_SG_ALL_PORTS", "line": 8, "severity": "CRITICAL", "tp": true},
+        {"rule_id": "AWS_OWASP_A05_MISCONFIG_SG", "line": 7, "severity": "CRITICAL", "tp": true},
+        {"rule_id": "AWS_OWASP_A05_MISCONFIG_SG", "line": 14, "severity": "CRITICAL", "tp": true, "note": "Fires on egress from_port=0"},
+        {"rule_id": "TF_OPEN_SECURITY_GROUP", "line": 10, "severity": "CRITICAL", "tp": true},
+        {"rule_id": "TF_OPEN_SECURITY_GROUP", "line": 17, "severity": "CRITICAL", "tp": true},
+        {"rule_id": "TF_WIDE_PORT_RANGE", "line": 8, "severity": "HIGH", "tp": true},
+        {"rule_id": "AWS_BP_EGRESS_ALL", "line": 16, "severity": "MEDIUM", "tp": true},
+        {"rule_id": "AWS_BP_EC2_NO_MONITORING", "line": 25, "severity": "LOW", "tp": true},
+        {"rule_id": "NO_HARDCODED_SECRET", "line": 31, "severity": "HIGH", "tp": true, "note": "Case-insensitive matches DB_PASSWORD="},
+        {"rule_id": "NO_HARDCODED_SECRET", "line": 59, "severity": "HIGH", "tp": true},
+        {"rule_id": "AWS_CIS_S3_PUBLIC_ACL", "line": 43, "severity": "CRITICAL", "tp": true},
+        {"rule_id": "TF_PUBLIC_S3", "line": 43, "severity": "CRITICAL", "tp": true},
+        {"rule_id": "AWS_CIS_DB_PUBLIC", "line": 55, "severity": "CRITICAL", "tp": true},
+        {"rule_id": "AWS_CIS_DB_UNENCRYPTED", "line": 56, "severity": "HIGH", "tp": true},
+        {"rule_id": "AWS_OWASP_A02_CRYPTO_FAILURE", "line": 56, "severity": "HIGH", "tp": true},
+        {"rule_id": "AWS_BP_HARDCODED_PASSWORD", "line": 59, "severity": "CRITICAL", "tp": true},
+        {"rule_id": "AWS_OWASP_A07_AUTH_FAILURE", "line": 59, "severity": "CRITICAL", "tp": true},
+        {"rule_id": "TF_HARDCODED_CREDENTIALS", "line": 59, "severity": "CRITICAL", "tp": true},
+        {"rule_id": "AWS_BP_SKIP_FINAL_SNAPSHOT", "line": 60, "severity": "MEDIUM", "tp": true},
+        {"rule_id": "TF_UNENCRYPTED_RDS", "line": 50, "severity": "HIGH", "tp": true, "note": "Coincidentally correct — DB IS unencrypted"},
+        {"rule_id": "AWS_BP_S3_NO_LOGGING", "line": 1, "severity": "MEDIUM", "tp": true, "note": "File contains an S3 bucket without logging"}
+      ],
+      "notes": "GT-023c (public EC2 IP), GT-023f (API secret in user_data), GT-023l (wildcard IAM) are detection gaps. user_data secrets L31 is partially caught by NO_HARDCODED_SECRET but L32 (API_SECRET_KEY=) is NOT caught because 'secret' in 'API_SECRET_KEY' is followed by '_KEY=' not '\\s*='. TF_SKIP_SNAPSHOT does NOT fire because L60 uses single-space formatting."
+    },
+
+    "vulnerable/vuln_24_logging_disabled.tf": {
+      "category": "vulnerable",
+      "description": "S3 audit log bucket with versioning disabled; flow log with misleading tag",
+      "ground_truth": [
+        {"id": "GT-024a", "line": 6, "vulnerability": "s3-versioning-disabled", "severity": "HIGH", "cwe": "CWE-693", "description": "Audit log S3 bucket has versioning disabled, allowing log tampering"},
+        {"id": "GT-024b", "line": 1, "vulnerability": "s3-no-logging", "severity": "MEDIUM", "cwe": "CWE-778", "description": "S3 bucket has no access logging configured"}
+      ],
+      "expected_findings": [
+        {"rule_id": "TF_VERSIONING_DISABLED", "line": 6, "severity": "MEDIUM", "tp": true},
+        {"rule_id": "AWS_OWASP_A09_LOGGING", "line": 39, "severity": "MEDIUM", "tp": false, "note": "Regex 'enable_log.*=\\s*false' matches tag 'enable_logging = false' but this is just a tag value, not functional config"},
+        {"rule_id": "AWS_BP_S3_NO_LOGGING", "line": 1, "severity": "MEDIUM", "tp": true}
+      ]
+    },
+
+    "vulnerable/vuln_25_s3_multiple_issues.tf": {
+      "category": "vulnerable",
+      "description": "S3 bucket with public-read ACL and versioning disabled",
+      "ground_truth": [
+        {"id": "GT-025a", "line": 3, "vulnerability": "s3-public-read", "severity": "CRITICAL", "cwe": "CWE-284", "description": "S3 data lake bucket has public-read ACL"},
+        {"id": "GT-025b", "line": 6, "vulnerability": "s3-versioning-disabled", "severity": "HIGH", "cwe": "CWE-693", "description": "S3 bucket versioning is disabled"},
+        {"id": "GT-025c", "line": 1, "vulnerability": "s3-no-logging", "severity": "MEDIUM", "cwe": "CWE-778", "description": "S3 bucket has no access logging configured"}
+      ],
+      "expected_findings": [
+        {"rule_id": "AWS_CIS_S3_PUBLIC_ACL", "line": 3, "severity": "CRITICAL", "tp": true},
+        {"rule_id": "TF_PUBLIC_S3", "line": 3, "severity": "CRITICAL", "tp": true},
+        {"rule_id": "TF_VERSIONING_DISABLED", "line": 6, "severity": "MEDIUM", "tp": true},
+        {"rule_id": "AWS_BP_S3_NO_LOGGING", "line": 1, "severity": "MEDIUM", "tp": true}
+      ]
+    },
+
+
+    "clean/clean_01_sg_ssh_restricted.tf": {
+      "category": "clean",
+      "description": "Security group allowing SSH from private CIDR only (10.0.0.0/8)",
+      "ground_truth": [],
+      "expected_findings": [
+        {"rule_id": "AWS_BP_S3_NO_LOGGING", "line": 1, "severity": "MEDIUM", "tp": false, "note": "Not an S3 file"}
+      ]
+    },
+
+    "clean/clean_02_sg_rdp_restricted.tf": {
+      "category": "clean",
+      "description": "Security group allowing RDP from management subnet only (172.16.0.0/16)",
+      "ground_truth": [],
+      "expected_findings": [
+        {"rule_id": "AWS_BP_S3_NO_LOGGING", "line": 1, "severity": "MEDIUM", "tp": false, "note": "Not an S3 file"}
+      ]
+    },
+
+    "clean/clean_03_sg_web_only.tf": {
+      "category": "clean",
+      "description": "Security group with specific HTTP/HTTPS ports from private CIDR",
+      "ground_truth": [],
+      "expected_findings": [
+        {"rule_id": "AWS_BP_S3_NO_LOGGING", "line": 1, "severity": "MEDIUM", "tp": false, "note": "Not an S3 file"}
+      ]
+    },
+
+    "clean/clean_04_sg_egress_restricted.tf": {
+      "category": "clean",
+      "description": "Security group with restricted egress to specific ports and CIDRs",
+      "ground_truth": [],
+      "expected_findings": [
+        {"rule_id": "AWS_BP_S3_NO_LOGGING", "line": 1, "severity": "MEDIUM", "tp": false, "note": "Not an S3 file"}
+      ]
+    },
+
+    "clean/clean_05_s3_private.tf": {
+      "category": "clean",
+      "description": "Private S3 bucket with access logging configured",
+      "ground_truth": [],
+      "expected_findings": [],
+      "notes": "File contains 'logging {' so AWS_BP_S3_NO_LOGGING correctly does not fire."
+    },
+
+    "clean/clean_06_s3_encrypted.tf": {
+      "category": "clean",
+      "description": "Private S3 bucket with KMS encryption and logging",
+      "ground_truth": [],
+      "expected_findings": [],
+      "notes": "File contains 'logging {' so AWS_BP_S3_NO_LOGGING correctly does not fire."
+    },
+
+    "clean/clean_07_s3_versioned.tf": {
+      "category": "clean",
+      "description": "Private S3 bucket with versioning enabled and logging",
+      "ground_truth": [],
+      "expected_findings": [],
+      "notes": "File contains 'logging {' so AWS_BP_S3_NO_LOGGING correctly does not fire."
+    },
+
+    "clean/clean_08_s3_complete.tf": {
+      "category": "clean",
+      "description": "Fully hardened S3 bucket: private, versioned, encrypted, logged, with lifecycle",
+      "ground_truth": [],
+      "expected_findings": [],
+      "notes": "File contains 'logging {' so AWS_BP_S3_NO_LOGGING correctly does not fire."
+    },
+
+    "clean/clean_09_db_private_encrypted.tf": {
+      "category": "clean",
+      "description": "Properly configured RDS: private, encrypted, multi-AZ, password via variable",
+      "ground_truth": [],
+      "expected_findings": [
+        {"rule_id": "TF_UNENCRYPTED_RDS", "line": 1, "severity": "HIGH", "tp": false, "note": "terraform_block_match fires on resource type despite storage_encrypted=true"},
+        {"rule_id": "NO_HARDCODED_SECRET", "line": 11, "severity": "HIGH", "tp": false, "note": "Matches 'password = var.db_password' — value is variable, not hardcoded"},
+        {"rule_id": "AWS_BP_S3_NO_LOGGING", "line": 1, "severity": "MEDIUM", "tp": false, "note": "Not an S3 file"}
+      ]
+    },
+
+    "clean/clean_10_db_complete.tf": {
+      "category": "clean",
+      "description": "Fully hardened RDS: private, encrypted, deletion protection, password via variable",
+      "ground_truth": [],
+      "expected_findings": [
+        {"rule_id": "TF_UNENCRYPTED_RDS", "line": 1, "severity": "HIGH", "tp": false, "note": "terraform_block_match fires on resource type despite storage_encrypted=true"},
+        {"rule_id": "NO_HARDCODED_SECRET", "line": 11, "severity": "HIGH", "tp": false, "note": "Matches 'password = var.db_password' — value is variable"},
+        {"rule_id": "AWS_BP_S3_NO_LOGGING", "line": 1, "severity": "MEDIUM", "tp": false, "note": "Not an S3 file"}
+      ]
+    },
+
+    "clean/clean_11_iam_minimal.tf": {
+      "category": "clean",
+      "description": "IAM role with minimal scoped permissions (s3:Get/Put, logs only)",
+      "ground_truth": [],
+      "expected_findings": [
+        {"rule_id": "AWS_BP_S3_NO_LOGGING", "line": 1, "severity": "MEDIUM", "tp": false, "note": "Not an S3 file"}
+      ]
+    },
+
+    "clean/clean_12_iam_scoped.tf": {
+      "category": "clean",
+      "description": "IAM role with permissions boundary and managed policy attachment",
+      "ground_truth": [],
+      "expected_findings": [
+        {"rule_id": "AWS_BP_S3_NO_LOGGING", "line": 1, "severity": "MEDIUM", "tp": false, "note": "Not an S3 file"}
+      ]
+    },
+
+    "clean/clean_13_ec2_private_monitored.tf": {
+      "category": "clean",
+      "description": "EC2 instance: private subnet, monitoring enabled, IMDSv2 required",
+      "ground_truth": [],
+      "expected_findings": [
+        {"rule_id": "AWS_BP_S3_NO_LOGGING", "line": 1, "severity": "MEDIUM", "tp": false, "note": "Not an S3 file"}
+      ]
+    },
+
+    "clean/clean_14_ebs_encrypted.tf": {
+      "category": "clean",
+      "description": "EBS volume with KMS encryption enabled",
+      "ground_truth": [],
+      "expected_findings": [
+        {"rule_id": "TF_UNENCRYPTED_EBS", "line": 1, "severity": "HIGH", "tp": false, "note": "terraform_block_match fires on resource type despite encrypted=true"},
+        {"rule_id": "AWS_BP_S3_NO_LOGGING", "line": 1, "severity": "MEDIUM", "tp": false, "note": "Not an S3 file"}
+      ]
+    },
+
+    "clean/clean_15_lambda_ssm.tf": {
+      "category": "clean",
+      "description": "Lambda function referencing secrets via SSM ARN, no hardcoded values",
+      "ground_truth": [],
+      "expected_findings": [
+        {"rule_id": "AWS_BP_S3_NO_LOGGING", "line": 1, "severity": "MEDIUM", "tp": false, "note": "Not an S3 file"}
+      ]
+    },
+
+    "clean/clean_16_provider_no_creds.tf": {
+      "category": "clean",
+      "description": "AWS provider using default credential chain (no hardcoded keys)",
+      "ground_truth": [],
+      "expected_findings": [
+        {"rule_id": "AWS_BP_S3_NO_LOGGING", "line": 1, "severity": "MEDIUM", "tp": false, "note": "Not an S3 file"}
+      ]
+    },
+
+    "clean/clean_17_keypair_var.tf": {
+      "category": "clean",
+      "description": "Key pair with public key from variable reference",
+      "ground_truth": [],
+      "expected_findings": [
+        {"rule_id": "AWS_BP_S3_NO_LOGGING", "line": 1, "severity": "MEDIUM", "tp": false, "note": "Not an S3 file"}
+      ]
+    },
+
+    "clean/clean_18_secrets_via_vars.tf": {
+      "category": "clean",
+      "description": "SSM parameter and Secrets Manager using SecureString and variable references",
+      "ground_truth": [],
+      "expected_findings": [
+        {"rule_id": "AWS_BP_S3_NO_LOGGING", "line": 1, "severity": "MEDIUM", "tp": false, "note": "Not an S3 file"}
+      ],
+      "notes": "NO_HARDCODED_SECRET does NOT fire — 'secret_id', 'secret_string' have 'secret' but followed by '_id'/'_string' not '\\s*='. Clean."
+    },
+
+    "clean/clean_19_ec2_bastion_secure.tf": {
+      "category": "clean",
+      "description": "Bastion EC2: private subnet, monitoring enabled, no hardcoded credentials",
+      "ground_truth": [],
+      "expected_findings": [
+        {"rule_id": "AWS_BP_S3_NO_LOGGING", "line": 1, "severity": "MEDIUM", "tp": false, "note": "Not an S3 file"}
+      ]
+    },
+
+    "clean/clean_20_logging_enabled.tf": {
+      "category": "clean",
+      "description": "VPC flow log with CloudWatch log group and proper retention",
+      "ground_truth": [],
+      "expected_findings": [
+        {"rule_id": "AWS_BP_S3_NO_LOGGING", "line": 1, "severity": "MEDIUM", "tp": false, "note": "Not an S3 file"}
+      ]
+    },
+
+    "clean/clean_21_full_stack_secure.tf": {
+      "category": "clean",
+      "description": "Full stack: restricted SG, private EC2, private S3 with logging, encrypted DB, scoped IAM",
+      "ground_truth": [],
+      "expected_findings": [
+        {"rule_id": "TF_UNENCRYPTED_RDS", "line": 50, "severity": "HIGH", "tp": false, "note": "terraform_block_match fires on resource type despite storage_encrypted=true"},
+        {"rule_id": "NO_HARDCODED_SECRET", "line": 59, "severity": "HIGH", "tp": false, "note": "Matches 'password = var.db_password' — value is variable"}
+      ],
+      "notes": "File contains 'logging {' so AWS_BP_S3_NO_LOGGING correctly does not fire."
+    },
+
+    "clean/clean_22_rds_cluster_secure.tf": {
+      "category": "clean",
+      "description": "Aurora RDS cluster: encrypted, deletion protection, backups enabled, password via variable",
+      "ground_truth": [],
+      "expected_findings": [
+        {"rule_id": "NO_HARDCODED_SECRET", "line": 5, "severity": "HIGH", "tp": false, "note": "Matches 'password' in 'master_password = var.db_password' — value is variable"},
+        {"rule_id": "AWS_BP_S3_NO_LOGGING", "line": 1, "severity": "MEDIUM", "tp": false, "note": "Not an S3 file"}
+      ]
+    },
+
+    "clean/clean_23_kms_key.tf": {
+      "category": "clean",
+      "description": "KMS key with rotation enabled and scoped IAM policy",
+      "ground_truth": [],
+      "expected_findings": [
+        {"rule_id": "AWS_BP_S3_NO_LOGGING", "line": 1, "severity": "MEDIUM", "tp": false, "note": "Not an S3 file"}
+      ]
+    },
+
+    "clean/clean_24_alb_internal.tf": {
+      "category": "clean",
+      "description": "Internal ALB with deletion protection and access logging",
+      "ground_truth": [],
+      "expected_findings": [
+        {"rule_id": "AWS_BP_S3_NO_LOGGING", "line": 1, "severity": "MEDIUM", "tp": false, "note": "Not an S3 file — ALB uses 'access_logs' not 'logging'"}
+      ]
+    },
+
+    "clean/clean_25_sg_db_restricted.tf": {
+      "category": "clean",
+      "description": "Restricted DB security group + fully hardened RDS instance",
+      "ground_truth": [],
+      "expected_findings": [
+        {"rule_id": "TF_UNENCRYPTED_RDS", "line": 19, "severity": "HIGH", "tp": false, "note": "terraform_block_match fires on resource type despite storage_encrypted=true"},
+        {"rule_id": "NO_HARDCODED_SECRET", "line": 29, "severity": "HIGH", "tp": false, "note": "Matches 'password = var.db_password' — value is variable"},
+        {"rule_id": "AWS_BP_S3_NO_LOGGING", "line": 1, "severity": "MEDIUM", "tp": false, "note": "Not an S3 file"}
+      ]
+    }
+  },
+
+  "summary_statistics": {
+    "ground_truth": {
+      "total_instances": 46,
+      "by_severity": {"CRITICAL": 27, "HIGH": 10, "MEDIUM": 7, "LOW": 2},
+      "with_detection_gap": 8,
+      "detection_gap_details": "8 of 46 ground truth instances have no TP rule. Gaps: wildcard IAM (2 files), embedded private key (1), hardcoded SSM value (1), public EC2 IP (2), missing S3 encryption (1), user_data API secret (1)"
+    },
+    "expected_findings": {
+      "total_expected_tp": 67,
+      "total_expected_fp": 62,
+      "fp_breakdown": {
+        "AWS_BP_S3_NO_LOGGING": 41,
+        "TF_UNENCRYPTED_RDS": 7,
+        "NO_HARDCODED_SECRET": 7,
+        "TF_UNENCRYPTED_EBS": 1,
+        "AWS_OWASP_A05_MISCONFIG_SG": 2,
+        "AWS_OWASP_A09_LOGGING": 1,
+        "other": 3
+      },
+      "precision_estimate": "67 / (67 + 62) = 0.519 (51.9%)",
+      "recall_estimate": "(46 - 8) / 46 = 0.826 (82.6%) of ground truth has at least one TP detection",
+      "note": "Precision is severely degraded by AWS_BP_S3_NO_LOGGING (41 FPs). Excluding that single rule would give precision ~67/(67+21) = 76.1%"
+    }
+  }
+}

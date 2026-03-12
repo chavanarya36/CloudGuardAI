@@ -1,0 +1,16 @@
+# Auto-discovered rule — generated 2026-03-11T07:55:38.214004
+# Based on 3 occurrences across 3 scans
+# Original: Database configured to skip final snapshot on deletion
+
+**Impact:** This could enable partial information disclosure or 
+rules:
+  - id: DISC_F4798340182F
+    description: "[Auto-Discovered] Database configured to skip final snapshot on deletion
+
+**Impact:** This could enable partial inform"
+    severity: MEDIUM
+    file_types: [".tf", ".yaml", ".yml", ".json"]
+    match:
+      regex: "information.*disclosure"
+    references:
+      - "https://cloudguard.ai/discovered-patterns/f4798340182f"

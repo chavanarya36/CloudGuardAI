@@ -1,0 +1,16 @@
+# Auto-discovered rule — generated 2026-03-11T07:55:37.967611
+# Based on 7 occurrences across 7 scans
+# Original: AWS provider credential exposure vulnerability. CVSS: 9.1.
+
+**Impact:** This could allow full system compromise, data br
+rules:
+  - id: DISC_CED9FDDA95DA
+    description: "[Auto-Discovered] AWS provider credential exposure vulnerability. CVSS: 9.1.
+
+**Impact:** This could allow full system"
+    severity: CRITICAL
+    file_types: [".tf", ".yaml", ".yml", ".json"]
+    match:
+      regex: "infrastructure.*vulnerability"
+    references:
+      - "https://cloudguard.ai/discovered-patterns/ced9fdda95da"

@@ -46,6 +46,7 @@ import {
   getLearningTelemetry,
   getPatternDetail,
 } from '../api/client';
+import CurrentScanBanner from '../components/enhanced/CurrentScanBanner';
 
 function StatusChip({ active }) {
   return (
@@ -158,6 +159,9 @@ export default function LearningIntelligence() {
 
   return (
     <Box>
+      {/* Current Scan Banner */}
+      <CurrentScanBanner />
+
       {/* Header */}
       <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 4 }}>
         <Box>
@@ -367,9 +371,9 @@ export default function LearningIntelligence() {
                         onClick={() => handleTogglePattern(p.signature)}
                       >
                         <Chip label={p.severity} size="small" color={sevColor} sx={{ fontWeight: 'bold', minWidth: 70 }} />
-                        <Tooltip title={p.sample_description || ''}>
+                        <Tooltip title={(p.sample_description || '').replace(/\*\*Impact:?\*\*.*$/s, '').replace(/\*\*(.*?)\*\*/g, '$1').trim() || p.signature}>
                           <Typography variant="body2" sx={{ flex: 1, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', fontWeight: 500 }}>
-                            {p.sample_description || p.signature}
+                            {(p.sample_description || '').replace(/\*\*Impact:?\*\*.*$/s, '').replace(/\*\*(.*?)\*\*/g, '$1').trim() || p.signature}
                           </Typography>
                         </Tooltip>
                         <Chip label={`${p.count}×`} size="small" variant="outlined" />
@@ -383,7 +387,7 @@ export default function LearningIntelligence() {
                       {/* Expanded detail panel */}
                       <Collapse in={isExpanded}>
                         <Divider />
-                        <Box sx={{ p: 2, bgcolor: 'grey.50' }}>
+                        <Box sx={{ p: 2, bgcolor: 'action.hover' }}>
                           {loadingDetail ? (
                             <Box sx={{ display: 'flex', justifyContent: 'center', py: 2 }}><CircularProgress size={24} /></Box>
                           ) : detail ? (
@@ -450,9 +454,26 @@ export default function LearningIntelligence() {
                                       <Typography variant="caption" color="text.secondary" sx={{ display: 'block', mb: 0.5 }}>
                                         {ex.resource && `Resource: ${ex.resource}`}{ex.file && ` | File: ${ex.file}`}{ex.line_number && ` | Line: ${ex.line_number}`}
                                       </Typography>
-                                      <Typography variant="body2" sx={{ fontSize: 12 }}>{ex.description?.slice(0, 300)}</Typography>
+                                      {(() => {
+                                        const desc = ex.description?.slice(0, 300) || '';
+                                        const impactMatch = desc.match(/\*\*Impact:?\*\*\s*(.*?)$/s);
+                                        const mainDesc = impactMatch ? desc.slice(0, impactMatch.index).replace(/\.\s*$/, '.') : desc;
+                                        const impactText = impactMatch ? impactMatch[1].trim() : null;
+                                        const cleanDesc = mainDesc.replace(/\*\*(.*?)\*\*/g, '$1');
+                                        return (
+                                          <>
+                                            <Typography variant="body2" sx={{ fontSize: 12 }}>{cleanDesc}</Typography>
+                                            {impactText && (
+                                              <Alert severity="error" icon={<WarningAmberIcon sx={{ fontSize: 14 }} />} sx={{ mt: 1, py: 0.25, borderRadius: 1, '& .MuiAlert-message': { py: 0.25 } }}>
+                                                <Typography variant="caption" fontWeight="bold" sx={{ textTransform: 'uppercase', letterSpacing: 0.5 }}>Impact</Typography>
+                                                <Typography variant="caption" display="block" sx={{ mt: 0.25 }}>{impactText.replace(/\*\*(.*?)\*\*/g, '$1')}</Typography>
+                                              </Alert>
+                                            )}
+                                          </>
+                                        );
+                                      })()}
                                       {ex.code_snippet && (
-                                        <Paper sx={{ p: 1, mt: 1, bgcolor: 'grey.100', borderRadius: 1 }}>
+                                        <Paper sx={{ p: 1, mt: 1, bgcolor: 'action.hover', borderRadius: 1 }}>
                                           <Typography variant="caption" component="pre" sx={{ whiteSpace: 'pre-wrap', fontFamily: 'monospace', fontSize: 10 }}>
                                             {ex.code_snippet}
                                           </Typography>
@@ -583,7 +604,7 @@ export default function LearningIntelligence() {
 
         {/* How It Works */}
         <Grid item xs={12}>
-          <Paper variant="outlined" sx={{ p: 3, borderRadius: 3, border: '2px solid', borderColor: 'divider', bgcolor: 'grey.50' }}>
+          <Paper variant="outlined" sx={{ p: 3, borderRadius: 3, border: '2px solid', borderColor: 'divider', bgcolor: 'background.paper' }}>
             <Typography variant="h6" fontWeight="bold" gutterBottom>
               🔄 How Adaptive Learning Works
             </Typography>

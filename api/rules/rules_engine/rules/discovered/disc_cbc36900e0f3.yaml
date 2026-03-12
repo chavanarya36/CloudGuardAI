@@ -1,0 +1,16 @@
+# Auto-discovered rule — generated 2026-03-11T07:55:37.299934
+# Based on 4 occurrences across 4 scans
+# Original: Detected a 2-hop attack path from aws_instance.web_server to aws_s3_bucket.data_backup.
+
+**Attack Chain:** web_server → 
+rules:
+  - id: DISC_CBC36900E0F3
+    description: "[Auto-Discovered] Detected a 2-hop attack path from aws_instance.web_server to aws_s3_bucket.data_backup.
+
+**Attack Ch"
+    severity: HIGH
+    file_types: [".tf", ".yaml", ".yml", ".json"]
+    match:
+      regex: "aws_instance.*data_backup"
+    references:
+      - "https://cloudguard.ai/discovered-patterns/cbc36900e0f3"

@@ -1,0 +1,16 @@
+# Auto-discovered rule — generated 2026-03-11T07:55:37.182994
+# Based on 9 occurrences across 5 scans
+# Original: Detected a 5-hop attack path from aws_security_group.db_sg to aws_iam_policy.admin_policy.
+
+**Attack Chain:** db_sg → da
+rules:
+  - id: DISC_4AE16B3B17D0
+    description: "[Auto-Discovered] Detected a 5-hop attack path from aws_security_group.db_sg to aws_iam_policy.admin_policy.
+
+**Attack"
+    severity: CRITICAL
+    file_types: [".tf", ".yaml", ".yml", ".json"]
+    match:
+      regex: "aws_security_group.*aws_iam_policy"
+    references:
+      - "https://cloudguard.ai/discovered-patterns/4ae16b3b17d0"

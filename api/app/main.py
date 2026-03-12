@@ -22,8 +22,117 @@ from app.rate_limiter import RateLimitMiddleware
 from app.metrics import MetricsMiddleware, metrics
 from scanners.integrated_scanner import get_integrated_scanner
 from scanners.attack_path_analyzer import analyze_attack_paths
+from scanners.unified_findings import unify_findings
+import sys
+from pathlib import Path as _Path
 
 logger = logging.getLogger(__name__)
+
+# ---------------------------------------------------------------------------
+# Helpers
+# ---------------------------------------------------------------------------
+
+_CERTAINTY_MAP = {"critical": 1.0, "high": 0.9, "medium": 0.7, "low": 0.4, "info": 0.2}
+
+def _parse_certainty(value) -> float:
+    """Convert a certainty/confidence value to float.  Accepts float, int, or
+    string labels like 'high', 'medium', etc."""
+    if isinstance(value, (int, float)):
+        return float(value)
+    if isinstance(value, str):
+        return _CERTAINTY_MAP.get(value.lower(), 0.5)
+    return 0.0
+
+# ---------------------------------------------------------------------------
+# Lazy-loaded ML model singletons (non-fatal if torch unavailable)
+# ---------------------------------------------------------------------------
+
+_rl_agent = None
+_rl_available = False
+_transformer_gen = None
+_transformer_available = False
+_gnn_predictor = None
+_gnn_available = False
+
+# Action name lookup for RL agent
+_RL_ACTION_NAMES = [
+    "ADD_ENCRYPTION", "RESTRICT_ACCESS", "ENABLE_LOGGING", "ADD_BACKUP",
+    "ENABLE_MFA", "UPDATE_VERSION", "REMOVE_PUBLIC_ACCESS", "ADD_VPC",
+    "ENABLE_WAF", "ADD_TAGS", "STRENGTHEN_IAM", "ENABLE_HTTPS",
+    "ADD_KMS", "RESTRICT_EGRESS", "ADD_MONITORING",
+]
+
+
+def _get_rl_agent():
+    """Lazy-load RL Auto-Fix Agent singleton (returns None if unavailable)."""
+    global _rl_agent, _rl_available
+    if _rl_agent is not None:
+        return _rl_agent
+    try:
+        # Add project root so 'ml.*' imports resolve when running from api/
+        _project_root = str(_Path(__file__).resolve().parents[2])
+        if _project_root not in sys.path:
+            sys.path.insert(0, _project_root)
+        from ml.models.rl_auto_fix import RLAutoFixAgent, VulnerabilityState, FixAction  # noqa: F811
+        agent = RLAutoFixAgent()
+        model_path = _Path(_project_root) / "ml" / "models_artifacts" / "rl_auto_fix_agent.pt"
+        if model_path.exists():
+            agent.load(str(model_path))
+            _rl_agent = agent
+            _rl_available = True
+            logger.info("RL Auto-Fix Agent loaded from %s", model_path)
+        else:
+            logger.warning("RL model artifact not found at %s", model_path)
+    except Exception as exc:
+        logger.warning("RL Auto-Fix Agent unavailable (non-fatal): %s", exc)
+    return _rl_agent
+
+
+def _get_transformer_generator():
+    """Lazy-load Transformer Secure Code Generator singleton (returns None if unavailable)."""
+    global _transformer_gen, _transformer_available
+    if _transformer_gen is not None:
+        return _transformer_gen
+    try:
+        _project_root = str(_Path(__file__).resolve().parents[2])
+        if _project_root not in sys.path:
+            sys.path.insert(0, _project_root)
+        from ml.models.transformer_code_gen import IaCSecureCodeGenerator
+        model_path = _Path(_project_root) / "ml" / "models_artifacts" / "transformer_secure_codegen.pt"
+        gen = IaCSecureCodeGenerator(model_path=str(model_path) if model_path.exists() else None)
+        if model_path.exists():
+            _transformer_gen = gen
+            _transformer_available = True
+            logger.info("Transformer Code Generator loaded from %s", model_path)
+        else:
+            logger.warning("Transformer model artifact not found at %s", model_path)
+    except Exception as exc:
+        logger.warning("Transformer Code Generator unavailable (non-fatal): %s", exc)
+    return _transformer_gen
+
+
+def _get_gnn_predictor():
+    """Lazy-load GNN AttackPathPredictor singleton (returns None if unavailable)."""
+    global _gnn_predictor, _gnn_available
+    if _gnn_predictor is not None:
+        return _gnn_predictor
+    try:
+        _project_root = str(_Path(__file__).resolve().parents[2])
+        if _project_root not in sys.path:
+            sys.path.insert(0, _project_root)
+        from ml.models.graph_neural_network import AttackPathPredictor
+        model_path = _Path(_project_root) / "ml" / "models_artifacts" / "gnn_attack_detector.pt"
+        if model_path.exists():
+            predictor = AttackPathPredictor(model_path=str(model_path))
+            _gnn_predictor = predictor
+            _gnn_available = True
+            logger.info("GNN AttackPathPredictor loaded from %s", model_path)
+        else:
+            logger.warning("GNN model artifact not found at %s", model_path)
+    except Exception as exc:
+        logger.warning("GNN predictor unavailable (non-fatal): %s", exc)
+    return _gnn_predictor
+
 
 # Create database tables
 Base.metadata.create_all(bind=engine)
@@ -147,7 +256,7 @@ async def create_scan(
                     response = await client.post(
                         f"{settings.ml_service_url}{endpoint}",
                         json={"file_path": file.filename, "file_content": file_content, "scan_mode": scan_mode},
-                        timeout=30.0
+                        timeout=120.0
                     )
                 break  # success
             except httpx.TimeoutException:
@@ -179,57 +288,62 @@ async def create_scan(
                     "scanners_used": []
                 }
 
-        # ── Always run CVE, Compliance & Secrets scanners locally ──
-        # The ML service /rules-scan only returns rules findings, so we
-        # run the remaining fast local scanners every time to ensure
-        # full 6-scanner coverage.
+        # ── Run CVE, Compliance & Secrets scanners locally ──────
+        # When the ML service responded, it only returns rules findings,
+        # so we must run the remaining local scanners.  When the local
+        # integrated scanner ran as fallback, these scanners were
+        # already executed inside scan_content — skip to avoid dupes.
         scanners_used = list(result.get("scanners_used", []))
         all_findings = list(result.get("findings", []))
         _gnn_graph_data = {}
         _gnn_attack_paths = []
         _gnn_summary = {}
 
+        # Detect whether scan_content already ran (local fallback)
+        _local_scanners_done = "secrets" in scanners_used
+
         try:
             integrated = get_integrated_scanner()
 
-            # Secrets scanner
-            try:
-                secrets_findings = await asyncio.to_thread(
-                    integrated.scan_with_secrets_scanner, file_content, file.filename
-                )
-                if secrets_findings:
-                    all_findings.extend(secrets_findings)
-                    if "secrets" not in scanners_used:
-                        scanners_used.append("secrets")
-                    logger.info("Secrets scanner: %d findings", len(secrets_findings))
-            except Exception as e:
-                logger.warning("Secrets scanner error (non-fatal): %s", e)
+            if not _local_scanners_done:
+                # Secrets scanner
+                try:
+                    secrets_findings = await asyncio.to_thread(
+                        integrated.scan_with_secrets_scanner, file_content, file.filename
+                    )
+                    if secrets_findings:
+                        all_findings.extend(secrets_findings)
+                        if "secrets" not in scanners_used:
+                            scanners_used.append("secrets")
+                        logger.info("Secrets scanner: %d findings", len(secrets_findings))
+                except Exception as e:
+                    logger.warning("Secrets scanner error (non-fatal): %s", e)
 
-            # CVE scanner
-            try:
-                cve_findings = await asyncio.to_thread(
-                    integrated.scan_with_cve_scanner, file_content, file.filename
-                )
-                if cve_findings:
-                    all_findings.extend(cve_findings)
-                    if "cve" not in scanners_used:
-                        scanners_used.append("cve")
-                    logger.info("CVE scanner: %d findings", len(cve_findings))
-            except Exception as e:
-                logger.warning("CVE scanner error (non-fatal): %s", e)
+                # CVE scanner
+                try:
+                    cve_findings = await asyncio.to_thread(
+                        integrated.scan_with_cve_scanner, file_content, file.filename
+                    )
+                    if cve_findings:
+                        all_findings.extend(cve_findings)
+                        if "cve" not in scanners_used:
+                            scanners_used.append("cve")
+                        logger.info("CVE scanner: %d findings", len(cve_findings))
+                except Exception as e:
+                    logger.warning("CVE scanner error (non-fatal): %s", e)
 
-            # Compliance scanner
-            try:
-                compliance_findings = await asyncio.to_thread(
-                    integrated.scan_with_compliance_scanner, file_content, file.filename
-                )
-                if compliance_findings:
-                    all_findings.extend(compliance_findings)
-                    if "compliance" not in scanners_used:
-                        scanners_used.append("compliance")
-                    logger.info("Compliance scanner: %d findings", len(compliance_findings))
-            except Exception as e:
-                logger.warning("Compliance scanner error (non-fatal): %s", e)
+                # Compliance scanner
+                try:
+                    compliance_findings = await asyncio.to_thread(
+                        integrated.scan_with_compliance_scanner, file_content, file.filename
+                    )
+                    if compliance_findings:
+                        all_findings.extend(compliance_findings)
+                        if "compliance" not in scanners_used:
+                            scanners_used.append("compliance")
+                        logger.info("Compliance scanner: %d findings", len(compliance_findings))
+                except Exception as e:
+                    logger.warning("Compliance scanner error (non-fatal): %s", e)
 
             # ML scanner (prediction)
             try:
@@ -244,7 +358,7 @@ async def create_scan(
             except Exception as e:
                 logger.warning("ML scanner error (non-fatal): %s", e)
 
-            # GNN Attack Path Analyzer (graph-based attack chain detection)
+            # Attack Path Analyzer (graph-based attack chain detection via regex + DFS)
             try:
                 gnn_result = await asyncio.to_thread(
                     analyze_attack_paths, file_content, file.filename
@@ -252,10 +366,10 @@ async def create_scan(
                 gnn_findings = gnn_result.get("findings", [])
                 if gnn_findings:
                     all_findings.extend(gnn_findings)
-                    if "gnn" not in scanners_used:
-                        scanners_used.append("gnn")
+                    if "attack_path" not in scanners_used:
+                        scanners_used.append("attack_path")
                     logger.info(
-                        "GNN Attack Path Analyzer: %d findings, %d paths detected",
+                        "Attack Path Analyzer: %d findings, %d paths detected",
                         len(gnn_findings), gnn_result.get("summary", {}).get("total_paths", 0),
                     )
                 # Store graph data and attack paths for the response
@@ -263,13 +377,207 @@ async def create_scan(
                 _gnn_attack_paths = gnn_result.get("attack_paths", [])
                 _gnn_summary = gnn_result.get("summary", {})
             except Exception as e:
-                logger.warning("GNN Attack Path Analyzer error (non-fatal): %s", e)
+                logger.warning("Attack Path Analyzer error (non-fatal): %s", e)
                 _gnn_graph_data = {}
                 _gnn_attack_paths = []
                 _gnn_summary = {}
 
+            # LLM scanner (enhanced explanations for top findings)
+            try:
+                llm_findings = await asyncio.to_thread(
+                    integrated.scan_with_llm_scanner, file_content, file.filename, all_findings
+                )
+                if llm_findings:
+                    all_findings.extend(llm_findings)
+                    if "llm" not in scanners_used:
+                        scanners_used.append("llm")
+                    logger.info("LLM scanner: %d findings", len(llm_findings))
+            except Exception as e:
+                logger.warning("LLM scanner error (non-fatal): %s", e)
+
+            # ── RL Auto-Fix Agent (enriches CRITICAL/HIGH findings) ───
+            try:
+                rl_agent = _get_rl_agent()
+                if rl_agent is not None:
+                    from ml.models.rl_auto_fix import VulnerabilityState, FixAction
+
+                    _VULN_TYPE_MAP = {
+                        "encryption": "MISSING_ENCRYPTION",
+                        "encrypt": "MISSING_ENCRYPTION",
+                        "public": "PUBLIC_ACCESS",
+                        "logging": "NO_LOGGING",
+                        "log": "NO_LOGGING",
+                        "backup": "NO_BACKUP",
+                        "mfa": "NO_MFA",
+                        "version": "OUTDATED_VERSION",
+                        "vpc": "NO_VPC",
+                        "waf": "NO_WAF",
+                        "iam": "WEAK_IAM",
+                        "https": "NO_HTTPS",
+                        "ssl": "NO_HTTPS",
+                        "tls": "NO_HTTPS",
+                        "kms": "NO_KMS",
+                        "egress": "UNRESTRICTED_EGRESS",
+                        "monitor": "NO_MONITORING",
+                        "secret": "HARDCODED_SECRET",
+                        "password": "HARDCODED_SECRET",
+                        "access": "PUBLIC_ACCESS",
+                        "tag": "MISSING_TAGS",
+                    }
+
+                    def _infer_vuln_type(fd):
+                        desc = (fd.get("description") or fd.get("title") or "").lower()
+                        for kw, vtype in _VULN_TYPE_MAP.items():
+                            if kw in desc:
+                                return vtype
+                        return "MISCONFIGURATION"
+
+                    _SEV_TO_FLOAT = {"CRITICAL": 1.0, "HIGH": 0.75, "MEDIUM": 0.5, "LOW": 0.25, "INFO": 0.1}
+
+                    def _run_rl_on_findings(findings, agent):
+                        enriched = 0
+                        for fd in findings:
+                            sev = (fd.get("severity") or "MEDIUM").upper()
+                            if sev not in ("CRITICAL", "HIGH"):
+                                continue
+                            try:
+                                snippet = fd.get("code_snippet") or fd.get("evidence") or ""
+                                state = VulnerabilityState(
+                                    vuln_type=_infer_vuln_type(fd),
+                                    severity=_SEV_TO_FLOAT.get(sev, 0.5),
+                                    resource_type=fd.get("resource", "unknown"),
+                                    file_format="terraform",
+                                    is_public="public" in (fd.get("description") or "").lower(),
+                                    has_encryption="encrypt" in (fd.get("description") or "").lower(),
+                                    has_backup=False,
+                                    has_logging=False,
+                                    has_mfa=False,
+                                    code_snippet=snippet,
+                                )
+                                action_id = agent.select_action(state, training=False)
+                                action_name = _RL_ACTION_NAMES[action_id] if action_id < len(_RL_ACTION_NAMES) else f"ACTION_{action_id}"
+                                fixed_code, success = FixAction.apply_fix(state, action_id)
+                                fd["rl_fix_action"] = action_name
+                                fd["rl_fix_applied"] = success
+                                fd["rl_fixed_code"] = fixed_code if success else None
+                                enriched += 1
+                            except Exception:
+                                pass
+                        return enriched
+
+                    rl_count = await asyncio.to_thread(_run_rl_on_findings, all_findings, rl_agent)
+                    if rl_count > 0:
+                        if "rl" not in scanners_used:
+                            scanners_used.append("rl")
+                        logger.info("RL Auto-Fix Agent: enriched %d findings", rl_count)
+            except Exception as e:
+                logger.warning("RL Auto-Fix Agent error (non-fatal): %s", e)
+
+            # ── Transformer Secure Code Generator ─────────────────────
+            try:
+                transformer = _get_transformer_generator()
+                if transformer is not None:
+                    def _run_transformer_on_findings(findings, gen):
+                        enriched = 0
+                        for fd in findings:
+                            sev = (fd.get("severity") or "MEDIUM").upper()
+                            if sev not in ("CRITICAL", "HIGH"):
+                                continue
+                            snippet = fd.get("code_snippet") or fd.get("evidence") or ""
+                            if len(snippet.strip()) < 10:
+                                continue
+                            try:
+                                secure_code = gen.generate_secure_code(
+                                    snippet, max_length=128, temperature=0.7
+                                )
+                                # Only attach if output has meaningful content
+                                if secure_code and len(secure_code.split()) >= 3:
+                                    fd["transformer_fix"] = secure_code
+                                    fd["transformer_fix_available"] = True
+                                    enriched += 1
+                            except Exception:
+                                pass
+                        return enriched
+
+                    tf_count = await asyncio.to_thread(
+                        _run_transformer_on_findings, all_findings, transformer
+                    )
+                    if tf_count > 0:
+                        if "transformer" not in scanners_used:
+                            scanners_used.append("transformer")
+                        logger.info("Transformer Code Gen: enriched %d findings", tf_count)
+            except Exception as e:
+                logger.warning("Transformer Code Gen error (non-fatal): %s", e)
+
         except Exception as e:
             logger.warning("Additional scanners init error (non-fatal): %s", e)
+
+        # ── GNN Model Risk Scoring (real PyTorch GAT inference) ───
+        # The GNN evaluates the infrastructure graph as a whole and
+        # produces a scan-level risk score (not per-finding).
+        # Only meaningful for Terraform / HCL files.
+        _gnn_risk_score = None
+        _is_terraform = file.filename.lower().endswith(('.tf', '.tfvars', '.hcl'))
+        try:
+            if _is_terraform:
+                gnn_predictor = _get_gnn_predictor()
+                if gnn_predictor is not None:
+                    gnn_model_result = await asyncio.to_thread(
+                        gnn_predictor.predict_attack_risk, file_content
+                    )
+                    # Suppress score when the model found no real resources
+                    _num_res = gnn_model_result.get("num_resources", 0)
+                    _crit = [n for n in gnn_model_result.get("critical_nodes", [])
+                             if n and n.lower() not in ("empty", "node_0")]
+                    if _num_res > 1 or _crit:
+                        _gnn_risk_score = gnn_model_result.get("risk_score", 0.0)
+                        _gnn_risk_level = gnn_model_result.get("risk_level", "LOW")
+                        _gnn_critical_nodes = gnn_model_result.get("critical_nodes", [])
+                        logger.info(
+                            "GNN inference completed: risk_score=%.4f, risk_level=%s, critical_nodes=%s",
+                            _gnn_risk_score, _gnn_risk_level, _gnn_critical_nodes,
+                        )
+                    else:
+                        logger.info("GNN: skipped — model found no real infrastructure resources")
+                    if "gnn" not in scanners_used:
+                        scanners_used.append("gnn")
+        except Exception as e:
+            logger.warning("GNN model inference error (non-fatal): %s", e)
+
+        # ── Unified findings integration layer ────────────────────
+        # Merge rule/GNN/ML outputs: attach ranking_score, attack-path
+        # context, and reasoning_summary to each finding.  Returns a
+        # recommended_order (indices sorted by ranking_score desc)
+        # without mutating the list order.
+        try:
+            _ml_risk = _gnn_risk_score if _gnn_risk_score is not None else 0.0
+            _recommended_order = unify_findings(
+                all_findings, _gnn_attack_paths, _ml_risk
+            )
+        except Exception as e:
+            logger.warning("Unified findings integration error (non-fatal): %s", e)
+            _recommended_order = list(range(len(all_findings)))
+
+        # ── Deduplicate findings ──────────────────────────────────
+        # Multiple scanners can flag the same issue (e.g. same rule on
+        # same code snippet).  Keep the first occurrence by building a
+        # composite key from rule/type + severity + code_snippet + line.
+        _seen_keys = set()
+        _deduped = []
+        for fd in all_findings:
+            _key = (
+                (fd.get("type") or fd.get("rule_id") or fd.get("title") or ""),
+                (fd.get("severity") or "").upper(),
+                (fd.get("code_snippet") or "").strip()[:200],
+                fd.get("line_number"),
+                (fd.get("category") or fd.get("scanner") or ""),
+            )
+            if _key not in _seen_keys:
+                _seen_keys.add(_key)
+                _deduped.append(fd)
+        if len(_deduped) < len(all_findings):
+            logger.info("Deduplication: %d → %d findings", len(all_findings), len(_deduped))
+        all_findings = _deduped
 
         # ── Explainability enrichment ──────────────────────────────
         # Build rich descriptions with impact analysis and remediation
@@ -277,7 +585,7 @@ async def create_scan(
         _SCANNER_DISPLAY = {
             "rules": "Rules", "secrets": "Secrets", "cve": "CVE",
             "compliance": "Compliance", "ml": "ML", "llm": "LLM",
-            "gnn": "GNN",
+            "attack_path": "Attack Path",
         }
         _IMPACT_DB = {
             "CRITICAL": "This could allow full system compromise, data breach, or unauthorized access to production infrastructure.",
@@ -314,6 +622,12 @@ async def create_scan(
                 "Review the file for security misconfigurations flagged by ML model",
                 "Cross-reference with rules and compliance findings",
                 "Apply remediation steps from the most critical related findings",
+            ],
+            "attack_path": [
+                "Review the attack path chain and identify the weakest link",
+                "Harden the entry-point resource to break the attack chain",
+                "Apply network segmentation to isolate high-value targets",
+                "Add monitoring and alerting on resources in this path",
             ],
         }
 
@@ -364,14 +678,51 @@ async def create_scan(
         scan.completed_at = datetime.utcnow()
         scan.risk_score = risk_score
         scan.unified_risk_score = risk_score
-        scan.supervised_probability = min(risk_score * 1.1, 1.0)
-        scan.unsupervised_probability = max(risk_score * 0.9, 0.0)
-        scan.ml_score = scanner_scores.get("ML", min(risk_score * 1.05, 1.0))
+        scan.supervised_probability = None  # No generic supervised classifier in pipeline
+        scan.unsupervised_probability = None  # No unsupervised model runs in pipeline
+        scan.gnn_risk_score = _gnn_risk_score  # Real GNN model output (scan-level)
+        # ML score: use external ML service score if available, otherwise
+        # derive from local GNN model (which IS a real ML model).
+        _ml_from_scanners = scanner_scores.get("ML", 0.0)
+        if _ml_from_scanners > 0:
+            scan.ml_score = _ml_from_scanners
+        elif _gnn_risk_score is not None:
+            scan.ml_score = _gnn_risk_score  # Real PyTorch GNN output
+        else:
+            scan.ml_score = 0.0
+
         scan.rules_score = scanner_scores.get("Rules", risk_score)
-        scan.llm_score = scanner_scores.get("LLM", max(risk_score * 0.85, 0.0))
-        scan.secrets_score = scanner_scores.get("Secrets", 0.0)
-        scan.cve_score = scanner_scores.get("CVE", 0.0)
-        scan.compliance_score = scanner_scores.get("Compliance", 0.0)
+
+        # LLM score: use external LLM service score if available, otherwise
+        # derive from Transformer-based enrichment coverage.
+        _llm_from_scanners = scanner_scores.get("LLM", 0.0)
+        if _llm_from_scanners > 0:
+            scan.llm_score = _llm_from_scanners
+        elif all_findings:
+            _tf_enriched = sum(1 for f in all_findings if f.get("transformer_fix_available"))
+            _rl_enriched = sum(1 for f in all_findings if f.get("rl_fix_action"))
+            # Proportion of findings enriched by local neural models
+            _enrichment_ratio = (_tf_enriched + _rl_enriched) / (2 * len(all_findings))
+            scan.llm_score = round(min(_enrichment_ratio, 1.0), 4)
+        else:
+            scan.llm_score = 0.0
+        scan.scanners_used = scanners_used  # Which scanners actually ran
+        # Use case-insensitive lookup for scanner scores (findings use lowercase keys)
+        _ss_lower = {k.lower(): v for k, v in scanner_scores.items()}
+        scan.secrets_score = _ss_lower.get("secrets", 0.0)
+        scan.cve_score = _ss_lower.get("cve", 0.0)
+        # Compliance score: 0-100 where 100 = fully compliant (penalty-based)
+        _compliance_findings = [f for f in all_findings
+                                if (f.get("category") or "").lower() == "compliance"]
+        if _compliance_findings:
+            _sev_penalties = {"CRITICAL": 25, "HIGH": 15, "MEDIUM": 8, "LOW": 3, "INFO": 1}
+            _total_penalty = sum(
+                _sev_penalties.get((f.get("severity") or "MEDIUM").upper(), 8)
+                for f in _compliance_findings
+            )
+            scan.compliance_score = round(max(0.0, 100.0 - _total_penalty), 2)
+        else:
+            scan.compliance_score = 100.0  # No violations = fully compliant
         scan.severity_counts = severity_counts
         scan.total_findings = len(all_findings)
         scan.critical_count = severity_counts.get("critical", 0)
@@ -386,6 +737,9 @@ async def create_scan(
             scanner_counts[cat] = scanner_counts.get(cat, 0) + 1
         scanner_counts["total"] = len(all_findings)
         scan.scanner_breakdown = scanner_counts
+
+        # Store recommended finding order for ranked display
+        scan.recommended_finding_order = _recommended_order
 
         # Store GNN attack path graph data for visualization
         try:
@@ -423,7 +777,8 @@ async def create_scan(
                 line_number=finding_data.get("line_number", finding_data.get("line")),
                 code_snippet=finding_data.get("code_snippet", finding_data.get("evidence", "")),
                 resource=finding_data.get("resource", ""),
-                certainty=finding_data.get("certainty", finding_data.get("confidence", 0.0)),
+                detection_method=finding_data.get("detection_method"),
+                certainty=_parse_certainty(finding_data.get("certainty", finding_data.get("confidence", 0.0))),
                 # Scanner categorization
                 scanner=finding_data.get("scanner", "Rules"),
                 category=finding_data.get("category", "rules"),
@@ -439,6 +794,18 @@ async def create_scan(
                 # LLM explanations
                 llm_explanation=finding_data.get("llm_explanation"),
                 llm_remediation=finding_data.get("llm_remediation", finding_data.get("remediation")),
+                # Unified reasoning fields
+                ranking_score=finding_data.get("ranking_score"),
+                reasoning_summary=finding_data.get("reasoning_summary"),
+                part_of_attack_path=finding_data.get("part_of_attack_path", False),
+                attack_path_context=finding_data.get("attack_path_context"),
+                # RL Auto-Fix fields
+                rl_fix_action=finding_data.get("rl_fix_action"),
+                rl_fix_applied=finding_data.get("rl_fix_applied", False),
+                rl_fixed_code=finding_data.get("rl_fixed_code"),
+                # Transformer Code Gen fields
+                transformer_fix=finding_data.get("transformer_fix"),
+                transformer_fix_available=finding_data.get("transformer_fix_available", False),
             )
             db.add(finding)
 

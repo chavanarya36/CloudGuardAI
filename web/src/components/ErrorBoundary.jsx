@@ -62,7 +62,7 @@ export default class ErrorBoundary extends Component {
                 component="pre"
                 sx={{
                   textAlign: 'left',
-                  bgcolor: 'grey.100',
+                  bgcolor: 'action.hover',
                   p: 2,
                   borderRadius: 1,
                   overflow: 'auto',

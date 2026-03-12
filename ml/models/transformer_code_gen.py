@@ -19,8 +19,11 @@ import torch.nn as nn
 import torch.nn.functional as F
 from typing import List, Dict, Tuple, Optional
 import re
+import logging
 from pathlib import Path
 import json
+
+logger = logging.getLogger(__name__)
 
 
 # ============================================================================
@@ -44,33 +47,75 @@ class IaCVocabulary:
         # Special tokens
         self.special_tokens = ['<PAD>', '<UNK>', '<SOS>', '<EOS>', '<VULN>', '<SECURE>']
         
-        # Common IaC keywords
+        # Common IaC keywords — extended vocabulary for real code generation
         self.iac_keywords = [
-            # Terraform
+            # HCL syntax tokens
+            '{', '}', '(', ')', '[', ']', '=', '"', ',', '.', ':',
+            '#', '//', '/*', '*/', '=>', '...', '?',
+
+            # Terraform top-level
             'resource', 'data', 'variable', 'output', 'module', 'provider',
             'locals', 'terraform', 'backend', 'depends_on', 'count', 'for_each',
-            
-            # AWS resources
-            'aws_s3_bucket', 'aws_db_instance', 'aws_instance', 'aws_security_group',
-            'aws_iam_role', 'aws_iam_policy', 'aws_kms_key', 'aws_vpc', 'aws_subnet',
+            'lifecycle', 'dynamic', 'content', 'each', 'self', 'var',
+
+            # AWS resource types
+            'aws_s3_bucket', 'aws_s3_bucket_server_side_encryption_configuration',
+            'aws_s3_bucket_versioning', 'aws_s3_bucket_logging',
+            'aws_s3_bucket_public_access_block',
+            'aws_db_instance', 'aws_instance', 'aws_security_group',
+            'aws_security_group_rule', 'aws_iam_role', 'aws_iam_policy',
+            'aws_iam_role_policy', 'aws_iam_policy_document',
+            'aws_kms_key', 'aws_kms_alias',
+            'aws_vpc', 'aws_subnet', 'aws_internet_gateway',
             'aws_lambda_function', 'aws_rds_cluster', 'aws_ebs_volume',
-            
+            'aws_cloudwatch_log_group', 'aws_cloudtrail',
+            'aws_lb', 'aws_lb_listener', 'aws_waf_web_acl',
+            'aws_flow_log', 'aws_config_configuration_recorder',
+
+            # Common attributes
+            'name', 'description', 'tags', 'id', 'arn', 'type',
+            'ami', 'instance_type', 'key_name', 'subnet_id', 'vpc_id',
+            'bucket', 'acl', 'force_destroy',
+            'engine', 'engine_version', 'instance_class', 'allocated_storage',
+            'from_port', 'to_port', 'protocol', 'cidr_blocks',
+            'actions', 'effect', 'principals', 'resources', 'condition',
+            'statement', 'sid', 'Action', 'Effect', 'Resource', 'Principal',
+
             # Security properties
             'encryption', 'encrypted', 'kms_key_id', 'storage_encrypted',
-            'publicly_accessible', 'public', 'private', 'cidr_blocks',
-            'ingress', 'egress', 'security_groups', 'vpc_id', 'subnet_id',
-            'iam_role', 'policy', 'assume_role_policy', 'logging',
+            'server_side_encryption_configuration', 'rule', 'apply_server_side_encryption_by_default',
+            'sse_algorithm', 'kms_master_key_id',
+            'publicly_accessible', 'public', 'private',
+            'block_public_acls', 'block_public_policy',
+            'ignore_public_acls', 'restrict_public_buckets',
+            'ingress', 'egress', 'security_groups',
+            'iam_role', 'policy', 'assume_role_policy',
+            'logging', 'target_bucket', 'target_prefix',
             'backup_retention_period', 'multi_az', 'versioning',
-            
+            'enabled', 'status', 'Enabled',
+            'deletion_window_in_days', 'enable_key_rotation',
+            'ssl_policy', 'certificate_arn', 'minimum_protocol_version',
+            'associate_public_ip_address',
+
             # Common values
             'true', 'false', 'null', 'AES256', 'aws:kms',
-            
+            '0.0.0.0/0', 'tcp', 'udp', '-1',
+            'private-read', 'public-read', 'public-read-write',
+            'TLSv1.2_2021', 'ELBSecurityPolicy-TLS-1-2-2017-01',
+            't2.micro', 't3.medium', 'db.t3.micro',
+            '443', '80', '22', '3306', '5432',
+
             # YAML/Kubernetes
             'apiVersion', 'kind', 'metadata', 'spec', 'container',
             'image', 'port', 'env', 'volume', 'configMap', 'secret',
-            
+            'securityContext', 'runAsNonRoot', 'readOnlyRootFilesystem',
+            'allowPrivilegeEscalation', 'capabilities', 'drop', 'ALL',
+
             # JSON/CloudFormation
             'Type', 'Properties', 'Resources', 'Parameters', 'Outputs',
+
+            # Whitespace / structural
+            'NEWLINE', 'INDENT', 'DEDENT',
         ]
         
         # Build vocabulary
@@ -92,18 +137,22 @@ class IaCVocabulary:
         self.secure_idx = self.token2idx['<SECURE>']
     
     def tokenize(self, code: str) -> List[str]:
-        """Tokenize IaC code into tokens"""
-        # Simple whitespace + symbol tokenization
+        """Tokenize IaC code into tokens, preserving structural symbols."""
         tokens = []
-        
-        # Split on whitespace and common symbols
-        pattern = r'[\s{}()\[\]"=,]+'
-        parts = re.split(pattern, code)
-        
-        for part in parts:
-            if part:
-                tokens.append(part)
-        
+        # Split on whitespace first, then separate punctuation
+        for line in code.split('\n'):
+            line = line.strip()
+            if not line:
+                continue
+            # Tokenize by splitting on spaces and separating punctuation
+            parts = re.findall(r'[{}()\[\]=,.:"\']|[^\s{}()\[\]=,.:"\']+'  , line)
+            if not parts:
+                parts = re.split(r'\s+', line)
+            for part in parts:
+                part = part.strip()
+                if part:
+                    tokens.append(part)
+            tokens.append('NEWLINE')
         return tokens
     
     def encode(self, code: str, max_length: int = 512) -> List[int]:
@@ -130,8 +179,30 @@ class IaCVocabulary:
             if idx not in [self.pad_idx, self.sos_idx]:
                 tokens.append(self.idx2token.get(idx, '<UNK>'))
         
-        # Simple reconstruction (can be improved)
-        return ' '.join(tokens)
+        raw = ' '.join(tokens)
+        return self._postprocess(raw)
+
+    @staticmethod
+    def _postprocess(text: str) -> str:
+        """Convert tokeniser placeholders back to real characters.
+
+        - NEWLINE  → actual newline
+        - INDENT   → 2-space indent
+        - DEDENT   → (removed)
+        - <UNK>    → removed (with surrounding whitespace collapsed)
+        - <VULN>, <SECURE>, <SOS>, <EOS> → removed
+        """
+        import re as _re
+        text = text.replace('NEWLINE', '\n')
+        text = text.replace('INDENT', '  ')
+        text = text.replace('DEDENT', '')
+        # Remove special tokens
+        for tok in ('<UNK>', '<VULN>', '<SECURE>', '<SOS>', '<EOS>', '<PAD>'):
+            text = text.replace(tok, '')
+        # Collapse multiple spaces / blank lines
+        text = _re.sub(r' {2,}', ' ', text)
+        text = _re.sub(r'\n\s*\n', '\n', text)
+        return text.strip()
     
     def pad_sequence(self, token_ids: List[int], max_length: int) -> List[int]:
         """Pad sequence to max_length"""
@@ -249,12 +320,15 @@ class SecureCodeGenerator(nn.Module):
         num_layers: int = 6,
         d_ff: int = 1024,
         max_seq_length: int = 512,
-        dropout: float = 0.1
+        dropout: float = 0.1,
+        eos_idx: int = 3
     ):
         super().__init__()
         
         self.d_model = d_model
         self.vocab_size = vocab_size
+        self.eos_idx = eos_idx
+        self.max_seq_length = max_seq_length
         
         # Embeddings
         self.token_embedding = nn.Embedding(vocab_size, d_model)
@@ -335,8 +409,11 @@ class SecureCodeGenerator(nn.Module):
         
         with torch.no_grad():
             for _ in range(max_length):
+                # Truncate to max_seq_length so position embedding stays in range
+                ctx = input_ids[:, -self.max_seq_length:]
+                
                 # Forward pass
-                logits = self.forward(input_ids)
+                logits = self.forward(ctx)
                 
                 # Get last token logits
                 next_token_logits = logits[:, -1, :] / temperature
@@ -353,8 +430,8 @@ class SecureCodeGenerator(nn.Module):
                 # Append to sequence
                 input_ids = torch.cat([input_ids, next_token], dim=1)
                 
-                # Stop if EOS token
-                if next_token.item() == 3:  # <EOS> index
+                # Stop if EOS token (use actual vocab index, not hardcoded)
+                if next_token.item() == self.eos_idx:
                     break
         
         return input_ids
@@ -377,23 +454,24 @@ class IaCSecureCodeGenerator:
         self.vocab = IaCVocabulary()
         self.device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
         
-        # Initialize model
+        # Initialize model — dimensions match train_transformer.py
         self.model = SecureCodeGenerator(
             vocab_size=self.vocab.vocab_size,
-            d_model=256,
-            num_heads=8,
-            num_layers=6,
-            d_ff=1024,
-            max_seq_length=512,
-            dropout=0.1
+            d_model=64,
+            num_heads=4,
+            num_layers=2,
+            d_ff=256,
+            max_seq_length=192,
+            dropout=0.15,
+            eos_idx=self.vocab.eos_idx,
         ).to(self.device)
         
         # Load pretrained model if available
         if model_path and Path(model_path).exists():
             self.load(model_path)
-            print(f"✅ Loaded transformer model from {model_path}")
+            logger.info("Loaded transformer model from %s", model_path)
         else:
-            print("ℹ️  Using untrained transformer model")
+            logger.info("Using untrained transformer model")
     
     def generate_secure_code(
         self,
@@ -412,9 +490,11 @@ class IaCSecureCodeGenerator:
         Returns:
             Secure IaC code
         """
-        # Encode input
+        # Encode input and pad to MAX_LEN (must match training layout where
+        # target tokens start at position MAX_LEN)
         input_text = f"<VULN> {vulnerable_code} <SECURE>"
-        input_ids = self.vocab.encode(input_text, max_length=128)
+        input_ids = self.vocab.encode(input_text, max_length=96)
+        input_ids = self.vocab.pad_sequence(input_ids, 96)  # pad to training input length
         input_tensor = torch.LongTensor([input_ids]).to(self.device)
         
         # Generate
@@ -425,29 +505,28 @@ class IaCSecureCodeGenerator:
             top_k=50
         )
         
-        # Decode
-        generated_code = self.vocab.decode(output_ids[0].tolist())
+        # Decode only the generated tokens (after the padded input prefix)
+        generated_ids = output_ids[0, 96:].tolist()
+        generated_code = self.vocab.decode(generated_ids)
         
-        # Extract secure portion
-        if '<SECURE>' in generated_code:
-            secure_code = generated_code.split('<SECURE>')[-1].strip()
-        else:
-            secure_code = generated_code
+        # Clean up — remove special tokens and excess whitespace
+        secure_code = generated_code.strip()
         
         return secure_code
     
     def save(self, path: str):
         """Save model checkpoint"""
+        Path(path).parent.mkdir(parents=True, exist_ok=True)
         torch.save({
             'model_state_dict': self.model.state_dict(),
-            'vocab_size': self.vocab.vocab_size
+            'vocab_size': self.vocab.vocab_size,
         }, path)
-        print(f"✅ Transformer model saved to {path}")
+        logger.info("Transformer model saved to %s", path)
     
     def load(self, path: str):
         """Load model checkpoint"""
         checkpoint = torch.load(path, map_location=self.device, weights_only=False)
-        self.model.load_state_dict(checkpoint['model_state_dict'])
+        self.model.load_state_dict(checkpoint['model_state_dict'], strict=True)
         self.model.eval()
 
 
@@ -461,12 +540,16 @@ if __name__ == "__main__":
     vocab = IaCVocabulary()
     print(f"✓ Vocabulary: {vocab.vocab_size} tokens")
     
-    model = SecureCodeGenerator(vocab_size=vocab.vocab_size)
+    model = SecureCodeGenerator(
+        vocab_size=vocab.vocab_size,
+        d_model=64, num_heads=4, num_layers=2, d_ff=256,
+        max_seq_length=192, dropout=0.15,
+    )
     total_params = sum(p.numel() for p in model.parameters())
     print(f"✓ Transformer: {total_params:,} parameters")
-    print(f"  - Embedding: {vocab.vocab_size} × 256")
-    print(f"  - Encoder: 6 layers × 8 heads")
-    print(f"  - Feed-forward: 1024 hidden units")
+    print(f"  - Embedding: {vocab.vocab_size} × 64")
+    print(f"  - Encoder: 2 layers × 4 heads")
+    print(f"  - Feed-forward: 256 hidden units")
     
     print()
     print("Ready to train transformer on secure code generation!")

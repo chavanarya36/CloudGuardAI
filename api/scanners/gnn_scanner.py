@@ -73,12 +73,19 @@ class GNNScanner:
             self.predictor = None
             self.available = False
     
-    def scan_file(self, file_path: str) -> List[Dict]:
+    # File extensions the GNN model can meaningfully analyze
+    _SUPPORTED_EXTENSIONS = {'.tf', '.tfvars', '.hcl'}
+
+    def scan_file(self, file_path: str, content=None) -> List[Dict]:
         """
         Scan a Terraform file for attack paths using GNN.
         
         Args:
-            file_path: Path to Terraform file
+            file_path: Path to Terraform file (used for labelling)
+            content:   Optional file content.  When provided the file
+                       is **not** read from disk, which avoids errors
+                       when only the filename (not a real path) is
+                       available.
         
         Returns:
             List of findings with attack path information
@@ -86,14 +93,29 @@ class GNNScanner:
         
         if not self.available or self.predictor is None:
             return []
+
+        # ── Guard: only analyse Terraform / HCL files ──────────
+        ext = Path(file_path).suffix.lower()
+        if ext not in self._SUPPORTED_EXTENSIONS:
+            return []
         
         try:
-            # Read file
-            with open(file_path, 'r', encoding='utf-8') as f:
-                terraform_content = f.read()
+            # Use supplied content or fall back to reading from disk
+            if content is not None:
+                terraform_content = content
+            else:
+                with open(file_path, 'r', encoding='utf-8') as f:
+                    terraform_content = f.read()
             
             # Predict attack risk
             result = self.predictor.predict_attack_risk(terraform_content)
+
+            # ── Guard: suppress when the model found no real resources ──
+            num_res = result.get('num_resources', 0)
+            critical = [n for n in result.get('critical_nodes', [])
+                        if n and n.lower() not in ('empty', 'node_0')]
+            if num_res <= 1 and not critical:
+                return []
             
             # Convert to findings format
             findings = []

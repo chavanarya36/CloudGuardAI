@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { AlertCircle, Info, XCircle, AlertTriangle, Shield, Key, Bug, CheckCircle, ChevronDown, ChevronRight, ExternalLink } from 'lucide-react';
+import { AlertCircle, Info, XCircle, AlertTriangle, Shield, Key, Bug, CheckCircle, ChevronDown, ChevronRight, ExternalLink, Sparkles, Search, FileCode, MapPin } from 'lucide-react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '../ui/card';
 import { Badge } from '../ui/badge';
 
@@ -39,6 +39,24 @@ export default function FindingsCard({ findings, scannerBreakdown, complianceSco
         label: 'Rules',
         color: 'bg-orange-100 text-orange-800 dark:bg-orange-900/30 dark:text-orange-300',
         borderColor: 'border-orange-500'
+      },
+      llm: {
+        icon: Sparkles,
+        label: 'LLM',
+        color: 'bg-indigo-100 text-indigo-800 dark:bg-indigo-900/30 dark:text-indigo-300',
+        borderColor: 'border-indigo-500'
+      },
+      gnn: {
+        icon: AlertTriangle,
+        label: 'GNN',
+        color: 'bg-teal-100 text-teal-800 dark:bg-teal-900/30 dark:text-teal-300',
+        borderColor: 'border-teal-500'
+      },
+      attack_path: {
+        icon: AlertTriangle,
+        label: 'Attack Path',
+        color: 'bg-teal-100 text-teal-800 dark:bg-teal-900/30 dark:text-teal-300',
+        borderColor: 'border-teal-500'
       }
     };
     return configs[category] || configs.rules;
@@ -199,6 +217,32 @@ export default function FindingsCard({ findings, scannerBreakdown, complianceSco
                 Rules ({scannerBreakdown.rules})
               </button>
             )}
+            {scannerBreakdown.llm > 0 && (
+              <button
+                onClick={() => setSelectedFilter('llm')}
+                className={`px-3 py-1 rounded-md text-xs font-medium transition-colors flex items-center gap-1 ${
+                  selectedFilter === 'llm'
+                    ? 'bg-indigo-600 text-white'
+                    : 'bg-indigo-100 text-indigo-800 dark:bg-indigo-900/30 dark:text-indigo-300 hover:bg-indigo-200'
+                }`}
+              >
+                <Sparkles className="w-3 h-3" />
+                LLM ({scannerBreakdown.llm})
+              </button>
+            )}
+            {scannerBreakdown.gnn > 0 && (
+              <button
+                onClick={() => setSelectedFilter('gnn')}
+                className={`px-3 py-1 rounded-md text-xs font-medium transition-colors flex items-center gap-1 ${
+                  selectedFilter === 'gnn'
+                    ? 'bg-teal-600 text-white'
+                    : 'bg-teal-100 text-teal-800 dark:bg-teal-900/30 dark:text-teal-300 hover:bg-teal-200'
+                }`}
+              >
+                <AlertTriangle className="w-3 h-3" />
+                GNN ({scannerBreakdown.gnn})
+              </button>
+            )}
           </div>
         )}
       </CardHeader>
@@ -235,9 +279,39 @@ export default function FindingsCard({ findings, scannerBreakdown, complianceSco
                     </div>
                   </div>
                   
-                  <p className="text-sm text-gray-700 dark:text-gray-300">
-                    {finding.description}
-                  </p>
+                  {/* Description with Impact extraction */}
+                  {(() => {
+                    const desc = finding.description || '';
+                    // Extract **Impact:** or **Impact** section from the description
+                    const impactMatch = desc.match(/\*\*Impact:?\*\*\s*(.*?)$/s);
+                    const mainDesc = impactMatch 
+                      ? desc.slice(0, impactMatch.index).replace(/\.\s*$/, '.') 
+                      : desc;
+                    const impactText = impactMatch ? impactMatch[1].trim() : null;
+                    // Also clean any remaining markdown bold markers
+                    const cleanDesc = mainDesc.replace(/\*\*(.*?)\*\*/g, '$1');
+
+                    return (
+                      <>
+                        <p className="text-sm text-gray-700 dark:text-gray-300">
+                          {cleanDesc}
+                        </p>
+                        {impactText && (
+                          <div className="mt-2 flex items-start gap-2 p-2.5 rounded-md bg-red-50 dark:bg-red-950/30 border border-red-200 dark:border-red-800/50">
+                            <AlertTriangle className="w-4 h-4 text-red-500 dark:text-red-400 shrink-0 mt-0.5" />
+                            <div>
+                              <span className="text-xs font-bold text-red-700 dark:text-red-300 uppercase tracking-wide">
+                                Impact
+                              </span>
+                              <p className="text-xs text-red-600 dark:text-red-300/90 mt-0.5 leading-relaxed">
+                                {impactText.replace(/\*\*(.*?)\*\*/g, '$1')}
+                              </p>
+                            </div>
+                          </div>
+                        )}
+                      </>
+                    );
+                  })()}
 
                   {/* CVE-specific information */}
                   {finding.cve_id && (
@@ -285,10 +359,50 @@ export default function FindingsCard({ findings, scannerBreakdown, complianceSco
                   
                   {finding.file_path && (
                     <div className="flex items-center gap-2 text-xs text-gray-600 dark:text-gray-400">
+                      <MapPin className="w-3 h-3 shrink-0" />
                       <span className="font-medium">Location:</span>
                       <span>{finding.file_path}</span>
                       {finding.line_number && (
-                        <span className="text-gray-500">Line {finding.line_number}</span>
+                        <span className="px-1.5 py-0.5 bg-amber-100 dark:bg-amber-900/30 text-amber-800 dark:text-amber-300 rounded font-mono font-bold">
+                          Line {finding.line_number}
+                        </span>
+                      )}
+                    </div>
+                  )}
+
+                  {/* ── Evidence & Explainability Section ── */}
+                  {(finding.code_snippet || finding.detection_method) && (
+                    <div className="mt-3 p-3 bg-slate-50 dark:bg-slate-900/60 rounded-lg border border-slate-200 dark:border-slate-700">
+                      <div className="flex items-center gap-2 mb-2">
+                        <Search className="w-4 h-4 text-emerald-600 dark:text-emerald-400" />
+                        <span className="text-xs font-semibold text-emerald-700 dark:text-emerald-300 uppercase tracking-wide">
+                          Evidence &amp; Detection
+                        </span>
+                      </div>
+
+                      {/* Detection Method */}
+                      {finding.detection_method && (
+                        <div className="mb-2">
+                          <p className="text-xs text-gray-600 dark:text-gray-400 leading-relaxed">
+                            <span className="font-medium text-gray-700 dark:text-gray-300">How detected: </span>
+                            {finding.detection_method}
+                          </p>
+                        </div>
+                      )}
+
+                      {/* Code Snippet */}
+                      {finding.code_snippet && (
+                        <div>
+                          <div className="flex items-center gap-1 mb-1">
+                            <FileCode className="w-3 h-3 text-gray-500 dark:text-gray-400" />
+                            <span className="text-xs font-medium text-gray-600 dark:text-gray-400">
+                              Source code{finding.line_number ? ` (line ${finding.line_number})` : ''}:
+                            </span>
+                          </div>
+                          <pre className="text-xs bg-gray-900 dark:bg-black text-green-400 dark:text-green-300 p-2.5 rounded font-mono overflow-x-auto whitespace-pre-wrap leading-relaxed border border-gray-700">
+                            {finding.code_snippet}
+                          </pre>
+                        </div>
                       )}
                     </div>
                   )}

@@ -1,0 +1,12 @@
+# Auto-discovered rule — generated 2026-03-11T07:55:37.511077
+# Based on 3 occurrences across 3 scans
+# Original: Rule CVE flagged this IaC resource as HIGH. Description: AWS provider allows overly permissive IAM policies. CVSS: 7.5..
+rules:
+  - id: DISC_505247D01927
+    description: "[Auto-Discovered] Rule CVE flagged this IaC resource as HIGH. Description: AWS provider allows overly permissive IAM p"
+    severity: HIGH
+    file_types: [".tf", ".yaml", ".yml", ".json"]
+    match:
+      regex: "description.*permissive"
+    references:
+      - "https://cloudguard.ai/discovered-patterns/505247d01927"

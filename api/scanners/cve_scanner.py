@@ -348,6 +348,12 @@ class CVEScanner:
                         'version': default_ver,
                         'type': 'terraform-provider',
                         'ecosystem': 'Terraform',
+                        'inferred': True,
+                        'detection_method': (
+                            f"No explicit provider version found. Inferred terraform-provider-{prefix} "
+                            f"v{default_ver} from resource type prefix '{prefix}_*'. "
+                            f"This is a heuristic — the actual version may differ."
+                        ),
                     })
 
         return dependencies
@@ -419,6 +425,11 @@ class CVEScanner:
                 for vuln in version_vulns:
                     if vuln['cve_id'] in existing_cves:
                         continue
+                    # Build detection_method from dependency context
+                    if dep.get('inferred'):
+                        det_method = dep.get('detection_method', 'Version inferred heuristically')
+                    else:
+                        det_method = f"Package '{package}' version '{version}' explicitly declared in file. Matched against local CVE database."
                     finding = {
                         'type': 'CVE', 'severity': vuln['severity'], 'category': 'cve', 'scanner': 'cve',
                         'title': f"{vuln['cve_id']} in {package} {version}",
@@ -428,6 +439,7 @@ class CVEScanner:
                         'fixed_version': vuln['fixed_version'], 'affected_versions': vuln['affected_versions'],
                         'remediation_steps': [f"Upgrade {package} to {vuln['fixed_version']}"],
                         'references': [f"https://nvd.nist.gov/vuln/detail/{vuln['cve_id']}"],
+                        'detection_method': det_method,
                     }
                     for line_num, line in enumerate(content.split('\n'), 1):
                         if package in line and version in line:

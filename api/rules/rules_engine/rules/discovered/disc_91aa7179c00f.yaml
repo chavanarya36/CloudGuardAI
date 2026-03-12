@@ -1,0 +1,12 @@
+# Auto-discovered rule — generated 2026-03-11T07:55:36.821042
+# Based on 21 occurrences across 12 scans
+# Original: Resource **aws_security_group.web_sg** has vulnerability: All ports open. This resource is part of the infrastructure at
+rules:
+  - id: DISC_91AA7179C00F
+    description: "[Auto-Discovered] Resource **aws_security_group.web_sg** has vulnerability: All ports open. This resource is part of t"
+    severity: CRITICAL
+    file_types: [".tf", ".yaml", ".yml", ".json"]
+    match:
+      regex: "aws_security_group.*infrastructure"
+    references:
+      - "https://cloudguard.ai/discovered-patterns/91aa7179c00f"

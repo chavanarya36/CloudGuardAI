@@ -1,0 +1,16 @@
+# Auto-discovered rule — generated 2026-03-11T07:55:38.073553
+# Based on 4 occurrences across 4 scans
+# Original: EBS volume encryption is not enabled
+
+**Impact:** This could lead to significant data exposure, privilege escalation, or
+rules:
+  - id: DISC_2A38F35DA454
+    description: "[Auto-Discovered] EBS volume encryption is not enabled
+
+**Impact:** This could lead to significant data exposure, priv"
+    severity: HIGH
+    file_types: [".tf", ".yaml", ".yml", ".json"]
+    match:
+      regex: "significant.*encryption"
+    references:
+      - "https://cloudguard.ai/discovered-patterns/2a38f35da454"

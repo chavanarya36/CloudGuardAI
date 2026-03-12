@@ -1,0 +1,12 @@
+# Auto-discovered rule — generated 2026-03-11T07:55:36.998412
+# Based on 9 occurrences across 6 scans
+# Original: Resource **aws_security_group.db_sg** has vulnerability: Unrestricted ingress (0.0.0.0/0). This resource is part of the 
+rules:
+  - id: DISC_18FDD7A32E03
+    description: "[Auto-Discovered] Resource **aws_security_group.db_sg** has vulnerability: Unrestricted ingress (0.0.0.0/0). This reso"
+    severity: HIGH
+    file_types: [".tf", ".yaml", ".yml", ".json"]
+    match:
+      regex: "aws_security_group.*infrastructure"
+    references:
+      - "https://cloudguard.ai/discovered-patterns/18fdd7a32e03"

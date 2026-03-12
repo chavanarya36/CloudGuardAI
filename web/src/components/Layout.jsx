@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Link, useLocation } from 'react-router-dom';
+import { Link, useLocation, Outlet } from 'react-router-dom';
 import {
   AppBar,
   Box,
@@ -29,7 +29,7 @@ import SettingsIcon from '@mui/icons-material/Settings';
 const drawerWidth = 260;
 
 const menuItems = [
-  { text: 'Scan', path: '/', icon: <ScannerIcon /> },
+  { text: 'Scan', path: '/scan', icon: <ScannerIcon /> },
   { text: 'Dashboard', path: '/dashboard', icon: <DashboardIcon /> },
   { text: 'Learning', path: '/learning', icon: <PsychologyIcon /> },
   { text: 'History', path: '/history', icon: <HistoryIcon /> },
@@ -47,11 +47,11 @@ export default function Layout({ children }) {
   };
 
   const drawer = (
-    <Box sx={{ height: '100%', display: 'flex', flexDirection: 'column', bgcolor: '#fafafa' }}>
+    <Box sx={{ height: '100%', display: 'flex', flexDirection: 'column', bgcolor: '#071a2f' }}>
       {/* Logo Section */}
       <Box sx={{ 
         p: 3,
-        background: 'linear-gradient(135deg, #1976d2 0%, #1565c0 100%)',
+        background: 'linear-gradient(135deg, #0d47a1 0%, #1565c0 100%)',
         color: 'white'
       }}>
         <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5, mb: 1 }}>
@@ -85,7 +85,7 @@ export default function Layout({ children }) {
           variant="overline" 
           sx={{ 
             px: 3, 
-            color: 'text.secondary',
+            color: 'rgba(255,255,255,0.4)',
             fontWeight: 'bold',
             fontSize: '0.7rem',
             letterSpacing: 1
@@ -104,14 +104,14 @@ export default function Layout({ children }) {
                   sx={{
                     borderRadius: 2,
                     py: 1.5,
-                    bgcolor: isActive ? 'primary.main' : 'transparent',
-                    color: isActive ? 'white' : 'text.primary',
+                    bgcolor: isActive ? 'rgba(66, 165, 245, 0.15)' : 'transparent',
+                    color: isActive ? '#42a5f5' : 'rgba(255,255,255,0.7)',
                     '&:hover': {
-                      bgcolor: isActive ? 'primary.dark' : 'rgba(25, 118, 210, 0.08)',
+                      bgcolor: isActive ? 'rgba(66, 165, 245, 0.2)' : 'rgba(255,255,255,0.05)',
                     },
                     transition: 'all 0.2s',
                     '& .MuiListItemIcon-root': {
-                      color: isActive ? 'white' : 'primary.main',
+                      color: isActive ? '#42a5f5' : 'rgba(255,255,255,0.5)',
                       minWidth: 40
                     }
                   }}
@@ -132,13 +132,13 @@ export default function Layout({ children }) {
       </Box>
 
       {/* Footer */}
-      <Box sx={{ p: 3, borderTop: '1px solid', borderColor: 'divider' }}>
+      <Box sx={{ p: 3, borderTop: '1px solid', borderColor: 'rgba(255,255,255,0.06)' }}>
         <Box sx={{ 
           p: 2, 
           borderRadius: 2,
-          background: 'linear-gradient(135deg, rgba(76, 175, 80, 0.1) 0%, rgba(46, 125, 50, 0.1) 100%)',
+          background: 'rgba(102, 187, 106, 0.08)',
           border: '1px solid',
-          borderColor: 'success.light'
+          borderColor: 'rgba(102, 187, 106, 0.25)'
         }}>
           <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mb: 1 }}>
             <Box sx={{
@@ -152,11 +152,11 @@ export default function Layout({ children }) {
                 '50%': { opacity: 0.5 }
               }
             }} />
-            <Typography variant="caption" fontWeight="bold" color="success.dark">
+            <Typography variant="caption" fontWeight="bold" color="success.main">
               System Online
             </Typography>
           </Box>
-          <Typography variant="caption" color="text.secondary" display="block">
+          <Typography variant="caption" color="rgba(255,255,255,0.5)" display="block">
             All services operational
           </Typography>
         </Box>
@@ -172,10 +172,11 @@ export default function Layout({ children }) {
         sx={{
           width: { sm: `calc(100% - ${drawerWidth}px)` },
           ml: { sm: `${drawerWidth}px` },
-          bgcolor: 'white',
+          bgcolor: '#0a1929',
           borderBottom: '1px solid',
-          borderColor: 'divider',
-          boxShadow: '0 1px 3px rgba(0,0,0,0.05)'
+          borderColor: 'rgba(255,255,255,0.08)',
+          boxShadow: '0 1px 3px rgba(0,0,0,0.2)',
+          backdropFilter: 'blur(20px)',
         }}
       >
         <Toolbar>
@@ -192,9 +193,9 @@ export default function Layout({ children }) {
               px: 2,
               py: 0.5,
               borderRadius: 1,
-              background: 'linear-gradient(135deg, rgba(25, 118, 210, 0.1) 0%, rgba(21, 101, 192, 0.15) 100%)',
+              background: 'rgba(66, 165, 245, 0.12)',
               border: '1px solid',
-              borderColor: 'primary.light'
+              borderColor: 'rgba(66, 165, 245, 0.3)'
             }}>
               <Typography 
                 variant="h6" 
@@ -202,10 +203,7 @@ export default function Layout({ children }) {
                 component="div"
                 sx={{
                   fontWeight: 'bold',
-                  background: 'linear-gradient(135deg, #1976d2 0%, #0d47a1 100%)',
-                  backgroundClip: 'text',
-                  WebkitBackgroundClip: 'text',
-                  WebkitTextFillColor: 'transparent',
+                  color: '#42a5f5',
                 }}
               >
                 Security Scanning Platform
@@ -216,8 +214,9 @@ export default function Layout({ children }) {
               size="small" 
               sx={{ 
                 fontWeight: 'bold',
-                bgcolor: 'success.light',
-                color: 'success.dark'
+                bgcolor: 'rgba(102, 187, 106, 0.15)',
+                color: '#66bb6a',
+                border: '1px solid rgba(102, 187, 106, 0.3)'
               }} 
             />
           </Box>
@@ -239,7 +238,8 @@ export default function Layout({ children }) {
             '& .MuiDrawer-paper': { 
               boxSizing: 'border-box', 
               width: drawerWidth,
-              border: 'none'
+              border: 'none',
+              bgcolor: '#071a2f'
             },
           }}
         >
@@ -254,7 +254,8 @@ export default function Layout({ children }) {
               width: drawerWidth,
               border: 'none',
               borderRight: '1px solid',
-              borderColor: 'divider'
+              borderColor: 'rgba(255,255,255,0.06)',
+              bgcolor: '#071a2f'
             },
           }}
           open
@@ -268,12 +269,12 @@ export default function Layout({ children }) {
           flexGrow: 1,
           p: 4,
           width: { sm: `calc(100% - ${drawerWidth}px)` },
-          bgcolor: '#fafafa',
+          bgcolor: '#0a1929',
           minHeight: '100vh'
         }}
       >
         <Toolbar />
-        {children}
+        {children || <Outlet />}
       </Box>
     </Box>
   );

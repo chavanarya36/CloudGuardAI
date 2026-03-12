@@ -1,0 +1,14 @@
+# Auto-discovered rule — generated 2026-03-11T07:55:37.540642
+# Based on 9 occurrences across 9 scans
+# Original: Machine learning model detected potential security issues with 50.0% risk score and 40.0% confidence.
+
+**Impact:** This 
+rules:
+  - id: DISC_48734817EFA2
+    description: "[Auto-Discovered] Machine learning model detected potential security issues with 50.0% risk score and 40.0% confidence"
+    severity: MEDIUM
+    file_types: [".tf", ".yaml", ".yml", ".json"]
+    match:
+      regex: "information.*disclosure"
+    references:
+      - "https://cloudguard.ai/discovered-patterns/48734817efa2"

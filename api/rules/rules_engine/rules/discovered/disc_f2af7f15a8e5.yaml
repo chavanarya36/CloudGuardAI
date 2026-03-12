@@ -1,0 +1,16 @@
+# Auto-discovered rule — generated 2026-03-12T15:05:45.529782
+# Based on 3 occurrences across 3 scans
+# Original: Detected a 4-hop attack path from aws_subnet.web_subnet2 to aws_s3_bucket.flowbucket.
+
+**Attack Chain:** web_subnet2 → w
+rules:
+  - id: DISC_F2AF7F15A8E5
+    description: "[Auto-Discovered] Detected a 4-hop attack path from aws_subnet.web_subnet2 to aws_s3_bucket.flowbucket.
+
+**Attack Chai"
+    severity: LOW
+    file_types: [".tf", ".yaml", ".yml", ".json"]
+    match:
+      regex: "vpcflowlogs.*aws_subnet"
+    references:
+      - "https://cloudguard.ai/discovered-patterns/f2af7f15a8e5"

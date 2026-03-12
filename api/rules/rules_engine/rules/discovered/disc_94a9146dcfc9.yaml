@@ -1,0 +1,16 @@
+# Auto-discovered rule — generated 2026-02-23T11:21:42.642728
+# Based on 7 occurrences across 7 scans
+# Original: AWS provider allows overly permissive IAM policies. CVSS: 7.5.
+
+**Impact:** This could lead to significant data exposure
+rules:
+  - id: DISC_94A9146DCFC9
+    description: "[Auto-Discovered] AWS provider allows overly permissive IAM policies. CVSS: 7.5.
+
+**Impact:** This could lead to signi"
+    severity: HIGH
+    file_types: [".tf", ".yaml", ".yml", ".json"]
+    match:
+      regex: "significant.*permissive"
+    references:
+      - "https://cloudguard.ai/discovered-patterns/94a9146dcfc9"

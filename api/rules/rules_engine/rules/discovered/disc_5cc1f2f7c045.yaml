@@ -1,0 +1,12 @@
+# Auto-discovered rule — generated 2026-03-11T07:55:36.881437
+# Based on 8 occurrences across 8 scans
+# Original: Resource **aws_instance.web_server** has vulnerability: Public IP assigned. This resource is part of the infrastructure 
+rules:
+  - id: DISC_5CC1F2F7C045
+    description: "[Auto-Discovered] Resource **aws_instance.web_server** has vulnerability: Public IP assigned. This resource is part of"
+    severity: MEDIUM
+    file_types: [".tf", ".yaml", ".yml", ".json"]
+    match:
+      regex: "infrastructure.*vulnerability"
+    references:
+      - "https://cloudguard.ai/discovered-patterns/5cc1f2f7c045"

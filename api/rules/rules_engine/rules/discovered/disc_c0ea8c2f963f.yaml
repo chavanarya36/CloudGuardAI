@@ -1,0 +1,12 @@
+# Auto-discovered rule — generated 2026-03-11T07:55:36.943536
+# Based on 11 occurrences across 8 scans
+# Original: Resource **aws_db_instance.database** has vulnerability: Database storage not encrypted. This resource is part of the in
+rules:
+  - id: DISC_C0EA8C2F963F
+    description: "[Auto-Discovered] Resource **aws_db_instance.database** has vulnerability: Database storage not encrypted. This resour"
+    severity: HIGH
+    file_types: [".tf", ".yaml", ".yml", ".json"]
+    match:
+      regex: "aws_db_instance.*infrastructure"
+    references:
+      - "https://cloudguard.ai/discovered-patterns/c0ea8c2f963f"

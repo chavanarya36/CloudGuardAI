@@ -1,0 +1,12 @@
+# Auto-discovered rule — generated 2026-03-11T07:55:37.567826
+# Based on 20 occurrences across 3 scans
+# Original: Rule SECRET_AZURE_CLIENT_SECRET flagged this IaC resource as CRITICAL. Description: Azure client secret detected. This p
+rules:
+  - id: DISC_D8F483049929
+    description: "[Auto-Discovered] Rule SECRET_AZURE_CLIENT_SECRET flagged this IaC resource as CRITICAL. Description: Azure client sec"
+    severity: CRITICAL
+    file_types: [".tf", ".yaml", ".yml", ".json"]
+    match:
+      regex: "secret_azure_client_secret.*description"
+    references:
+      - "https://cloudguard.ai/discovered-patterns/d8f483049929"

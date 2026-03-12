@@ -9,7 +9,7 @@ logger = logging.getLogger(__name__)
 class Settings(BaseSettings):
     model_config = ConfigDict(env_file=".env")
 
-    database_url: str = "sqlite:///./cloudguard.db"
+    database_url: str = "sqlite:///./cloudguard.db"  # relative; overridden to absolute in database.py
     redis_url: str = "redis://localhost:6379/0"
     ml_service_url: str = "http://localhost:8001"
     secret_key: str = "change-this-secret-key-in-production"

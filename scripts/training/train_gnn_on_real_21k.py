@@ -5,7 +5,8 @@ Uses actual file metadata and findings from CSV
 
 import sys
 import os
-sys.path.insert(0, os.path.join(os.path.dirname(__file__), 'ml'))
+# Add project root so 'from ml.models...' works
+sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..', '..'))
 
 import pandas as pd
 import torch

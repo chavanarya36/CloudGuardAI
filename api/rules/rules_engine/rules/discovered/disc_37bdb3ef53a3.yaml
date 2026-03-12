@@ -1,0 +1,16 @@
+# Auto-discovered rule — generated 2026-03-11T07:55:37.328262
+# Based on 4 occurrences across 4 scans
+# Original: Detected a 3-hop attack path from aws_s3_bucket.data_backup to aws_iam_role.admin_role.
+
+**Attack Chain:** data_backup →
+rules:
+  - id: DISC_37BDB3EF53A3
+    description: "[Auto-Discovered] Detected a 3-hop attack path from aws_s3_bucket.data_backup to aws_iam_role.admin_role.
+
+**Attack Ch"
+    severity: HIGH
+    file_types: [".tf", ".yaml", ".yml", ".json"]
+    match:
+      regex: "aws_iam_role.*data_backup"
+    references:
+      - "https://cloudguard.ai/discovered-patterns/37bdb3ef53a3"

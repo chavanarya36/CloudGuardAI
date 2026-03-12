@@ -1,0 +1,16 @@
+# Auto-discovered rule — generated 2026-02-23T11:21:42.655786
+# Based on 12 occurrences across 6 scans
+# Original: Security group allows all egress traffic
+
+**Impact:** This could enable partial information disclosure or weaken the sec
+rules:
+  - id: DISC_8ECB858F3A9E
+    description: "[Auto-Discovered] Security group allows all egress traffic
+
+**Impact:** This could enable partial information disclosu"
+    severity: MEDIUM
+    file_types: [".tf", ".yaml", ".yml", ".json"]
+    match:
+      regex: "information.*disclosure"
+    references:
+      - "https://cloudguard.ai/discovered-patterns/8ecb858f3a9e"

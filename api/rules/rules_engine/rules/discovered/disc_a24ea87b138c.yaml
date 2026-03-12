@@ -1,0 +1,12 @@
+# Auto-discovered rule — generated 2026-03-11T07:55:37.759029
+# Based on 8 occurrences across 5 scans
+# Original: OCI bucket 'myreallysecretstore' is not encrypted with a Customer Managed Key. Oracle-managed keys provide less control 
+rules:
+  - id: DISC_A24EA87B138C
+    description: "[Auto-Discovered] OCI bucket 'myreallysecretstore' is not encrypted with a Customer Managed Key. Oracle-managed keys p"
+    severity: HIGH
+    file_types: [".tf", ".yaml", ".yml", ".json"]
+    match:
+      regex: "myreallysecretstore.*significant"
+    references:
+      - "https://cloudguard.ai/discovered-patterns/a24ea87b138c"

@@ -1,0 +1,12 @@
+# Auto-discovered rule — generated 2026-03-11T07:55:36.914247
+# Based on 11 occurrences across 8 scans
+# Original: Resource **aws_db_instance.database** has vulnerability: Database publicly accessible. This resource is part of the infr
+rules:
+  - id: DISC_2ED8E2DA8B27
+    description: "[Auto-Discovered] Resource **aws_db_instance.database** has vulnerability: Database publicly accessible. This resource"
+    severity: CRITICAL
+    file_types: [".tf", ".yaml", ".yml", ".json"]
+    match:
+      regex: "aws_db_instance.*infrastructure"
+    references:
+      - "https://cloudguard.ai/discovered-patterns/2ed8e2da8b27"

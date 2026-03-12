@@ -6,7 +6,7 @@
   </p>
   <p align="center">
     <a href="https://github.com/chavanarya36/CloudGuardAI/actions"><img src="https://img.shields.io/github/actions/workflow/status/chavanarya36/CloudGuardAI/pipeline.yml?branch=main&label=CI%2FCD&logo=github" alt="CI/CD"></a>
-    <img src="https://img.shields.io/badge/tests-413%20passing-brightgreen?logo=pytest" alt="Tests">
+    <img src="https://img.shields.io/badge/tests-388%20passing-brightgreen?logo=pytest" alt="Tests">
     <img src="https://img.shields.io/badge/python-3.11+-3776AB?logo=python&logoColor=white" alt="Python">
     <img src="https://img.shields.io/badge/react-18.2-61DAFB?logo=react&logoColor=black" alt="React">
     <img src="https://img.shields.io/badge/AI_contribution-80%25-blueviolet" alt="AI 80%">
@@ -24,19 +24,19 @@ CloudGuardAI is a full-stack security scanning platform that uses **3 novel AI m
 |:-----------|:--------|
 | 🧠 **GNN Attack Paths** | Graph Neural Network (114K params) detects multi-hop attack chains across infrastructure |
 | 🎯 **RL Auto-Fix** | Deep Q-Network (31K params) selects optimal remediation from 15 action strategies |
-| ✨ **Transformer Code Gen** | 6-layer encoder-decoder (4.9M params) generates secure IaC replacements |
+| ✨ **Transformer Code Gen** | 2-layer encoder (~150K params) generates secure IaC replacements |
 | 🔁 **Adaptive Learning** | 8-subsystem self-improving engine — drift detection, pattern discovery, auto-retrain |
 | 🔐 **Production Security** | JWT + API-key auth, rate limiting, Prometheus metrics, 3-tier Docker network isolation |
-| 📊 **413 Tests Passing** | Unit, integration, API, ML — zero failures |
+| 📊 **388 Tests Passing** | Unit, integration, API, ML — zero failures |
 
 ## 🏗️ Architecture
 
 ```
 ┌───────────────┐       ┌───────────────────┐       ┌───────────────────────────┐
 │  React 18 UI  │──────▶│  FastAPI Backend   │──────▶│      ML Service           │
-│  (Vite + MUI) │  HTTP │  28 routes · JWT   │  HTTP │  🧠 GNN  (114K params)   │
+│  (Vite + MUI) │  HTTP │  25 routes · JWT   │  HTTP │  🧠 GNN  (114K params)   │
 │  10 pages     │◀──────│  Rate Limit · CORS │◀──────│  🎯 RL   (31K params)    │
-└───────────────┘       └────────┬──────────┘       │  ✨ Transformer (4.9M)    │
+└───────────────┘       └────────┬──────────┘       │  ✨ Transformer (~150K)   │
                                  │                   │  📦 Ensemble (13MB)       │
                       ┌──────────┴──────────┐       └───────────────────────────┘
                       │                     │
@@ -102,7 +102,7 @@ cd web && npm run dev
 
 ```
 CloudGuardAI/
-├── api/                    # FastAPI backend — 28 routes, JWT auth, rate limiting
+├── api/                    # FastAPI backend — 25 routes, JWT auth, rate limiting
 │   ├── app/                # Core: main.py, models.py, schemas.py, auth.py, config.py
 │   ├── scanners/           # CVE, secrets, compliance, GNN, integrated scanner
 │   └── tests/              # 20 API integration tests
@@ -123,8 +123,8 @@ CloudGuardAI/
 ## 🧪 Testing
 
 ```bash
-# Run all tests with one command (413 total)
-python -m pytest                            # 413 passed, 10 skipped
+# Run all tests with one command (388 total)
+python -m pytest                            # 388 passed, 10 skipped
 
 # Or run individual suites
 python -m pytest tests/ -q                  # 388 passed, 10 skipped
@@ -139,12 +139,14 @@ python -m pytest tests/validation/ -v       # Validation tests
 
 ## 📊 AI Model Performance
 
-| Model | Parameters | Training Data | Metric | Inference |
+| Model | Parameters | Training Data | Key Metric | Inference |
 |-------|-----------|---------------|--------|-----------|
-| **GNN Attack Detector** | 114,434 | 2,836 graphs | 100% validation acc | <500ms |
-| **RL Auto-Fix Agent** | 31,503 | 500 episodes | 100% fix success | <100ms |
-| **Transformer Code Gen** | 4,906,055 | Architecture ready | Security-focused | 1-3s |
+| **GNN Attack Detector** | 114,434 | Synthetic graphs (400 train / 100 val) | See [evaluation report](docs/MODEL_EVALUATION.md) | <500ms |
+| **RL Auto-Fix Agent** | 31,503 | Simulated vulnerability episodes | See [evaluation report](docs/MODEL_EVALUATION.md) | <100ms |
+| **Transformer Code Gen** | ~150K | ~30 synthetic IaC pairs | See [evaluation report](docs/MODEL_EVALUATION.md) | <1s |
 | **Ensemble Classifier** | ~13MB | 21K IaC files | 70% baseline | <50ms |
+
+> **⚠️ Limitations:** All novel ML models (GNN, RL, Transformer) are trained on **synthetic data** as a proof-of-concept. Reported metrics reflect performance on synthetic test sets and should not be extrapolated to production accuracy. See [docs/MODEL_EVALUATION.md](docs/MODEL_EVALUATION.md) for full transparent evaluation with caveats.
 
 ## 🔐 Security Features
 
@@ -198,6 +200,7 @@ See [infra/README.md](infra/README.md) for full deployment guide.
 | [docs/PROJECT_SUMMARY.md](docs/PROJECT_SUMMARY.md) | Complete project overview |
 | [docs/PHASE_7.1_GNN_IMPLEMENTATION.md](docs/PHASE_7.1_GNN_IMPLEMENTATION.md) | GNN implementation details |
 | [docs/CONTRIBUTING.md](docs/CONTRIBUTING.md) | Contribution guidelines |
+| [docs/MODEL_EVALUATION.md](docs/MODEL_EVALUATION.md) | Honest ML model evaluation with metrics and caveats |
 | [REVIEW_3_READINESS.md](REVIEW_3_READINESS.md) | Review readiness report |
 
 ## 🤝 Contributing

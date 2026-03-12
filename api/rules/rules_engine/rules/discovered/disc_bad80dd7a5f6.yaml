@@ -1,0 +1,13 @@
+# Auto-discovered rule — generated 2026-03-11T07:55:38.023720
+# Based on 3 occurrences across 3 scans
+# Original: S3 bucket 'data_science' does not have server-side encryption enabled. CIS Benchmark 2.1.1 requires encryption at rest.
+
+rules:
+  - id: DISC_BAD80DD7A5F6
+    description: "[Auto-Discovered] S3 bucket 'data_science' does not have server-side encryption enabled. CIS Benchmark 2.1.1 requires "
+    severity: HIGH
+    file_types: [".tf", ".yaml", ".yml", ".json"]
+    match:
+      regex: "data_science.*significant"
+    references:
+      - "https://cloudguard.ai/discovered-patterns/bad80dd7a5f6"

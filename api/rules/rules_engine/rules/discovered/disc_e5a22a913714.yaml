@@ -1,0 +1,14 @@
+# Auto-discovered rule — generated 2026-02-23T11:21:42.677842
+# Based on 6 occurrences across 6 scans
+# Original: S3 bucket 'data_backup' does not have server-side encryption enabled. CIS Benchmark 2.1.1 requires encryption at rest.
+
+
+rules:
+  - id: DISC_E5A22A913714
+    description: "[Auto-Discovered] S3 bucket 'data_backup' does not have server-side encryption enabled. CIS Benchmark 2.1.1 requires e"
+    severity: HIGH
+    file_types: [".tf", ".yaml", ".yml", ".json"]
+    match:
+      regex: "significant.*data_backup"
+    references:
+      - "https://cloudguard.ai/discovered-patterns/e5a22a913714"

@@ -1,0 +1,16 @@
+# Auto-discovered rule — generated 2026-03-11T07:55:38.167156
+# Based on 3 occurrences across 3 scans
+# Original: Detected a 5-hop attack path from aws_route.public_internet_gateway to aws_s3_bucket.flowbucket.
+
+**Attack Chain:** publ
+rules:
+  - id: DISC_DBD84FBB8A8E
+    description: "[Auto-Discovered] Detected a 5-hop attack path from aws_route.public_internet_gateway to aws_s3_bucket.flowbucket.
+
+**"
+    severity: LOW
+    file_types: [".tf", ".yaml", ".yml", ".json"]
+    match:
+      regex: "public_internet_gateway.*vpcflowlogs"
+    references:
+      - "https://cloudguard.ai/discovered-patterns/dbd84fbb8a8e"

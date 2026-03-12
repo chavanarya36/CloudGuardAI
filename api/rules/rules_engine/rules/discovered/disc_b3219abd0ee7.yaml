@@ -1,0 +1,16 @@
+# Auto-discovered rule — generated 2026-03-11T07:55:38.103240
+# Based on 4 occurrences across 4 scans
+# Original: Detected a 3-hop attack path from aws_security_group.web-node to aws_s3_bucket.flowbucket.
+
+**Attack Chain:** web-node →
+rules:
+  - id: DISC_B3219ABD0EE7
+    description: "[Auto-Discovered] Detected a 3-hop attack path from aws_security_group.web-node to aws_s3_bucket.flowbucket.
+
+**Attack"
+    severity: CRITICAL
+    file_types: [".tf", ".yaml", ".yml", ".json"]
+    match:
+      regex: "aws_security_group.*flowbucket"
+    references:
+      - "https://cloudguard.ai/discovered-patterns/b3219abd0ee7"

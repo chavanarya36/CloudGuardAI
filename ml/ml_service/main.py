@@ -267,30 +267,58 @@ async def explain(request: ExplainRequest):
     Get LLM explanations and remediations for findings.
     """
     try:
+        # Normalize finding dicts: map 'type' -> 'rule_id' if needed
+        normalized = []
+        for f in request.findings:
+            nf = dict(f)
+            if 'rule_id' not in nf:
+                nf['rule_id'] = nf.pop('type', nf.get('category', 'UNKNOWN'))
+            if 'title' not in nf:
+                nf['title'] = nf.get('description', 'Finding')[:120]
+            if 'severity' not in nf:
+                nf['severity'] = 'MEDIUM'
+            normalized.append(nf)
+
         try:
-            from rules.rules_engine.llm_reasoner import get_llm_explanation_and_remediation
+            from rules.rules_engine.llm_reasoner import explain_and_remediate
             
             explained_findings = []
             
-            for finding in request.findings:
-                # Get LLM explanation
-                llm_result = get_llm_explanation_and_remediation(
-                    file_content=request.file_content,
+            for finding in normalized:
+                # Get LLM explanation (uses OPENAI_API_KEY env var or deterministic fallback)
+                llm_result = explain_and_remediate(
                     finding=finding,
-                    provider=settings.llm_provider,
-                    api_key=settings.openai_api_key if settings.llm_provider == 'openai' else settings.anthropic_api_key
+                    file_content=request.file_content,
                 )
                 
-                # Create explained finding
+                # Create explained finding (only pass known fields)
                 explained = ExplainedFinding(
-                    **finding,
+                    rule_id=finding.get('rule_id', 'UNKNOWN'),
+                    severity=finding.get('severity', 'MEDIUM'),
+                    title=finding.get('title', 'Finding'),
+                    description=finding.get('description'),
+                    file_path=finding.get('file_path'),
+                    line_number=finding.get('line_number'),
+                    code_snippet=finding.get('code_snippet'),
+                    resource=finding.get('resource'),
                     llm_explanation=llm_result.get('explanation'),
+                    llm_impact=llm_result.get('impact'),
                     llm_remediation=llm_result.get('remediation')
                 )
                 explained_findings.append(explained)
         except ImportError:
             # LLM reasoner not available, return findings without explanation
-            explained_findings = [ExplainedFinding(**finding) for finding in request.findings]
+            explained_findings = [
+                ExplainedFinding(
+                    rule_id=f.get('rule_id', 'UNKNOWN'),
+                    severity=f.get('severity', 'MEDIUM'),
+                    title=f.get('title', 'Finding'),
+                    description=f.get('description'),
+                    file_path=f.get('file_path'),
+                    line_number=f.get('line_number'),
+                )
+                for f in normalized
+            ]
         
         return ExplainResponse(findings=explained_findings)
         

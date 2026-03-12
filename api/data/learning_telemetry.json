@@ -881,5 +881,1078 @@
     "scan_id": 6,
     "findings_count": 49,
     "risk_score": 1.0
+  },
+  {
+    "type": "scan_processed",
+    "timestamp": "2026-02-22T13:21:57.923091",
+    "scan_id": 7,
+    "findings_count": 6,
+    "risk_score": 0.475
+  },
+  {
+    "type": "engine_started",
+    "timestamp": "2026-02-24T06:46:05.697255",
+    "components": [
+      "feature_extractor",
+      "label_transformer",
+      "drift_detector",
+      "rule_weights",
+      "pattern_engine",
+      "model_evaluator",
+      "telemetry"
+    ]
+  },
+  {
+    "type": "engine_started",
+    "timestamp": "2026-03-01T13:16:38.775190",
+    "components": [
+      "feature_extractor",
+      "label_transformer",
+      "drift_detector",
+      "rule_weights",
+      "pattern_engine",
+      "model_evaluator",
+      "telemetry"
+    ]
+  },
+  {
+    "type": "engine_started",
+    "timestamp": "2026-03-01T13:20:10.622095",
+    "components": [
+      "feature_extractor",
+      "label_transformer",
+      "drift_detector",
+      "rule_weights",
+      "pattern_engine",
+      "model_evaluator",
+      "telemetry"
+    ]
+  },
+  {
+    "type": "scan_processed",
+    "timestamp": "2026-03-01T13:22:33.831717",
+    "scan_id": 1,
+    "findings_count": 7,
+    "risk_score": 0.5
+  },
+  {
+    "type": "scan_processed",
+    "timestamp": "2026-03-01T13:22:37.282557",
+    "scan_id": 2,
+    "findings_count": 4,
+    "risk_score": 0.5
+  },
+  {
+    "type": "scan_processed",
+    "timestamp": "2026-03-01T13:25:58.098390",
+    "scan_id": 3,
+    "findings_count": 7,
+    "risk_score": 0.5
+  },
+  {
+    "type": "engine_started",
+    "timestamp": "2026-03-01T13:28:02.936021",
+    "components": [
+      "feature_extractor",
+      "label_transformer",
+      "drift_detector",
+      "rule_weights",
+      "pattern_engine",
+      "model_evaluator",
+      "telemetry"
+    ]
+  },
+  {
+    "type": "scan_processed",
+    "timestamp": "2026-03-01T13:29:25.754870",
+    "scan_id": 1,
+    "findings_count": 7,
+    "risk_score": 0.5
+  },
+  {
+    "type": "scan_processed",
+    "timestamp": "2026-03-01T13:29:48.000924",
+    "scan_id": 2,
+    "findings_count": 4,
+    "risk_score": 0.5
+  },
+  {
+    "type": "scan_processed",
+    "timestamp": "2026-03-01T13:48:39.103825",
+    "scan_id": 3,
+    "findings_count": 2,
+    "risk_score": 1.0
+  },
+  {
+    "type": "scan_processed",
+    "timestamp": "2026-03-01T13:50:02.228637",
+    "scan_id": 4,
+    "findings_count": 2,
+    "risk_score": 1.0
+  },
+  {
+    "type": "scan_processed",
+    "timestamp": "2026-03-01T13:50:46.822514",
+    "scan_id": 5,
+    "findings_count": 0,
+    "risk_score": 0.0
+  },
+  {
+    "type": "scan_processed",
+    "timestamp": "2026-03-01T13:51:14.852879",
+    "scan_id": 6,
+    "findings_count": 0,
+    "risk_score": 0.0
+  },
+  {
+    "type": "scan_processed",
+    "timestamp": "2026-03-01T13:52:02.421371",
+    "scan_id": 7,
+    "findings_count": 16,
+    "risk_score": 0.9375
+  },
+  {
+    "type": "scan_processed",
+    "timestamp": "2026-03-01T19:39:16.344992",
+    "scan_id": 8,
+    "findings_count": 90,
+    "risk_score": 0.9111
+  },
+  {
+    "type": "engine_started",
+    "timestamp": "2026-03-01T19:46:49.495166",
+    "components": [
+      "feature_extractor",
+      "label_transformer",
+      "drift_detector",
+      "rule_weights",
+      "pattern_engine",
+      "model_evaluator",
+      "telemetry"
+    ]
+  },
+  {
+    "type": "scan_processed",
+    "timestamp": "2026-03-01T19:49:47.196065",
+    "scan_id": 1,
+    "findings_count": 6,
+    "risk_score": 0.2
+  },
+  {
+    "type": "scan_processed",
+    "timestamp": "2026-03-01T19:49:48.071915",
+    "scan_id": 2,
+    "findings_count": 6,
+    "risk_score": 0.2
+  },
+  {
+    "type": "scan_processed",
+    "timestamp": "2026-03-01T19:55:44.612965",
+    "scan_id": 3,
+    "findings_count": 6,
+    "risk_score": 0.2
+  },
+  {
+    "type": "scan_processed",
+    "timestamp": "2026-03-01T20:00:18.124880",
+    "scan_id": 4,
+    "findings_count": 6,
+    "risk_score": 0.2
+  },
+  {
+    "type": "scan_processed",
+    "timestamp": "2026-03-01T20:02:24.884269",
+    "scan_id": 5,
+    "findings_count": 11,
+    "risk_score": 0.2
+  },
+  {
+    "type": "scan_processed",
+    "timestamp": "2026-03-01T20:03:03.753404",
+    "scan_id": 6,
+    "findings_count": 13,
+    "risk_score": 0.45
+  },
+  {
+    "type": "scan_processed",
+    "timestamp": "2026-03-01T20:04:05.830631",
+    "scan_id": 7,
+    "findings_count": 11,
+    "risk_score": 0.2
+  },
+  {
+    "type": "scan_processed",
+    "timestamp": "2026-03-01T20:04:13.947460",
+    "scan_id": 8,
+    "findings_count": 13,
+    "risk_score": 0.45
+  },
+  {
+    "type": "scan_processed",
+    "timestamp": "2026-03-01T20:04:22.516203",
+    "scan_id": 9,
+    "findings_count": 13,
+    "risk_score": 0.25
+  },
+  {
+    "type": "scan_processed",
+    "timestamp": "2026-03-01T20:05:11.860361",
+    "scan_id": 10,
+    "findings_count": 0,
+    "risk_score": 0.0
+  },
+  {
+    "type": "scan_processed",
+    "timestamp": "2026-03-01T20:05:40.777565",
+    "scan_id": 11,
+    "findings_count": 79,
+    "risk_score": 1.0
+  },
+  {
+    "type": "scan_processed",
+    "timestamp": "2026-03-02T05:38:36.103432",
+    "scan_id": 12,
+    "findings_count": 53,
+    "risk_score": 0.8156
+  },
+  {
+    "type": "scan_processed",
+    "timestamp": "2026-03-02T09:40:27.988585",
+    "scan_id": 13,
+    "findings_count": 6,
+    "risk_score": 1.0
+  },
+  {
+    "type": "scan_processed",
+    "timestamp": "2026-03-02T09:41:07.848901",
+    "scan_id": 14,
+    "findings_count": 28,
+    "risk_score": 0.9286
+  },
+  {
+    "type": "engine_started",
+    "timestamp": "2026-03-03T11:27:05.193103",
+    "components": [
+      "feature_extractor",
+      "label_transformer",
+      "drift_detector",
+      "rule_weights",
+      "pattern_engine",
+      "model_evaluator",
+      "telemetry"
+    ]
+  },
+  {
+    "type": "scan_processed",
+    "timestamp": "2026-03-03T11:29:33.863070",
+    "scan_id": 15,
+    "findings_count": 7,
+    "risk_score": 0.4
+  },
+  {
+    "type": "scan_processed",
+    "timestamp": "2026-03-03T11:30:25.568374",
+    "scan_id": 16,
+    "findings_count": 7,
+    "risk_score": 0.4
+  },
+  {
+    "type": "scan_processed",
+    "timestamp": "2026-03-03T11:31:12.149406",
+    "scan_id": 17,
+    "findings_count": 7,
+    "risk_score": 0.4
+  },
+  {
+    "type": "engine_started",
+    "timestamp": "2026-03-07T08:23:22.303371",
+    "components": [
+      "feature_extractor",
+      "label_transformer",
+      "drift_detector",
+      "rule_weights",
+      "pattern_engine",
+      "model_evaluator",
+      "telemetry"
+    ]
+  },
+  {
+    "type": "engine_started",
+    "timestamp": "2026-03-07T08:36:32.301734",
+    "components": [
+      "feature_extractor",
+      "label_transformer",
+      "drift_detector",
+      "rule_weights",
+      "pattern_engine",
+      "model_evaluator",
+      "telemetry"
+    ]
+  },
+  {
+    "type": "engine_started",
+    "timestamp": "2026-03-07T08:39:23.789275",
+    "components": [
+      "feature_extractor",
+      "label_transformer",
+      "drift_detector",
+      "rule_weights",
+      "pattern_engine",
+      "model_evaluator",
+      "telemetry"
+    ]
+  },
+  {
+    "type": "scan_processed",
+    "timestamp": "2026-03-07T08:56:29.444371",
+    "scan_id": 1,
+    "findings_count": 13,
+    "risk_score": 0.55
+  },
+  {
+    "type": "engine_started",
+    "timestamp": "2026-03-07T09:48:16.505340",
+    "components": [
+      "feature_extractor",
+      "label_transformer",
+      "drift_detector",
+      "rule_weights",
+      "pattern_engine",
+      "model_evaluator",
+      "telemetry"
+    ]
+  },
+  {
+    "type": "scan_processed",
+    "timestamp": "2026-03-07T09:50:57.509375",
+    "scan_id": 1,
+    "findings_count": 13,
+    "risk_score": 0.55
+  },
+  {
+    "type": "scan_processed",
+    "timestamp": "2026-03-07T09:51:27.557490",
+    "scan_id": 2,
+    "findings_count": 13,
+    "risk_score": 0.55
+  },
+  {
+    "type": "scan_processed",
+    "timestamp": "2026-03-07T09:52:06.713099",
+    "scan_id": 3,
+    "findings_count": 13,
+    "risk_score": 0.55
+  },
+  {
+    "type": "scan_processed",
+    "timestamp": "2026-03-07T09:52:36.726491",
+    "scan_id": 4,
+    "findings_count": 13,
+    "risk_score": 0.55
+  },
+  {
+    "type": "engine_started",
+    "timestamp": "2026-03-07T10:25:41.247788",
+    "components": [
+      "feature_extractor",
+      "label_transformer",
+      "drift_detector",
+      "rule_weights",
+      "pattern_engine",
+      "model_evaluator",
+      "telemetry"
+    ]
+  },
+  {
+    "type": "engine_started",
+    "timestamp": "2026-03-07T10:31:03.866728",
+    "components": [
+      "feature_extractor",
+      "label_transformer",
+      "drift_detector",
+      "rule_weights",
+      "pattern_engine",
+      "model_evaluator",
+      "telemetry"
+    ]
+  },
+  {
+    "type": "scan_processed",
+    "timestamp": "2026-03-07T10:32:41.973372",
+    "scan_id": 1,
+    "findings_count": 13,
+    "risk_score": 0.55
+  },
+  {
+    "type": "engine_started",
+    "timestamp": "2026-03-07T11:23:14.814585",
+    "components": [
+      "feature_extractor",
+      "label_transformer",
+      "drift_detector",
+      "rule_weights",
+      "pattern_engine",
+      "model_evaluator",
+      "telemetry"
+    ]
+  },
+  {
+    "type": "scan_processed",
+    "timestamp": "2026-03-07T11:29:02.388311",
+    "scan_id": 1,
+    "findings_count": 2,
+    "risk_score": 1.0
+  },
+  {
+    "type": "engine_started",
+    "timestamp": "2026-03-07T11:35:29.729955",
+    "components": [
+      "feature_extractor",
+      "label_transformer",
+      "drift_detector",
+      "rule_weights",
+      "pattern_engine",
+      "model_evaluator",
+      "telemetry"
+    ]
+  },
+  {
+    "type": "engine_started",
+    "timestamp": "2026-03-07T11:39:40.988223",
+    "components": [
+      "feature_extractor",
+      "label_transformer",
+      "drift_detector",
+      "rule_weights",
+      "pattern_engine",
+      "model_evaluator",
+      "telemetry"
+    ]
+  },
+  {
+    "type": "engine_started",
+    "timestamp": "2026-03-07T11:43:23.587163",
+    "components": [
+      "feature_extractor",
+      "label_transformer",
+      "drift_detector",
+      "rule_weights",
+      "pattern_engine",
+      "model_evaluator",
+      "telemetry"
+    ]
+  },
+  {
+    "type": "scan_processed",
+    "timestamp": "2026-03-07T11:45:12.967049",
+    "scan_id": 1,
+    "findings_count": 2,
+    "risk_score": 0.35
+  },
+  {
+    "type": "scan_processed",
+    "timestamp": "2026-03-07T11:48:33.209440",
+    "scan_id": 2,
+    "findings_count": 17,
+    "risk_score": 0.5875
+  },
+  {
+    "type": "scan_processed",
+    "timestamp": "2026-03-07T11:52:31.960165",
+    "scan_id": 3,
+    "findings_count": 2,
+    "risk_score": 0.35
+  },
+  {
+    "type": "engine_started",
+    "timestamp": "2026-03-07T11:55:55.558062",
+    "components": [
+      "feature_extractor",
+      "label_transformer",
+      "drift_detector",
+      "rule_weights",
+      "pattern_engine",
+      "model_evaluator",
+      "telemetry"
+    ]
+  },
+  {
+    "type": "scan_processed",
+    "timestamp": "2026-03-07T11:56:55.674045",
+    "scan_id": 1,
+    "findings_count": 0,
+    "risk_score": 0.0
+  },
+  {
+    "type": "scan_processed",
+    "timestamp": "2026-03-07T11:57:39.421996",
+    "scan_id": 3,
+    "findings_count": 0,
+    "risk_score": 0.0
+  },
+  {
+    "type": "scan_processed",
+    "timestamp": "2026-03-07T11:57:44.714592",
+    "scan_id": 2,
+    "findings_count": 2,
+    "risk_score": 1.0
+  },
+  {
+    "type": "scan_processed",
+    "timestamp": "2026-03-07T11:58:10.425946",
+    "scan_id": 4,
+    "findings_count": 17,
+    "risk_score": 0.5875
+  },
+  {
+    "type": "engine_started",
+    "timestamp": "2026-03-07T12:01:24.935020",
+    "components": [
+      "feature_extractor",
+      "label_transformer",
+      "drift_detector",
+      "rule_weights",
+      "pattern_engine",
+      "model_evaluator",
+      "telemetry"
+    ]
+  },
+  {
+    "type": "scan_processed",
+    "timestamp": "2026-03-07T12:03:53.188193",
+    "scan_id": 1,
+    "findings_count": 0,
+    "risk_score": 0.0
+  },
+  {
+    "type": "engine_started",
+    "timestamp": "2026-03-07T12:10:44.678810",
+    "components": [
+      "feature_extractor",
+      "label_transformer",
+      "drift_detector",
+      "rule_weights",
+      "pattern_engine",
+      "model_evaluator",
+      "telemetry"
+    ]
+  },
+  {
+    "type": "scan_processed",
+    "timestamp": "2026-03-07T12:12:46.961068",
+    "scan_id": 1,
+    "findings_count": 3,
+    "risk_score": 0.4
+  },
+  {
+    "type": "scan_processed",
+    "timestamp": "2026-03-07T12:13:12.672769",
+    "scan_id": 2,
+    "findings_count": 13,
+    "risk_score": 0.5875
+  },
+  {
+    "type": "scan_processed",
+    "timestamp": "2026-03-07T12:14:00.630074",
+    "scan_id": 3,
+    "findings_count": 3,
+    "risk_score": 0.4
+  },
+  {
+    "type": "scan_processed",
+    "timestamp": "2026-03-07T12:14:24.492411",
+    "scan_id": 4,
+    "findings_count": 3,
+    "risk_score": 0.4
+  },
+  {
+    "type": "engine_started",
+    "timestamp": "2026-03-07T12:15:04.605144",
+    "components": [
+      "feature_extractor",
+      "label_transformer",
+      "drift_detector",
+      "rule_weights",
+      "pattern_engine",
+      "model_evaluator",
+      "telemetry"
+    ]
+  },
+  {
+    "type": "scan_processed",
+    "timestamp": "2026-03-07T12:16:50.798396",
+    "scan_id": 1,
+    "findings_count": 4,
+    "risk_score": 0.35
+  },
+  {
+    "type": "scan_processed",
+    "timestamp": "2026-03-07T12:20:51.497607",
+    "scan_id": 2,
+    "findings_count": 4,
+    "risk_score": 0.35
+  },
+  {
+    "type": "engine_started",
+    "timestamp": "2026-03-07T12:33:43.469415",
+    "components": [
+      "feature_extractor",
+      "label_transformer",
+      "drift_detector",
+      "rule_weights",
+      "pattern_engine",
+      "model_evaluator",
+      "telemetry"
+    ]
+  },
+  {
+    "type": "scan_processed",
+    "timestamp": "2026-03-07T12:34:51.122279",
+    "scan_id": 1,
+    "findings_count": 4,
+    "risk_score": 0.35
+  },
+  {
+    "type": "scan_processed",
+    "timestamp": "2026-03-07T12:38:19.370865",
+    "scan_id": 2,
+    "findings_count": 4,
+    "risk_score": 0.35
+  },
+  {
+    "type": "scan_processed",
+    "timestamp": "2026-03-07T15:26:28.855991",
+    "scan_id": 3,
+    "findings_count": 0,
+    "risk_score": 0.0
+  },
+  {
+    "type": "scan_processed",
+    "timestamp": "2026-03-07T15:27:00.091927",
+    "scan_id": 4,
+    "findings_count": 0,
+    "risk_score": 0.0
+  },
+  {
+    "type": "scan_processed",
+    "timestamp": "2026-03-07T15:27:35.602428",
+    "scan_id": 5,
+    "findings_count": 4,
+    "risk_score": 0.35
+  },
+  {
+    "type": "scan_processed",
+    "timestamp": "2026-03-07T15:28:06.395065",
+    "scan_id": 6,
+    "findings_count": 0,
+    "risk_score": 0.0
+  },
+  {
+    "type": "scan_processed",
+    "timestamp": "2026-03-07T15:28:32.095421",
+    "scan_id": 7,
+    "findings_count": 0,
+    "risk_score": 0.0
+  },
+  {
+    "type": "scan_processed",
+    "timestamp": "2026-03-07T15:29:24.608617",
+    "scan_id": 8,
+    "findings_count": 10,
+    "risk_score": 0.37
+  },
+  {
+    "type": "scan_processed",
+    "timestamp": "2026-03-07T15:45:26.379026",
+    "scan_id": 9,
+    "findings_count": 10,
+    "risk_score": 0.37
+  },
+  {
+    "type": "scan_processed",
+    "timestamp": "2026-03-07T15:45:58.218558",
+    "scan_id": 10,
+    "findings_count": 10,
+    "risk_score": 0.37
+  },
+  {
+    "type": "scan_processed",
+    "timestamp": "2026-03-07T15:46:28.265199",
+    "scan_id": 11,
+    "findings_count": 10,
+    "risk_score": 0.37
+  },
+  {
+    "type": "engine_started",
+    "timestamp": "2026-03-07T15:47:40.925045",
+    "components": [
+      "feature_extractor",
+      "label_transformer",
+      "drift_detector",
+      "rule_weights",
+      "pattern_engine",
+      "model_evaluator",
+      "telemetry"
+    ]
+  },
+  {
+    "type": "scan_processed",
+    "timestamp": "2026-03-07T15:48:42.608617",
+    "scan_id": 12,
+    "findings_count": 10,
+    "risk_score": 0.37
+  },
+  {
+    "type": "scan_processed",
+    "timestamp": "2026-03-07T15:49:12.019734",
+    "scan_id": 13,
+    "findings_count": 10,
+    "risk_score": 0.37
+  },
+  {
+    "type": "scan_processed",
+    "timestamp": "2026-03-08T11:33:19.151435",
+    "scan_id": 14,
+    "findings_count": 10,
+    "risk_score": 0.37
+  },
+  {
+    "type": "engine_started",
+    "timestamp": "2026-03-08T17:49:50.525949",
+    "components": [
+      "feature_extractor",
+      "label_transformer",
+      "drift_detector",
+      "rule_weights",
+      "pattern_engine",
+      "model_evaluator",
+      "telemetry"
+    ]
+  },
+  {
+    "type": "scan_processed",
+    "timestamp": "2026-03-08T17:56:29.965344",
+    "scan_id": 15,
+    "findings_count": 19,
+    "risk_score": 0.2
+  },
+  {
+    "type": "engine_started",
+    "timestamp": "2026-03-09T19:25:41.531368",
+    "components": [
+      "feature_extractor",
+      "label_transformer",
+      "drift_detector",
+      "rule_weights",
+      "pattern_engine",
+      "model_evaluator",
+      "telemetry"
+    ]
+  },
+  {
+    "type": "engine_started",
+    "timestamp": "2026-03-09T20:03:54.877805",
+    "components": [
+      "feature_extractor",
+      "label_transformer",
+      "drift_detector",
+      "rule_weights",
+      "pattern_engine",
+      "model_evaluator",
+      "telemetry"
+    ]
+  },
+  {
+    "type": "scan_processed",
+    "timestamp": "2026-03-09T20:05:58.531975",
+    "scan_id": 16,
+    "findings_count": 1,
+    "risk_score": 0.05
+  },
+  {
+    "type": "scan_processed",
+    "timestamp": "2026-03-09T20:06:35.024443",
+    "scan_id": 17,
+    "findings_count": 1,
+    "risk_score": 0.05
+  },
+  {
+    "type": "engine_started",
+    "timestamp": "2026-03-09T20:08:00.202760",
+    "components": [
+      "feature_extractor",
+      "label_transformer",
+      "drift_detector",
+      "rule_weights",
+      "pattern_engine",
+      "model_evaluator",
+      "telemetry"
+    ]
+  },
+  {
+    "type": "scan_processed",
+    "timestamp": "2026-03-09T20:10:39.604412",
+    "scan_id": 18,
+    "findings_count": 19,
+    "risk_score": 0.2
+  },
+  {
+    "type": "scan_processed",
+    "timestamp": "2026-03-09T20:12:04.170363",
+    "scan_id": 19,
+    "findings_count": 19,
+    "risk_score": 0.2
+  },
+  {
+    "type": "scan_processed",
+    "timestamp": "2026-03-10T04:58:28.408912",
+    "scan_id": 20,
+    "findings_count": 2,
+    "risk_score": 0.15
+  },
+  {
+    "type": "scan_processed",
+    "timestamp": "2026-03-10T05:06:56.014752",
+    "scan_id": 21,
+    "findings_count": 31,
+    "risk_score": 1.0
+  },
+  {
+    "type": "engine_started",
+    "timestamp": "2026-03-10T06:49:01.331660",
+    "components": [
+      "feature_extractor",
+      "label_transformer",
+      "drift_detector",
+      "rule_weights",
+      "pattern_engine",
+      "model_evaluator",
+      "telemetry"
+    ]
+  },
+  {
+    "type": "scan_processed",
+    "timestamp": "2026-03-10T06:52:01.095416",
+    "scan_id": 22,
+    "findings_count": 22,
+    "risk_score": 1.0
+  },
+  {
+    "type": "feedback_processed",
+    "timestamp": "2026-03-10T07:07:31.732247",
+    "scan_id": 22,
+    "label": 1,
+    "feedback_type": null,
+    "rule_id": null,
+    "buffer_size": 1
+  },
+  {
+    "type": "engine_started",
+    "timestamp": "2026-03-10T14:34:08.158432",
+    "components": [
+      "feature_extractor",
+      "label_transformer",
+      "drift_detector",
+      "rule_weights",
+      "pattern_engine",
+      "model_evaluator",
+      "telemetry"
+    ]
+  },
+  {
+    "type": "scan_processed",
+    "timestamp": "2026-03-10T14:38:11.214424",
+    "scan_id": 23,
+    "findings_count": 22,
+    "risk_score": 1.0
+  },
+  {
+    "type": "engine_started",
+    "timestamp": "2026-03-10T14:41:02.266529",
+    "components": [
+      "feature_extractor",
+      "label_transformer",
+      "drift_detector",
+      "rule_weights",
+      "pattern_engine",
+      "model_evaluator",
+      "telemetry"
+    ]
+  },
+  {
+    "type": "scan_processed",
+    "timestamp": "2026-03-10T14:43:15.043833",
+    "scan_id": 24,
+    "findings_count": 22,
+    "risk_score": 1.0
+  },
+  {
+    "type": "feedback_processed",
+    "timestamp": "2026-03-10T14:44:12.117390",
+    "scan_id": 24,
+    "label": 1,
+    "feedback_type": "accurate",
+    "rule_id": null,
+    "buffer_size": 1
+  },
+  {
+    "type": "scan_processed",
+    "timestamp": "2026-03-10T14:44:38.350213",
+    "scan_id": 25,
+    "findings_count": 0,
+    "risk_score": 0.0
+  },
+  {
+    "type": "scan_processed",
+    "timestamp": "2026-03-10T14:44:58.146688",
+    "scan_id": 26,
+    "findings_count": 0,
+    "risk_score": 0.0
+  },
+  {
+    "type": "scan_processed",
+    "timestamp": "2026-03-10T14:45:36.257973",
+    "scan_id": 27,
+    "findings_count": 2,
+    "risk_score": 0.1
+  },
+  {
+    "type": "scan_processed",
+    "timestamp": "2026-03-10T14:47:41.672430",
+    "scan_id": 28,
+    "findings_count": 6,
+    "risk_score": 0.4
+  },
+  {
+    "type": "scan_processed",
+    "timestamp": "2026-03-10T14:51:46.854013",
+    "scan_id": 29,
+    "findings_count": 12,
+    "risk_score": 0.35
+  },
+  {
+    "type": "scan_processed",
+    "timestamp": "2026-03-11T05:55:18.721821",
+    "scan_id": 30,
+    "findings_count": 33,
+    "risk_score": 1.0
+  },
+  {
+    "type": "feedback_processed",
+    "timestamp": "2026-03-11T05:56:37.748191",
+    "scan_id": 30,
+    "label": 1,
+    "feedback_type": "accurate",
+    "rule_id": null,
+    "buffer_size": 2
+  },
+  {
+    "type": "scan_processed",
+    "timestamp": "2026-03-11T07:51:44.006813",
+    "scan_id": 31,
+    "findings_count": 33,
+    "risk_score": 1.0
+  },
+  {
+    "type": "engine_started",
+    "timestamp": "2026-03-11T07:55:20.515964",
+    "components": [
+      "feature_extractor",
+      "label_transformer",
+      "drift_detector",
+      "rule_weights",
+      "pattern_engine",
+      "model_evaluator",
+      "telemetry"
+    ]
+  },
+  {
+    "type": "scan_processed",
+    "timestamp": "2026-03-11T07:58:34.698081",
+    "scan_id": 32,
+    "findings_count": 33,
+    "risk_score": 1.0
+  },
+  {
+    "type": "scan_processed",
+    "timestamp": "2026-03-11T08:54:15.148002",
+    "scan_id": 33,
+    "findings_count": 33,
+    "risk_score": 1.0
+  },
+  {
+    "type": "scan_processed",
+    "timestamp": "2026-03-11T09:11:05.917526",
+    "scan_id": 34,
+    "findings_count": 33,
+    "risk_score": 1.0
+  },
+  {
+    "type": "scan_processed",
+    "timestamp": "2026-03-11T09:15:34.596141",
+    "scan_id": 35,
+    "findings_count": 22,
+    "risk_score": 1.0
+  },
+  {
+    "type": "scan_processed",
+    "timestamp": "2026-03-11T13:38:55.883995",
+    "scan_id": 36,
+    "findings_count": 33,
+    "risk_score": 1.0
+  },
+  {
+    "type": "engine_started",
+    "timestamp": "2026-03-12T14:57:31.893856",
+    "components": [
+      "feature_extractor",
+      "label_transformer",
+      "drift_detector",
+      "rule_weights",
+      "pattern_engine",
+      "model_evaluator",
+      "telemetry"
+    ]
+  },
+  {
+    "type": "scan_processed",
+    "timestamp": "2026-03-12T15:02:17.335189",
+    "scan_id": 37,
+    "findings_count": 5,
+    "risk_score": 0.4833
+  },
+  {
+    "type": "scan_processed",
+    "timestamp": "2026-03-12T15:06:28.388231",
+    "scan_id": 38,
+    "findings_count": 10,
+    "risk_score": 0.55
+  },
+  {
+    "type": "scan_processed",
+    "timestamp": "2026-03-12T15:08:34.714509",
+    "scan_id": 39,
+    "findings_count": 10,
+    "risk_score": 0.55
+  },
+  {
+    "type": "engine_started",
+    "timestamp": "2026-03-12T15:28:11.954437",
+    "components": [
+      "feature_extractor",
+      "label_transformer",
+      "drift_detector",
+      "rule_weights",
+      "pattern_engine",
+      "model_evaluator",
+      "telemetry"
+    ]
+  },
+  {
+    "type": "scan_processed",
+    "timestamp": "2026-03-12T15:32:48.919084",
+    "scan_id": 40,
+    "findings_count": 22,
+    "risk_score": 1.0
   }
 ]

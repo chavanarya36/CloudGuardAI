@@ -23,13 +23,13 @@ class SecretsScanner:
                 'severity': 'CRITICAL'
             },
             'aws_secret_key': {
-                'pattern': r'(?:aws.{0,20})?["\']?([A-Za-z0-9/+=]{40})["\']?',
+                'pattern': r'(?:secret[_\s-]*(?:access[_\s-]*)?key|aws_secret|SECRET_KEY)\s*[=:]\s*["\']?([A-Za-z0-9/+=]{40})["\']?',
                 'title': 'AWS Secret Access Key',
                 'description': 'Potential AWS Secret Access Key detected',
                 'severity': 'CRITICAL'
             },
             'azure_client_secret': {
-                'pattern': r'(?:azure|az).{0,20}["\']?([A-Za-z0-9~._-]{34})["\']?',
+                'pattern': r'(?:client_secret|azure[_\s]*secret|ARM_CLIENT_SECRET)\s*[=:]\s*["\']?([A-Za-z0-9~._\-]{30,44})["\']?',
                 'title': 'Azure Client Secret',
                 'description': 'Azure client secret detected',
                 'severity': 'CRITICAL'
@@ -112,8 +112,12 @@ class SecretsScanner:
         """
         combined = (match_text + line).lower()
         
-        # Skip only obvious placeholders
-        skip_words = ['example.com', 'your-', 'my-', '<', '>', '${', 'xxx', 'test@test']
+        # Skip obvious placeholders and metadata fields
+        skip_words = [
+            'example.com', 'your-', 'my-', '<', '>', '${', 'xxx', 'test@test',
+            'git_commit', 'git_file', 'git_last_modified', 'git_modifiers',
+            'git_org', 'git_repo', 'yor_trace',
+        ]
         
         for skip_word in skip_words:
             if skip_word in combined:
@@ -178,6 +182,7 @@ class SecretsScanner:
                         'code_snippet': redacted_line,
                         'file_path': file_path,
                         'entropy': round(entropy, 2),
+                        'detection_method': f"Regex pattern matched at line {line_num}. Pattern: '{secret_type}' detector. Shannon entropy of matched value: {round(entropy, 2)} bits/char (threshold: 3.5).",
                         'remediation_steps': [
                             'Remove the hardcoded credential from the code',
                             'Use environment variables or a secrets management service (AWS Secrets Manager, Azure Key Vault, HashiCorp Vault)',

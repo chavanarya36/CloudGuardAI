@@ -1,0 +1,292 @@
+﻿{
+    "check_type": "terraform",
+    "results": {
+        "failed_checks": [
+            {
+                "check_id": "CKV_AWS_24",
+                "bc_check_id": "BC_AWS_NETWORKING_1",
+                "check_name": "Ensure no security groups allow ingress from 0.0.0.0:0 to port 22",
+                "check_result": {
+                    "result": "FAILED",
+                    "evaluated_keys": [
+                        "ingress/[0]/from_port",
+                        "ingress/[0]/to_port",
+                        "ingress/[0]/cidr_blocks",
+                        "ingress/[0]/ipv6_cidr_blocks"
+                    ]
+                },
+                "code_block": [
+                    [
+                        1,
+                        "resource \"aws_security_group\" \"ssh_access\" {\n"
+                    ],
+                    [
+                        2,
+                        "  name        = \"ssh-access\"\n"
+                    ],
+                    [
+                        3,
+                        "  description = \"Allow SSH access\"\n"
+                    ],
+                    [
+                        4,
+                        "  vpc_id      = var.vpc_id\n"
+                    ],
+                    [
+                        5,
+                        "\n"
+                    ],
+                    [
+                        6,
+                        "  ingress {\n"
+                    ],
+                    [
+                        7,
+                        "    description = \"SSH from anywhere\"\n"
+                    ],
+                    [
+                        8,
+                        "    from_port   = 22\n"
+                    ],
+                    [
+                        9,
+                        "    to_port     = 22\n"
+                    ],
+                    [
+                        10,
+                        "    protocol    = \"tcp\"\n"
+                    ],
+                    [
+                        11,
+                        "    cidr_blocks = [\"0.0.0.0/0\"]\n"
+                    ],
+                    [
+                        12,
+                        "  }\n"
+                    ],
+                    [
+                        13,
+                        "\n"
+                    ],
+                    [
+                        14,
+                        "  tags = {\n"
+                    ],
+                    [
+                        15,
+                        "    Name        = \"ssh-access\"\n"
+                    ],
+                    [
+                        16,
+                        "    Environment = \"production\"\n"
+                    ],
+                    [
+                        17,
+                        "  }\n"
+                    ],
+                    [
+                        18,
+                        "}\n"
+                    ]
+                ],
+                "file_path": "\\vuln_01_sg_ssh_open.tf",
+                "file_abs_path": "D:\\CloudGuardAI\\evaluation\\dataset\\vulnerable\\vuln_01_sg_ssh_open.tf",
+                "repo_file_path": "/evaluation/dataset/vulnerable/vuln_01_sg_ssh_open.tf",
+                "file_line_range": [
+                    1,
+                    18
+                ],
+                "resource": "aws_security_group.ssh_access",
+                "evaluations": null,
+                "check_class": "checkov.terraform.checks.resource.aws.SecurityGroupUnrestrictedIngress22",
+                "fixed_definition": null,
+                "entity_tags": {
+                    "Environment": "production",
+                    "Name": "ssh-access"
+                },
+                "caller_file_path": null,
+                "caller_file_line_range": null,
+                "resource_address": null,
+                "severity": null,
+                "bc_category": null,
+                "benchmarks": null,
+                "description": null,
+                "short_description": null,
+                "vulnerability_details": null,
+                "connected_node": null,
+                "guideline": "https://docs.prismacloud.io/en/enterprise-edition/policy-reference/aws-policies/aws-networking-policies/networking-1-port-security",
+                "details": [],
+                "check_len": null,
+                "definition_context_file_path": "D:\\CloudGuardAI\\evaluation\\dataset\\vulnerable\\vuln_01_sg_ssh_open.tf"
+            },
+            {
+                "check_id": "CKV2_AWS_5",
+                "bc_check_id": "BC_AWS_NETWORKING_51",
+                "check_name": "Ensure that Security Groups are attached to another resource",
+                "check_result": {
+                    "result": "FAILED",
+                    "entity": {
+                        "aws_security_group": {
+                            "ssh_access": {
+                                "__end_line__": 18,
+                                "__start_line__": 1,
+                                "description": [
+                                    "Allow SSH access"
+                                ],
+                                "ingress": [
+                                    {
+                                        "cidr_blocks": [
+                                            [
+                                                "0.0.0.0/0"
+                                            ]
+                                        ],
+                                        "description": [
+                                            "SSH from anywhere"
+                                        ],
+                                        "from_port": [
+                                            22
+                                        ],
+                                        "protocol": [
+                                            "tcp"
+                                        ],
+                                        "to_port": [
+                                            22
+                                        ]
+                                    }
+                                ],
+                                "name": [
+                                    "ssh-access"
+                                ],
+                                "tags": [
+                                    {
+                                        "Environment": "production",
+                                        "Name": "ssh-access"
+                                    }
+                                ],
+                                "vpc_id": [
+                                    "var.vpc_id"
+                                ],
+                                "__address__": "aws_security_group.ssh_access"
+                            }
+                        }
+                    },
+                    "evaluated_keys": [
+                        "resource_type",
+                        "networking"
+                    ]
+                },
+                "code_block": [
+                    [
+                        1,
+                        "resource \"aws_security_group\" \"ssh_access\" {\n"
+                    ],
+                    [
+                        2,
+                        "  name        = \"ssh-access\"\n"
+                    ],
+                    [
+                        3,
+                        "  description = \"Allow SSH access\"\n"
+                    ],
+                    [
+                        4,
+                        "  vpc_id      = var.vpc_id\n"
+                    ],
+                    [
+                        5,
+                        "\n"
+                    ],
+                    [
+                        6,
+                        "  ingress {\n"
+                    ],
+                    [
+                        7,
+                        "    description = \"SSH from anywhere\"\n"
+                    ],
+                    [
+                        8,
+                        "    from_port   = 22\n"
+                    ],
+                    [
+                        9,
+                        "    to_port     = 22\n"
+                    ],
+                    [
+                        10,
+                        "    protocol    = \"tcp\"\n"
+                    ],
+                    [
+                        11,
+                        "    cidr_blocks = [\"0.0.0.0/0\"]\n"
+                    ],
+                    [
+                        12,
+                        "  }\n"
+                    ],
+                    [
+                        13,
+                        "\n"
+                    ],
+                    [
+                        14,
+                        "  tags = {\n"
+                    ],
+                    [
+                        15,
+                        "    Name        = \"ssh-access\"\n"
+                    ],
+                    [
+                        16,
+                        "    Environment = \"production\"\n"
+                    ],
+                    [
+                        17,
+                        "  }\n"
+                    ],
+                    [
+                        18,
+                        "}\n"
+                    ]
+                ],
+                "file_path": "\\vuln_01_sg_ssh_open.tf",
+                "file_abs_path": "D:\\CloudGuardAI\\evaluation\\dataset\\vulnerable\\vuln_01_sg_ssh_open.tf",
+                "repo_file_path": "/evaluation/dataset/vulnerable/vuln_01_sg_ssh_open.tf",
+                "file_line_range": [
+                    1,
+                    18
+                ],
+                "resource": "aws_security_group.ssh_access",
+                "evaluations": null,
+                "check_class": "checkov.common.graph.checks_infra.base_check",
+                "fixed_definition": null,
+                "entity_tags": {
+                    "Environment": "production",
+                    "Name": "ssh-access"
+                },
+                "caller_file_path": null,
+                "caller_file_line_range": null,
+                "resource_address": null,
+                "severity": null,
+                "bc_category": null,
+                "benchmarks": null,
+                "description": null,
+                "short_description": null,
+                "vulnerability_details": null,
+                "connected_node": null,
+                "guideline": "https://docs.prismacloud.io/en/enterprise-edition/policy-reference/aws-policies/aws-networking-policies/ensure-that-security-groups-are-attached-to-ec2-instances-or-elastic-network-interfaces-enis",
+                "details": [],
+                "check_len": null,
+                "definition_context_file_path": "D:\\CloudGuardAI\\evaluation\\dataset\\vulnerable\\vuln_01_sg_ssh_open.tf"
+            }
+        ]
+    },
+    "summary": {
+        "passed": 5,
+        "failed": 2,
+        "skipped": 0,
+        "parsing_errors": 0,
+        "resource_count": 1,
+        "checkov_version": "3.2.497"
+    }
+}

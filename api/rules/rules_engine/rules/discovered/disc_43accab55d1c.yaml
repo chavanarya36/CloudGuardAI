@@ -1,0 +1,14 @@
+# Auto-discovered rule — generated 2026-02-23T11:21:42.701986
+# Based on 12 occurrences across 6 scans
+# Original: Security group 'web_sg' allows SSH access (port 22) from the internet (0.0.0.0/0). CIS Benchmark 4.1 prohibits this.
+
+**
+rules:
+  - id: DISC_43ACCAB55D1C
+    description: "[Auto-Discovered] Security group 'web_sg' allows SSH access (port 22) from the internet (0.0.0.0/0). CIS Benchmark 4.1"
+    severity: CRITICAL
+    file_types: [".tf", ".yaml", ".yml", ".json"]
+    match:
+      regex: "unauthorized.*compromise"
+    references:
+      - "https://cloudguard.ai/discovered-patterns/43accab55d1c"

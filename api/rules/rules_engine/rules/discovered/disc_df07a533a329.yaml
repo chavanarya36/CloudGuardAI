@@ -1,0 +1,16 @@
+# Auto-discovered rule — generated 2026-03-11T07:55:37.094031
+# Based on 15 occurrences across 5 scans
+# Original: Detected a 4-hop attack path from aws_security_group.db_sg to aws_s3_bucket.data_backup.
+
+**Attack Chain:** db_sg → data
+rules:
+  - id: DISC_DF07A533A329
+    description: "[Auto-Discovered] Detected a 4-hop attack path from aws_security_group.db_sg to aws_s3_bucket.data_backup.
+
+**Attack C"
+    severity: CRITICAL
+    file_types: [".tf", ".yaml", ".yml", ".json"]
+    match:
+      regex: "aws_security_group.*data_backup"
+    references:
+      - "https://cloudguard.ai/discovered-patterns/df07a533a329"

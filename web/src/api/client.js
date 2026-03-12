@@ -63,7 +63,7 @@ export const scanFile = async (file, scanMode = 'all') => {
   const formData = new FormData();
   formData.append('file', file);
   formData.append('scan_mode', scanMode);
-  const response = await apiClient.post('/scan', formData, { headers: { 'Content-Type': 'multipart/form-data' }, timeout: 60000 });
+  const response = await apiClient.post('/scan', formData, { headers: { 'Content-Type': 'multipart/form-data' }, timeout: 300000 });
   return response.data;
 };
 

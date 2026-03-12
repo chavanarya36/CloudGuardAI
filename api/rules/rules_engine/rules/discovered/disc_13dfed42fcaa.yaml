@@ -1,0 +1,14 @@
+# Auto-discovered rule — generated 2026-03-11T07:55:37.729961
+# Based on 8 occurrences across 5 scans
+# Original: OCI bucket 'myreallysecretstore' has access_type = "ObjectRead". Public read access exposes data to the internet.
+
+**Imp
+rules:
+  - id: DISC_13DFED42FCAA
+    description: "[Auto-Discovered] OCI bucket 'myreallysecretstore' has access_type = "ObjectRead". Public read access exposes data to "
+    severity: HIGH
+    file_types: [".tf", ".yaml", ".yml", ".json"]
+    match:
+      regex: "myreallysecretstore.*access_type"
+    references:
+      - "https://cloudguard.ai/discovered-patterns/13dfed42fcaa"

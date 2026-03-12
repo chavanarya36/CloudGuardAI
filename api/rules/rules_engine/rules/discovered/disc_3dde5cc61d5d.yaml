@@ -1,0 +1,12 @@
+# Auto-discovered rule — generated 2026-03-11T07:55:37.815932
+# Based on 5 occurrences across 3 scans
+# Original: OCI bucket 'myreallysecretstore' does not have versioning enabled. Without versioning, deleted or overwritten objects ca
+rules:
+  - id: DISC_3DDE5CC61D5D
+    description: "[Auto-Discovered] OCI bucket 'myreallysecretstore' does not have versioning enabled. Without versioning, deleted or ov"
+    severity: MEDIUM
+    file_types: [".tf", ".yaml", ".yml", ".json"]
+    match:
+      regex: "myreallysecretstore.*information"
+    references:
+      - "https://cloudguard.ai/discovered-patterns/3dde5cc61d5d"

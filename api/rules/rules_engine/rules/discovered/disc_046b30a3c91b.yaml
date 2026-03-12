@@ -1,0 +1,12 @@
+# Auto-discovered rule — generated 2026-03-11T07:55:37.789089
+# Based on 8 occurrences across 5 scans
+# Original: OCI bucket 'myreallysecretstore' has object_events_enabled = false. Without event emission, object-level audit logging i
+rules:
+  - id: DISC_046B30A3C91B
+    description: "[Auto-Discovered] OCI bucket 'myreallysecretstore' has object_events_enabled = false. Without event emission, object-l"
+    severity: MEDIUM
+    file_types: [".tf", ".yaml", ".yml", ".json"]
+    match:
+      regex: "object_events_enabled.*myreallysecretstore"
+    references:
+      - "https://cloudguard.ai/discovered-patterns/046b30a3c91b"

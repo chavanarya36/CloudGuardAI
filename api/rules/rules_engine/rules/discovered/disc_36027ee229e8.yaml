@@ -1,0 +1,16 @@
+# Auto-discovered rule — generated 2026-02-23T11:21:42.632683
+# Based on 8 occurrences across 8 scans
+# Original: Hardcoded password detected in infrastructure code
+
+**Impact:** This could allow full system compromise, data breach, or
+rules:
+  - id: DISC_36027EE229E8
+    description: "[Auto-Discovered] Hardcoded password detected in infrastructure code
+
+**Impact:** This could allow full system comprom"
+    severity: CRITICAL
+    file_types: [".tf", ".yaml", ".yml", ".json"]
+    match:
+      regex: "infrastructure.*unauthorized"
+    references:
+      - "https://cloudguard.ai/discovered-patterns/36027ee229e8"

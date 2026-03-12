@@ -1,0 +1,251 @@
+{
+  "version": "1",
+  "frozen_at": "2026-03-01T12:30:33.899139+00:00",
+  "description": "Frozen evaluation artifacts \u2014 version 1. CloudGuard P=0.904, R=0.940, F1=0.922.",
+  "files": {
+    "run_baseline_comparison.py": {
+      "sha256": "800698622566a1c262b06a2cbb523463b2351bd08c6599a37e68689fdd397744",
+      "size_bytes": 31367
+    },
+    "run_evaluation.py": {
+      "sha256": "15b4f0721c3906f2fe3c0c8120f6fb259020e3034e607ab0fd3e7d791399d494",
+      "size_bytes": 30597
+    },
+    "dataset/labels.json": {
+      "sha256": "4f551bff73a61e08cf67658c94d0955de3c609d539f2ab8383940d61ed3bad85",
+      "size_bytes": 48915
+    },
+    "dataset/README.md": {
+      "sha256": "d32ff933a39482e310dad5964aebe3b5730bfce4ff6afb39c83f633d933c96bd",
+      "size_bytes": 7718
+    },
+    "dataset/clean/clean_01_sg_ssh_restricted.tf": {
+      "sha256": "00f4b5c0a041d25e593627787443da92b780c42a4ea9374185ec6730eaaeb000",
+      "size_bytes": 400
+    },
+    "dataset/clean/clean_02_sg_rdp_restricted.tf": {
+      "sha256": "9c859a04d1df0d0f31106517a5e41e0e5811d39af875c725ea121a4d6300050c",
+      "size_bytes": 382
+    },
+    "dataset/clean/clean_03_sg_web_only.tf": {
+      "sha256": "8ab98d65b51c999400a581072e5a829cffecff665b0d1cf5c1728cbb1d3ce8ce",
+      "size_bytes": 645
+    },
+    "dataset/clean/clean_04_sg_egress_restricted.tf": {
+      "sha256": "3a28c301672a5e6a7505fd930e9536fac0fbe016b5c5493d2e4b2bdcb3b6608a",
+      "size_bytes": 541
+    },
+    "dataset/clean/clean_05_s3_private.tf": {
+      "sha256": "c70ac6395f5ee57c2284a168a5578d08e36b5f38093a2eb1d9002d80229d48c2",
+      "size_bytes": 290
+    },
+    "dataset/clean/clean_06_s3_encrypted.tf": {
+      "sha256": "da9533cffcfc1a0e58d089d82a317c6e6d5b98211cdadd1a08baecffa7d75a0a",
+      "size_bytes": 510
+    },
+    "dataset/clean/clean_07_s3_versioned.tf": {
+      "sha256": "5782d424b369cdaf02f4883dc83a1782090f4e4fbd2a4d06e8a67002efb77a6f",
+      "size_bytes": 340
+    },
+    "dataset/clean/clean_08_s3_complete.tf": {
+      "sha256": "d147f86c320ff467cb216073d96a622f09fc3b1698b2ad1b593f1d2f73b4d4ef",
+      "size_bytes": 678
+    },
+    "dataset/clean/clean_09_db_private_encrypted.tf": {
+      "sha256": "918327c967171b9fb11309ed134173df9e53a16979633a989afb71f5de5ea119",
+      "size_bytes": 726
+    },
+    "dataset/clean/clean_10_db_complete.tf": {
+      "sha256": "1dbb8c97c795bc3f83c881fd0b3f6dac445749869ed83f794b7c2746156f22f2",
+      "size_bytes": 747
+    },
+    "dataset/clean/clean_11_iam_minimal.tf": {
+      "sha256": "cf9eb4d8d0de9b14b42299a788b92525a2e0ab403fd1c41cb2d4a3102111ea6e",
+      "size_bytes": 854
+    },
+    "dataset/clean/clean_12_iam_scoped.tf": {
+      "sha256": "d82ef4afe82e736808b77cb8f7a8678a5f9d2e7f5c9f6fc8ded30b19e6244980",
+      "size_bytes": 571
+    },
+    "dataset/clean/clean_13_ec2_private_monitored.tf": {
+      "sha256": "71df9bb21e4cd91a17a001f152881eb4d38a5a9fa5472d6563223b9418c77a50",
+      "size_bytes": 535
+    },
+    "dataset/clean/clean_14_ebs_encrypted.tf": {
+      "sha256": "7fb4f74097b643899af254d49295a950e59c5722994c325d90f4e1e84bac4064",
+      "size_bytes": 451
+    },
+    "dataset/clean/clean_15_lambda_ssm.tf": {
+      "sha256": "424505b74883f6dbc803e5e1c5fc8624a0c332c198ae30cc26cbad30329bddde",
+      "size_bytes": 577
+    },
+    "dataset/clean/clean_16_provider_no_creds.tf": {
+      "sha256": "7b75bd5a899fd305316c65483519e1b192e625e09d65e79a3fe55a1ed49c0240",
+      "size_bytes": 207
+    },
+    "dataset/clean/clean_17_keypair_var.tf": {
+      "sha256": "fd8f96d36186313d03b9de7444185fd71d5f90f3ccf2d57cf3ba1d1caca92212",
+      "size_bytes": 112
+    },
+    "dataset/clean/clean_18_secrets_via_vars.tf": {
+      "sha256": "4bb2b80497114ccea71bb23aec89909d2336dc4073e8e2f3ec9fd5306f307262",
+      "size_bytes": 460
+    },
+    "dataset/clean/clean_19_ec2_bastion_secure.tf": {
+      "sha256": "14a79aecd1d8871041de457ba9c23abd525a4093d1dd2c2682f5cbb880cecc0a",
+      "size_bytes": 449
+    },
+    "dataset/clean/clean_20_logging_enabled.tf": {
+      "sha256": "d4def596f803833c3a36df1998f1c318f577a2c065c1df7be8274026285da1c5",
+      "size_bytes": 422
+    },
+    "dataset/clean/clean_21_full_stack_secure.tf": {
+      "sha256": "8ee8b617551d3c23e6e087a95f77fdc589604939abba06a113cecfa15d8b3aff",
+      "size_bytes": 2282
+    },
+    "dataset/clean/clean_22_rds_cluster_secure.tf": {
+      "sha256": "00b8889c6086156e69090dd0e60294e2873418e93352cd0966d9b633daf498a9",
+      "size_bytes": 696
+    },
+    "dataset/clean/clean_23_kms_key.tf": {
+      "sha256": "fffad950f5a601737d710f5ec110b4df1f7bdbbb121e28b1e574e583cc49256b",
+      "size_bytes": 803
+    },
+    "dataset/clean/clean_24_alb_internal.tf": {
+      "sha256": "440b62e3190052500fd0eac17483dde315416d190ff52e8ac95257df59c0ac52",
+      "size_bytes": 461
+    },
+    "dataset/clean/clean_25_sg_db_restricted.tf": {
+      "sha256": "f07ccf948d1ca91cb184abc31ec8218f3e058089be644739c085e3a8e52592cd",
+      "size_bytes": 1045
+    },
+    "dataset/vulnerable/vuln_01_sg_ssh_open.tf": {
+      "sha256": "261e361272a4482db1bb81f4b993ab7d799fa7b2c44c801763888178ba6b4a52",
+      "size_bytes": 387
+    },
+    "dataset/vulnerable/vuln_02_sg_rdp_open.tf": {
+      "sha256": "3ac4f85d20f438eee014a6494b52f6c63351fb3c065255ce905a2539244a3501",
+      "size_bytes": 352
+    },
+    "dataset/vulnerable/vuln_03_sg_all_ports.tf": {
+      "sha256": "d8a2e99791d50dbcd4baa494d130d8cfb010b1f6eaf3f47a5fb4766d56ae3590",
+      "size_bytes": 366
+    },
+    "dataset/vulnerable/vuln_04_sg_egress_all.tf": {
+      "sha256": "c591e714174844d6660b995df8acf1a4559995632976618d2760ebfb90182ddf",
+      "size_bytes": 485
+    },
+    "dataset/vulnerable/vuln_05_s3_public_read.tf": {
+      "sha256": "3c85dcaaa2d117b701cc43b183709f0136399e39c0bada6e631ea838cc23966f",
+      "size_bytes": 193
+    },
+    "dataset/vulnerable/vuln_06_s3_public_write.tf": {
+      "sha256": "4adda9920c25456cc8962b647ac1bb9577ff58665b488d52326e3e13f50fcb8d",
+      "size_bytes": 196
+    },
+    "dataset/vulnerable/vuln_07_s3_no_versioning.tf": {
+      "sha256": "1b0777d70099fc3dcf24291c987975bc361dc781acd9d3668fac64c52ded372c",
+      "size_bytes": 224
+    },
+    "dataset/vulnerable/vuln_07_s3_versioning_off.tf": {
+      "sha256": "ef7911f8aed036b36fbf3dccbd063e4a4e6d70de5301910e22d5918326ec03d2",
+      "size_bytes": 321
+    },
+    "dataset/vulnerable/vuln_08_s3_no_encryption.tf": {
+      "sha256": "64228fefb0e40e1e9869b4c21523e1c65caa356215794d31442e3d37454fe643",
+      "size_bytes": 243
+    },
+    "dataset/vulnerable/vuln_09_db_public.tf": {
+      "sha256": "f4ab438186afd01a79644e62fb9cccb9ca4a37d5f773b6ae147a162b9dd44c44",
+      "size_bytes": 602
+    },
+    "dataset/vulnerable/vuln_10_db_unencrypted.tf": {
+      "sha256": "89472e4566470edbc2487d70d5c345431d8efa69cfc3383932c362142e5ed86a",
+      "size_bytes": 624
+    },
+    "dataset/vulnerable/vuln_11_db_hardcoded_pw.tf": {
+      "sha256": "8f705b97a4d46a584623ae00846ed9035e4aeaa1a71fd3650da157551c2ea09e",
+      "size_bytes": 605
+    },
+    "dataset/vulnerable/vuln_12_db_skip_snapshot.tf": {
+      "sha256": "ee258f6799705d3efe63e57468e3ca34689f690436a945e6b1c626aea1fa2743",
+      "size_bytes": 616
+    },
+    "dataset/vulnerable/vuln_13_creds_aws_key.tf": {
+      "sha256": "af7a449da3ecea55739a044802728389cff9945df9c3a8bfe4233c254753f84e",
+      "size_bytes": 309
+    },
+    "dataset/vulnerable/vuln_14_creds_secret_value.tf": {
+      "sha256": "b568705aaa558d3136e2b4e08c5c7c23c6b9f98ada5046f6e0ab95fb80646cb9",
+      "size_bytes": 476
+    },
+    "dataset/vulnerable/vuln_15_creds_private_key.tf": {
+      "sha256": "c2e568f969144390f8c88dfaa5687a783a903359deb130b0b9e26cd5995fe732",
+      "size_bytes": 665
+    },
+    "dataset/vulnerable/vuln_16_creds_password.tf": {
+      "sha256": "0ae36c8ca2682f7161770a5232411f6a311992b5289c1e1e51cd85a46def50f1",
+      "size_bytes": 481
+    },
+    "dataset/vulnerable/vuln_17_iam_wildcard.tf": {
+      "sha256": "56c69932852228d83751ab61954a11cff5684e90f4d9764600f562c702056409",
+      "size_bytes": 612
+    },
+    "dataset/vulnerable/vuln_18_iam_root.tf": {
+      "sha256": "52f84cb4e5d512219bd0ea7a899f6bbd812ed8f902fe35746691cb117a0fe143",
+      "size_bytes": 407
+    },
+    "dataset/vulnerable/vuln_19_ec2_public_unmonitored.tf": {
+      "sha256": "b98a266ddab0c857c98fb64e3df82dbd6492fa7dd2a9488fbde88717afd5aa06",
+      "size_bytes": 442
+    },
+    "dataset/vulnerable/vuln_20_ebs_unencrypted.tf": {
+      "sha256": "c50f766c96ed3c879f2faf0b104e0add693f667074870f338364d13db6525dfd",
+      "size_bytes": 385
+    },
+    "dataset/vulnerable/vuln_21_lambda_secrets.tf": {
+      "sha256": "cd829183bdd73070897758902c4d6d1893ce19775da80f67d9a90d45a6f4e2f9",
+      "size_bytes": 632
+    },
+    "dataset/vulnerable/vuln_22_multi_open_sg_to_db.tf": {
+      "sha256": "47f26242eb4f873594faf6b2b9e2fb8df15872faec7056bfc4b466a958259bc2",
+      "size_bytes": 941
+    },
+    "dataset/vulnerable/vuln_23_multi_full_stack.tf": {
+      "sha256": "9e896eaa75d04fe2865ca90261e7eaff5810b2106e441b7b94d9fa0f603ad25e",
+      "size_bytes": 2154
+    },
+    "dataset/vulnerable/vuln_24_logging_disabled.tf": {
+      "sha256": "acf12b8d84a82a9cb9824cd87117350179526bf9ffde43cae4dd83f64e137ce6",
+      "size_bytes": 810
+    },
+    "dataset/vulnerable/vuln_25_s3_multiple_issues.tf": {
+      "sha256": "fccee7cb3b5c77ae88303f71d75ec4b209b2d1e746401f1ffbab24f09b731b66",
+      "size_bytes": 227
+    },
+    "results/baseline_comparison.json": {
+      "sha256": "a179b829094b28a16f51ec57acfa5c8b70a9552adcf60ab589379ec601d6897c",
+      "size_bytes": 2901
+    },
+    "results/baseline_comparison.md": {
+      "sha256": "c900dce2756ea1e1ddf52c7cccda76d691be8518e5b55aed402c951f20333475",
+      "size_bytes": 4342
+    },
+    "results/checkov_raw.json": {
+      "sha256": "13a23de9522b2508b35dce0a4fd2ff1903d2f4a498ca74449228059e56bc3564",
+      "size_bytes": 840958
+    },
+    "results/metrics.json": {
+      "sha256": "40f2a5827f8ea2667d19394e757c147bebddfb4738f0ed20dd02e35e7087b1e8",
+      "size_bytes": 4016
+    },
+    "results/report.md": {
+      "sha256": "d0466ad617e5f1ba7b33407f8b1b04b581868fde8877a3ee4a53f6a0de0bf2bf",
+      "size_bytes": 7195
+    },
+    "results/tfsec_raw.json": {
+      "sha256": "35c92daf6a05a3f0499fe718fa152b597e72bdad5d071a3b50f2a33fb3434098",
+      "size_bytes": 183083
+    }
+  }
+}

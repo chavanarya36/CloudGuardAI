@@ -1,0 +1,12 @@
+# Auto-discovered rule — generated 2026-03-11T07:55:37.927233
+# Based on 7 occurrences across 7 scans
+# Original: GNN attention mechanism identified aws_s3_bucket.test as a critical point in potential attack paths. This resource has h
+rules:
+  - id: DISC_55F92BC85D98
+    description: "[Auto-Discovered] GNN attention mechanism identified aws_s3_bucket.test as a critical point in potential attack paths."
+    severity: MEDIUM
+    file_types: [".tf", ".yaml", ".yml", ".json"]
+    match:
+      regex: "infrastructure.*importance"
+    references:
+      - "https://cloudguard.ai/discovered-patterns/55f92bc85d98"

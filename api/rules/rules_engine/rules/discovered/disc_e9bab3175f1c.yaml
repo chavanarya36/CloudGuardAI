@@ -1,0 +1,14 @@
+# Auto-discovered rule — generated 2026-03-07T12:38:58.479380
+# Based on 18 occurrences across 5 scans
+# Original: S3 bucket 'b' does not have access logging enabled. CIS Benchmark 2.1.2 requires logging for audit trails.
+
+**Impact:** 
+rules:
+  - id: DISC_E9BAB3175F1C
+    description: "[Auto-Discovered] S3 bucket 'b' does not have access logging enabled. CIS Benchmark 2.1.2 requires logging for audit t"
+    severity: MEDIUM
+    file_types: [".tf", ".yaml", ".yml", ".json"]
+    match:
+      regex: "information.*disclosure"
+    references:
+      - "https://cloudguard.ai/discovered-patterns/e9bab3175f1c"

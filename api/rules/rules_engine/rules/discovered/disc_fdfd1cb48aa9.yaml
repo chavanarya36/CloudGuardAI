@@ -1,0 +1,14 @@
+# Auto-discovered rule — generated 2026-03-11T07:55:37.596082
+# Based on 6 occurrences across 3 scans
+# Original: S3 bucket 'bad' does not have server-side encryption enabled. CIS Benchmark 2.1.1 requires encryption at rest.
+
+**Impact
+rules:
+  - id: DISC_FDFD1CB48AA9
+    description: "[Auto-Discovered] S3 bucket 'bad' does not have server-side encryption enabled. CIS Benchmark 2.1.1 requires encryptio"
+    severity: HIGH
+    file_types: [".tf", ".yaml", ".yml", ".json"]
+    match:
+      regex: "significant.*encryption"
+    references:
+      - "https://cloudguard.ai/discovered-patterns/fdfd1cb48aa9"

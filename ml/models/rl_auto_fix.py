@@ -22,7 +22,10 @@ from collections import deque
 import random
 import re
 import json
+import logging
 from pathlib import Path
+
+logger = logging.getLogger(__name__)
 
 
 # ============================================================================
@@ -534,7 +537,7 @@ resource "aws_cloudwatch_metric_alarm" "%s_errors" {
 
 class RewardCalculator:
     """
-    Calculate reward for RL agent
+    Calculate reward for RL agent (v2 - shaped rewards)
     
     Reward components:
     1. Vulnerability fixed: +10
@@ -543,7 +546,34 @@ class RewardCalculator:
     4. Introduced new vulnerability: -15
     5. Broke functionality: -10
     6. Excessive changes: -3
+    7. [NEW] Semantic action match: +3 (correct action for vuln type)
+    8. [NEW] Action repetition penalty: -5 (same action repeated)
+    9. [NEW] Severity-scaled fix bonus: up to +4 extra for CRITICAL fixes
     """
+
+    # Which actions are semantically appropriate for each vulnerability type
+    ACTION_RELEVANCE_MAP: Dict[str, List[int]] = {
+        "unencrypted_storage": [FixAction.ADD_ENCRYPTION, FixAction.ADD_KMS],
+        "public_access": [FixAction.RESTRICT_ACCESS, FixAction.REMOVE_PUBLIC_ACCESS, FixAction.ADD_VPC],
+        "weak_iam": [FixAction.STRENGTHEN_IAM, FixAction.ENABLE_MFA],
+        "missing_logging": [FixAction.ENABLE_LOGGING, FixAction.ADD_MONITORING],
+        "no_backup": [FixAction.ADD_BACKUP],
+        "insecure_protocol": [FixAction.ENABLE_HTTPS, FixAction.UPDATE_VERSION],
+        "hardcoded_secrets": [FixAction.ADD_KMS, FixAction.STRENGTHEN_IAM],
+        "open_security_group": [FixAction.RESTRICT_ACCESS, FixAction.RESTRICT_EGRESS],
+        "missing_mfa": [FixAction.ENABLE_MFA],
+        "outdated_version": [FixAction.UPDATE_VERSION],
+        "excessive_permissions": [FixAction.STRENGTHEN_IAM, FixAction.RESTRICT_ACCESS],
+        "no_encryption_transit": [FixAction.ENABLE_HTTPS, FixAction.ADD_KMS],
+        "missing_tags": [FixAction.ADD_TAGS],
+        "public_bucket": [FixAction.REMOVE_PUBLIC_ACCESS, FixAction.RESTRICT_ACCESS],
+        "weak_password": [FixAction.UPDATE_VERSION, FixAction.STRENGTHEN_IAM],
+        "missing_vpc": [FixAction.ADD_VPC],
+        "internet_gateway": [FixAction.RESTRICT_ACCESS, FixAction.ADD_VPC],
+        "unrestricted_egress": [FixAction.RESTRICT_EGRESS],
+        "missing_waf": [FixAction.ENABLE_WAF],
+        "cors_misconfiguration": [FixAction.RESTRICT_ACCESS, FixAction.ENABLE_HTTPS],
+    }
     
     @staticmethod
     def calculate_reward(
@@ -552,10 +582,14 @@ class RewardCalculator:
         original_vulnerabilities: int,
         fixed_vulnerabilities: int,
         syntax_valid: bool,
-        functionality_maintained: bool
+        functionality_maintained: bool,
+        action_id: int = -1,
+        vuln_type: str = "",
+        severity: float = 0.5,
+        episode_action_history: Optional[List[int]] = None
     ) -> float:
         """
-        Calculate reward for a fix action
+        Calculate shaped reward for a fix action (v2)
         
         Args:
             original_code: Original vulnerable code
@@ -564,6 +598,10 @@ class RewardCalculator:
             fixed_vulnerabilities: Number of vulnerabilities after fix
             syntax_valid: Whether fixed code has valid syntax
             functionality_maintained: Whether code still works
+            action_id: The action that was taken (-1 = unknown)
+            vuln_type: The vulnerability type string
+            severity: Vulnerability severity 0.0-1.0
+            episode_action_history: List of actions taken so far in episode
         
         Returns:
             Reward value (higher is better)
@@ -594,6 +632,27 @@ class RewardCalculator:
             reward -= 3.0
         elif abs(code_diff) < 100:  # Minimal changes
             reward += 2.0
+        
+        # ---- SHAPED REWARD COMPONENTS (v2) ----
+        
+        # 5. Semantic action match bonus/penalty (DOMINANT signal)
+        #    This is the primary learning signal: pick the RIGHT action for the vuln type.
+        #    Must outweigh the +5 functionality bonus for wrong actions.
+        if action_id >= 0 and vuln_type:
+            relevant_actions = RewardCalculator.ACTION_RELEVANCE_MAP.get(vuln_type, [])
+            if action_id in relevant_actions:
+                reward += 12.0  # Strong bonus: correct action for vuln type
+            elif relevant_actions:
+                reward -= 12.0  # Strong penalty: wrong action type
+        
+        # 6. Action repetition penalty (-5)
+        if episode_action_history and action_id >= 0:
+            if action_id in episode_action_history:
+                reward -= 5.0  # Penalize repeating the same action
+        
+        # 7. Severity-scaled fix bonus (up to +4 for CRITICAL)
+        if vulns_fixed > 0 and severity > 0:
+            reward += 4.0 * severity  # CRITICAL(1.0)=+4, HIGH(0.8)=+3.2, MED(0.5)=+2
         
         return reward
 
@@ -803,7 +862,7 @@ class RLAutoFixAgent:
             'steps_done': self.steps_done,
             'episode_rewards': self.episode_rewards
         }, path)
-        print(f"✅ RL agent saved to {path}")
+        logger.info("RL agent saved to %s", path)
     
     def load(self, path: str):
         """Load model checkpoint"""
@@ -814,7 +873,7 @@ class RLAutoFixAgent:
         self.epsilon = checkpoint['epsilon']
         self.steps_done = checkpoint['steps_done']
         self.episode_rewards = checkpoint.get('episode_rewards', [])
-        print(f"✅ RL agent loaded from {path}")
+        logger.info("RL agent loaded from %s", path)
 
 
 if __name__ == "__main__":
@@ -823,9 +882,9 @@ if __name__ == "__main__":
     print("Novel AI Feature #2: Deep Q-Network for vulnerability fixing")
     print()
     print("Components:")
-    print("  ✓ State Space: 44-dimensional vulnerability representation")
-    print("  ✓ Action Space: 15 fix strategies")
-    print("  ✓ DQN: 3-layer neural network with experience replay")
-    print("  ✓ Reward: Balances fix quality, functionality, code changes")
+    print("  [OK] State Space: 44-dimensional vulnerability representation")
+    print("  [OK] Action Space: 15 fix strategies")
+    print("  [OK] DQN: 3-layer neural network with experience replay")
+    print("  [OK] Reward: Balances fix quality, functionality, code changes")
     print()
     print("Ready to train RL agent on vulnerability fixing tasks!")

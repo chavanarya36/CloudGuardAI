@@ -42,6 +42,12 @@ class Scan(Base):
     scanner_breakdown = Column(JSON)
     # GNN attack path graph data (nodes + edges + attack paths)
     gnn_graph_data = Column(JSON)
+    # GNN model scan-level risk score (real PyTorch GAT inference)
+    gnn_risk_score = Column(Float, nullable=True)
+    # Which scanners actually ran during this scan
+    scanners_used = Column(JSON, nullable=True)
+    # Recommended finding display order (indices sorted by ranking_score)
+    recommended_finding_order = Column(JSON)
     risk_score = Column(Float, default=0.0)
     severity_counts = Column(JSON)
     total_findings = Column(Integer, default=0)
@@ -86,12 +92,25 @@ class Finding(Base):
     line_number = Column(Integer)
     code_snippet = Column(Text)
     resource = Column(String)
+    detection_method = Column(Text)  # Explainability: how the scanner detected this finding
     llm_explanation = Column(Text)
     llm_explanation_short = Column(Text)
     llm_remediation = Column(Text)
     certainty = Column(Float)
     llm_certainty = Column(Float)
     meta_data = Column(JSON)
+    # Unified reasoning fields
+    ranking_score = Column(Float)
+    reasoning_summary = Column(Text)
+    part_of_attack_path = Column(Boolean, default=False)
+    attack_path_context = Column(JSON)
+    # RL Auto-Fix Agent fields
+    rl_fix_action = Column(String(50))          # e.g. "ADD_ENCRYPTION", "RESTRICT_ACCESS"
+    rl_fix_applied = Column(Boolean, default=False)
+    rl_fixed_code = Column(Text)
+    # Transformer Secure Code Generator fields
+    transformer_fix = Column(Text)
+    transformer_fix_available = Column(Boolean, default=False)
     # Deduplication fields
     finding_hash = Column(String(64), index=True)
     first_seen = Column(DateTime, default=datetime.utcnow)

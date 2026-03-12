@@ -1,8 +1,10 @@
 """
-Graph Neural Network for Infrastructure Attack Path Detection
+Graph Neural Network for Topology-Aware Infrastructure Risk Scoring
 
-Novel Contribution: Uses GNN to learn complex attack patterns across infrastructure resources
-that traditional rule-based scanners cannot detect.
+Novel Contribution: Uses GNN to learn complex risk patterns across infrastructure
+resource graphs that traditional rule-based scanners cannot detect.  The model
+outputs a per-graph risk probability and per-node attention weights; concrete
+attack-path enumeration is handled by the companion attack_path_analyzer module.
 
 This is the core AI innovation that makes CloudGuard AI different from Checkov/TFSec.
 """
@@ -14,6 +16,9 @@ from typing import Dict, List, Tuple, Optional
 import json
 import re
 from pathlib import Path
+import logging
+
+logger = logging.getLogger(__name__)
 
 # Try to import PyTorch Geometric, provide helpful error if not installed
 try:
@@ -22,8 +27,7 @@ try:
     TORCH_GEOMETRIC_AVAILABLE = True
 except ImportError:
     TORCH_GEOMETRIC_AVAILABLE = False
-    print("⚠️  PyTorch Geometric not installed. Install with:")
-    print("    pip install torch-geometric torch-scatter torch-sparse")
+    logger.warning("PyTorch Geometric not installed. Install with: pip install torch-geometric torch-scatter torch-sparse")
 
 
 class InfrastructureGNN(nn.Module):
@@ -360,7 +364,7 @@ class AttackPathPredictor:
         else:
             self.model.load_state_dict(checkpoint)
         self.model.eval()
-        print(f"✅ Loaded GNN model from {model_path}")
+        logger.info("Loaded GNN model from %s", model_path)
     
     def save_model(self, model_path: str):
         """Save model weights"""
@@ -370,7 +374,7 @@ class AttackPathPredictor:
             'num_features': self.model.num_node_features,
             'hidden_channels': self.model.hidden_channels
         }, model_path)
-        print(f"💾 Saved GNN model to {model_path}")
+        logger.info("Saved GNN model to %s", model_path)
     
     def terraform_to_graph(self, terraform_content: str) -> Tuple[Data, Dict[int, str]]:
         """

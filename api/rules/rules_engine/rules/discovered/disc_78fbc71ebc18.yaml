@@ -1,0 +1,14 @@
+# Auto-discovered rule — generated 2026-03-11T07:58:46.832340
+# Based on 3 occurrences across 3 scans
+# Original: Detected a 2-hop attack path from aws_s3_bucket_public_access_block.bucket_access to aws_s3_bucket.public_bucket.
+
+**Att
+rules:
+  - id: DISC_78FBC71EBC18
+    description: "[Auto-Discovered] Detected a 2-hop attack path from aws_s3_bucket_public_access_block.bucket_access to aws_s3_bucket.p"
+    severity: LOW
+    file_types: [".tf", ".yaml", ".yml", ".json"]
+    match:
+      regex: "_bucket_public_access_block.*public_bucket"
+    references:
+      - "https://cloudguard.ai/discovered-patterns/78fbc71ebc18"

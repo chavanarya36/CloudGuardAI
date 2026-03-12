@@ -1,0 +1,12 @@
+# Auto-discovered rule — generated 2026-03-11T07:55:36.852224
+# Based on 16 occurrences across 7 scans
+# Original: Resource **aws_security_group.web_sg** has vulnerability: All protocols allowed. This resource is part of the infrastruc
+rules:
+  - id: DISC_B7683E88E1A5
+    description: "[Auto-Discovered] Resource **aws_security_group.web_sg** has vulnerability: All protocols allowed. This resource is pa"
+    severity: HIGH
+    file_types: [".tf", ".yaml", ".yml", ".json"]
+    match:
+      regex: "aws_security_group.*infrastructure"
+    references:
+      - "https://cloudguard.ai/discovered-patterns/b7683e88e1a5"

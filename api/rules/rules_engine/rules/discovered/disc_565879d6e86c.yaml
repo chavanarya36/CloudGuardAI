@@ -1,0 +1,12 @@
+# Auto-discovered rule — generated 2026-03-11T07:55:37.841790
+# Based on 7 occurrences across 7 scans
+# Original: ⚡ MEDIUM RISK: GNN found moderate attack path indicators (54.1%). Critical resources identified: azurerm_storage_account
+rules:
+  - id: DISC_565879D6E86C
+    description: "[Auto-Discovered] ⚡ MEDIUM RISK: GNN found moderate attack path indicators (54.1%). Critical resources identified: azu"
+    severity: MEDIUM
+    file_types: [".tf", ".yaml", ".yml", ".json"]
+    match:
+      regex: "azurerm_storage_account.*google_storage_bucket"
+    references:
+      - "https://cloudguard.ai/discovered-patterns/565879d6e86c"

@@ -1,0 +1,12 @@
+# Auto-discovered rule — generated 2026-03-11T07:55:36.972034
+# Based on 9 occurrences across 6 scans
+# Original: Resource **aws_db_instance.database** has vulnerability: Hardcoded database password. This resource is part of the infra
+rules:
+  - id: DISC_4C99385EA394
+    description: "[Auto-Discovered] Resource **aws_db_instance.database** has vulnerability: Hardcoded database password. This resource "
+    severity: CRITICAL
+    file_types: [".tf", ".yaml", ".yml", ".json"]
+    match:
+      regex: "aws_db_instance.*infrastructure"
+    references:
+      - "https://cloudguard.ai/discovered-patterns/4c99385ea394"

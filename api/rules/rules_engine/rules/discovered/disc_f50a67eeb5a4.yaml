@@ -1,0 +1,16 @@
+# Auto-discovered rule — generated 2026-03-11T07:55:37.999783
+# Based on 7 occurrences across 7 scans
+# Original: GCP provider service account key exposure. CVSS: 6.5.
+
+**Impact:** This could enable partial information disclosure or w
+rules:
+  - id: DISC_F50A67EEB5A4
+    description: "[Auto-Discovered] GCP provider service account key exposure. CVSS: 6.5.
+
+**Impact:** This could enable partial informa"
+    severity: MEDIUM
+    file_types: [".tf", ".yaml", ".yml", ".json"]
+    match:
+      regex: "information.*disclosure"
+    references:
+      - "https://cloudguard.ai/discovered-patterns/f50a67eeb5a4"
