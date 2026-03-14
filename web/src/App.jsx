@@ -15,6 +15,7 @@ import NotFound from './pages/NotFound';
 import Settings from './pages/Settings';
 import UserModeSelection from './pages/UserModeSelection';
 import BeginnerLanding from './pages/BeginnerLanding';
+import CloudSecurityOverview from './pages/CloudSecurityOverview';
 
 const theme = createTheme({
   palette: {
@@ -74,9 +75,6 @@ const theme = createTheme({
 });
 
 function HomeRedirect() {
-  const mode = localStorage.getItem('user_mode');
-  if (mode === 'expert') return <Navigate to="/scan" replace />;
-  if (mode === 'beginner') return <Navigate to="/landing" replace />;
   return <Navigate to="/welcome" replace />;
 }
 
@@ -91,6 +89,7 @@ function App() {
             {/* Standalone pages — no Layout wrapper */}
             <Route path="/" element={<HomeRedirect />} />
             <Route path="/welcome" element={<UserModeSelection />} />
+            <Route path="/security-overview" element={<CloudSecurityOverview />} />
             <Route path="/landing" element={<BeginnerLanding />} />
 
             {/* Main app pages — wrapped in Layout */}

@@ -1,281 +1,225 @@
 import { useState } from 'react';
 import { Link, useLocation, Outlet } from 'react-router-dom';
-import {
-  AppBar,
-  Box,
-  Drawer,
-  IconButton,
-  List,
-  ListItem,
-  ListItemButton,
-  ListItemIcon,
-  ListItemText,
-  Toolbar,
-  Typography,
-  Divider,
-  Chip,
-} from '@mui/material';
-import MenuIcon from '@mui/icons-material/Menu';
-import SecurityIcon from '@mui/icons-material/Security';
-import ScannerIcon from '@mui/icons-material/Scanner';
-import DashboardIcon from '@mui/icons-material/Dashboard';
-import PsychologyIcon from '@mui/icons-material/Psychology';
-import FeedbackIcon from '@mui/icons-material/Feedback';
-import AssessmentIcon from '@mui/icons-material/Assessment';
-import ShieldIcon from '@mui/icons-material/Shield';
-import HistoryIcon from '@mui/icons-material/History';
-import SettingsIcon from '@mui/icons-material/Settings';
 
 const drawerWidth = 260;
 
 const menuItems = [
-  { text: 'Scan', path: '/scan', icon: <ScannerIcon /> },
-  { text: 'Dashboard', path: '/dashboard', icon: <DashboardIcon /> },
-  { text: 'Learning', path: '/learning', icon: <PsychologyIcon /> },
-  { text: 'History', path: '/history', icon: <HistoryIcon /> },
-  { text: 'Feedback', path: '/feedback', icon: <FeedbackIcon /> },
-  { text: 'Model Status', path: '/model-status', icon: <AssessmentIcon /> },
-  { text: 'Settings', path: '/settings', icon: <SettingsIcon /> },
+  { text: 'Scan', path: '/scan', icon: '🔍' },
+  { text: 'Dashboard', path: '/dashboard', icon: '📊' },
+  { text: 'Learning', path: '/learning', icon: '🧠' },
+  { text: 'History', path: '/history', icon: '📋' },
+  { text: 'Feedback', path: '/feedback', icon: '💬' },
+  { text: 'Model Status', path: '/model-status', icon: '⚡' },
+  { text: 'Settings', path: '/settings', icon: '⚙️' },
 ];
 
 export default function Layout({ children }) {
   const [mobileOpen, setMobileOpen] = useState(false);
   const location = useLocation();
 
-  const handleDrawerToggle = () => {
-    setMobileOpen(!mobileOpen);
-  };
+  const handleDrawerToggle = () => setMobileOpen(!mobileOpen);
 
-  const drawer = (
-    <Box sx={{ height: '100%', display: 'flex', flexDirection: 'column', bgcolor: '#071a2f' }}>
-      {/* Logo Section */}
-      <Box sx={{ 
-        p: 3,
-        background: 'linear-gradient(135deg, #0d47a1 0%, #1565c0 100%)',
-        color: 'white'
+  const sidebar = (
+    <div style={{
+      width: drawerWidth,
+      height: '100vh',
+      display: 'flex',
+      flexDirection: 'column',
+      background: '#040b14',
+      borderRight: '1px solid rgba(66,165,245,0.08)',
+      fontFamily: '"DM Sans", "Helvetica Neue", sans-serif',
+      position: 'fixed',
+      top: 0,
+      left: 0,
+      zIndex: 1200,
+      overflowY: 'auto',
+    }}>
+      <style>{`
+        @import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&family=Syne:wght@700;800&display=swap');
+        .nav-item { transition: all 0.2s ease; cursor: pointer; text-decoration: none; }
+        .nav-item:hover { background: rgba(66,165,245,0.08) !important; }
+      `}</style>
+
+      {/* Logo */}
+      <div style={{
+        padding: '24px 24px 20px',
+        borderBottom: '1px solid rgba(255,255,255,0.04)',
       }}>
-        <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5, mb: 1 }}>
-          <Box sx={{
-            width: 40,
-            height: 40,
-            borderRadius: 2,
-            background: 'rgba(255, 255, 255, 0.2)',
-            backdropFilter: 'blur(10px)',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            border: '2px solid rgba(255, 255, 255, 0.3)'
+        <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+          <div style={{
+            width: '36px', height: '36px', borderRadius: '9px',
+            background: 'linear-gradient(135deg, #0d47a1, #42a5f5)',
+            display: 'flex', alignItems: 'center', justifyContent: 'center',
+            boxShadow: '0 0 16px rgba(66,165,245,0.3)',
           }}>
-            <ShieldIcon sx={{ fontSize: 24 }} />
-          </Box>
-          <Box>
-            <Typography variant="h6" fontWeight="bold" sx={{ lineHeight: 1.2 }}>
+            <svg width="18" height="18" viewBox="0 0 16 16" fill="none">
+              <path d="M8 1L2 3.5v4.5c0 3.59 2.55 6.95 6 7.77 3.45-.82 6-4.18 6-7.77V3.5L8 1z" fill="white" opacity="0.9"/>
+            </svg>
+          </div>
+          <div>
+            <div style={{
+              fontFamily: '"Syne", sans-serif',
+              fontWeight: 700, fontSize: '16px', color: '#fff',
+              lineHeight: 1.2,
+            }}>
               CloudGuard
-            </Typography>
-            <Typography variant="caption" sx={{ opacity: 0.9 }}>
+            </div>
+            <div style={{
+              fontSize: '11px', color: '#42a5f5',
+              fontWeight: 500, letterSpacing: '0.05em',
+            }}>
               AI Security
-            </Typography>
-          </Box>
-        </Box>
-      </Box>
+            </div>
+          </div>
+        </div>
+      </div>
 
       {/* Navigation */}
-      <Box sx={{ flex: 1, py: 2 }}>
-        <Typography 
-          variant="overline" 
-          sx={{ 
-            px: 3, 
-            color: 'rgba(255,255,255,0.4)',
-            fontWeight: 'bold',
-            fontSize: '0.7rem',
-            letterSpacing: 1
-          }}
-        >
+      <div style={{ flex: 1, padding: '16px 12px' }}>
+        <div style={{
+          fontSize: '10px', letterSpacing: '0.15em', textTransform: 'uppercase',
+          color: 'rgba(255,255,255,0.25)', fontWeight: 600,
+          padding: '0 12px', marginBottom: '12px',
+        }}>
           Navigation
-        </Typography>
-        <List sx={{ px: 2, mt: 1 }}>
+        </div>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '2px' }}>
           {menuItems.map((item) => {
             const isActive = location.pathname === item.path;
             return (
-              <ListItem key={item.text} disablePadding sx={{ mb: 0.5 }}>
-                <ListItemButton
-                  component={Link}
-                  to={item.path}
-                  sx={{
-                    borderRadius: 2,
-                    py: 1.5,
-                    bgcolor: isActive ? 'rgba(66, 165, 245, 0.15)' : 'transparent',
-                    color: isActive ? '#42a5f5' : 'rgba(255,255,255,0.7)',
-                    '&:hover': {
-                      bgcolor: isActive ? 'rgba(66, 165, 245, 0.2)' : 'rgba(255,255,255,0.05)',
-                    },
-                    transition: 'all 0.2s',
-                    '& .MuiListItemIcon-root': {
-                      color: isActive ? '#42a5f5' : 'rgba(255,255,255,0.5)',
-                      minWidth: 40
-                    }
-                  }}
-                >
-                  <ListItemIcon>{item.icon}</ListItemIcon>
-                  <ListItemText 
-                    primary={item.text}
-                    primaryTypographyProps={{
-                      fontWeight: isActive ? 'bold' : 'medium',
-                      fontSize: '0.95rem'
-                    }}
-                  />
-                </ListItemButton>
-              </ListItem>
+              <Link
+                key={item.text}
+                to={item.path}
+                className="nav-item"
+                style={{
+                  display: 'flex', alignItems: 'center', gap: '12px',
+                  padding: '10px 14px', borderRadius: '8px',
+                  background: isActive ? 'rgba(66,165,245,0.12)' : 'transparent',
+                  border: isActive ? '1px solid rgba(66,165,245,0.2)' : '1px solid transparent',
+                  color: isActive ? '#42a5f5' : 'rgba(255,255,255,0.55)',
+                  fontSize: '14px', fontWeight: isActive ? 600 : 400,
+                  textDecoration: 'none',
+                }}
+              >
+                <span style={{ fontSize: '16px', width: '20px', textAlign: 'center' }}>{item.icon}</span>
+                {item.text}
+                {isActive && (
+                  <div style={{
+                    marginLeft: 'auto', width: '4px', height: '4px',
+                    borderRadius: '50%', background: '#42a5f5',
+                    boxShadow: '0 0 6px #42a5f5',
+                  }} />
+                )}
+              </Link>
             );
           })}
-        </List>
-      </Box>
+        </div>
+      </div>
 
       {/* Footer */}
-      <Box sx={{ p: 3, borderTop: '1px solid', borderColor: 'rgba(255,255,255,0.06)' }}>
-        <Box sx={{ 
-          p: 2, 
-          borderRadius: 2,
-          background: 'rgba(102, 187, 106, 0.08)',
-          border: '1px solid',
-          borderColor: 'rgba(102, 187, 106, 0.25)'
+      <div style={{
+        padding: '16px',
+        borderTop: '1px solid rgba(255,255,255,0.04)',
+      }}>
+        <div style={{
+          padding: '12px 14px', borderRadius: '10px',
+          background: 'rgba(102,187,106,0.06)',
+          border: '1px solid rgba(102,187,106,0.15)',
         }}>
-          <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mb: 1 }}>
-            <Box sx={{
-              width: 8,
-              height: 8,
-              borderRadius: '50%',
-              bgcolor: 'success.main',
+          <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '4px' }}>
+            <div style={{
+              width: '7px', height: '7px', borderRadius: '50%',
+              background: '#66bb6a', boxShadow: '0 0 6px #66bb6a',
               animation: 'pulse 2s infinite',
-              '@keyframes pulse': {
-                '0%, 100%': { opacity: 1 },
-                '50%': { opacity: 0.5 }
-              }
             }} />
-            <Typography variant="caption" fontWeight="bold" color="success.main">
+            <span style={{ fontSize: '12px', fontWeight: 600, color: '#66bb6a' }}>
               System Online
-            </Typography>
-          </Box>
-          <Typography variant="caption" color="rgba(255,255,255,0.5)" display="block">
+            </span>
+          </div>
+          <div style={{ fontSize: '11px', color: 'rgba(255,255,255,0.3)' }}>
             All services operational
-          </Typography>
-        </Box>
-      </Box>
-    </Box>
+          </div>
+        </div>
+        <style>{`
+          @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.4} }
+        `}</style>
+      </div>
+    </div>
   );
 
   return (
-    <Box sx={{ display: 'flex' }}>
-      <AppBar
-        position="fixed"
-        elevation={0}
-        sx={{
-          width: { sm: `calc(100% - ${drawerWidth}px)` },
-          ml: { sm: `${drawerWidth}px` },
-          bgcolor: '#0a1929',
-          borderBottom: '1px solid',
-          borderColor: 'rgba(255,255,255,0.08)',
-          boxShadow: '0 1px 3px rgba(0,0,0,0.2)',
-          backdropFilter: 'blur(20px)',
-        }}
-      >
-        <Toolbar>
-          <IconButton
-            color="primary"
-            edge="start"
-            onClick={handleDrawerToggle}
-            sx={{ mr: 2, display: { sm: 'none' } }}
-          >
-            <MenuIcon />
-          </IconButton>
-          <Box sx={{ display: 'flex', alignItems: 'center', gap: 2, flexGrow: 1 }}>
-            <Box sx={{
-              px: 2,
-              py: 0.5,
-              borderRadius: 1,
-              background: 'rgba(66, 165, 245, 0.12)',
-              border: '1px solid',
-              borderColor: 'rgba(66, 165, 245, 0.3)'
-            }}>
-              <Typography 
-                variant="h6" 
-                noWrap 
-                component="div"
-                sx={{
-                  fontWeight: 'bold',
-                  color: '#42a5f5',
-                }}
-              >
-                Security Scanning Platform
-              </Typography>
-            </Box>
-            <Chip 
-              label="v2.5" 
-              size="small" 
-              sx={{ 
-                fontWeight: 'bold',
-                bgcolor: 'rgba(102, 187, 106, 0.15)',
-                color: '#66bb6a',
-                border: '1px solid rgba(102, 187, 106, 0.3)'
-              }} 
-            />
-          </Box>
-        </Toolbar>
-      </AppBar>
-      <Box
-        component="nav"
-        sx={{ width: { sm: drawerWidth }, flexShrink: { sm: 0 } }}
-      >
-        <Drawer
-          variant="temporary"
-          open={mobileOpen}
-          onClose={handleDrawerToggle}
-          ModalProps={{
-            keepMounted: true,
-          }}
-          sx={{
-            display: { xs: 'block', sm: 'none' },
-            '& .MuiDrawer-paper': { 
-              boxSizing: 'border-box', 
-              width: drawerWidth,
-              border: 'none',
-              bgcolor: '#071a2f'
-            },
-          }}
-        >
-          {drawer}
-        </Drawer>
-        <Drawer
-          variant="permanent"
-          sx={{
-            display: { xs: 'none', sm: 'block' },
-            '& .MuiDrawer-paper': { 
-              boxSizing: 'border-box', 
-              width: drawerWidth,
-              border: 'none',
-              borderRight: '1px solid',
-              borderColor: 'rgba(255,255,255,0.06)',
-              bgcolor: '#071a2f'
-            },
-          }}
-          open
-        >
-          {drawer}
-        </Drawer>
-      </Box>
-      <Box
-        component="main"
-        sx={{
-          flexGrow: 1,
-          p: 4,
-          width: { sm: `calc(100% - ${drawerWidth}px)` },
-          bgcolor: '#0a1929',
-          minHeight: '100vh'
-        }}
-      >
-        <Toolbar />
+    <div style={{ display: 'flex', minHeight: '100vh', background: '#060e1a' }}>
+      {/* Mobile hamburger */}
+      <div style={{
+        position: 'fixed', top: 0, left: 0, right: 0, height: '56px',
+        display: 'none', // hidden on desktop
+        zIndex: 1300,
+        background: 'rgba(6,14,26,0.9)', backdropFilter: 'blur(20px)',
+        borderBottom: '1px solid rgba(255,255,255,0.06)',
+        alignItems: 'center', padding: '0 16px',
+      }}>
+        <button onClick={handleDrawerToggle} style={{
+          background: 'none', border: 'none', color: '#42a5f5',
+          fontSize: '24px', cursor: 'pointer',
+        }}>
+          ☰
+        </button>
+        <span style={{
+          fontFamily: '"Syne", sans-serif',
+          fontWeight: 700, fontSize: '15px', color: '#fff',
+          marginLeft: '12px',
+        }}>
+          CloudGuard <span style={{ color: '#42a5f5' }}>AI</span>
+        </span>
+      </div>
+
+      {/* Desktop Sidebar */}
+      <nav>{sidebar}</nav>
+
+      {/* Top Bar */}
+      <div style={{
+        position: 'fixed', top: 0,
+        left: drawerWidth, right: 0, height: '56px',
+        background: 'rgba(6,14,26,0.85)', backdropFilter: 'blur(20px)',
+        borderBottom: '1px solid rgba(255,255,255,0.06)',
+        display: 'flex', alignItems: 'center',
+        padding: '0 28px', zIndex: 1100,
+        fontFamily: '"DM Sans", sans-serif',
+      }}>
+        <div style={{
+          padding: '5px 14px', borderRadius: '6px',
+          background: 'rgba(66,165,245,0.08)',
+          border: '1px solid rgba(66,165,245,0.2)',
+        }}>
+          <span style={{
+            fontFamily: '"Syne", sans-serif',
+            fontWeight: 700, fontSize: '14px', color: '#42a5f5',
+          }}>
+            Security Scanning Platform
+          </span>
+        </div>
+        <div style={{
+          marginLeft: '12px', padding: '3px 10px', borderRadius: '99px',
+          background: 'rgba(102,187,106,0.1)',
+          border: '1px solid rgba(102,187,106,0.25)',
+          fontSize: '11px', fontWeight: 600, color: '#66bb6a',
+        }}>
+          v2.5
+        </div>
+      </div>
+
+      {/* Main Content */}
+      <main style={{
+        flex: 1,
+        marginLeft: drawerWidth,
+        marginTop: '56px',
+        padding: '32px',
+        background: '#060e1a',
+        minHeight: 'calc(100vh - 56px)',
+        fontFamily: '"DM Sans", "Helvetica Neue", sans-serif',
+      }}>
         {children || <Outlet />}
-      </Box>
-    </Box>
+      </main>
+    </div>
   );
 }

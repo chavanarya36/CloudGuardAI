@@ -112,6 +112,13 @@ vi.mock('../components/enhanced/FindingsCard', () => ({
 vi.mock('../components/enhanced/EnhancedUpload', () => ({
   default: (props) => React.createElement('div', { 'data-testid': 'enhanced-upload' }, 'Upload'),
 }));
+vi.mock('../components/enhanced/CurrentScanBanner', () => ({
+  default: () => null,
+}));
+vi.mock('../context/ScanContext', () => ({
+  useLastScan: () => ({ lastScan: null, recordScan: vi.fn(), clearLastScan: vi.fn() }),
+  ScanProvider: ({ children }) => children,
+}));
 
 // ── Import components after mocks ──────────────────────────────────
 import * as clientApi from '../api/client';
@@ -241,12 +248,12 @@ describe('Dashboard Page', () => {
     clientApi.getScanStats.mockResolvedValue({
       total_scans: 10,
       findings_by_severity: { CRITICAL: 1, HIGH: 2, MEDIUM: 3, LOW: 4, INFO: 0 },
-      average_scores: { unified_risk: 0.2 },
+      average_scores: { unified_risk: 0.2, ml_score: 0, rules_score: 0, llm_score: 0, secrets_score: 0, cve_score: 0, compliance_score: 0 },
       trend_30_days: [],
     });
     render(<Providers><Dashboard /></Providers>);
-    await waitFor(() => expect(screen.getByText('CRITICAL')).toBeInTheDocument());
-    expect(screen.getByText('HIGH')).toBeInTheDocument();
+    await waitFor(() => expect(screen.getByText(/CRITICAL/)).toBeInTheDocument());
+    expect(screen.getByText(/HIGH/)).toBeInTheDocument();
     expect(screen.getByText('MEDIUM')).toBeInTheDocument();
   });
 
@@ -288,7 +295,8 @@ describe('Settings Page', () => {
 
   it('shows Adaptive Learning section', () => {
     render(<Providers><Settings /></Providers>);
-    expect(screen.getByText('Adaptive Learning')).toBeInTheDocument();
+    const elements = screen.getAllByText('Adaptive Learning');
+    expect(elements.length).toBeGreaterThan(0);
   });
 
   it('calls setApiKey when Save Key is clicked with valid input', () => {
@@ -699,7 +707,8 @@ describe('Layout Component', () => {
     );
     const navItems = ['Scan', 'Dashboard', 'Learning', 'History', 'Feedback', 'Model Status', 'Settings'];
     for (const item of navItems) {
-      expect(screen.getByText(item)).toBeInTheDocument();
+      const elements = screen.getAllByText(item);
+      expect(elements.length).toBeGreaterThan(0);
     }
   });
 
@@ -709,7 +718,8 @@ describe('Layout Component', () => {
         <Layout><div>Status</div></Layout>
       </Providers>
     );
-    expect(screen.getByText('System Online')).toBeInTheDocument();
+    const elements = screen.getAllByText('System Online');
+    expect(elements.length).toBeGreaterThan(0);
   });
 
   it('navigation links point to correct paths', () => {
@@ -718,7 +728,8 @@ describe('Layout Component', () => {
         <Layout><div>Links</div></Layout>
       </Providers>
     );
-    const settingsLink = screen.getByText('Settings').closest('a');
+    const settingsLinks = screen.getAllByText('Settings');
+    const settingsLink = settingsLinks[0].closest('a');
     expect(settingsLink).toHaveAttribute('href', '/settings');
   });
 });

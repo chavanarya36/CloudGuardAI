@@ -1,30 +1,22 @@
 import { useState, useEffect } from 'react';
 import {
-  Box,
-  Typography,
-  Card,
-  CardContent,
-  TextField,
-  Button,
-  Select,
-  MenuItem,
-  FormControl,
-  InputLabel,
-  Alert,
-  List,
-  ListItem,
-  ListItemText,
-  Chip,
-  Paper,
-  Rating,
+  Select, MenuItem, TextField, Rating, Alert,
 } from '@mui/material';
-import MessageIcon from '@mui/icons-material/Message';
-import SendIcon from '@mui/icons-material/Send';
-import CheckCircleIcon from '@mui/icons-material/CheckCircle';
-import StarIcon from '@mui/icons-material/Star';
-import EmailIcon from '@mui/icons-material/Email';
-import ForumIcon from '@mui/icons-material/Forum';
 import { listScans, submitFeedback, listFeedback } from '../api/client';
+
+function GlassCard({ children, style }) {
+  return (
+    <div style={{
+      background: 'rgba(10,22,38,0.8)',
+      border: '1px solid rgba(255,255,255,0.06)',
+      borderRadius: '14px', padding: '28px',
+      backdropFilter: 'blur(8px)',
+      ...style,
+    }}>
+      {children}
+    </div>
+  );
+}
 
 export default function Feedback() {
   const [scans, setScans] = useState([]);
@@ -42,8 +34,7 @@ export default function Feedback() {
     const fetchData = async () => {
       try {
         const [scansData, feedbacksData] = await Promise.all([
-          listScans(),
-          listFeedback(),
+          listScans(), listFeedback(),
         ]);
         setScans(scansData);
         setFeedbacks(feedbacksData);
@@ -51,312 +42,249 @@ export default function Feedback() {
         setError('Failed to load data');
       }
     };
-
     fetchData();
   }, []);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setError(null);
-    setSuccess(null);
-
+    setError(null); setSuccess(null);
     try {
-      const feedbackData = {
+      await submitFeedback({
         scan_id: parseInt(selectedScan),
         is_correct: isCorrect === '' ? null : parseInt(isCorrect),
         adjusted_severity: adjustedSeverity || null,
         user_comment: comment || null,
-      };
-
-      await submitFeedback(feedbackData);
+      });
       setSuccess('Feedback submitted successfully!');
       setSubmitted(true);
-      
-      // Reset form after delay
       setTimeout(() => {
-        setSelectedScan('');
-        setIsCorrect('');
-        setAdjustedSeverity('');
-        setComment('');
-        setRating(0);
-        setSubmitted(false);
-        setSuccess(null);
+        setSelectedScan(''); setIsCorrect(''); setAdjustedSeverity('');
+        setComment(''); setRating(0); setSubmitted(false); setSuccess(null);
       }, 3000);
-      
-      // Refresh feedback list
       const feedbacksData = await listFeedback();
       setFeedbacks(feedbacksData);
-      
     } catch (err) {
       setError(err.response?.data?.detail || 'Failed to submit feedback');
     }
   };
 
+  const muiDarkSx = {
+    '& .MuiOutlinedInput-root': {
+      color: 'rgba(255,255,255,0.8)',
+      '& fieldset': { borderColor: 'rgba(255,255,255,0.12)' },
+      '&:hover fieldset': { borderColor: 'rgba(66,165,245,0.4)' },
+      '&.Mui-focused fieldset': { borderColor: '#42a5f5' },
+    },
+    '& .MuiInputLabel-root': { color: 'rgba(255,255,255,0.4)' },
+    '& .MuiSelect-icon': { color: 'rgba(255,255,255,0.4)' },
+  };
+
   return (
-    <Box sx={{ 
-      minHeight: '100vh',
-      background: 'linear-gradient(to bottom, rgba(25, 118, 210, 0.04), transparent)',
-      py: 6
-    }}>
-      <Box sx={{ maxWidth: 1200, mx: 'auto', px: 3 }}>
-        {/* Header */}
-        <Box sx={{ textAlign: 'center', mb: 8 }}>
-          <Box sx={{
-            display: 'inline-flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            width: 80,
-            height: 80,
-            borderRadius: '50%',
-            background: 'linear-gradient(135deg, #1976d2 0%, #1565c0 100%)',
-            mb: 3,
-            boxShadow: '0 8px 24px rgba(25, 118, 210, 0.3)'
-          }}>
-            <MessageIcon sx={{ fontSize: 40, color: 'white' }} />
-          </Box>
-          <Typography variant="h3" fontWeight="bold" gutterBottom>
-            We Value Your Feedback
-          </Typography>
-          <Typography variant="h6" color="text.secondary" sx={{ maxWidth: 600, mx: 'auto' }}>
-            Help us improve CloudGuard AI by sharing your thoughts and suggestions
-          </Typography>
-        </Box>
+    <div style={{ fontFamily: '"DM Sans", sans-serif' }}>
+      <style>{`
+        @import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&family=Syne:wght@700;800&display=swap');
+        .feedback-btn { cursor:pointer; transition:all 0.25s ease; }
+        .feedback-btn:hover { transform:translateY(-2px); box-shadow:0 8px 24px rgba(66,165,245,0.3); }
+        .contact-card { transition:all 0.3s ease; }
+        .contact-card:hover { border-color:rgba(66,165,245,0.3)!important; transform:translateY(-2px); }
+      `}</style>
 
-        {/* Feedback Form */}
+      {/* Header */}
+      <div style={{ textAlign: 'center', marginBottom: '48px' }}>
+        <div style={{
+          width: '64px', height: '64px', borderRadius: '50%',
+          background: 'linear-gradient(135deg, #1976d2, #42a5f5)',
+          display: 'inline-flex', alignItems: 'center', justifyContent: 'center',
+          marginBottom: '20px',
+          boxShadow: '0 0 32px rgba(66,165,245,0.3)',
+        }}>
+          <span style={{ fontSize: '28px' }}>💬</span>
+        </div>
+        <h1 style={{
+          fontFamily: '"Syne", sans-serif',
+          fontSize: 'clamp(28px, 4vw, 36px)', fontWeight: 800,
+          color: '#fff', margin: '0 0 10px', letterSpacing: '-0.02em',
+        }}>
+          We Value Your Feedback
+        </h1>
+        <p style={{ color: 'rgba(255,255,255,0.4)', fontSize: '15px', maxWidth: '500px', margin: '0 auto' }}>
+          Help us improve CloudGuard AI by sharing your thoughts and suggestions
+        </p>
+      </div>
+
+      {/* Form */}
+      <div style={{ maxWidth: '700px', margin: '0 auto' }}>
         {submitted ? (
-          <Card sx={{
-            maxWidth: 800,
-            mx: 'auto',
-            border: '2px solid',
-            borderColor: 'success.main',
-            background: 'linear-gradient(135deg, rgba(46, 125, 50, 0.05), rgba(76, 175, 80, 0.05))',
-            boxShadow: 3
-          }}>
-            <CardContent sx={{ p: 8, textAlign: 'center' }}>
-              <Box sx={{
-                display: 'inline-flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                width: 80,
-                height: 80,
-                borderRadius: '50%',
-                bgcolor: 'rgba(76,175,80,0.15)',
-                mb: 3
-              }}>
-                <CheckCircleIcon sx={{ fontSize: 48, color: 'success.main' }} />
-              </Box>
-              <Typography variant="h4" fontWeight="bold" gutterBottom>
-                Thank You!
-              </Typography>
-              <Typography variant="body1" color="text.secondary">
-                Your feedback has been submitted successfully
-              </Typography>
-            </CardContent>
-          </Card>
+          <GlassCard style={{ textAlign: 'center', padding: '48px', border: '1px solid rgba(102,187,106,0.3)' }}>
+            <div style={{ fontSize: '48px', marginBottom: '16px' }}>✅</div>
+            <div style={{
+              fontFamily: '"Syne", sans-serif',
+              fontSize: '24px', fontWeight: 800, color: '#fff', marginBottom: '8px',
+            }}>
+              Thank You!
+            </div>
+            <p style={{ color: 'rgba(255,255,255,0.45)', fontSize: '14px' }}>
+              Your feedback has been submitted successfully
+            </p>
+          </GlassCard>
         ) : (
-          <Card sx={{
-            maxWidth: 800,
-            mx: 'auto',
-            border: '2px solid',
-            borderColor: 'divider',
-            boxShadow: 4,
-            '&:hover': {
-              boxShadow: 8,
-              borderColor: 'primary.main'
-            },
-            transition: 'all 0.3s'
-          }}>
-            <CardContent sx={{ p: 4 }}>
-              <Typography variant="h5" fontWeight="bold" gutterBottom>
-                Share Your Experience
-              </Typography>
-              <Typography variant="body2" color="text.secondary" paragraph>
-                Tell us what you think about CloudGuard AI
-              </Typography>
+          <GlassCard>
+            <div style={{
+              fontFamily: '"Syne", sans-serif',
+              fontSize: '18px', fontWeight: 700, color: '#fff', marginBottom: '6px',
+            }}>
+              Share Your Experience
+            </div>
+            <p style={{ color: 'rgba(255,255,255,0.4)', fontSize: '13px', marginBottom: '24px' }}>
+              Tell us what you think about CloudGuard AI
+            </p>
 
-              <form onSubmit={handleSubmit}>
-                <Box display="flex" flexDirection="column" gap={3} mt={3}>
-                  {/* Rating */}
-                  <Box>
-                    <Typography variant="body1" fontWeight="medium" gutterBottom>
-                      How would you rate your experience?
-                    </Typography>
-                    <Rating
-                      value={rating}
-                      onChange={(event, newValue) => setRating(newValue)}
-                      size="large"
-                      icon={<StarIcon sx={{ fontSize: 32 }} />}
-                      emptyIcon={<StarIcon sx={{ fontSize: 32 }} />}
-                    />
-                  </Box>
+            <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
+              {/* Rating */}
+              <div>
+                <div style={{ fontSize: '13px', color: 'rgba(255,255,255,0.5)', marginBottom: '8px', fontWeight: 500 }}>
+                  How would you rate your experience?
+                </div>
+                <Rating
+                  value={rating}
+                  onChange={(event, newValue) => setRating(newValue)}
+                  size="large"
+                  sx={{ '& .MuiRating-iconFilled': { color: '#42a5f5' } }}
+                />
+              </div>
 
-                  <FormControl fullWidth>
-                    <InputLabel>Select Scan</InputLabel>
-                    <Select
-                      value={selectedScan}
-                      onChange={(e) => setSelectedScan(e.target.value)}
-                      required
-                    >
-                      {scans.map((scan) => (
-                        <MenuItem key={scan.id} value={scan.id}>
-                          {scan.filename} - Score: {scan.unified_risk_score?.toFixed(2) || 'N/A'}
-                        </MenuItem>
-                      ))}
-                    </Select>
-                  </FormControl>
+              <Select value={selectedScan} onChange={(e) => setSelectedScan(e.target.value)} displayEmpty fullWidth size="small" sx={muiDarkSx} required>
+                <MenuItem value="" disabled>Select Scan</MenuItem>
+                {scans.map((scan) => (
+                  <MenuItem key={scan.id} value={scan.id}>
+                    {scan.filename} - Score: {scan.unified_risk_score?.toFixed(2) || 'N/A'}
+                  </MenuItem>
+                ))}
+              </Select>
 
-                  <FormControl fullWidth>
-                    <InputLabel>Was the assessment correct?</InputLabel>
-                    <Select
-                      value={isCorrect}
-                      onChange={(e) => setIsCorrect(e.target.value)}
-                    >
-                      <MenuItem value="">Not evaluated</MenuItem>
-                      <MenuItem value="1">Correct</MenuItem>
-                      <MenuItem value="0">Incorrect</MenuItem>
-                    </Select>
-                  </FormControl>
+              <Select value={isCorrect} onChange={(e) => setIsCorrect(e.target.value)} displayEmpty fullWidth size="small" sx={muiDarkSx}>
+                <MenuItem value="">Was the assessment correct?</MenuItem>
+                <MenuItem value="1">Correct</MenuItem>
+                <MenuItem value="0">Incorrect</MenuItem>
+              </Select>
 
-                  <FormControl fullWidth>
-                    <InputLabel>Adjusted Severity (optional)</InputLabel>
-                    <Select
-                      value={adjustedSeverity}
-                      onChange={(e) => setAdjustedSeverity(e.target.value)}
-                    >
-                      <MenuItem value="">None</MenuItem>
-                      <MenuItem value="critical">Critical</MenuItem>
-                      <MenuItem value="high">High</MenuItem>
-                      <MenuItem value="medium">Medium</MenuItem>
-                      <MenuItem value="low">Low</MenuItem>
-                    </Select>
-                  </FormControl>
+              <Select value={adjustedSeverity} onChange={(e) => setAdjustedSeverity(e.target.value)} displayEmpty fullWidth size="small" sx={muiDarkSx}>
+                <MenuItem value="">Adjusted Severity (optional)</MenuItem>
+                <MenuItem value="critical">Critical</MenuItem>
+                <MenuItem value="high">High</MenuItem>
+                <MenuItem value="medium">Medium</MenuItem>
+                <MenuItem value="low">Low</MenuItem>
+              </Select>
 
-                  <TextField
-                    label="Your Feedback"
-                    multiline
-                    rows={6}
-                    value={comment}
-                    onChange={(e) => setComment(e.target.value)}
-                    placeholder="Tell us about your experience, suggestions for improvement, or report any issues..."
-                    helperText={`${comment.length} characters`}
-                  />
+              <TextField
+                label="Your Feedback"
+                multiline rows={5}
+                value={comment} onChange={(e) => setComment(e.target.value)}
+                placeholder="Tell us about your experience, suggestions for improvement, or report any issues..."
+                helperText={`${comment.length} characters`}
+                fullWidth sx={muiDarkSx}
+              />
 
-                  {error && <Alert severity="error">{error}</Alert>}
-                  {success && <Alert severity="success">{success}</Alert>}
+              {error && <Alert severity="error" sx={{ borderRadius: 2 }}>{error}</Alert>}
+              {success && <Alert severity="success" sx={{ borderRadius: 2 }}>{success}</Alert>}
 
-                  <Button 
-                    type="submit" 
-                    variant="contained" 
-                    size="large"
-                    disabled={!selectedScan}
-                    startIcon={<SendIcon />}
-                    sx={{ 
-                      py: 1.5,
-                      background: 'linear-gradient(135deg, #1976d2 0%, #1565c0 100%)',
-                      '&:hover': {
-                        background: 'linear-gradient(135deg, #1565c0 0%, #0d47a1 100%)',
-                      }
-                    }}
-                  >
-                    Submit Feedback
-                  </Button>
-                </Box>
-              </form>
-            </CardContent>
-          </Card>
+              <button type="submit" className="feedback-btn" disabled={!selectedScan} style={{
+                padding: '14px 28px', borderRadius: '10px', border: 'none',
+                background: selectedScan ? 'linear-gradient(135deg, #1976d2, #42a5f5)' : 'rgba(255,255,255,0.08)',
+                color: selectedScan ? '#fff' : 'rgba(255,255,255,0.3)',
+                fontSize: '15px', fontWeight: 600,
+                fontFamily: '"DM Sans", sans-serif',
+                display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px',
+                cursor: selectedScan ? 'pointer' : 'not-allowed',
+              }}>
+                Submit Feedback
+                <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                  <path d="M2 14l12-6L2 2v4.67l8 1.33-8 1.33V14z" fill="currentColor"/>
+                </svg>
+              </button>
+            </form>
+          </GlassCard>
         )}
 
         {/* Contact Cards */}
-        <Box sx={{ display: 'grid', gridTemplateColumns: { xs: '1fr', md: '1fr 1fr' }, gap: 3, mt: 6, maxWidth: 800, mx: 'auto' }}>
-          <Card sx={{ 
-            border: '2px solid',
-            borderColor: 'divider',
-            '&:hover': {
-              borderColor: 'primary.main',
-              boxShadow: 4
-            },
-            transition: 'all 0.3s'
+        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '14px', marginTop: '28px' }}>
+          <div className="contact-card" style={{
+            background: 'rgba(10,22,38,0.8)', border: '1px solid rgba(255,255,255,0.06)',
+            borderRadius: '14px', padding: '20px', backdropFilter: 'blur(8px)',
           }}>
-            <CardContent sx={{ p: 3 }}>
-              <Box sx={{ display: 'flex', alignItems: 'center', gap: 2, mb: 1 }}>
-                <EmailIcon color="primary" />
-                <Typography variant="h6" fontWeight="bold">
-                  Email Support
-                </Typography>
-              </Box>
-              <Typography variant="body2" color="text.secondary">
-                support@cloudguardai.com
-              </Typography>
-            </CardContent>
-          </Card>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '8px' }}>
+              <span style={{ fontSize: '20px' }}>📧</span>
+              <span style={{ fontFamily: '"Syne", sans-serif', fontWeight: 700, color: '#fff', fontSize: '15px' }}>
+                Email Support
+              </span>
+            </div>
+            <span style={{ fontSize: '13px', color: 'rgba(255,255,255,0.4)' }}>support@cloudguardai.com</span>
+          </div>
 
-          <Card sx={{ 
-            border: '2px solid',
-            borderColor: 'divider',
-            '&:hover': {
-              borderColor: 'primary.main',
-              boxShadow: 4
-            },
-            transition: 'all 0.3s'
+          <div className="contact-card" style={{
+            background: 'rgba(10,22,38,0.8)', border: '1px solid rgba(255,255,255,0.06)',
+            borderRadius: '14px', padding: '20px', backdropFilter: 'blur(8px)',
           }}>
-            <CardContent sx={{ p: 3 }}>
-              <Box sx={{ display: 'flex', alignItems: 'center', gap: 2, mb: 1 }}>
-                <ForumIcon color="primary" />
-                <Typography variant="h6" fontWeight="bold">
-                  Community
-                </Typography>
-              </Box>
-              <Typography variant="body2" color="text.secondary">
-                Join our Discord server for discussions
-              </Typography>
-            </CardContent>
-          </Card>
-        </Box>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '8px' }}>
+              <span style={{ fontSize: '20px' }}>💬</span>
+              <span style={{ fontFamily: '"Syne", sans-serif', fontWeight: 700, color: '#fff', fontSize: '15px' }}>
+                Community
+              </span>
+            </div>
+            <span style={{ fontSize: '13px', color: 'rgba(255,255,255,0.4)' }}>Join our Discord server for discussions</span>
+          </div>
+        </div>
 
         {/* Recent Feedback */}
         {feedbacks.length > 0 && (
-          <Box sx={{ mt: 8, maxWidth: 800, mx: 'auto' }}>
-            <Typography variant="h5" fontWeight="bold" gutterBottom>
+          <div style={{ marginTop: '40px' }}>
+            <h2 style={{
+              fontFamily: '"Syne", sans-serif',
+              fontSize: '18px', fontWeight: 700, color: '#fff', marginBottom: '16px',
+            }}>
               Recent Feedback
-            </Typography>
-            <Card sx={{ mt: 2, border: '2px solid', borderColor: 'divider' }}>
-              <List>
-                {feedbacks.slice(0, 10).map((fb, index) => (
-                  <ListItem key={fb.id} divider={index < 9}>
-                    <ListItemText
-                      primary={`Scan #${fb.scan_id}`}
-                      secondary={
-                        <Box sx={{ mt: 1 }}>
-                          {fb.is_correct !== null && (
-                            <Chip
-                              label={fb.is_correct === 1 ? 'Correct' : 'Incorrect'}
-                              color={fb.is_correct === 1 ? 'success' : 'error'}
-                              size="small"
-                              sx={{ mr: 1 }}
-                            />
-                          )}
-                          {fb.adjusted_severity && (
-                            <Chip
-                              label={`Adjusted: ${fb.adjusted_severity}`}
-                              size="small"
-                              sx={{ mr: 1 }}
-                            />
-                          )}
-                          {fb.user_comment && (
-                            <Typography variant="body2" sx={{ mt: 1 }}>
-                              {fb.user_comment}
-                            </Typography>
-                          )}
-                        </Box>
-                      }
-                    />
-                  </ListItem>
-                ))}
-              </List>
-            </Card>
-          </Box>
+            </h2>
+            <GlassCard style={{ padding: 0, overflow: 'hidden' }}>
+              {feedbacks.slice(0, 10).map((fb, index) => (
+                <div key={fb.id} style={{
+                  padding: '16px 24px',
+                  borderBottom: index < 9 ? '1px solid rgba(255,255,255,0.04)' : 'none',
+                }}>
+                  <div style={{ fontSize: '14px', fontWeight: 600, color: '#fff', marginBottom: '8px' }}>
+                    Scan #{fb.scan_id}
+                  </div>
+                  <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
+                    {fb.is_correct !== null && (
+                      <span style={{
+                        padding: '3px 10px', borderRadius: '99px', fontSize: '11px', fontWeight: 500,
+                        background: fb.is_correct === 1 ? 'rgba(102,187,106,0.15)' : 'rgba(239,83,80,0.15)',
+                        color: fb.is_correct === 1 ? '#66bb6a' : '#ef5350',
+                        border: `1px solid ${fb.is_correct === 1 ? 'rgba(102,187,106,0.3)' : 'rgba(239,83,80,0.3)'}`,
+                      }}>
+                        {fb.is_correct === 1 ? 'Correct' : 'Incorrect'}
+                      </span>
+                    )}
+                    {fb.adjusted_severity && (
+                      <span style={{
+                        padding: '3px 10px', borderRadius: '99px', fontSize: '11px', fontWeight: 500,
+                        background: 'rgba(66,165,245,0.12)', color: '#42a5f5',
+                        border: '1px solid rgba(66,165,245,0.25)',
+                      }}>
+                        Adjusted: {fb.adjusted_severity}
+                      </span>
+                    )}
+                  </div>
+                  {fb.user_comment && (
+                    <div style={{ fontSize: '13px', color: 'rgba(255,255,255,0.45)', marginTop: '8px', lineHeight: 1.5 }}>
+                      {fb.user_comment}
+                    </div>
+                  )}
+                </div>
+              ))}
+            </GlassCard>
+          </div>
         )}
-      </Box>
-    </Box>
+      </div>
+    </div>
   );
 }

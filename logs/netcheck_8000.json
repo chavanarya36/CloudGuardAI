@@ -22,10 +22,61 @@
                                   "IsIPv4MappedToIPv6":  false
                               }
                           ],
-    "PingSucceeded":  false,
-    "PingReplyDetails":  null,
+    "PingSucceeded":  true,
+    "PingReplyDetails":  {
+                             "Status":  0,
+                             "Address":  {
+                                             "Address":  16777343,
+                                             "AddressFamily":  2,
+                                             "ScopeId":  null,
+                                             "IsIPv6Multicast":  false,
+                                             "IsIPv6LinkLocal":  false,
+                                             "IsIPv6SiteLocal":  false,
+                                             "IsIPv6Teredo":  false,
+                                             "IsIPv4MappedToIPv6":  false
+                                         },
+                             "RoundtripTime":  0,
+                             "Options":  {
+                                             "Ttl":  128,
+                                             "DontFragment":  false
+                                         },
+                             "Buffer":  [
+                                            97,
+                                            98,
+                                            99,
+                                            100,
+                                            101,
+                                            102,
+                                            103,
+                                            104,
+                                            105,
+                                            106,
+                                            107,
+                                            108,
+                                            109,
+                                            110,
+                                            111,
+                                            112,
+                                            113,
+                                            114,
+                                            115,
+                                            116,
+                                            117,
+                                            118,
+                                            119,
+                                            97,
+                                            98,
+                                            99,
+                                            100,
+                                            101,
+                                            102,
+                                            103,
+                                            104,
+                                            105
+                                        ]
+                         },
     "TcpClientSocket":  null,
-    "TcpTestSucceeded":  true,
+    "TcpTestSucceeded":  false,
     "RemotePort":  8000,
     "TraceRoute":  null,
     "Detailed":  false,
@@ -36,7 +87,7 @@
     "NetRoute":  {
                      "CimClass":  {
                                       "CimSuperClassName":  "CIM_NextHopRoute",
-                                      "CimSuperClass":  "ROOT/standardcimv2:CIM_NextHopRoute",
+                                      "CimSuperClass":  "ROOT/StandardCimv2:CIM_NextHopRoute",
                                       "CimClassProperties":  "Caption Description ElementName InstanceID AdminDistance DestinationAddress IsStatic RouteMetric TypeOfRoute = 3 AddressFamily CompartmentId DestinationPrefix InterfaceAlias InterfaceIndex InterfaceMetric NextHop PreferredLifetime Protocol Publish State Store ValidLifetime",
                                       "CimClassQualifiers":  "UMLPackagePath = \"CIM::Network::Routes\" ClassVersion = \"1.0.0\" dynamic = True locale = 1033 provider = \"nettcpip\"",
                                       "CimClassMethods":  "Create Find",
@@ -67,7 +118,7 @@
                                                    "ValidLifetime = 10675199.02:48:05.4775807"
                                                ],
                      "CimSystemProperties":  {
-                                                 "Namespace":  "root/standardcimv2",
+                                                 "Namespace":  "ROOT/StandardCimv2",
                                                  "ServerName":  "BOOGEYMAN_36",
                                                  "ClassName":  "MSFT_NetRoute",
                                                  "Path":  null
@@ -76,7 +127,7 @@
     "SourceAddress":  {
                           "CimClass":  {
                                            "CimSuperClassName":  "CIM_IPProtocolEndpoint",
-                                           "CimSuperClass":  "ROOT/standardcimv2:CIM_IPProtocolEndpoint",
+                                           "CimSuperClass":  "ROOT/StandardCimv2:CIM_IPProtocolEndpoint",
                                            "CimClassProperties":  "Caption Description ElementName InstanceID CommunicationStatus DetailedStatus HealthState InstallDate Name OperatingStatus OperationalStatus PrimaryStatus Status StatusDescriptions AvailableRequestedStates EnabledDefault = 2 EnabledState OtherEnabledState RequestedState = 12 TimeOfLastStateChange TransitioningToState = 12 CreationClassName SystemCreationClassName SystemName NameFormat OtherTypeDescription ProtocolIFType = 4096 ProtocolType Address AddressOrigin = 0 AddressType IPv4Address IPv6Address IPVersionSupport PrefixLength SubnetMask AddressFamily AddressState InterfaceAlias InterfaceIndex IPAddress PreferredLifetime PrefixOrigin SkipAsSource Store SuffixOrigin Type ValidLifetime",
                                            "CimClassQualifiers":  "UMLPackagePath = \"CIM::Network::ProtocolEndpoints\" ClassVersion = \"1.0.0\" dynamic = True locale = 1033 provider = \"nettcpip\"",
                                            "CimClassMethods":  "RequestStateChange Create",
@@ -133,7 +184,7 @@
                                                         "ValidLifetime = 10675199.02:48:05.4775807"
                                                     ],
                           "CimSystemProperties":  {
-                                                      "Namespace":  "root/standardcimv2",
+                                                      "Namespace":  "ROOT/StandardCimv2",
                                                       "ServerName":  "BOOGEYMAN_36",
                                                       "ClassName":  "MSFT_NetIPAddress",
                                                       "Path":  null
@@ -148,7 +199,7 @@
                                     "CharacterSet":  1,
                                     "Section":  1,
                                     "DataLength":  8,
-                                    "TTL":  265995,
+                                    "TTL":  264609,
                                     "QueryType":  12,
                                     "Server":  "kubernetes.docker.internal"
                                 }

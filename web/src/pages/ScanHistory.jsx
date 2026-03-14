@@ -1,79 +1,32 @@
 import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import {
-  Box,
-  Card,
-  CardContent,
-  Typography,
-  TextField,
-  MenuItem,
-  Grid,
-  Table,
-  TableBody,
-  TableCell,
-  TableContainer,
-  TableHead,
-  TableRow,
-  Paper,
-  Chip,
-  IconButton,
-  Button,
-  Dialog,
-  DialogTitle,
-  DialogContent,
-  DialogActions,
+  TextField, MenuItem, Dialog, DialogTitle, DialogContent, DialogActions,
   LinearProgress,
-  Alert
 } from '@mui/material';
-import {
-  Visibility,
-  Delete,
-  FileDownload,
-  FilterList,
-  Refresh
-} from '@mui/icons-material';
 import { Line } from 'react-chartjs-2';
 import {
-  Chart as ChartJS,
-  CategoryScale,
-  LinearScale,
-  PointElement,
-  LineElement,
-  Title,
-  Tooltip,
-  Legend,
-  Filler
+  Chart as ChartJS, CategoryScale, LinearScale, PointElement, LineElement,
+  Title, Tooltip, Legend, Filler,
 } from 'chart.js';
-
 import apiClient, { listScans, getScan } from '../api/client';
 
-// Register ChartJS components
-ChartJS.register(
-  CategoryScale,
-  LinearScale,
-  PointElement,
-  LineElement,
-  Title,
-  Tooltip,
-  Legend,
-  Filler
-);
+ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend, Filler);
 
-const severityColors = {
-  CRITICAL: '#dc2626',
-  HIGH: '#ea580c',
-  MEDIUM: '#f59e0b',
-  LOW: '#84cc16',
-  INFO: '#3b82f6'
-};
+const severityColors = { CRITICAL: '#ef5350', HIGH: '#ffa726', MEDIUM: '#f9a825', LOW: '#66bb6a', INFO: '#42a5f5' };
+const scannerColors = { ML: '#ce93d8', Rules: '#ffa726', LLM: '#26c6da', Secrets: '#ab47bc', CVE: '#ef5350', Compliance: '#42a5f5' };
 
-const scannerColors = {
-  ML: '#8b5cf6',
-  Rules: '#f97316',
-  LLM: '#06b6d4',
-  Secrets: '#a855f7',
-  CVE: '#ef4444',
-  Compliance: '#3b82f6'
-};
+function GlassCard({ children, style }) {
+  return (
+    <div style={{
+      background: 'rgba(10,22,38,0.8)',
+      border: '1px solid rgba(255,255,255,0.06)',
+      borderRadius: '14px', padding: '24px',
+      backdropFilter: 'blur(8px)',
+      ...style,
+    }}>{children}</div>
+  );
+}
 
 function ScanHistory() {
   const [scans, setScans] = useState([]);
@@ -83,17 +36,13 @@ function ScanHistory() {
   const [dialogOpen, setDialogOpen] = useState(false);
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
   const [scanToDelete, setScanToDelete] = useState(null);
-  
-  // Filters
   const [severity, setSeverity] = useState('');
   const [scanner, setScanner] = useState('');
   const [startDate, setStartDate] = useState('');
   const [endDate, setEndDate] = useState('');
+  const navigate = useNavigate();
 
-  useEffect(() => {
-    fetchScans();
-    fetchStats();
-  }, [severity, scanner, startDate, endDate]);
+  useEffect(() => { fetchScans(); fetchStats(); }, [severity, scanner, startDate, endDate]);
 
   const fetchScans = async () => {
     try {
@@ -103,536 +52,295 @@ function ScanHistory() {
       if (scanner) params.append('scanner', scanner);
       if (startDate) params.append('start_date', startDate);
       if (endDate) params.append('end_date', endDate);
-      
       const response = await apiClient.get(`/scans?${params}`);
       setScans(response.data);
     } catch (error) {
       console.error('Failed to fetch scans:', error);
-    } finally {
-      setLoading(false);
-    }
+    } finally { setLoading(false); }
   };
 
   const fetchStats = async () => {
-    try {
-      const response = await apiClient.get('/scans/stats');
-      setStats(response.data);
-    } catch (error) {
-      console.error('Failed to fetch stats:', error);
-    }
+    try { const r = await apiClient.get('/scans/stats'); setStats(r.data); } catch (e) { /* ignore */ }
   };
 
   const handleViewScan = async (scanId) => {
-    try {
-      const data = await getScan(scanId);
-      setSelectedScan(data);
-      setDialogOpen(true);
-    } catch (error) {
-      console.error('Failed to fetch scan details:', error);
-    }
+    try { const data = await getScan(scanId); setSelectedScan(data); setDialogOpen(true); } catch (e) { /* ignore */ }
   };
 
   const handleDeleteScan = async () => {
     if (!scanToDelete) return;
-    
-    try {
-      await apiClient.delete(`/scans/${scanToDelete}`);
-      setDeleteDialogOpen(false);
-      setScanToDelete(null);
-      fetchScans();
-      fetchStats();
-    } catch (error) {
-      console.error('Failed to delete scan:', error);
-    }
+    try { await apiClient.delete(`/scans/${scanToDelete}`); setDeleteDialogOpen(false); setScanToDelete(null); fetchScans(); fetchStats(); } catch (e) { /* ignore */ }
   };
 
-  const confirmDelete = (scanId) => {
-    setScanToDelete(scanId);
-    setDeleteDialogOpen(true);
-  };
+  const confirmDelete = (scanId) => { setScanToDelete(scanId); setDeleteDialogOpen(true); };
 
   const exportScans = () => {
-    const dataStr = JSON.stringify(scans, null, 2);
-    const dataBlob = new Blob([dataStr], { type: 'application/json' });
-    const url = URL.createObjectURL(dataBlob);
-    const link = document.createElement('a');
-    link.href = url;
+    const blob = new Blob([JSON.stringify(scans, null, 2)], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a'); link.href = url;
     link.download = `scan-history-${new Date().toISOString()}.json`;
     link.click();
   };
 
   const getRiskColor = (score) => {
-    if (score >= 80) return '#dc2626';
-    if (score >= 60) return '#ea580c';
-    if (score >= 40) return '#f59e0b';
-    if (score >= 20) return '#84cc16';
-    return '#22c55e';
+    if (score >= 80) return '#ef5350';
+    if (score >= 60) return '#ffa726';
+    if (score >= 40) return '#f9a825';
+    return '#66bb6a';
   };
 
-  // Trend chart data
   const getTrendChartData = () => {
-    if (!stats || !stats.trend_30_days) return null;
-
+    if (!stats?.trend_30_days) return null;
     return {
       labels: stats.trend_30_days.map(d => d.date),
-      datasets: [
-        {
-          label: 'Scans',
-          data: stats.trend_30_days.map(d => d.count),
-          borderColor: '#3b82f6',
-          backgroundColor: 'rgba(59, 130, 246, 0.1)',
-          fill: true,
-          tension: 0.4
-        }
-      ]
+      datasets: [{
+        label: 'Scans', data: stats.trend_30_days.map(d => d.count),
+        borderColor: '#42a5f5', backgroundColor: 'rgba(66,165,245,0.08)',
+        fill: true, tension: 0.4, pointRadius: 2,
+      }],
     };
   };
 
   const chartOptions = {
-    responsive: true,
-    maintainAspectRatio: false,
-    plugins: {
-      legend: {
-        display: false
-      },
-      tooltip: {
-        backgroundColor: 'rgba(0, 0, 0, 0.8)',
-        padding: 12,
-        borderRadius: 8
-      }
-    },
+    responsive: true, maintainAspectRatio: false,
+    plugins: { legend: { display: false }, tooltip: { backgroundColor: '#0f2744', padding: 12, borderColor: 'rgba(255,255,255,0.1)', borderWidth: 1 } },
     scales: {
-      y: {
-        beginAtZero: true,
-        grid: {
-          color: 'rgba(0, 0, 0, 0.05)'
-        }
-      },
-      x: {
-        grid: {
-          display: false
-        }
-      }
-    }
+      y: { beginAtZero: true, grid: { color: 'rgba(255,255,255,0.04)' }, ticks: { color: 'rgba(255,255,255,0.3)', font: { size: 11 } } },
+      x: { grid: { display: false }, ticks: { color: 'rgba(255,255,255,0.3)', font: { size: 10 } } },
+    },
+  };
+
+  const muiDarkSx = {
+    '& .MuiOutlinedInput-root': { color: 'rgba(255,255,255,0.8)', '& fieldset': { borderColor: 'rgba(255,255,255,0.12)' }, '&:hover fieldset': { borderColor: 'rgba(66,165,245,0.4)' } },
+    '& .MuiInputLabel-root': { color: 'rgba(255,255,255,0.4)' },
+    '& .MuiSelect-icon': { color: 'rgba(255,255,255,0.4)' },
   };
 
   return (
-    <Box sx={{ p: 3 }}>
+    <div style={{ fontFamily: '"DM Sans", sans-serif' }}>
+      <style>{`
+        @import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&family=Syne:wght@700;800&display=swap');
+        .sh-btn { cursor:pointer; transition:all 0.2s ease; }
+        .sh-btn:hover { transform:translateY(-1px); filter:brightness(1.15); }
+        .scan-row { cursor:pointer; transition:all 0.15s ease; }
+        .scan-row:hover { background:rgba(66,165,245,0.06)!important; }
+      `}</style>
+
       {/* Header */}
-      <Box sx={{ mb: 4 }}>
-        <Typography variant="h4" sx={{ fontWeight: 700, mb: 1 }}>
+      <div style={{ marginBottom: '28px' }}>
+        <div style={{ fontSize: '11px', letterSpacing: '0.2em', textTransform: 'uppercase', color: 'rgba(66,165,245,0.7)', fontWeight: 600, marginBottom: '8px' }}>
+          Historical Data
+        </div>
+        <h1 style={{ fontFamily: '"Syne", sans-serif', fontSize: '28px', fontWeight: 800, color: '#fff', margin: '0 0 8px', letterSpacing: '-0.02em' }}>
           Scan History
-        </Typography>
-        <Typography variant="body1" color="text.secondary">
+        </h1>
+        <p style={{ color: 'rgba(255,255,255,0.4)', fontSize: '14px', margin: 0 }}>
           View and analyze past security scans
-        </Typography>
-      </Box>
+        </p>
+      </div>
 
-      {/* Statistics Cards */}
+      {/* Stats Cards */}
       {stats && (
-        <Grid container spacing={3} sx={{ mb: 4 }}>
-          {/* Total Scans */}
-          <Grid item xs={12} md={3}>
-            <Card sx={{ 
-              background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
-              color: 'white'
-            }}>
-              <CardContent>
-                <Typography variant="h3" sx={{ fontWeight: 700 }}>
-                  {stats.total_scans}
-                </Typography>
-                <Typography variant="body2" sx={{ opacity: 0.9 }}>
-                  Total Scans
-                </Typography>
-              </CardContent>
-            </Card>
-          </Grid>
-
-          {/* Average Risk */}
-          <Grid item xs={12} md={3}>
-            <Card sx={{
-              background: 'linear-gradient(135deg, #f093fb 0%, #f5576c 100%)',
-              color: 'white'
-            }}>
-              <CardContent>
-                <Typography variant="h3" sx={{ fontWeight: 700 }}>
-                  {stats.average_scores.unified_risk.toFixed(1)}
-                </Typography>
-                <Typography variant="body2" sx={{ opacity: 0.9 }}>
-                  Avg Risk Score
-                </Typography>
-              </CardContent>
-            </Card>
-          </Grid>
-
-          {/* Critical Findings */}
-          <Grid item xs={12} md={3}>
-            <Card sx={{
-              background: 'linear-gradient(135deg, #fa709a 0%, #fee140 100%)',
-              color: 'white'
-            }}>
-              <CardContent>
-                <Typography variant="h3" sx={{ fontWeight: 700 }}>
-                  {stats.findings_by_severity.CRITICAL}
-                </Typography>
-                <Typography variant="body2" sx={{ opacity: 0.9 }}>
-                  Critical Findings
-                </Typography>
-              </CardContent>
-            </Card>
-          </Grid>
-
-          {/* High Findings */}
-          <Grid item xs={12} md={3}>
-            <Card sx={{
-              background: 'linear-gradient(135deg, #30cfd0 0%, #330867 100%)',
-              color: 'white'
-            }}>
-              <CardContent>
-                <Typography variant="h3" sx={{ fontWeight: 700 }}>
-                  {stats.findings_by_severity.HIGH}
-                </Typography>
-                <Typography variant="body2" sx={{ opacity: 0.9 }}>
-                  High Findings
-                </Typography>
-              </CardContent>
-            </Card>
-          </Grid>
+        <>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))', gap: '14px', marginBottom: '20px' }}>
+            {[
+              { label: 'Total Scans', value: stats.total_scans, icon: '🔍', color: '#42a5f5' },
+              { label: 'Avg Risk Score', value: stats.average_scores?.unified_risk?.toFixed(1) || '0', icon: '⚡', color: '#ffa726' },
+              { label: 'Critical Findings', value: stats.findings_by_severity?.CRITICAL || 0, icon: '🔴', color: '#ef5350' },
+              { label: 'High Findings', value: stats.findings_by_severity?.HIGH || 0, icon: '🟠', color: '#ffa726' },
+            ].map((s, i) => (
+              <GlassCard key={i} style={{ position: 'relative', overflow: 'hidden', padding: '18px 20px' }}>
+                <div style={{ position: 'absolute', top: 0, left: 0, right: 0, height: '3px', background: s.color }} />
+                <div style={{ fontSize: '12px', color: 'rgba(255,255,255,0.4)', marginBottom: '4px' }}>{s.label}</div>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                  <span style={{ fontFamily: '"Syne", sans-serif', fontSize: '28px', fontWeight: 800, color: '#fff' }}>{s.value}</span>
+                  <span style={{ fontSize: '16px' }}>{s.icon}</span>
+                </div>
+              </GlassCard>
+            ))}
+          </div>
 
           {/* Trend Chart */}
-          <Grid item xs={12}>
-            <Card>
-              <CardContent>
-                <Typography variant="h6" sx={{ mb: 2, fontWeight: 600 }}>
-                  Scan Trend (Last 30 Days)
-                </Typography>
-                <Box sx={{ height: 250 }}>
-                  {getTrendChartData() && (
-                    <Line data={getTrendChartData()} options={chartOptions} />
-                  )}
-                </Box>
-              </CardContent>
-            </Card>
-          </Grid>
+          {getTrendChartData() && (
+            <GlassCard style={{ marginBottom: '20px' }}>
+              <div style={{ fontFamily: '"Syne", sans-serif', fontSize: '16px', fontWeight: 700, color: '#fff', marginBottom: '14px' }}>
+                Scan Trend (Last 30 Days)
+              </div>
+              <div style={{ height: '220px' }}>
+                <Line data={getTrendChartData()} options={chartOptions} />
+              </div>
+            </GlassCard>
+          )}
 
-          {/* Scanner Distribution */}
-          <Grid item xs={12} md={6}>
-            <Card>
-              <CardContent>
-                <Typography variant="h6" sx={{ mb: 2, fontWeight: 600 }}>
-                  Findings by Scanner
-                </Typography>
-                {Object.entries(stats.findings_by_scanner).map(([scanner, count]) => (
-                  <Box key={scanner} sx={{ mb: 2 }}>
-                    <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 0.5 }}>
-                      <Typography variant="body2" sx={{ fontWeight: 500 }}>
-                        {scanner}
-                      </Typography>
-                      <Typography variant="body2" color="text.secondary">
-                        {count}
-                      </Typography>
-                    </Box>
-                    <LinearProgress 
-                      variant="determinate" 
-                      value={(count / Object.values(stats.findings_by_scanner).reduce((a, b) => a + b, 0)) * 100}
-                      sx={{
-                        height: 8,
-                        borderRadius: 4,
-                        backgroundColor: 'rgba(0, 0, 0, 0.05)',
-                        '& .MuiLinearProgress-bar': {
-                          backgroundColor: scannerColors[scanner]
-                        }
-                      }}
-                    />
-                  </Box>
-                ))}
-              </CardContent>
-            </Card>
-          </Grid>
-
-          {/* Severity Distribution */}
-          <Grid item xs={12} md={6}>
-            <Card>
-              <CardContent>
-                <Typography variant="h6" sx={{ mb: 2, fontWeight: 600 }}>
-                  Findings by Severity
-                </Typography>
-                {Object.entries(stats.findings_by_severity).map(([sev, count]) => (
-                  <Box key={sev} sx={{ mb: 2 }}>
-                    <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 0.5 }}>
-                      <Typography variant="body2" sx={{ fontWeight: 500 }}>
-                        {sev}
-                      </Typography>
-                      <Typography variant="body2" color="text.secondary">
-                        {count}
-                      </Typography>
-                    </Box>
-                    <LinearProgress 
-                      variant="determinate" 
-                      value={(count / Object.values(stats.findings_by_severity).reduce((a, b) => a + b, 0)) * 100}
-                      sx={{
-                        height: 8,
-                        borderRadius: 4,
-                        backgroundColor: 'rgba(0, 0, 0, 0.05)',
-                        '& .MuiLinearProgress-bar': {
-                          backgroundColor: severityColors[sev]
-                        }
-                      }}
-                    />
-                  </Box>
-                ))}
-              </CardContent>
-            </Card>
-          </Grid>
-        </Grid>
+          {/* Scanner + Severity Distribution */}
+          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px', marginBottom: '20px' }}>
+            <GlassCard>
+              <div style={{ fontFamily: '"Syne", sans-serif', fontSize: '15px', fontWeight: 700, color: '#fff', marginBottom: '14px' }}>
+                Findings by Scanner
+              </div>
+              {Object.entries(stats.findings_by_scanner || {}).map(([sc, count]) => {
+                const total = Object.values(stats.findings_by_scanner).reduce((a, b) => a + b, 0) || 1;
+                return (
+                  <div key={sc} style={{ marginBottom: '12px' }}>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '4px' }}>
+                      <span style={{ fontSize: '12px', color: 'rgba(255,255,255,0.55)', fontWeight: 500 }}>{sc}</span>
+                      <span style={{ fontSize: '12px', color: '#fff', fontWeight: 600 }}>{count}</span>
+                    </div>
+                    <div style={{ height: '5px', borderRadius: '3px', background: 'rgba(255,255,255,0.06)' }}>
+                      <div style={{ height: '100%', borderRadius: '3px', width: `${(count / total) * 100}%`, background: scannerColors[sc] || '#42a5f5', transition: 'width 0.4s ease' }} />
+                    </div>
+                  </div>
+                );
+              })}
+            </GlassCard>
+            <GlassCard>
+              <div style={{ fontFamily: '"Syne", sans-serif', fontSize: '15px', fontWeight: 700, color: '#fff', marginBottom: '14px' }}>
+                Findings by Severity
+              </div>
+              {Object.entries(stats.findings_by_severity || {}).map(([sev, count]) => {
+                const total = Object.values(stats.findings_by_severity).reduce((a, b) => a + b, 0) || 1;
+                return (
+                  <div key={sev} style={{ marginBottom: '12px' }}>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '4px' }}>
+                      <span style={{ fontSize: '12px', color: 'rgba(255,255,255,0.55)', fontWeight: 500 }}>{sev}</span>
+                      <span style={{ fontSize: '12px', color: '#fff', fontWeight: 600 }}>{count}</span>
+                    </div>
+                    <div style={{ height: '5px', borderRadius: '3px', background: 'rgba(255,255,255,0.06)' }}>
+                      <div style={{ height: '100%', borderRadius: '3px', width: `${(count / total) * 100}%`, background: severityColors[sev] || '#42a5f5', transition: 'width 0.4s ease' }} />
+                    </div>
+                  </div>
+                );
+              })}
+            </GlassCard>
+          </div>
+        </>
       )}
 
       {/* Filters */}
-      <Card sx={{ mb: 3 }}>
-        <CardContent>
-          <Grid container spacing={2} alignItems="center">
-            <Grid item xs={12} md={2.5}>
-              <TextField
-                select
-                fullWidth
-                size="small"
-                label="Severity"
-                value={severity}
-                onChange={(e) => setSeverity(e.target.value)}
-              >
-                <MenuItem value="">All</MenuItem>
-                <MenuItem value="CRITICAL">Critical</MenuItem>
-                <MenuItem value="HIGH">High</MenuItem>
-                <MenuItem value="MEDIUM">Medium</MenuItem>
-                <MenuItem value="LOW">Low</MenuItem>
-                <MenuItem value="INFO">Info</MenuItem>
-              </TextField>
-            </Grid>
-            <Grid item xs={12} md={2.5}>
-              <TextField
-                select
-                fullWidth
-                size="small"
-                label="Scanner"
-                value={scanner}
-                onChange={(e) => setScanner(e.target.value)}
-              >
-                <MenuItem value="">All</MenuItem>
-                <MenuItem value="ML">ML</MenuItem>
-                <MenuItem value="Rules">Rules</MenuItem>
-                <MenuItem value="LLM">LLM</MenuItem>
-                <MenuItem value="Secrets">Secrets</MenuItem>
-                <MenuItem value="CVE">CVE</MenuItem>
-                <MenuItem value="Compliance">Compliance</MenuItem>
-              </TextField>
-            </Grid>
-            <Grid item xs={12} md={2.5}>
-              <TextField
-                type="date"
-                fullWidth
-                size="small"
-                label="Start Date"
-                value={startDate}
-                onChange={(e) => setStartDate(e.target.value)}
-                InputLabelProps={{ shrink: true }}
-              />
-            </Grid>
-            <Grid item xs={12} md={2.5}>
-              <TextField
-                type="date"
-                fullWidth
-                size="small"
-                label="End Date"
-                value={endDate}
-                onChange={(e) => setEndDate(e.target.value)}
-                InputLabelProps={{ shrink: true }}
-              />
-            </Grid>
-            <Grid item xs={12} md={2}>
-              <Box sx={{ display: 'flex', gap: 1 }}>
-                <IconButton onClick={fetchScans} color="primary">
-                  <Refresh />
-                </IconButton>
-                <IconButton onClick={exportScans} color="primary">
-                  <FileDownload />
-                </IconButton>
-              </Box>
-            </Grid>
-          </Grid>
-        </CardContent>
-      </Card>
+      <GlassCard style={{ marginBottom: '16px', padding: '16px 20px' }}>
+        <div style={{ display: 'flex', gap: '12px', alignItems: 'center', flexWrap: 'wrap' }}>
+          <TextField select size="small" label="Severity" value={severity} onChange={(e) => setSeverity(e.target.value)} sx={{ ...muiDarkSx, minWidth: 130 }}>
+            <MenuItem value="">All</MenuItem>
+            {['CRITICAL', 'HIGH', 'MEDIUM', 'LOW', 'INFO'].map(s => <MenuItem key={s} value={s}>{s}</MenuItem>)}
+          </TextField>
+          <TextField select size="small" label="Scanner" value={scanner} onChange={(e) => setScanner(e.target.value)} sx={{ ...muiDarkSx, minWidth: 130 }}>
+            <MenuItem value="">All</MenuItem>
+            {['ML', 'Rules', 'LLM', 'Secrets', 'CVE', 'Compliance'].map(s => <MenuItem key={s} value={s}>{s}</MenuItem>)}
+          </TextField>
+          <TextField type="date" size="small" label="Start Date" value={startDate} onChange={(e) => setStartDate(e.target.value)} InputLabelProps={{ shrink: true }} sx={{ ...muiDarkSx, minWidth: 140 }} />
+          <TextField type="date" size="small" label="End Date" value={endDate} onChange={(e) => setEndDate(e.target.value)} InputLabelProps={{ shrink: true }} sx={{ ...muiDarkSx, minWidth: 140 }} />
+          <div style={{ marginLeft: 'auto', display: 'flex', gap: '8px' }}>
+            <button className="sh-btn" onClick={fetchScans} style={{ padding: '6px 14px', borderRadius: '8px', background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.12)', color: 'rgba(255,255,255,0.5)', fontSize: '20px', fontFamily: '"DM Sans", sans-serif' }}>🔄</button>
+            <button className="sh-btn" onClick={exportScans} style={{ padding: '6px 14px', borderRadius: '8px', background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.12)', color: 'rgba(255,255,255,0.5)', fontSize: '20px', fontFamily: '"DM Sans", sans-serif' }}>📥</button>
+          </div>
+        </div>
+      </GlassCard>
 
       {/* Scan Table */}
-      <Card>
-        <CardContent>
-          {loading ? (
-            <LinearProgress />
-          ) : scans.length === 0 ? (
-            <Alert severity="info">No scans found matching the filters</Alert>
-          ) : (
-            <TableContainer>
-              <Table>
-                <TableHead>
-                  <TableRow>
-                    <TableCell>ID</TableCell>
-                    <TableCell>Filename</TableCell>
-                    <TableCell>Date</TableCell>
-                    <TableCell>Risk Score</TableCell>
-                    <TableCell>Findings</TableCell>
-                    <TableCell>Status</TableCell>
-                    <TableCell>Actions</TableCell>
-                  </TableRow>
-                </TableHead>
-                <TableBody>
-                  {scans.map((scan) => (
-                    <TableRow key={scan.id} hover>
-                      <TableCell>{scan.id}</TableCell>
-                      <TableCell>
-                        <Typography variant="body2" sx={{ fontWeight: 500 }}>
-                          {scan.filename}
-                        </Typography>
-                      </TableCell>
-                      <TableCell>
-                        {new Date(scan.created_at).toLocaleString()}
-                      </TableCell>
-                      <TableCell>
-                        <Chip
-                          label={scan.unified_risk_score?.toFixed(1) || 'N/A'}
-                          size="small"
-                          sx={{
-                            backgroundColor: getRiskColor(scan.unified_risk_score),
-                            color: 'white',
-                            fontWeight: 600
-                          }}
-                        />
-                      </TableCell>
-                      <TableCell>
-                        <Box sx={{ display: 'flex', gap: 0.5, flexWrap: 'wrap' }}>
-                          {scan.critical_count > 0 && (
-                            <Chip
-                              label={`C:${scan.critical_count}`}
-                              size="small"
-                              sx={{ 
-                                backgroundColor: severityColors.CRITICAL,
-                                color: 'white',
-                                fontSize: '0.7rem'
-                              }}
-                            />
-                          )}
-                          {scan.high_count > 0 && (
-                            <Chip
-                              label={`H:${scan.high_count}`}
-                              size="small"
-                              sx={{ 
-                                backgroundColor: severityColors.HIGH,
-                                color: 'white',
-                                fontSize: '0.7rem'
-                              }}
-                            />
-                          )}
-                          {scan.medium_count > 0 && (
-                            <Chip
-                              label={`M:${scan.medium_count}`}
-                              size="small"
-                              sx={{ 
-                                backgroundColor: severityColors.MEDIUM,
-                                color: 'white',
-                                fontSize: '0.7rem'
-                              }}
-                            />
-                          )}
-                        </Box>
-                      </TableCell>
-                      <TableCell>
-                        <Chip
-                          label={scan.status}
-                          size="small"
-                          color={scan.status === 'completed' ? 'success' : 'default'}
-                        />
-                      </TableCell>
-                      <TableCell>
-                        <IconButton
-                          size="small"
-                          onClick={() => handleViewScan(scan.id)}
-                          color="primary"
-                        >
-                          <Visibility />
-                        </IconButton>
-                        <IconButton
-                          size="small"
-                          onClick={() => confirmDelete(scan.id)}
-                          color="error"
-                        >
-                          <Delete />
-                        </IconButton>
-                      </TableCell>
-                    </TableRow>
+      <GlassCard style={{ padding: 0, overflow: 'hidden' }}>
+        {loading ? (
+          <LinearProgress sx={{ borderRadius: 0 }} />
+        ) : scans.length === 0 ? (
+          <div style={{ textAlign: 'center', padding: '40px' }}>
+            <div style={{ fontSize: '36px', marginBottom: '8px' }}>📋</div>
+            <div style={{ color: 'rgba(255,255,255,0.4)', fontSize: '14px' }}>No scans found matching the filters</div>
+          </div>
+        ) : (
+          <div style={{ overflowX: 'auto' }}>
+            <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px' }}>
+              <thead>
+                <tr style={{ background: 'rgba(255,255,255,0.03)', borderBottom: '1px solid rgba(255,255,255,0.06)' }}>
+                  {['ID', 'Filename', 'Date', 'Risk Score', 'Findings', 'Status', 'Actions'].map(h => (
+                    <th key={h} style={{ padding: '12px 16px', textAlign: 'left', color: 'rgba(255,255,255,0.5)', fontWeight: 600, fontSize: '11px', textTransform: 'uppercase', letterSpacing: '0.05em' }}>{h}</th>
                   ))}
-                </TableBody>
-              </Table>
-            </TableContainer>
-          )}
-        </CardContent>
-      </Card>
+                </tr>
+              </thead>
+              <tbody>
+                {scans.map((scan) => (
+                  <tr key={scan.id} className="scan-row" style={{ borderBottom: '1px solid rgba(255,255,255,0.04)' }}>
+                    <td style={{ padding: '10px 16px', color: 'rgba(255,255,255,0.4)' }}>#{scan.id}</td>
+                    <td style={{ padding: '10px 16px', color: '#fff', fontWeight: 500 }}>{scan.filename}</td>
+                    <td style={{ padding: '10px 16px', color: 'rgba(255,255,255,0.5)', fontSize: '12px' }}>{new Date(scan.created_at).toLocaleString()}</td>
+                    <td style={{ padding: '10px 16px' }}>
+                      <span style={{
+                        padding: '3px 10px', borderRadius: '6px', fontSize: '11px', fontWeight: 700,
+                        background: `${getRiskColor(scan.unified_risk_score)}20`,
+                        color: getRiskColor(scan.unified_risk_score),
+                        border: `1px solid ${getRiskColor(scan.unified_risk_score)}40`,
+                      }}>
+                        {scan.unified_risk_score?.toFixed(1) || 'N/A'}
+                      </span>
+                    </td>
+                    <td style={{ padding: '10px 16px' }}>
+                      <div style={{ display: 'flex', gap: '4px', flexWrap: 'wrap' }}>
+                        {scan.critical_count > 0 && <span style={{ padding: '2px 6px', borderRadius: '4px', fontSize: '10px', fontWeight: 700, background: 'rgba(239,83,80,0.15)', color: '#ef5350' }}>C:{scan.critical_count}</span>}
+                        {scan.high_count > 0 && <span style={{ padding: '2px 6px', borderRadius: '4px', fontSize: '10px', fontWeight: 700, background: 'rgba(255,167,38,0.15)', color: '#ffa726' }}>H:{scan.high_count}</span>}
+                        {scan.medium_count > 0 && <span style={{ padding: '2px 6px', borderRadius: '4px', fontSize: '10px', fontWeight: 700, background: 'rgba(249,168,37,0.15)', color: '#f9a825' }}>M:{scan.medium_count}</span>}
+                      </div>
+                    </td>
+                    <td style={{ padding: '10px 16px' }}>
+                      <span style={{
+                        padding: '3px 10px', borderRadius: '99px', fontSize: '10px', fontWeight: 600,
+                        background: scan.status === 'completed' ? 'rgba(102,187,106,0.12)' : 'rgba(255,255,255,0.06)',
+                        color: scan.status === 'completed' ? '#66bb6a' : 'rgba(255,255,255,0.4)',
+                        border: `1px solid ${scan.status === 'completed' ? 'rgba(102,187,106,0.25)' : 'rgba(255,255,255,0.08)'}`,
+                      }}>{scan.status}</span>
+                    </td>
+                    <td style={{ padding: '10px 16px' }}>
+                      <div style={{ display: 'flex', gap: '4px' }}>
+                        <button onClick={() => handleViewScan(scan.id)} style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#42a5f5', fontSize: '16px', padding: '4px' }}>👁️</button>
+                        <button onClick={() => confirmDelete(scan.id)} style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#ef5350', fontSize: '16px', padding: '4px' }}>🗑️</button>
+                      </div>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        )}
+      </GlassCard>
 
-      {/* View Scan Dialog */}
-      <Dialog
-        open={dialogOpen}
-        onClose={() => setDialogOpen(false)}
-        maxWidth="md"
-        fullWidth
+      {/* View Dialog */}
+      <Dialog open={dialogOpen} onClose={() => setDialogOpen(false)} maxWidth="md" fullWidth
+        PaperProps={{ sx: { bgcolor: '#0f2744', backgroundImage: 'none', border: '1px solid rgba(255,255,255,0.08)', borderRadius: 3 } }}
       >
-        <DialogTitle>Scan Details</DialogTitle>
+        <DialogTitle sx={{ fontWeight: 700, color: '#fff' }}>Scan Details</DialogTitle>
         <DialogContent>
           {selectedScan && (
-            <Box>
-              <Typography variant="h6" sx={{ mb: 2 }}>
+            <div>
+              <div style={{ fontFamily: '"Syne", sans-serif', fontSize: '18px', fontWeight: 700, color: '#fff', marginBottom: '16px' }}>
                 {selectedScan.filename}
-              </Typography>
-              <Grid container spacing={2}>
-                <Grid item xs={6}>
-                  <Typography variant="body2" color="text.secondary">
-                    Risk Score
-                  </Typography>
-                  <Typography variant="h5">
-                    {selectedScan.unified_risk_score?.toFixed(1)}
-                  </Typography>
-                </Grid>
-                <Grid item xs={6}>
-                  <Typography variant="body2" color="text.secondary">
-                    Total Findings
-                  </Typography>
-                  <Typography variant="h5">
-                    {selectedScan.total_findings}
-                  </Typography>
-                </Grid>
-                {/* Add more scan details as needed */}
-              </Grid>
-            </Box>
+              </div>
+              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px' }}>
+                <div style={{ padding: '14px', borderRadius: '10px', background: 'rgba(255,255,255,0.03)' }}>
+                  <div style={{ fontSize: '12px', color: 'rgba(255,255,255,0.4)' }}>Risk Score</div>
+                  <div style={{ fontSize: '28px', fontWeight: 800, color: '#fff', fontFamily: '"Syne", sans-serif' }}>{selectedScan.unified_risk_score?.toFixed(1)}</div>
+                </div>
+                <div style={{ padding: '14px', borderRadius: '10px', background: 'rgba(255,255,255,0.03)' }}>
+                  <div style={{ fontSize: '12px', color: 'rgba(255,255,255,0.4)' }}>Total Findings</div>
+                  <div style={{ fontSize: '28px', fontWeight: 800, color: '#fff', fontFamily: '"Syne", sans-serif' }}>{selectedScan.total_findings}</div>
+                </div>
+              </div>
+            </div>
           )}
         </DialogContent>
-        <DialogActions>
-          <Button onClick={() => setDialogOpen(false)}>Close</Button>
+        <DialogActions sx={{ p: 3, pt: 0 }}>
+          <button onClick={() => setDialogOpen(false)} style={{ padding: '8px 20px', borderRadius: '8px', background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.12)', color: 'rgba(255,255,255,0.6)', cursor: 'pointer', fontFamily: '"DM Sans", sans-serif' }}>Close</button>
         </DialogActions>
       </Dialog>
 
-      {/* Delete Confirmation Dialog */}
-      <Dialog
-        open={deleteDialogOpen}
-        onClose={() => setDeleteDialogOpen(false)}
+      {/* Delete Dialog */}
+      <Dialog open={deleteDialogOpen} onClose={() => setDeleteDialogOpen(false)}
+        PaperProps={{ sx: { bgcolor: '#0f2744', backgroundImage: 'none', border: '1px solid rgba(255,255,255,0.08)', borderRadius: 3 } }}
       >
-        <DialogTitle>Confirm Delete</DialogTitle>
-        <DialogContent>
-          <Typography>
-            Are you sure you want to delete this scan? This action cannot be undone.
-          </Typography>
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={() => setDeleteDialogOpen(false)}>Cancel</Button>
-          <Button onClick={handleDeleteScan} color="error">Delete</Button>
+        <DialogTitle sx={{ fontWeight: 700, color: '#fff' }}>Confirm Delete</DialogTitle>
+        <DialogContent><p style={{ color: 'rgba(255,255,255,0.6)', fontSize: '14px' }}>Are you sure you want to delete this scan? This action cannot be undone.</p></DialogContent>
+        <DialogActions sx={{ p: 3, pt: 0 }}>
+          <button onClick={() => setDeleteDialogOpen(false)} style={{ padding: '8px 20px', borderRadius: '8px', background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.12)', color: 'rgba(255,255,255,0.6)', cursor: 'pointer', fontFamily: '"DM Sans", sans-serif' }}>Cancel</button>
+          <button onClick={handleDeleteScan} style={{ padding: '8px 20px', borderRadius: '8px', border: 'none', background: 'linear-gradient(135deg, #ef5350, #c62828)', color: '#fff', fontWeight: 600, cursor: 'pointer', fontFamily: '"DM Sans", sans-serif' }}>Delete</button>
         </DialogActions>
       </Dialog>
-    </Box>
+    </div>
   );
 }
 

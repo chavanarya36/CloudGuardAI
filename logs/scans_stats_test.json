@@ -1,0 +1,53 @@
+﻿{
+    "total_scans":  40,
+    "findings_by_severity":  {
+                                 "CRITICAL":  199,
+                                 "HIGH":  165,
+                                 "MEDIUM":  148,
+                                 "LOW":  15,
+                                 "INFO":  0
+                             },
+    "findings_by_scanner":  {
+                                "ML":  20,
+                                "Rules":  165,
+                                "LLM":  64,
+                                "Secrets":  14,
+                                "CVE":  51,
+                                "Compliance":  87
+                            },
+    "average_scores":  {
+                           "unified_risk":  0.47308250000000013,
+                           "ml_score":  0.1963007236877455,
+                           "rules_score":  0.4418325,
+                           "llm_score":  0.290625,
+                           "secrets_score":  0.03125,
+                           "cve_score":  0.0956250000000001,
+                           "compliance_score":  51.15625
+                       },
+    "trend_30_days":  [
+                          {
+                              "date":  "2026-03-07",
+                              "count":  13
+                          },
+                          {
+                              "date":  "2026-03-08",
+                              "count":  2
+                          },
+                          {
+                              "date":  "2026-03-09",
+                              "count":  4
+                          },
+                          {
+                              "date":  "2026-03-10",
+                              "count":  10
+                          },
+                          {
+                              "date":  "2026-03-11",
+                              "count":  7
+                          },
+                          {
+                              "date":  "2026-03-12",
+                              "count":  4
+                          }
+                      ]
+}

@@ -1,48 +1,23 @@
 import { useState, useEffect } from 'react';
 import {
-  Box,
-  Typography,
-  Card,
-  CardContent,
-  Button,
-  Alert,
-  CircularProgress,
-  Grid,
-  Paper,
-  Table,
-  TableBody,
-  TableCell,
-  TableContainer,
-  TableHead,
-  TableRow,
-  Dialog,
-  DialogTitle,
-  DialogContent,
-  DialogActions,
-  TextField,
-  Chip,
-  LinearProgress,
-  Badge,
+  CircularProgress, Dialog, DialogTitle, DialogContent, DialogActions,
+  TextField, Alert,
 } from '@mui/material';
-import RefreshIcon from '@mui/icons-material/Refresh';
-import WarningIcon from '@mui/icons-material/Warning';
-import CheckCircleIcon from '@mui/icons-material/CheckCircle';
-import ActivityIcon from '@mui/icons-material/ShowChart';
-import CpuIcon from '@mui/icons-material/Memory';
-import DatabaseIcon from '@mui/icons-material/Storage';
-import SpeedIcon from '@mui/icons-material/Speed';
-import TrendingUpIcon from '@mui/icons-material/TrendingUp';
-import {
-  LineChart,
-  Line,
-  XAxis,
-  YAxis,
-  CartesianGrid,
-  Tooltip,
-  Legend,
-  ResponsiveContainer,
-} from 'recharts';
 import { getModelStatus, triggerRetrain, listModelVersions } from '../api/client';
+
+function GlassCard({ children, style }) {
+  return (
+    <div style={{
+      background: 'rgba(10,22,38,0.8)',
+      border: '1px solid rgba(255,255,255,0.06)',
+      borderRadius: '14px', padding: '24px',
+      backdropFilter: 'blur(8px)',
+      ...style,
+    }}>
+      {children}
+    </div>
+  );
+}
 
 export default function ModelStatus() {
   const [status, setStatus] = useState(null);
@@ -59,8 +34,7 @@ export default function ModelStatus() {
     setLoading(true);
     try {
       const [statusData, versionsData] = await Promise.all([
-        getModelStatus(),
-        listModelVersions(),
+        getModelStatus(), listModelVersions(),
       ]);
       setStatus(statusData);
       setVersions(versionsData);
@@ -71,23 +45,15 @@ export default function ModelStatus() {
     }
   };
 
-  useEffect(() => {
-    fetchData();
-  }, []);
+  useEffect(() => { fetchData(); }, []);
 
   const handleRetrain = async () => {
-    setRetraining(true);
-    setError(null);
-    setSuccess(null);
-
+    setRetraining(true); setError(null); setSuccess(null);
     try {
       await triggerRetrain(forceRetrain, minSamples);
       setSuccess('Retraining job started successfully!');
       setDialogOpen(false);
-      
-      // Refresh data after a delay
       setTimeout(fetchData, 3000);
-      
     } catch (err) {
       setError(err.response?.data?.detail || 'Failed to start retraining');
     } finally {
@@ -97,460 +63,322 @@ export default function ModelStatus() {
 
   if (loading) {
     return (
-      <Box display="flex" justifyContent="center" alignItems="center" minHeight="400px">
-        <CircularProgress />
-      </Box>
+      <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '400px' }}>
+        <CircularProgress sx={{ color: '#42a5f5' }} />
+      </div>
     );
   }
 
+  const metrics = [
+    { icon: '⚡', title: 'Model Status', value: 'Operational', desc: 'All systems running smoothly', color: '#66bb6a', gradient: 'linear-gradient(135deg, #66bb6a, #388e3c)' },
+    { icon: '🚀', title: 'Response Time', value: '1.2s', desc: 'Average API response', color: '#42a5f5', gradient: 'linear-gradient(135deg, #42a5f5, #1565c0)' },
+    { icon: '🧠', title: 'Model Version', value: status?.active_version || 'N/A', desc: 'Latest stable release', color: '#ce93d8', gradient: 'linear-gradient(135deg, #ce93d8, #7b1fa2)' },
+    { icon: '📡', title: 'Uptime', value: '99.9%', desc: 'Last 30 days', color: '#ffa726', gradient: 'linear-gradient(135deg, #ffa726, #e65100)' },
+  ];
+
+  const healthBars = [
+    { label: 'API Response Time', value: 95, color: '#66bb6a' },
+    { label: 'Model Accuracy', value: 98, color: '#42a5f5' },
+    { label: 'Cache Hit Rate', value: 87, color: '#ce93d8' },
+    { label: 'Resource Usage', value: 62, color: '#ffa726' },
+  ];
+
   return (
-    <Box sx={{ 
-      minHeight: '100vh',
-      background: 'linear-gradient(to bottom, rgba(25, 118, 210, 0.04), transparent)',
-      py: 6
-    }}>
-      <Box sx={{ maxWidth: 1400, mx: 'auto', px: 3 }}>
-        {/* Header */}
-        <Box sx={{ mb: 6 }}>
-          <Box sx={{ display: 'flex', alignItems: 'center', gap: 2, mb: 2 }}>
-            <Box sx={{
-              width: 60,
-              height: 60,
-              borderRadius: '50%',
-              background: 'linear-gradient(135deg, #4caf50 0%, #2e7d32 100%)',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              boxShadow: '0 4px 20px rgba(76, 175, 80, 0.3)'
+    <div style={{ fontFamily: '"DM Sans", sans-serif' }}>
+      <style>{`
+        @import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&family=Syne:wght@700;800&display=swap');
+        .ms-btn { cursor:pointer; transition:all 0.2s ease; }
+        .ms-btn:hover { transform:translateY(-1px); filter:brightness(1.15); }
+      `}</style>
+
+      {/* Header */}
+      <div style={{ marginBottom: '32px' }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '14px', marginBottom: '12px' }}>
+          <div style={{
+            width: '48px', height: '48px', borderRadius: '12px',
+            background: 'linear-gradient(135deg, #66bb6a, #388e3c)',
+            display: 'flex', alignItems: 'center', justifyContent: 'center',
+            boxShadow: '0 0 20px rgba(102,187,106,0.3)',
+            fontSize: '22px',
+          }}>⚡</div>
+          <div>
+            <h1 style={{
+              fontFamily: '"Syne", sans-serif',
+              fontSize: '28px', fontWeight: 800, color: '#fff',
+              margin: 0, letterSpacing: '-0.02em',
             }}>
-              <ActivityIcon sx={{ fontSize: 32, color: 'white' }} />
-            </Box>
-            <Box>
-              <Typography variant="h3" fontWeight="bold">
-                Model Status
-              </Typography>
-              <Typography variant="h6" color="text.secondary" sx={{ mt: 0.5 }}>
-                Real-time monitoring of AI model performance
-              </Typography>
-            </Box>
-          </Box>
+              Model Status
+            </h1>
+            <p style={{ color: 'rgba(255,255,255,0.4)', fontSize: '14px', margin: 0 }}>
+              Real-time monitoring of AI model performance
+            </p>
+          </div>
+        </div>
 
-          <Box sx={{ display: 'flex', alignItems: 'center', gap: 2, mt: 3 }}>
-            <Box sx={{ 
-              display: 'flex', 
-              alignItems: 'center', 
-              gap: 1,
-              px: 2,
-              py: 1,
-              borderRadius: 2,
-              bgcolor: 'rgba(76,175,80,0.12)',
-              border: '1px solid',
-              borderColor: 'success.main'
-            }}>
-              <Box sx={{ 
-                width: 12, 
-                height: 12, 
-                borderRadius: '50%', 
-                bgcolor: 'success.main',
-                animation: 'pulse 2s infinite',
-                '@keyframes pulse': {
-                  '0%, 100%': { opacity: 1 },
-                  '50%': { opacity: 0.5 }
-                }
-              }} />
-              <Typography variant="body2" fontWeight="medium" color="success.light">
-                All Systems Operational
-              </Typography>
-            </Box>
-
-            <Box sx={{ ml: 'auto', display: 'flex', gap: 2 }}>
-              <Button
-                variant="outlined"
-                startIcon={<RefreshIcon />}
-                onClick={fetchData}
-                sx={{ borderRadius: 2 }}
-              >
-                Refresh
-              </Button>
-              <Button
-                variant="contained"
-                onClick={() => setDialogOpen(true)}
-                sx={{ 
-                  borderRadius: 2,
-                  background: 'linear-gradient(135deg, #1976d2 0%, #1565c0 100%)'
-                }}
-              >
-                Trigger Retrain
-              </Button>
-            </Box>
-          </Box>
-        </Box>
-
-        {error && <Alert severity="error" sx={{ mb: 3, borderRadius: 2 }}>{error}</Alert>}
-        {success && <Alert severity="success" sx={{ mb: 3, borderRadius: 2 }}>{success}</Alert>}
-
-        {/* Metrics Grid */}
-        <Grid container spacing={3} sx={{ mb: 6 }}>
-          {[
-            {
-              icon: ActivityIcon,
-              title: 'Model Status',
-              value: 'Operational',
-              status: 'success',
-              description: 'All systems running smoothly',
-              gradient: 'linear-gradient(135deg, #4caf50 0%, #2e7d32 100%)'
-            },
-            {
-              icon: SpeedIcon,
-              title: 'Response Time',
-              value: '1.2s',
-              status: 'success',
-              description: 'Average API response',
-              gradient: 'linear-gradient(135deg, #2196f3 0%, #1565c0 100%)'
-            },
-            {
-              icon: CpuIcon,
-              title: 'Model Version',
-              value: status?.active_version || 'N/A',
-              status: 'info',
-              description: 'Latest stable release',
-              gradient: 'linear-gradient(135deg, #9c27b0 0%, #6a1b9a 100%)'
-            },
-            {
-              icon: DatabaseIcon,
-              title: 'Uptime',
-              value: '99.9%',
-              status: 'success',
-              description: 'Last 30 days',
-              gradient: 'linear-gradient(135deg, #ff9800 0%, #e65100 100%)'
-            }
-          ].map((metric, index) => {
-            const Icon = metric.icon;
-            return (
-              <Grid item xs={12} sm={6} lg={3} key={index}>
-                <Card sx={{
-                  border: '2px solid',
-                  borderColor: 'divider',
-                  borderRadius: 3,
-                  overflow: 'hidden',
-                  position: 'relative',
-                  '&:hover': {
-                    boxShadow: 6,
-                    borderColor: metric.status === 'success' ? 'success.main' : 'primary.main'
-                  },
-                  transition: 'all 0.3s'
-                }}>
-                  <Box sx={{
-                    position: 'absolute',
-                    top: 0,
-                    left: 0,
-                    right: 0,
-                    height: 4,
-                    background: metric.gradient
-                  }} />
-                  <CardContent sx={{ pt: 3 }}>
-                    <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 2 }}>
-                      <Box sx={{
-                        width: 48,
-                        height: 48,
-                        borderRadius: 2,
-                        background: metric.gradient,
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                        transition: 'transform 0.3s',
-                        '&:hover': {
-                          transform: 'scale(1.1)'
-                        }
-                      }}>
-                        <Icon sx={{ fontSize: 24, color: 'white' }} />
-                      </Box>
-                      <Chip 
-                        label={metric.status} 
-                        size="small"
-                        color={metric.status === 'success' ? 'success' : 'default'}
-                      />
-                    </Box>
-                    <Typography variant="body2" color="text.secondary" gutterBottom>
-                      {metric.title}
-                    </Typography>
-                    <Typography variant="h4" fontWeight="bold" gutterBottom>
-                      {metric.value}
-                    </Typography>
-                    <Typography variant="caption" color="text.secondary">
-                      {metric.description}
-                    </Typography>
-                  </CardContent>
-                </Card>
-              </Grid>
-            );
-          })}
-        </Grid>
-
-        {/* Performance Details */}
-        <Grid container spacing={3} sx={{ mb: 6 }}>
-          {/* Active Model Card */}
-          <Grid item xs={12} lg={6}>
-            <Card sx={{ 
-              border: '2px solid', 
-              borderColor: 'divider',
-              borderRadius: 3,
-              height: '100%'
-            }}>
-              <CardContent sx={{ p: 3 }}>
-                <Typography variant="h6" fontWeight="bold" gutterBottom>
-                  Active Model
-                </Typography>
-                {status?.active_version ? (
-                  <Box display="flex" flexDirection="column" gap={2} mt={2}>
-                    {[
-                      { label: 'Version', value: status.active_version },
-                      { label: 'Type', value: status.model_type },
-                      { label: 'Accuracy', value: status.accuracy?.toFixed(4) || 'N/A' },
-                      { label: 'Precision', value: status.precision?.toFixed(4) || 'N/A' },
-                      { label: 'Recall', value: status.recall?.toFixed(4) || 'N/A' },
-                      { label: 'F1 Score', value: status.f1_score?.toFixed(4) || 'N/A' }
-                    ].map((item, i) => (
-                      <Box key={i} display="flex" justifyContent="space-between" alignItems="center">
-                        <Typography color="text.secondary">{item.label}:</Typography>
-                        <Typography fontWeight="bold">{item.value}</Typography>
-                      </Box>
-                    ))}
-                  </Box>
-                ) : (
-                  <Alert severity="info" sx={{ mt: 2 }}>No active model</Alert>
-                )}
-              </CardContent>
-            </Card>
-          </Grid>
-
-          {/* System Health Card */}
-          <Grid item xs={12} lg={6}>
-            <Card sx={{ 
-              border: '2px solid', 
-              borderColor: 'divider',
-              borderRadius: 3,
-              height: '100%'
-            }}>
-              <CardContent sx={{ p: 3 }}>
-                <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mb: 3 }}>
-                  <TrendingUpIcon color="primary" />
-                  <Typography variant="h6" fontWeight="bold">
-                    System Health
-                  </Typography>
-                </Box>
-                <Box display="flex" flexDirection="column" gap={3}>
-                  {[
-                    { label: 'API Response Time', value: 95, color: '#4caf50' },
-                    { label: 'Model Accuracy', value: 98, color: '#2196f3' },
-                    { label: 'Cache Hit Rate', value: 87, color: '#9c27b0' },
-                    { label: 'Resource Usage', value: 62, color: '#ff9800' }
-                  ].map((item, i) => (
-                    <Box key={i}>
-                      <Box display="flex" justifyContent="space-between" mb={1}>
-                        <Typography variant="body2" fontWeight="medium">
-                          {item.label}
-                        </Typography>
-                        <Typography variant="body2" fontWeight="bold">
-                          {item.value}%
-                        </Typography>
-                      </Box>
-                      <LinearProgress 
-                        variant="determinate" 
-                        value={item.value}
-                        sx={{
-                          height: 8,
-                          borderRadius: 1,
-                          bgcolor: 'rgba(255,255,255,0.08)',
-                          '& .MuiLinearProgress-bar': {
-                            bgcolor: item.color,
-                            borderRadius: 1
-                          }
-                        }}
-                      />
-                    </Box>
-                  ))}
-                </Box>
-              </CardContent>
-            </Card>
-          </Grid>
-        </Grid>
-
-        {/* Statistics */}
-        <Card sx={{ 
-          border: '2px solid', 
-          borderColor: 'divider',
-          borderRadius: 3,
-          mb: 6
-        }}>
-          <CardContent sx={{ p: 3 }}>
-            <Typography variant="h6" fontWeight="bold" gutterBottom>
-              Statistics
-            </Typography>
-            <Grid container spacing={3} mt={1}>
-              {[
-                { label: 'Total Scans', value: status?.total_scans || 0, color: 'primary' },
-                { label: 'Total Feedback', value: status?.total_feedback || 0, color: 'secondary' },
-                { label: 'Pending Retraining', value: status?.pending_retraining_samples || 0, color: 'warning' },
-                { label: 'Training Samples', value: status?.training_samples || 0, color: 'success' }
-              ].map((stat, i) => (
-                <Grid item xs={6} md={3} key={i}>
-                  <Box sx={{ textAlign: 'center', p: 2, borderRadius: 2, bgcolor: 'action.hover' }}>
-                    <Typography variant="body2" color="text.secondary" gutterBottom>
-                      {stat.label}
-                    </Typography>
-                    <Typography variant="h4" fontWeight="bold" color={`${stat.color}.main`}>
-                      {stat.value}
-                    </Typography>
-                  </Box>
-                </Grid>
-              ))}
-            </Grid>
-          </CardContent>
-        </Card>
-
-        {/* Recent Activity */}
-        <Card sx={{ 
-          border: '2px solid', 
-          borderColor: 'divider',
-          borderRadius: 3,
-          mb: 6
-        }}>
-          <CardContent sx={{ p: 3 }}>
-            <Typography variant="h6" fontWeight="bold" gutterBottom>
-              Recent Activity
-            </Typography>
-            <Box sx={{ mt: 3 }}>
-              {[
-                { time: '2 min ago', event: 'Security scan completed', status: 'success' },
-                { time: '15 min ago', event: 'Model cache updated', status: 'info' },
-                { time: '1 hour ago', event: 'System health check passed', status: 'success' },
-                { time: '3 hours ago', event: 'Database optimization completed', status: 'info' }
-              ].map((activity, i) => (
-                <Box 
-                  key={i}
-                  sx={{
-                    display: 'flex',
-                    alignItems: 'flex-start',
-                    gap: 2,
-                    p: 2,
-                    borderRadius: 2,
-                    '&:hover': { bgcolor: 'action.hover' },
-                    transition: 'background-color 0.2s'
-                  }}
-                >
-                  <Box sx={{
-                    width: 8,
-                    height: 8,
-                    borderRadius: '50%',
-                    bgcolor: activity.status === 'success' ? 'success.main' : 'info.main',
-                    mt: 1,
-                    flexShrink: 0
-                  }} />
-                  <Box sx={{ flex: 1 }}>
-                    <Typography variant="body2" fontWeight="medium">
-                      {activity.event}
-                    </Typography>
-                    <Typography variant="caption" color="text.secondary">
-                      {activity.time}
-                    </Typography>
-                  </Box>
-                </Box>
-              ))}
-            </Box>
-          </CardContent>
-        </Card>
-
-        {/* Version History */}
-        <Box>
-          <Typography variant="h5" fontWeight="bold" gutterBottom sx={{ mb: 3 }}>
-            Version History
-          </Typography>
-          <TableContainer component={Paper} sx={{ 
-            border: '2px solid',
-            borderColor: 'divider',
-            borderRadius: 3,
-            boxShadow: 'none'
+        <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginTop: '16px' }}>
+          <div style={{
+            display: 'flex', alignItems: 'center', gap: '8px',
+            padding: '6px 14px', borderRadius: '8px',
+            background: 'rgba(102,187,106,0.08)',
+            border: '1px solid rgba(102,187,106,0.2)',
           }}>
-            <Table>
-              <TableHead sx={{ bgcolor: 'action.hover' }}>
-                <TableRow>
-                  <TableCell><Typography fontWeight="bold">Version</Typography></TableCell>
-                  <TableCell><Typography fontWeight="bold">Type</Typography></TableCell>
-                  <TableCell><Typography fontWeight="bold">Accuracy</Typography></TableCell>
-                  <TableCell><Typography fontWeight="bold">Precision</Typography></TableCell>
-                  <TableCell><Typography fontWeight="bold">Recall</Typography></TableCell>
-                  <TableCell><Typography fontWeight="bold">F1 Score</Typography></TableCell>
-                  <TableCell><Typography fontWeight="bold">Samples</Typography></TableCell>
-                  <TableCell><Typography fontWeight="bold">Created</Typography></TableCell>
-                </TableRow>
-              </TableHead>
-              <TableBody>
-                {versions.map((version) => (
-                  <TableRow 
-                    key={version.active_version}
-                    sx={{ '&:hover': { bgcolor: 'action.hover' } }}
-                  >
-                    <TableCell>
-                      <Chip label={version.active_version} size="small" color="primary" />
-                    </TableCell>
-                    <TableCell>{version.model_type}</TableCell>
-                    <TableCell>{version.accuracy?.toFixed(4) || 'N/A'}</TableCell>
-                    <TableCell>{version.precision?.toFixed(4) || 'N/A'}</TableCell>
-                    <TableCell>{version.recall?.toFixed(4) || 'N/A'}</TableCell>
-                    <TableCell>{version.f1_score?.toFixed(4) || 'N/A'}</TableCell>
-                    <TableCell>{version.training_samples || 0}</TableCell>
-                    <TableCell>
-                      {version.created_at ? new Date(version.created_at).toLocaleString() : 'N/A'}
-                    </TableCell>
-                  </TableRow>
+            <div style={{
+              width: '8px', height: '8px', borderRadius: '50%',
+              background: '#66bb6a', boxShadow: '0 0 6px #66bb6a',
+              animation: 'pulse 2s infinite',
+            }} />
+            <span style={{ fontSize: '12px', fontWeight: 500, color: '#66bb6a' }}>
+              All Systems Operational
+            </span>
+          </div>
+          <div style={{ marginLeft: 'auto', display: 'flex', gap: '10px' }}>
+            <button className="ms-btn" onClick={fetchData} style={{
+              padding: '8px 18px', borderRadius: '8px',
+              background: 'rgba(255,255,255,0.04)',
+              border: '1px solid rgba(255,255,255,0.12)',
+              color: 'rgba(255,255,255,0.6)', fontSize: '13px', fontWeight: 500,
+              fontFamily: '"DM Sans", sans-serif',
+              display: 'flex', alignItems: 'center', gap: '6px',
+            }}>
+              🔄 Refresh
+            </button>
+            <button className="ms-btn" onClick={() => setDialogOpen(true)} style={{
+              padding: '8px 18px', borderRadius: '8px',
+              background: 'linear-gradient(135deg, #1976d2, #42a5f5)',
+              border: 'none', color: '#fff', fontSize: '13px', fontWeight: 600,
+              fontFamily: '"DM Sans", sans-serif',
+            }}>
+              Trigger Retrain
+            </button>
+          </div>
+        </div>
+        <style>{`@keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.4} }`}</style>
+      </div>
+
+      {error && (
+        <div style={{
+          padding: '14px 20px', borderRadius: '12px', marginBottom: '20px',
+          background: 'rgba(239,83,80,0.08)', border: '1px solid rgba(239,83,80,0.2)',
+          color: '#ef5350', fontSize: '13px',
+        }}>
+          ⚠️ {error}
+        </div>
+      )}
+      {success && (
+        <div style={{
+          padding: '14px 20px', borderRadius: '12px', marginBottom: '20px',
+          background: 'rgba(102,187,106,0.08)', border: '1px solid rgba(102,187,106,0.2)',
+          color: '#66bb6a', fontSize: '13px',
+        }}>
+          ✅ {success}
+        </div>
+      )}
+
+      {/* Metrics Grid */}
+      <div style={{
+        display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))',
+        gap: '16px', marginBottom: '28px',
+      }}>
+        {metrics.map((m, i) => (
+          <GlassCard key={i} style={{ position: 'relative', overflow: 'hidden' }}>
+            <div style={{
+              position: 'absolute', top: 0, left: 0, right: 0, height: '3px',
+              background: m.gradient,
+            }} />
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '14px' }}>
+              <div style={{
+                width: '40px', height: '40px', borderRadius: '10px',
+                background: m.gradient,
+                display: 'flex', alignItems: 'center', justifyContent: 'center',
+                fontSize: '18px',
+              }}>{m.icon}</div>
+              <span style={{
+                padding: '3px 10px', borderRadius: '99px', fontSize: '10px', fontWeight: 600,
+                background: `${m.color}15`, color: m.color,
+                border: `1px solid ${m.color}30`,
+              }}>online</span>
+            </div>
+            <div style={{ fontSize: '12px', color: 'rgba(255,255,255,0.4)', marginBottom: '4px' }}>{m.title}</div>
+            <div style={{ fontSize: '24px', fontWeight: 800, color: '#fff', fontFamily: '"Syne", sans-serif', marginBottom: '4px' }}>{m.value}</div>
+            <div style={{ fontSize: '11px', color: 'rgba(255,255,255,0.3)' }}>{m.desc}</div>
+          </GlassCard>
+        ))}
+      </div>
+
+      {/* Active Model + Health */}
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(340px, 1fr))', gap: '16px', marginBottom: '28px' }}>
+        <GlassCard>
+          <div style={{ fontFamily: '"Syne", sans-serif', fontSize: '16px', fontWeight: 700, color: '#fff', marginBottom: '6px' }}>Active Model</div>
+          <div style={{ height: '1px', background: 'rgba(255,255,255,0.06)', margin: '12px 0 16px' }} />
+          {status?.active_version ? (
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+              {[
+                { label: 'Version', value: status.active_version },
+                { label: 'Type', value: status.model_type },
+                { label: 'Accuracy', value: status.accuracy?.toFixed(4) || 'N/A' },
+                { label: 'Precision', value: status.precision?.toFixed(4) || 'N/A' },
+                { label: 'Recall', value: status.recall?.toFixed(4) || 'N/A' },
+                { label: 'F1 Score', value: status.f1_score?.toFixed(4) || 'N/A' },
+              ].map((item, i) => (
+                <div key={i} style={{ display: 'flex', justifyContent: 'space-between', padding: '8px 12px', borderRadius: '6px', background: 'rgba(255,255,255,0.02)' }}>
+                  <span style={{ fontSize: '13px', color: 'rgba(255,255,255,0.4)' }}>{item.label}</span>
+                  <span style={{ fontSize: '13px', color: '#fff', fontWeight: 600 }}>{item.value}</span>
+                </div>
+              ))}
+            </div>
+          ) : (
+            <div style={{ textAlign: 'center', padding: '20px', color: 'rgba(255,255,255,0.4)', fontSize: '13px' }}>No active model</div>
+          )}
+        </GlassCard>
+
+        <GlassCard>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '6px' }}>
+            <span style={{ fontSize: '16px' }}>📈</span>
+            <span style={{ fontFamily: '"Syne", sans-serif', fontSize: '16px', fontWeight: 700, color: '#fff' }}>System Health</span>
+          </div>
+          <div style={{ height: '1px', background: 'rgba(255,255,255,0.06)', margin: '12px 0 16px' }} />
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+            {healthBars.map((bar, i) => (
+              <div key={i}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '6px' }}>
+                  <span style={{ fontSize: '13px', color: 'rgba(255,255,255,0.5)', fontWeight: 500 }}>{bar.label}</span>
+                  <span style={{ fontSize: '13px', fontWeight: 700, color: '#fff' }}>{bar.value}%</span>
+                </div>
+                <div style={{ height: '6px', borderRadius: '3px', background: 'rgba(255,255,255,0.06)' }}>
+                  <div style={{ height: '100%', borderRadius: '3px', width: `${bar.value}%`, background: bar.color, transition: 'width 0.6s ease' }} />
+                </div>
+              </div>
+            ))}
+          </div>
+        </GlassCard>
+      </div>
+
+      {/* Statistics */}
+      <GlassCard style={{ marginBottom: '28px' }}>
+        <div style={{ fontFamily: '"Syne", sans-serif', fontSize: '16px', fontWeight: 700, color: '#fff', marginBottom: '6px' }}>Statistics</div>
+        <div style={{ height: '1px', background: 'rgba(255,255,255,0.06)', margin: '12px 0 16px' }} />
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(140px, 1fr))', gap: '12px' }}>
+          {[
+            { label: 'Total Scans', value: status?.total_scans || 0, color: '#42a5f5' },
+            { label: 'Total Feedback', value: status?.total_feedback || 0, color: '#ce93d8' },
+            { label: 'Pending Retraining', value: status?.pending_retraining_samples || 0, color: '#ffa726' },
+            { label: 'Training Samples', value: status?.training_samples || 0, color: '#66bb6a' },
+          ].map((stat, i) => (
+            <div key={i} style={{
+              textAlign: 'center', padding: '16px', borderRadius: '10px',
+              background: 'rgba(255,255,255,0.02)',
+              border: '1px solid rgba(255,255,255,0.04)',
+            }}>
+              <div style={{ fontSize: '12px', color: 'rgba(255,255,255,0.4)', marginBottom: '6px' }}>{stat.label}</div>
+              <div style={{ fontSize: '28px', fontWeight: 800, color: stat.color, fontFamily: '"Syne", sans-serif' }}>{stat.value}</div>
+            </div>
+          ))}
+        </div>
+      </GlassCard>
+
+      {/* Recent Activity */}
+      <GlassCard style={{ marginBottom: '28px' }}>
+        <div style={{ fontFamily: '"Syne", sans-serif', fontSize: '16px', fontWeight: 700, color: '#fff', marginBottom: '6px' }}>Recent Activity</div>
+        <div style={{ height: '1px', background: 'rgba(255,255,255,0.06)', margin: '12px 0 16px' }} />
+        {[
+          { time: '2 min ago', event: 'Security scan completed', status: 'success' },
+          { time: '15 min ago', event: 'Model cache updated', status: 'info' },
+          { time: '1 hour ago', event: 'System health check passed', status: 'success' },
+          { time: '3 hours ago', event: 'Database optimization completed', status: 'info' },
+        ].map((a, i) => (
+          <div key={i} style={{
+            display: 'flex', alignItems: 'flex-start', gap: '12px',
+            padding: '10px 12px', borderRadius: '8px',
+            marginBottom: '4px',
+          }}>
+            <div style={{
+              width: '7px', height: '7px', borderRadius: '50%', marginTop: '6px', flexShrink: 0,
+              background: a.status === 'success' ? '#66bb6a' : '#42a5f5',
+              boxShadow: `0 0 6px ${a.status === 'success' ? '#66bb6a' : '#42a5f5'}`,
+            }} />
+            <div style={{ flex: 1 }}>
+              <div style={{ fontSize: '13px', color: 'rgba(255,255,255,0.65)', fontWeight: 500 }}>{a.event}</div>
+              <div style={{ fontSize: '11px', color: 'rgba(255,255,255,0.3)' }}>{a.time}</div>
+            </div>
+          </div>
+        ))}
+      </GlassCard>
+
+      {/* Version History */}
+      <div style={{ marginBottom: '28px' }}>
+        <h2 style={{ fontFamily: '"Syne", sans-serif', fontSize: '18px', fontWeight: 700, color: '#fff', marginBottom: '16px' }}>Version History</h2>
+        <GlassCard style={{ padding: 0, overflow: 'hidden' }}>
+          <div style={{ overflowX: 'auto' }}>
+            <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px' }}>
+              <thead>
+                <tr style={{ background: 'rgba(255,255,255,0.03)', borderBottom: '1px solid rgba(255,255,255,0.06)' }}>
+                  {['Version', 'Type', 'Accuracy', 'Precision', 'Recall', 'F1 Score', 'Samples', 'Created'].map((h) => (
+                    <th key={h} style={{ padding: '12px 16px', textAlign: 'left', color: 'rgba(255,255,255,0.5)', fontWeight: 600, fontSize: '11px', textTransform: 'uppercase', letterSpacing: '0.05em' }}>{h}</th>
+                  ))}
+                </tr>
+              </thead>
+              <tbody>
+                {versions.map((v, i) => (
+                  <tr key={v.active_version || i} style={{ borderBottom: '1px solid rgba(255,255,255,0.04)' }}>
+                    <td style={{ padding: '10px 16px' }}>
+                      <span style={{ padding: '3px 10px', borderRadius: '6px', background: 'rgba(66,165,245,0.12)', color: '#42a5f5', fontSize: '11px', fontWeight: 600, border: '1px solid rgba(66,165,245,0.25)' }}>
+                        {v.active_version}
+                      </span>
+                    </td>
+                    <td style={{ padding: '10px 16px', color: 'rgba(255,255,255,0.6)' }}>{v.model_type}</td>
+                    <td style={{ padding: '10px 16px', color: 'rgba(255,255,255,0.6)' }}>{v.accuracy?.toFixed(4) || 'N/A'}</td>
+                    <td style={{ padding: '10px 16px', color: 'rgba(255,255,255,0.6)' }}>{v.precision?.toFixed(4) || 'N/A'}</td>
+                    <td style={{ padding: '10px 16px', color: 'rgba(255,255,255,0.6)' }}>{v.recall?.toFixed(4) || 'N/A'}</td>
+                    <td style={{ padding: '10px 16px', color: 'rgba(255,255,255,0.6)' }}>{v.f1_score?.toFixed(4) || 'N/A'}</td>
+                    <td style={{ padding: '10px 16px', color: 'rgba(255,255,255,0.6)' }}>{v.training_samples || 0}</td>
+                    <td style={{ padding: '10px 16px', color: 'rgba(255,255,255,0.4)' }}>{v.created_at ? new Date(v.created_at).toLocaleString() : 'N/A'}</td>
+                  </tr>
                 ))}
-              </TableBody>
-            </Table>
-          </TableContainer>
-        </Box>
-      </Box>
+              </tbody>
+            </table>
+          </div>
+        </GlassCard>
+      </div>
 
       {/* Retrain Dialog */}
-      <Dialog 
-        open={dialogOpen} 
-        onClose={() => setDialogOpen(false)}
-        maxWidth="sm"
-        fullWidth
+      <Dialog open={dialogOpen} onClose={() => setDialogOpen(false)} maxWidth="sm" fullWidth
+        PaperProps={{ sx: { bgcolor: '#0f2744', backgroundImage: 'none', border: '1px solid rgba(255,255,255,0.08)', borderRadius: 3 } }}
       >
-        <DialogTitle sx={{ fontWeight: 'bold' }}>Trigger Model Retraining</DialogTitle>
+        <DialogTitle sx={{ fontWeight: 700, color: '#fff' }}>Trigger Model Retraining</DialogTitle>
         <DialogContent>
-          <Box display="flex" flexDirection="column" gap={2} pt={1}>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '16px', paddingTop: '8px' }}>
             <Alert severity="info" sx={{ borderRadius: 2 }}>
               Retraining will use feedback data to update the model using online learning.
             </Alert>
             <TextField
-              label="Minimum Samples"
-              type="number"
-              value={minSamples}
-              onChange={(e) => setMinSamples(parseInt(e.target.value))}
+              label="Minimum Samples" type="number"
+              value={minSamples} onChange={(e) => setMinSamples(parseInt(e.target.value))}
               helperText="Minimum number of feedback samples required"
               fullWidth
+              sx={{
+                '& .MuiOutlinedInput-root': { color: 'rgba(255,255,255,0.8)', '& fieldset': { borderColor: 'rgba(255,255,255,0.12)' } },
+                '& .MuiInputLabel-root': { color: 'rgba(255,255,255,0.4)' },
+              }}
             />
-          </Box>
+          </div>
         </DialogContent>
         <DialogActions sx={{ p: 3, pt: 0 }}>
-          <Button onClick={() => setDialogOpen(false)} sx={{ borderRadius: 2 }}>
+          <button onClick={() => setDialogOpen(false)} style={{
+            padding: '8px 20px', borderRadius: '8px',
+            background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.12)',
+            color: 'rgba(255,255,255,0.6)', cursor: 'pointer', fontFamily: '"DM Sans", sans-serif',
+          }}>
             Cancel
-          </Button>
-          <Button
-            onClick={handleRetrain}
-            variant="contained"
-            disabled={retraining}
-            sx={{ 
-              borderRadius: 2,
-              background: 'linear-gradient(135deg, #1976d2 0%, #1565c0 100%)'
-            }}
-          >
-            {retraining ? <CircularProgress size={24} /> : 'Start Retraining'}
-          </Button>
+          </button>
+          <button onClick={handleRetrain} disabled={retraining} style={{
+            padding: '8px 20px', borderRadius: '8px', border: 'none',
+            background: 'linear-gradient(135deg, #1976d2, #42a5f5)',
+            color: '#fff', fontWeight: 600, cursor: 'pointer', fontFamily: '"DM Sans", sans-serif',
+          }}>
+            {retraining ? 'Starting...' : 'Start Retraining'}
+          </button>
         </DialogActions>
       </Dialog>
-    </Box>
+    </div>
   );
 }

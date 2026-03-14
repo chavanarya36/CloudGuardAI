@@ -61,7 +61,7 @@ export default function UserModeSelection() {
 
   const selectMode = (mode) => {
     localStorage.setItem('user_mode', mode);
-    navigate(mode === 'expert' ? '/scan' : '/landing');
+    navigate(mode === 'expert' ? '/scan' : '/security-overview');
   };
 
   const cards = [

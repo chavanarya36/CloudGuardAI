@@ -962,7 +962,7 @@ async def get_scan_statistics(db: Session = Depends(get_db)):
             "llm_score": float(avg_scores.avg_llm) if avg_scores.avg_llm else 0.0,
             "secrets_score": float(avg_scores.avg_secrets) if avg_scores.avg_secrets else 0.0,
             "cve_score": float(avg_scores.avg_cve) if avg_scores.avg_cve else 0.0,
-            "compliance_score": float(avg_scores.avg_compliance) if avg_scores.avg_compliance else 0.0
+            "compliance_score": float(avg_scores.avg_compliance) / 100.0 if avg_scores.avg_compliance else 0.0
         },
         "trend_30_days": trend_data
     }

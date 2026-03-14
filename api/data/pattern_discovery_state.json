@@ -250,11 +250,13 @@
       34,
       35,
       36,
-      40
+      40,
+      41,
+      42
     ],
-    "count": 62,
+    "count": 64,
     "first_seen": "2026-02-22T11:47:30.883001",
-    "last_seen": "2026-03-12T15:32:48.895546",
+    "last_seen": "2026-03-13T14:58:41.822853",
     "rule_generated": true,
     "affected_files": [
       "vulnerable_infra.tf",
@@ -291,7 +293,7 @@
       "Validate changes with terraform plan before applying",
       "Add automated policy checks in your CI/CD pipeline"
     ],
-    "risk_explanation": "This pattern has been detected 62 times across 25 scan(s), affecting 0 unique resource(s) in 4 file(s). Severity: CRITICAL. Detected by: Rules."
+    "risk_explanation": "This pattern has been detected 64 times across 27 scan(s), affecting 0 unique resource(s) in 4 file(s). Severity: CRITICAL. Detected by: Rules."
   },
   "000a4bef5923": {
     "signature": "000a4bef5923",
@@ -439,11 +441,13 @@
       34,
       35,
       36,
-      40
+      40,
+      41,
+      42
     ],
-    "count": 94,
+    "count": 98,
     "first_seen": "2026-02-22T11:47:30.883001",
-    "last_seen": "2026-03-12T15:32:48.895546",
+    "last_seen": "2026-03-13T14:58:41.822853",
     "rule_generated": true,
     "affected_files": [
       "vulnerable_infra.tf",
@@ -493,7 +497,7 @@
       "Validate changes with terraform plan before applying",
       "Add automated policy checks in your CI/CD pipeline"
     ],
-    "risk_explanation": "This pattern has been detected 94 times across 25 scan(s), affecting 0 unique resource(s) in 4 file(s). Severity: CRITICAL. Detected by: Rules."
+    "risk_explanation": "This pattern has been detected 98 times across 27 scan(s), affecting 0 unique resource(s) in 4 file(s). Severity: CRITICAL. Detected by: Rules."
   },
   "f15970b619a7": {
     "signature": "f15970b619a7",
@@ -517,11 +521,13 @@
       32,
       33,
       34,
-      36
+      36,
+      41,
+      42
     ],
-    "count": 25,
+    "count": 27,
     "first_seen": "2026-02-22T11:47:30.883001",
-    "last_seen": "2026-03-11T13:38:55.823984",
+    "last_seen": "2026-03-13T14:58:41.822853",
     "rule_generated": true,
     "affected_files": [
       "vulnerable_infra.tf",
@@ -559,7 +565,7 @@
       "Validate changes with terraform plan before applying",
       "Add automated policy checks in your CI/CD pipeline"
     ],
-    "risk_explanation": "This pattern has been detected 25 times across 17 scan(s), affecting 0 unique resource(s) in 5 file(s). Severity: CRITICAL. Detected by: Rules."
+    "risk_explanation": "This pattern has been detected 27 times across 19 scan(s), affecting 0 unique resource(s) in 5 file(s). Severity: CRITICAL. Detected by: Rules."
   },
   "36027ee229e8": {
     "signature": "36027ee229e8",
@@ -583,11 +589,13 @@
       32,
       33,
       34,
-      36
+      36,
+      41,
+      42
     ],
-    "count": 25,
+    "count": 27,
     "first_seen": "2026-02-22T11:47:30.883001",
-    "last_seen": "2026-03-11T13:38:55.824988",
+    "last_seen": "2026-03-13T14:58:41.822853",
     "rule_generated": true,
     "affected_files": [
       "vulnerable_infra.tf",
@@ -625,7 +633,7 @@
       "Validate changes with terraform plan before applying",
       "Add automated policy checks in your CI/CD pipeline"
     ],
-    "risk_explanation": "This pattern has been detected 25 times across 17 scan(s), affecting 0 unique resource(s) in 5 file(s). Severity: CRITICAL. Detected by: Rules."
+    "risk_explanation": "This pattern has been detected 27 times across 19 scan(s), affecting 0 unique resource(s) in 5 file(s). Severity: CRITICAL. Detected by: Rules."
   },
   "04f7bc8714b1": {
     "signature": "04f7bc8714b1",
@@ -695,11 +703,13 @@
       34,
       35,
       36,
-      40
+      40,
+      41,
+      42
     ],
-    "count": 44,
+    "count": 46,
     "first_seen": "2026-02-22T11:47:30.883001",
-    "last_seen": "2026-03-12T15:32:48.895546",
+    "last_seen": "2026-03-13T14:58:41.822853",
     "rule_generated": true,
     "affected_files": [
       "vulnerable_infra.tf",
@@ -737,7 +747,7 @@
       "Validate changes with terraform plan before applying",
       "Add automated policy checks in your CI/CD pipeline"
     ],
-    "risk_explanation": "This pattern has been detected 44 times across 28 scan(s), affecting 0 unique resource(s) in 5 file(s). Severity: MEDIUM. Detected by: Rules."
+    "risk_explanation": "This pattern has been detected 46 times across 30 scan(s), affecting 0 unique resource(s) in 5 file(s). Severity: MEDIUM. Detected by: Rules."
   },
   "50d4cc8b5dc3": {
     "signature": "50d4cc8b5dc3",
@@ -765,11 +775,13 @@
       32,
       33,
       34,
-      36
+      36,
+      41,
+      42
     ],
-    "count": 30,
+    "count": 32,
     "first_seen": "2026-02-22T11:47:30.883001",
-    "last_seen": "2026-03-11T13:38:55.824988",
+    "last_seen": "2026-03-13T14:58:41.822853",
     "rule_generated": true,
     "affected_files": [
       "vulnerable_infra.tf",
@@ -808,7 +820,7 @@
       "Validate changes with terraform plan before applying",
       "Add automated policy checks in your CI/CD pipeline"
     ],
-    "risk_explanation": "This pattern has been detected 30 times across 21 scan(s), affecting 0 unique resource(s) in 6 file(s). Severity: HIGH. Detected by: Rules."
+    "risk_explanation": "This pattern has been detected 32 times across 23 scan(s), affecting 0 unique resource(s) in 6 file(s). Severity: HIGH. Detected by: Rules."
   },
   "e1c9edc42bab": {
     "signature": "e1c9edc42bab",
@@ -836,11 +848,13 @@
       32,
       33,
       34,
-      36
+      36,
+      41,
+      42
     ],
-    "count": 31,
+    "count": 33,
     "first_seen": "2026-02-22T11:47:30.883001",
-    "last_seen": "2026-03-11T13:38:55.824988",
+    "last_seen": "2026-03-13T14:58:41.822853",
     "rule_generated": true,
     "affected_files": [
       "vulnerable_infra.tf",
@@ -878,7 +892,7 @@
       "Validate changes with terraform plan before applying",
       "Add automated policy checks in your CI/CD pipeline"
     ],
-    "risk_explanation": "This pattern has been detected 31 times across 21 scan(s), affecting 0 unique resource(s) in 5 file(s). Severity: CRITICAL. Detected by: Rules."
+    "risk_explanation": "This pattern has been detected 33 times across 23 scan(s), affecting 0 unique resource(s) in 5 file(s). Severity: CRITICAL. Detected by: Rules."
   },
   "6d78475595b4": {
     "signature": "6d78475595b4",
@@ -959,11 +973,13 @@
       32,
       33,
       34,
-      36
+      36,
+      41,
+      42
     ],
-    "count": 17,
+    "count": 19,
     "first_seen": "2026-02-22T11:47:30.883001",
-    "last_seen": "2026-03-11T13:38:55.824988",
+    "last_seen": "2026-03-13T14:58:41.822853",
     "rule_generated": true,
     "affected_files": [
       "vulnerable_infra.tf",
@@ -998,7 +1014,7 @@
       "Validate changes with terraform plan before applying",
       "Add automated policy checks in your CI/CD pipeline"
     ],
-    "risk_explanation": "This pattern has been detected 17 times across 17 scan(s), affecting 0 unique resource(s) in 2 file(s). Severity: HIGH. Detected by: Rules."
+    "risk_explanation": "This pattern has been detected 19 times across 19 scan(s), affecting 0 unique resource(s) in 2 file(s). Severity: HIGH. Detected by: Rules."
   },
   "16338fa813bb": {
     "signature": "16338fa813bb",
@@ -1100,11 +1116,13 @@
       36,
       38,
       39,
-      40
+      40,
+      41,
+      42
     ],
-    "count": 76,
+    "count": 78,
     "first_seen": "2026-02-22T11:56:22.049283",
-    "last_seen": "2026-03-12T15:32:48.895546",
+    "last_seen": "2026-03-13T14:58:41.822853",
     "rule_generated": true,
     "affected_files": [
       "vulnerable_infra.tf",
@@ -1150,7 +1168,7 @@
       "Review release notes for breaking changes before upgrading",
       "Pin dependency versions and enable automated update PRs"
     ],
-    "risk_explanation": "This pattern has been detected 76 times across 36 scan(s), affecting 0 unique resource(s) in 15 file(s). Severity: HIGH. Detected by: CVE.",
+    "risk_explanation": "This pattern has been detected 78 times across 38 scan(s), affecting 0 unique resource(s) in 15 file(s). Severity: HIGH. Detected by: CVE.",
     "rule_ids_involved": [
       "CVE"
     ]
@@ -1190,11 +1208,13 @@
       37,
       38,
       39,
-      40
+      40,
+      41,
+      42
     ],
-    "count": 53,
+    "count": 55,
     "first_seen": "2026-02-22T11:56:22.049283",
-    "last_seen": "2026-03-12T15:32:48.895546",
+    "last_seen": "2026-03-13T14:58:41.822853",
     "rule_generated": true,
     "affected_resources": [
       "arn:aws:s3:::private_data",
@@ -1294,7 +1314,7 @@
       "Configure default encryption for the bucket",
       "Update bucket policy to require encrypted uploads"
     ],
-    "risk_explanation": "This pattern has been detected 53 times across 30 scan(s), affecting 7 unique resource(s) in 6 file(s). Severity: HIGH. Detected by: Compliance."
+    "risk_explanation": "This pattern has been detected 55 times across 32 scan(s), affecting 7 unique resource(s) in 6 file(s). Severity: HIGH. Detected by: Compliance."
   },
   "e9bab3175f1c": {
     "signature": "e9bab3175f1c",
@@ -1331,11 +1351,13 @@
       37,
       38,
       39,
-      40
+      40,
+      41,
+      42
     ],
-    "count": 49,
+    "count": 51,
     "first_seen": "2026-02-22T11:56:22.049283",
-    "last_seen": "2026-03-12T15:32:48.895546",
+    "last_seen": "2026-03-13T14:58:41.822853",
     "rule_generated": true,
     "affected_resources": [
       "arn:aws:s3:::public_bucket",
@@ -1433,7 +1455,7 @@
       "Set appropriate log file prefix",
       "Review logs regularly for security events"
     ],
-    "risk_explanation": "This pattern has been detected 49 times across 30 scan(s), affecting 6 unique resource(s) in 5 file(s). Severity: MEDIUM. Detected by: Compliance."
+    "risk_explanation": "This pattern has been detected 51 times across 32 scan(s), affecting 6 unique resource(s) in 5 file(s). Severity: MEDIUM. Detected by: Compliance."
   },
   "909bef9b0672": {
     "signature": "909bef9b0672",
@@ -1456,11 +1478,13 @@
       32,
       33,
       34,
-      36
+      36,
+      41,
+      42
     ],
-    "count": 16,
+    "count": 18,
     "first_seen": "2026-02-22T11:59:34.936932",
-    "last_seen": "2026-03-11T13:38:55.822977",
+    "last_seen": "2026-03-13T14:58:41.822853",
     "rule_generated": true,
     "affected_files": [
       "vulnerable_infra.tf",
@@ -1496,7 +1520,7 @@
       "Validate changes with terraform plan before applying",
       "Add automated policy checks in your CI/CD pipeline"
     ],
-    "risk_explanation": "This pattern has been detected 16 times across 16 scan(s), affecting 0 unique resource(s) in 3 file(s). Severity: CRITICAL. Detected by: Rules."
+    "risk_explanation": "This pattern has been detected 18 times across 18 scan(s), affecting 0 unique resource(s) in 3 file(s). Severity: CRITICAL. Detected by: Rules."
   },
   "1a5f29664184": {
     "signature": "1a5f29664184",
@@ -1519,11 +1543,13 @@
       32,
       33,
       34,
-      36
+      36,
+      41,
+      42
     ],
-    "count": 16,
+    "count": 18,
     "first_seen": "2026-02-22T11:59:34.936932",
-    "last_seen": "2026-03-11T13:38:55.822977",
+    "last_seen": "2026-03-13T14:58:41.822853",
     "rule_generated": true,
     "affected_files": [
       "vulnerable_infra.tf",
@@ -1559,7 +1585,7 @@
       "Validate changes with terraform plan before applying",
       "Add automated policy checks in your CI/CD pipeline"
     ],
-    "risk_explanation": "This pattern has been detected 16 times across 16 scan(s), affecting 0 unique resource(s) in 3 file(s). Severity: HIGH. Detected by: Rules."
+    "risk_explanation": "This pattern has been detected 18 times across 18 scan(s), affecting 0 unique resource(s) in 3 file(s). Severity: HIGH. Detected by: Rules."
   },
   "97b91f264efb": {
     "signature": "97b91f264efb",
@@ -1586,11 +1612,13 @@
       34,
       35,
       36,
-      40
+      40,
+      41,
+      42
     ],
-    "count": 22,
+    "count": 24,
     "first_seen": "2026-02-22T11:59:34.936932",
-    "last_seen": "2026-03-12T15:32:48.895546",
+    "last_seen": "2026-03-13T14:58:41.822853",
     "rule_generated": true,
     "affected_files": [
       "vulnerable_infra.tf",
@@ -1627,7 +1655,7 @@
       "Validate changes with terraform plan before applying",
       "Add automated policy checks in your CI/CD pipeline"
     ],
-    "risk_explanation": "This pattern has been detected 22 times across 20 scan(s), affecting 0 unique resource(s) in 4 file(s). Severity: HIGH. Detected by: Rules."
+    "risk_explanation": "This pattern has been detected 24 times across 22 scan(s), affecting 0 unique resource(s) in 4 file(s). Severity: HIGH. Detected by: Rules."
   },
   "d135cd26b7a3": {
     "signature": "d135cd26b7a3",
@@ -1860,11 +1888,13 @@
       34,
       35,
       36,
-      40
+      40,
+      41,
+      42
     ],
-    "count": 24,
+    "count": 26,
     "first_seen": "2026-02-22T12:56:12.324119",
-    "last_seen": "2026-03-12T15:32:48.895546",
+    "last_seen": "2026-03-13T14:58:41.822853",
     "rule_generated": true,
     "affected_resources": [],
     "affected_files": [
@@ -1901,7 +1931,7 @@
       "Validate changes with terraform plan before applying",
       "Add automated policy checks in your CI/CD pipeline"
     ],
-    "risk_explanation": "This pattern has been detected 24 times across 18 scan(s), affecting 0 unique resource(s) in 3 file(s). Severity: MEDIUM. Detected by: Rules."
+    "risk_explanation": "This pattern has been detected 26 times across 20 scan(s), affecting 0 unique resource(s) in 3 file(s). Severity: MEDIUM. Detected by: Rules."
   },
   "2ca895597198": {
     "signature": "2ca895597198",
@@ -1924,11 +1954,13 @@
       32,
       33,
       34,
-      36
+      36,
+      41,
+      42
     ],
-    "count": 42,
+    "count": 44,
     "first_seen": "2026-02-22T12:56:12.324635",
-    "last_seen": "2026-03-11T13:38:55.824988",
+    "last_seen": "2026-03-13T14:58:41.822853",
     "rule_generated": true,
     "affected_resources": [],
     "affected_files": [
@@ -1973,7 +2005,7 @@
       "Use a secrets manager (AWS Secrets Manager, HashiCorp Vault)",
       "Add pre-commit hooks to prevent future secret commits"
     ],
-    "risk_explanation": "This pattern has been detected 42 times across 16 scan(s), affecting 0 unique resource(s) in 6 file(s). Severity: HIGH. Detected by: Secrets."
+    "risk_explanation": "This pattern has been detected 44 times across 18 scan(s), affecting 0 unique resource(s) in 6 file(s). Severity: HIGH. Detected by: Secrets."
   },
   "e5a22a913714": {
     "signature": "e5a22a913714",
@@ -2097,11 +2129,13 @@
       32,
       33,
       34,
-      36
+      36,
+      41,
+      42
     ],
-    "count": 41,
+    "count": 43,
     "first_seen": "2026-02-22T12:56:12.324635",
-    "last_seen": "2026-03-11T13:38:55.824988",
+    "last_seen": "2026-03-13T14:58:41.823769",
     "rule_generated": true,
     "affected_resources": [
       "web_sg",
@@ -2185,7 +2219,7 @@
       "Update the Terraform resource to meet the compliance requirement",
       "Enable encryption, logging, or access controls as specified"
     ],
-    "risk_explanation": "This pattern has been detected 41 times across 13 scan(s), affecting 3 unique resource(s) in 4 file(s). Severity: CRITICAL. Detected by: Compliance."
+    "risk_explanation": "This pattern has been detected 43 times across 15 scan(s), affecting 3 unique resource(s) in 4 file(s). Severity: CRITICAL. Detected by: Compliance."
   },
   "1db9024d2edd": {
     "signature": "1db9024d2edd",
@@ -2210,11 +2244,13 @@
       34,
       35,
       36,
-      40
+      40,
+      41,
+      42
     ],
-    "count": 18,
+    "count": 20,
     "first_seen": "2026-02-22T12:56:12.324635",
-    "last_seen": "2026-03-12T15:32:48.895546",
+    "last_seen": "2026-03-13T14:58:41.823769",
     "rule_generated": true,
     "affected_resources": [],
     "affected_files": [
@@ -2248,7 +2284,7 @@
       "Cross-reference with rules and compliance findings",
       "Apply remediation steps from the most critical related findings"
     ],
-    "risk_explanation": "This pattern has been detected 18 times across 18 scan(s), affecting 0 unique resource(s) in 3 file(s). Severity: CRITICAL. Detected by: ML."
+    "risk_explanation": "This pattern has been detected 20 times across 20 scan(s), affecting 0 unique resource(s) in 3 file(s). Severity: CRITICAL. Detected by: ML."
   },
   "1dcad65dbce3": {
     "signature": "1dcad65dbce3",
@@ -2383,11 +2419,13 @@
       36,
       38,
       39,
-      40
+      40,
+      41,
+      42
     ],
-    "count": 35,
+    "count": 37,
     "first_seen": "2026-02-22T12:56:12.324635",
-    "last_seen": "2026-03-12T15:32:48.895546",
+    "last_seen": "2026-03-13T14:58:41.823769",
     "rule_generated": true,
     "affected_resources": [
       "aws_security_group.web_sg",
@@ -2469,7 +2507,7 @@
     "remediation_guidance": [
       "Restrict CIDR blocks to specific IP ranges"
     ],
-    "risk_explanation": "This pattern has been detected 35 times across 21 scan(s), affecting 4 unique resource(s) in 5 file(s). Severity: HIGH. Detected by: GNN, Attack Path."
+    "risk_explanation": "This pattern has been detected 37 times across 23 scan(s), affecting 4 unique resource(s) in 5 file(s). Severity: HIGH. Detected by: GNN, Attack Path."
   },
   "91aa7179c00f": {
     "signature": "91aa7179c00f",
@@ -2496,11 +2534,13 @@
       36,
       38,
       39,
-      40
+      40,
+      41,
+      42
     ],
-    "count": 29,
+    "count": 31,
     "first_seen": "2026-02-22T12:56:12.324635",
-    "last_seen": "2026-03-12T15:32:48.895546",
+    "last_seen": "2026-03-13T14:58:41.823769",
     "rule_generated": true,
     "affected_resources": [
       "aws_security_group.web_sg",
@@ -2567,7 +2607,7 @@
     "remediation_guidance": [
       "Limit port ranges to necessary services only"
     ],
-    "risk_explanation": "This pattern has been detected 29 times across 20 scan(s), affecting 3 unique resource(s) in 4 file(s). Severity: CRITICAL. Detected by: GNN, Attack Path."
+    "risk_explanation": "This pattern has been detected 31 times across 22 scan(s), affecting 3 unique resource(s) in 4 file(s). Severity: CRITICAL. Detected by: GNN, Attack Path."
   },
   "b7683e88e1a5": {
     "signature": "b7683e88e1a5",
@@ -2670,11 +2710,13 @@
       32,
       33,
       34,
-      36
+      36,
+      41,
+      42
     ],
-    "count": 12,
+    "count": 14,
     "first_seen": "2026-02-22T12:56:12.324635",
-    "last_seen": "2026-03-11T13:38:55.829989",
+    "last_seen": "2026-03-13T14:58:41.823769",
     "rule_generated": true,
     "affected_resources": [
       "aws_instance.web_server"
@@ -2711,7 +2753,7 @@
     "remediation_guidance": [
       "Place instance behind a load balancer or NAT gateway"
     ],
-    "risk_explanation": "This pattern has been detected 12 times across 12 scan(s), affecting 1 unique resource(s) in 2 file(s). Severity: MEDIUM. Detected by: GNN, Attack Path."
+    "risk_explanation": "This pattern has been detected 14 times across 14 scan(s), affecting 1 unique resource(s) in 2 file(s). Severity: MEDIUM. Detected by: GNN, Attack Path."
   },
   "2ed8e2da8b27": {
     "signature": "2ed8e2da8b27",
@@ -2730,11 +2772,13 @@
       32,
       33,
       34,
-      36
+      36,
+      41,
+      42
     ],
-    "count": 15,
+    "count": 17,
     "first_seen": "2026-02-22T12:56:12.324635",
-    "last_seen": "2026-03-11T13:38:55.829989",
+    "last_seen": "2026-03-13T14:58:41.823769",
     "rule_generated": true,
     "affected_resources": [
       "aws_db_instance.database"
@@ -2772,7 +2816,7 @@
     "remediation_guidance": [
       "Set publicly_accessible = false and use VPC peering"
     ],
-    "risk_explanation": "This pattern has been detected 15 times across 12 scan(s), affecting 1 unique resource(s) in 3 file(s). Severity: CRITICAL. Detected by: GNN, Attack Path."
+    "risk_explanation": "This pattern has been detected 17 times across 14 scan(s), affecting 1 unique resource(s) in 3 file(s). Severity: CRITICAL. Detected by: GNN, Attack Path."
   },
   "c0ea8c2f963f": {
     "signature": "c0ea8c2f963f",
@@ -2791,11 +2835,13 @@
       32,
       33,
       34,
-      36
+      36,
+      41,
+      42
     ],
-    "count": 15,
+    "count": 17,
     "first_seen": "2026-02-22T12:56:12.324635",
-    "last_seen": "2026-03-11T13:38:55.830984",
+    "last_seen": "2026-03-13T14:58:41.824768",
     "rule_generated": true,
     "affected_resources": [
       "aws_db_instance.database"
@@ -2833,7 +2879,7 @@
     "remediation_guidance": [
       "Enable storage_encrypted = true with KMS key"
     ],
-    "risk_explanation": "This pattern has been detected 15 times across 12 scan(s), affecting 1 unique resource(s) in 3 file(s). Severity: HIGH. Detected by: GNN, Attack Path."
+    "risk_explanation": "This pattern has been detected 17 times across 14 scan(s), affecting 1 unique resource(s) in 3 file(s). Severity: HIGH. Detected by: GNN, Attack Path."
   },
   "4c99385ea394": {
     "signature": "4c99385ea394",
@@ -3023,11 +3069,13 @@
       32,
       33,
       34,
-      36
+      36,
+      41,
+      42
     ],
-    "count": 11,
+    "count": 13,
     "first_seen": "2026-02-22T12:58:56.871052",
-    "last_seen": "2026-03-11T13:38:55.824988",
+    "last_seen": "2026-03-13T14:58:41.823769",
     "rule_generated": true,
     "affected_resources": [
       "aws_security_group.web_sg",
@@ -3123,7 +3171,7 @@
       "Add monitoring and alerting for the identified attack path.",
       "[aws_security_group.open_sg] Restrict CIDR blocks to specific IP ranges"
     ],
-    "risk_explanation": "This pattern has been detected 11 times across 11 scan(s), affecting 2 unique resource(s) in 2 file(s). Severity: CRITICAL. Detected by: GNN, Attack Path."
+    "risk_explanation": "This pattern has been detected 13 times across 13 scan(s), affecting 2 unique resource(s) in 2 file(s). Severity: CRITICAL. Detected by: GNN, Attack Path."
   },
   "df07a533a329": {
     "signature": "df07a533a329",
@@ -8320,11 +8368,13 @@
       32,
       33,
       34,
-      36
+      36,
+      41,
+      42
     ],
-    "count": 7,
+    "count": 9,
     "first_seen": "2026-03-10T14:51:46.802013",
-    "last_seen": "2026-03-11T13:38:55.824988",
+    "last_seen": "2026-03-13T14:58:41.822853",
     "rule_generated": true,
     "affected_resources": [],
     "affected_files": [
@@ -8360,7 +8410,7 @@
       "Validate changes with terraform plan before applying",
       "Add automated policy checks in your CI/CD pipeline"
     ],
-    "risk_explanation": "This pattern has been detected 7 times across 7 scan(s), affecting 0 unique resource(s) in 2 file(s). Severity: MEDIUM. Detected by: Rules."
+    "risk_explanation": "This pattern has been detected 9 times across 9 scan(s), affecting 0 unique resource(s) in 2 file(s). Severity: MEDIUM. Detected by: Rules."
   },
   "336ffe93a1f6": {
     "signature": "336ffe93a1f6",
@@ -8598,11 +8648,13 @@
       32,
       33,
       34,
-      36
+      36,
+      41,
+      42
     ],
-    "count": 6,
+    "count": 8,
     "first_seen": "2026-03-11T05:55:18.651911",
-    "last_seen": "2026-03-11T13:38:55.822977",
+    "last_seen": "2026-03-13T14:58:41.822757",
     "rule_generated": true,
     "affected_resources": [],
     "affected_files": [
@@ -8637,7 +8689,7 @@
       "Validate changes with terraform plan before applying",
       "Add automated policy checks in your CI/CD pipeline"
     ],
-    "risk_explanation": "This pattern has been detected 6 times across 6 scan(s), affecting 0 unique resource(s) in 1 file(s). Severity: CRITICAL. Detected by: Rules."
+    "risk_explanation": "This pattern has been detected 8 times across 8 scan(s), affecting 0 unique resource(s) in 1 file(s). Severity: CRITICAL. Detected by: Rules."
   },
   "0e15ad955ab3": {
     "signature": "0e15ad955ab3",
@@ -8650,11 +8702,13 @@
       32,
       33,
       34,
-      36
+      36,
+      41,
+      42
     ],
-    "count": 6,
+    "count": 8,
     "first_seen": "2026-03-11T05:55:18.656899",
-    "last_seen": "2026-03-11T13:38:55.826985",
+    "last_seen": "2026-03-13T14:58:41.823769",
     "rule_generated": true,
     "affected_resources": [
       "aws_instance.web_server"
@@ -8690,7 +8744,7 @@
       "Apply principle of least privilege across all connected resources.",
       "Add monitoring and alerting for the identified attack path."
     ],
-    "risk_explanation": "This pattern has been detected 6 times across 6 scan(s), affecting 1 unique resource(s) in 1 file(s). Severity: MEDIUM. Detected by: Attack Path."
+    "risk_explanation": "This pattern has been detected 8 times across 8 scan(s), affecting 1 unique resource(s) in 1 file(s). Severity: MEDIUM. Detected by: Attack Path."
   },
   "78fbc71ebc18": {
     "signature": "78fbc71ebc18",
@@ -8703,11 +8757,13 @@
       32,
       33,
       34,
-      36
+      36,
+      41,
+      42
     ],
-    "count": 6,
+    "count": 8,
     "first_seen": "2026-03-11T05:55:18.656899",
-    "last_seen": "2026-03-11T13:38:55.827986",
+    "last_seen": "2026-03-13T14:58:41.823769",
     "rule_generated": true,
     "affected_resources": [
       "aws_s3_bucket_public_access_block.bucket_access"
@@ -8743,7 +8799,7 @@
       "Apply principle of least privilege across all connected resources.",
       "Add monitoring and alerting for the identified attack path."
     ],
-    "risk_explanation": "This pattern has been detected 6 times across 6 scan(s), affecting 1 unique resource(s) in 1 file(s). Severity: LOW. Detected by: Attack Path."
+    "risk_explanation": "This pattern has been detected 8 times across 8 scan(s), affecting 1 unique resource(s) in 1 file(s). Severity: LOW. Detected by: Attack Path."
   },
   "663094b952ac": {
     "signature": "663094b952ac",
@@ -9156,11 +9212,12 @@
     "sample_rule_id": "",
     "severity": "CRITICAL",
     "scan_ids": [
-      32
+      32,
+      41
     ],
-    "count": 1,
+    "count": 2,
     "first_seen": "2026-03-11T07:58:34.653078",
-    "last_seen": "2026-03-11T07:58:34.653078",
+    "last_seen": "2026-03-12T15:56:13.307153",
     "rule_generated": false,
     "affected_resources": [],
     "affected_files": [
@@ -9179,6 +9236,18 @@
         "code_snippet": "",
         "scanner": "LLM",
         "scan_id": 32
+      },
+      {
+        "description": "This security group allows unrestricted access from the IP address 0.0.0.0/0, which could lead to unauthorized access and potential data breaches.\n\nImpact: unauthorized access\n\n**Impact:** This could allow full system compromise, data breach, or unauthorized access to production infrastructure.",
+        "title": "LLM: Aws Cis Sg 0 0 0 0",
+        "severity": "CRITICAL",
+        "resource": "",
+        "file": "test_vulnerable.tf",
+        "rule_id": "",
+        "line_number": null,
+        "code_snippet": "",
+        "scanner": "LLM",
+        "scan_id": 41
       }
     ],
     "scanners_involved": [
@@ -9193,7 +9262,7 @@
       "Validate changes with terraform plan before applying",
       "Add automated policy checks in your CI/CD pipeline"
     ],
-    "risk_explanation": "This pattern has been detected 1 times across 1 scan(s), affecting 0 unique resource(s) in 1 file(s). Severity: CRITICAL. Detected by: LLM."
+    "risk_explanation": "This pattern has been detected 2 times across 2 scan(s), affecting 0 unique resource(s) in 1 file(s). Severity: CRITICAL. Detected by: LLM."
   },
   "44fe4aa716d0": {
     "signature": "44fe4aa716d0",
@@ -9944,6 +10013,321 @@
         "code_snippet": "",
         "scanner": "LLM",
         "scan_id": 40
+      }
+    ],
+    "scanners_involved": [
+      "LLM"
+    ],
+    "categories": [
+      "llm"
+    ],
+    "remediation_guidance": [
+      "Review the flagged configuration block",
+      "Apply least-privilege and defense-in-depth principles",
+      "Validate changes with terraform plan before applying",
+      "Add automated policy checks in your CI/CD pipeline"
+    ],
+    "risk_explanation": "This pattern has been detected 1 times across 1 scan(s), affecting 0 unique resource(s) in 1 file(s). Severity: CRITICAL. Detected by: LLM."
+  },
+  "f0d7e6ef6980": {
+    "signature": "f0d7e6ef6980",
+    "sample_description": "This policy is dangerous because it grants full admin access to all resources, allowing unauthorized actions that could lead to data breaches, unauthorized access, or service disruptions.\n\nImpact: con",
+    "sample_rule_id": "",
+    "severity": "CRITICAL",
+    "scan_ids": [
+      41
+    ],
+    "count": 1,
+    "first_seen": "2026-03-12T15:56:13.307153",
+    "last_seen": "2026-03-12T15:56:13.307153",
+    "rule_generated": false,
+    "affected_resources": [],
+    "affected_files": [
+      "test_vulnerable.tf"
+    ],
+    "rule_ids_involved": [],
+    "example_findings": [
+      {
+        "description": "This policy is dangerous because it grants full admin access to all resources, allowing unauthorized actions that could lead to data breaches, unauthorized access, or service disruptions.\n\nImpact: consequences include unauthorized access, data breaches, and potential security incidents.\n\n**Impact:** This could allow full system compromise, data breach, or unauthorized access to production infrastructure.",
+        "title": "LLM: Aws Cis Iam Wildcard Policy",
+        "severity": "CRITICAL",
+        "resource": "",
+        "file": "test_vulnerable.tf",
+        "rule_id": "",
+        "line_number": null,
+        "code_snippet": "",
+        "scanner": "LLM",
+        "scan_id": 41
+      }
+    ],
+    "scanners_involved": [
+      "LLM"
+    ],
+    "categories": [
+      "llm"
+    ],
+    "remediation_guidance": [
+      "Review the flagged configuration block",
+      "Apply least-privilege and defense-in-depth principles",
+      "Validate changes with terraform plan before applying",
+      "Add automated policy checks in your CI/CD pipeline"
+    ],
+    "risk_explanation": "This pattern has been detected 1 times across 1 scan(s), affecting 0 unique resource(s) in 1 file(s). Severity: CRITICAL. Detected by: LLM."
+  },
+  "9283166d8ac0": {
+    "signature": "9283166d8ac0",
+    "sample_description": "The database instance is publicly accessible, which can expose sensitive data to unauthorized access.\n\nImpact: Consequences may include unauthorized access to sensitive information, potential breaches",
+    "sample_rule_id": "",
+    "severity": "CRITICAL",
+    "scan_ids": [
+      41
+    ],
+    "count": 1,
+    "first_seen": "2026-03-12T15:56:13.307153",
+    "last_seen": "2026-03-12T15:56:13.307153",
+    "rule_generated": false,
+    "affected_resources": [],
+    "affected_files": [
+      "test_vulnerable.tf"
+    ],
+    "rule_ids_involved": [],
+    "example_findings": [
+      {
+        "description": "The database instance is publicly accessible, which can expose sensitive data to unauthorized access.\n\nImpact: Consequences may include unauthorized access to sensitive information, potential breaches, and regulatory non-compliance.\n\n**Impact:** This could allow full system compromise, data breach, or unauthorized access to production infrastructure.",
+        "title": "LLM: Aws Cis Db Public",
+        "severity": "CRITICAL",
+        "resource": "",
+        "file": "test_vulnerable.tf",
+        "rule_id": "",
+        "line_number": null,
+        "code_snippet": "",
+        "scanner": "LLM",
+        "scan_id": 41
+      }
+    ],
+    "scanners_involved": [
+      "LLM"
+    ],
+    "categories": [
+      "llm"
+    ],
+    "remediation_guidance": [
+      "Review the flagged configuration block",
+      "Apply least-privilege and defense-in-depth principles",
+      "Validate changes with terraform plan before applying",
+      "Add automated policy checks in your CI/CD pipeline"
+    ],
+    "risk_explanation": "This pattern has been detected 1 times across 1 scan(s), affecting 0 unique resource(s) in 1 file(s). Severity: CRITICAL. Detected by: LLM."
+  },
+  "474baeac1221": {
+    "signature": "474baeac1221",
+    "sample_description": "Overly permissive security group allows unauthorized traffic to pass through, potentially exposing systems to attacks.\n\nImpact: Consequences include unauthorized access to sensitive data, potential sy",
+    "sample_rule_id": "",
+    "severity": "CRITICAL",
+    "scan_ids": [
+      41
+    ],
+    "count": 1,
+    "first_seen": "2026-03-12T15:56:13.307153",
+    "last_seen": "2026-03-12T15:56:13.307153",
+    "rule_generated": false,
+    "affected_resources": [],
+    "affected_files": [
+      "test_vulnerable.tf"
+    ],
+    "rule_ids_involved": [],
+    "example_findings": [
+      {
+        "description": "Overly permissive security group allows unauthorized traffic to pass through, potentially exposing systems to attacks.\n\nImpact: Consequences include unauthorized access to sensitive data, potential system compromise, or data breaches.\n\n**Impact:** This could allow full system compromise, data breach, or unauthorized access to production infrastructure.",
+        "title": "LLM: Aws Owasp A05 Misconfig Sg",
+        "severity": "CRITICAL",
+        "resource": "",
+        "file": "test_vulnerable.tf",
+        "rule_id": "",
+        "line_number": null,
+        "code_snippet": "",
+        "scanner": "LLM",
+        "scan_id": 41
+      }
+    ],
+    "scanners_involved": [
+      "LLM"
+    ],
+    "categories": [
+      "llm"
+    ],
+    "remediation_guidance": [
+      "Review the flagged configuration block",
+      "Apply least-privilege and defense-in-depth principles",
+      "Validate changes with terraform plan before applying",
+      "Add automated policy checks in your CI/CD pipeline"
+    ],
+    "risk_explanation": "This pattern has been detected 1 times across 1 scan(s), affecting 0 unique resource(s) in 1 file(s). Severity: CRITICAL. Detected by: LLM."
+  },
+  "550b2c080369": {
+    "signature": "550b2c080369",
+    "sample_description": "This policy grants full access to all resources, which could lead to unauthorized operations, including data breaches or damage.\n\nImpact: Consequences include potential exposure of sensitive data, una",
+    "sample_rule_id": "",
+    "severity": "CRITICAL",
+    "scan_ids": [
+      42
+    ],
+    "count": 1,
+    "first_seen": "2026-03-13T14:58:41.824768",
+    "last_seen": "2026-03-13T14:58:41.824768",
+    "rule_generated": false,
+    "affected_resources": [],
+    "affected_files": [
+      "test_vulnerable.tf"
+    ],
+    "rule_ids_involved": [],
+    "example_findings": [
+      {
+        "description": "This policy grants full access to all resources, which could lead to unauthorized operations, including data breaches or damage.\n\nImpact: Consequences include potential exposure of sensitive data, unauthorized access, or system compromise.\n\n**Impact:** This could allow full system compromise, data breach, or unauthorized access to production infrastructure.",
+        "title": "LLM: Aws Cis Iam Wildcard Policy",
+        "severity": "CRITICAL",
+        "resource": "",
+        "file": "test_vulnerable.tf",
+        "rule_id": "",
+        "line_number": null,
+        "code_snippet": "",
+        "scanner": "LLM",
+        "scan_id": 42
+      }
+    ],
+    "scanners_involved": [
+      "LLM"
+    ],
+    "categories": [
+      "llm"
+    ],
+    "remediation_guidance": [
+      "Review the flagged configuration block",
+      "Apply least-privilege and defense-in-depth principles",
+      "Validate changes with terraform plan before applying",
+      "Add automated policy checks in your CI/CD pipeline"
+    ],
+    "risk_explanation": "This pattern has been detected 1 times across 1 scan(s), affecting 0 unique resource(s) in 1 file(s). Severity: CRITICAL. Detected by: LLM."
+  },
+  "892da9c876d3": {
+    "signature": "892da9c876d3",
+    "sample_description": "The security group rule allows unrestricted access from the public IP address 0.0.0.0/0, which is a default public IP range. This can lead to unauthenticated access to applications or services, potent",
+    "sample_rule_id": "",
+    "severity": "CRITICAL",
+    "scan_ids": [
+      42
+    ],
+    "count": 1,
+    "first_seen": "2026-03-13T14:58:41.824768",
+    "last_seen": "2026-03-13T14:58:41.824768",
+    "rule_generated": false,
+    "affected_resources": [],
+    "affected_files": [
+      "test_vulnerable.tf"
+    ],
+    "rule_ids_involved": [],
+    "example_findings": [
+      {
+        "description": "The security group rule allows unrestricted access from the public IP address 0.0.0.0/0, which is a default public IP range. This can lead to unauthenticated access to applications or services, potentially exposing them to unauthorized attacks.\n\nImpact: Severe, as it allows unauthenticated access to systems, which can result in data breaches, privilege escalation, or service compromise.\n\n**Impact:** This could allow full system compromise, data breach, or unauthorized access to production infras",
+        "title": "LLM: Aws Cis Sg 0 0 0 0",
+        "severity": "CRITICAL",
+        "resource": "",
+        "file": "test_vulnerable.tf",
+        "rule_id": "",
+        "line_number": null,
+        "code_snippet": "",
+        "scanner": "LLM",
+        "scan_id": 42
+      }
+    ],
+    "scanners_involved": [
+      "LLM"
+    ],
+    "categories": [
+      "llm"
+    ],
+    "remediation_guidance": [
+      "Review the flagged configuration block",
+      "Apply least-privilege and defense-in-depth principles",
+      "Validate changes with terraform plan before applying",
+      "Add automated policy checks in your CI/CD pipeline"
+    ],
+    "risk_explanation": "This pattern has been detected 1 times across 1 scan(s), affecting 0 unique resource(s) in 1 file(s). Severity: CRITICAL. Detected by: LLM."
+  },
+  "b98fd9bcd996": {
+    "signature": "b98fd9bcd996",
+    "sample_description": "A publicly accessible database instance poses a significant risk as it allows unauthorized access to sensitive data, potentially leading to breaches and unauthorized modifications.\n\nImpact: consequenc",
+    "sample_rule_id": "",
+    "severity": "CRITICAL",
+    "scan_ids": [
+      42
+    ],
+    "count": 1,
+    "first_seen": "2026-03-13T14:58:41.824768",
+    "last_seen": "2026-03-13T14:58:41.824768",
+    "rule_generated": false,
+    "affected_resources": [],
+    "affected_files": [
+      "test_vulnerable.tf"
+    ],
+    "rule_ids_involved": [],
+    "example_findings": [
+      {
+        "description": "A publicly accessible database instance poses a significant risk as it allows unauthorized access to sensitive data, potentially leading to breaches and unauthorized modifications.\n\nImpact: consequences include data exposure, unauthorized access, and potential regulatory non-compliance.\n\n**Impact:** This could allow full system compromise, data breach, or unauthorized access to production infrastructure.",
+        "title": "LLM: Aws Cis Db Public",
+        "severity": "CRITICAL",
+        "resource": "",
+        "file": "test_vulnerable.tf",
+        "rule_id": "",
+        "line_number": null,
+        "code_snippet": "",
+        "scanner": "LLM",
+        "scan_id": 42
+      }
+    ],
+    "scanners_involved": [
+      "LLM"
+    ],
+    "categories": [
+      "llm"
+    ],
+    "remediation_guidance": [
+      "Review the flagged configuration block",
+      "Apply least-privilege and defense-in-depth principles",
+      "Validate changes with terraform plan before applying",
+      "Add automated policy checks in your CI/CD pipeline"
+    ],
+    "risk_explanation": "This pattern has been detected 1 times across 1 scan(s), affecting 0 unique resource(s) in 1 file(s). Severity: CRITICAL. Detected by: LLM."
+  },
+  "087c99e4e54a": {
+    "signature": "087c99e4e54a",
+    "sample_description": "Overly permissive security group allows unauthorized access to the default port 0, which can lead to vulnerabilities in cloud infrastructure.\n\nImpact: This misconfiguration could allow unauthorized ac",
+    "sample_rule_id": "",
+    "severity": "CRITICAL",
+    "scan_ids": [
+      42
+    ],
+    "count": 1,
+    "first_seen": "2026-03-13T14:58:41.824768",
+    "last_seen": "2026-03-13T14:58:41.824768",
+    "rule_generated": false,
+    "affected_resources": [],
+    "affected_files": [
+      "test_vulnerable.tf"
+    ],
+    "rule_ids_involved": [],
+    "example_findings": [
+      {
+        "description": "Overly permissive security group allows unauthorized access to the default port 0, which can lead to vulnerabilities in cloud infrastructure.\n\nImpact: This misconfiguration could allow unauthorized access to sensitive systems, potentially exposing data or exposing critical infrastructure to threats.\n\n**Impact:** This could allow full system compromise, data breach, or unauthorized access to production infrastructure.",
+        "title": "LLM: Aws Owasp A05 Misconfig Sg",
+        "severity": "CRITICAL",
+        "resource": "",
+        "file": "test_vulnerable.tf",
+        "rule_id": "",
+        "line_number": null,
+        "code_snippet": "",
+        "scanner": "LLM",
+        "scan_id": 42
       }
     ],
     "scanners_involved": [

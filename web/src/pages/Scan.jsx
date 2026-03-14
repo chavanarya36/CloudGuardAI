@@ -1,34 +1,7 @@
 import { useState, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
-import {
-  Box,
-  Button,
-  Card,
-  CardContent,
-  Typography,
-  Alert,
-  CircularProgress,
-  Paper,
-  Chip,
-  LinearProgress,
-  Grid,
-  Container,
-  FormControl,
-  FormLabel,
-  RadioGroup,
-  FormControlLabel,
-  Radio
-} from '@mui/material';
-import CloudUploadIcon from '@mui/icons-material/CloudUpload';
-import InsertDriveFileIcon from '@mui/icons-material/InsertDriveFile';
-import DeleteIcon from '@mui/icons-material/Delete';
-import CheckCircleIcon from '@mui/icons-material/CheckCircle';
-import ShieldIcon from '@mui/icons-material/Shield';
-import BoltIcon from '@mui/icons-material/Bolt';
-import LockIcon from '@mui/icons-material/Lock';
-import PsychologyIcon from '@mui/icons-material/Psychology';
-import BugReportIcon from '@mui/icons-material/BugReport';
-import { scanFile, getScan } from '../api/client';
+import { CircularProgress } from '@mui/material';
+import { scanFile } from '../api/client';
 import EnhancedUpload from '../components/enhanced/EnhancedUpload';
 import { useLastScan } from '../context/ScanContext';
 
@@ -42,60 +15,34 @@ export default function Scan() {
   const navigate = useNavigate();
   const { recordScan } = useLastScan();
 
-  const handleFileSelect = (selectedFile) => {
-    validateAndSetFile(selectedFile);
-  };
+  const handleFileSelect = (selectedFile) => validateAndSetFile(selectedFile);
 
   const handleFileChange = (event) => {
     const selectedFile = event.target.files[0];
-    if (selectedFile) {
-      validateAndSetFile(selectedFile);
-    }
+    if (selectedFile) validateAndSetFile(selectedFile);
   };
 
   const validateAndSetFile = (selectedFile) => {
-    const maxSize = 10 * 1024 * 1024; // 10MB
+    const maxSize = 10 * 1024 * 1024;
     const allowedTypes = ['.tf', '.yaml', '.yml', '.json', '.bicep'];
     const fileExt = '.' + selectedFile.name.split('.').pop().toLowerCase();
-
-    if (selectedFile.size > maxSize) {
-      setError('File size must be less than 10MB');
-      return;
-    }
-
-    if (!allowedTypes.includes(fileExt)) {
-      setError('Invalid file type. Supported: .tf, .yaml, .yml, .json, .bicep');
-      return;
-    }
-
-    setFile(selectedFile);
-    setError(null);
+    if (selectedFile.size > maxSize) { setError('File size must be less than 10MB'); return; }
+    if (!allowedTypes.includes(fileExt)) { setError('Invalid file type. Supported: .tf, .yaml, .yml, .json, .bicep'); return; }
+    setFile(selectedFile); setError(null);
   };
 
   const handleDrag = useCallback((e) => {
-    e.preventDefault();
-    e.stopPropagation();
-    if (e.type === 'dragenter' || e.type === 'dragover') {
-      setDragActive(true);
-    } else if (e.type === 'dragleave') {
-      setDragActive(false);
-    }
+    e.preventDefault(); e.stopPropagation();
+    if (e.type === 'dragenter' || e.type === 'dragover') setDragActive(true);
+    else if (e.type === 'dragleave') setDragActive(false);
   }, []);
 
   const handleDrop = useCallback((e) => {
-    e.preventDefault();
-    e.stopPropagation();
-    setDragActive(false);
-
-    if (e.dataTransfer.files && e.dataTransfer.files[0]) {
-      validateAndSetFile(e.dataTransfer.files[0]);
-    }
+    e.preventDefault(); e.stopPropagation(); setDragActive(false);
+    if (e.dataTransfer.files && e.dataTransfer.files[0]) validateAndSetFile(e.dataTransfer.files[0]);
   }, []);
 
-  const removeFile = () => {
-    setFile(null);
-    setError(null);
-  };
+  const removeFile = () => { setFile(null); setError(null); };
 
   const formatFileSize = (bytes) => {
     if (bytes === 0) return '0 Bytes';
@@ -106,394 +53,329 @@ export default function Scan() {
   };
 
   const handleSubmit = async () => {
-    if (!file) {
-      setError('Please select a file');
-      return;
-    }
-
-    setLoading(true);
-    setError(null);
-    setProgress(10);
-
+    if (!file) { setError('Please select a file'); return; }
+    setLoading(true); setError(null); setProgress(10);
     try {
       setProgress(30);
-      
-      // Use the centralized API client
       const data = await scanFile(file, scanMode);
-      
       setProgress(90);
-      // Store in global context so Dashboard/Learning can show current scan
       recordScan(data, file.name);
       setTimeout(() => {
         setProgress(100);
-        navigate(`/results/${data.id}`, { 
-          state: { 
-            scanResults: data,
-            fileName: file.name,
-            scanMode: scanMode
-          } 
-        });
+        navigate(`/results/${data.id}`, { state: { scanResults: data, fileName: file.name, scanMode } });
       }, 500);
-      
     } catch (err) {
-      setError(err.message || 'Failed to scan file');
-      setProgress(0);
+      setError(err.message || 'Failed to scan file'); setProgress(0);
     } finally {
-      setTimeout(() => {
-        setLoading(false);
-        setProgress(0);
-      }, 2000);
+      setTimeout(() => { setLoading(false); setProgress(0); }, 2000);
     }
   };
 
-  return (
-    <Box>
-      {/* Hero Section */}
-      <Box sx={{ 
-        textAlign: 'center', 
-        mb: 6,
-        py: 4,
-        borderRadius: 3,
-        background: 'linear-gradient(135deg, rgba(66, 165, 245, 0.08) 0%, rgba(13, 71, 161, 0.12) 100%)',
-        position: 'relative',
-        overflow: 'hidden'
-      }}>
-        <Box sx={{
-          display: 'inline-flex',
-          alignItems: 'center',
-          gap: 1,
-          px: 3,
-          py: 1,
-          borderRadius: 10,
-          bgcolor: 'primary.light',
-          border: '1px solid',
-          borderColor: 'primary.main',
-          mb: 3
-        }}>
-          <BoltIcon sx={{ fontSize: 18, color: 'primary.dark' }} />
-          <Typography variant="body2" fontWeight="medium" color="primary.dark">
-            AI-Powered Cloud Security
-          </Typography>
-        </Box>
+  const scanModes = [
+    { value: 'all', icon: '🛡️', label: 'Complete AI Scan', desc: 'GNN + RL + Checkov + CVE', color: '#42a5f5' },
+    { value: 'gnn', icon: '🧠', label: 'GNN Attack Path Detection', desc: '114K params model', color: '#ce93d8' },
+    { value: 'checkov', icon: '🐛', label: 'Checkov Compliance Only', desc: 'Policy checks', color: '#ffa726' },
+  ];
 
-        <Typography variant="h2" fontWeight="bold" gutterBottom sx={{
-          color: '#42a5f5',
-          mb: 2
+  return (
+    <div style={{ fontFamily: '"DM Sans", sans-serif' }}>
+      <style>{`
+        @import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&family=Syne:wght@700;800&display=swap');
+        @keyframes shimmer { 0%{background-position:-200% center} 100%{background-position:200% center} }
+        .scan-btn { cursor:pointer; transition:all 0.25s cubic-bezier(0.34,1.56,0.64,1); }
+        .scan-btn:hover { transform:translateY(-3px) scale(1.02); box-shadow:0 12px 40px rgba(66,165,245,0.35); }
+        .mode-card { cursor:pointer; transition:all 0.25s ease; }
+        .mode-card:hover { transform:translateY(-2px); }
+      `}</style>
+
+      {/* Hero */}
+      <div style={{
+        textAlign: 'center', padding: '40px 24px 48px',
+        borderRadius: '16px', marginBottom: '32px',
+        background: 'linear-gradient(135deg, rgba(21,101,192,0.1) 0%, rgba(10,22,38,0.8) 100%)',
+        border: '1px solid rgba(66,165,245,0.1)',
+        position: 'relative', overflow: 'hidden',
+      }}>
+        <div style={{
+          position: 'absolute', top: '-60px', left: '50%', transform: 'translateX(-50%)',
+          width: '400px', height: '200px',
+          background: 'radial-gradient(ellipse, rgba(66,165,245,0.08), transparent 70%)',
+        }} />
+
+        <div style={{
+          display: 'inline-flex', alignItems: 'center', gap: '8px',
+          padding: '6px 16px', borderRadius: '99px', marginBottom: '20px',
+          background: 'rgba(66,165,245,0.08)',
+          border: '1px solid rgba(66,165,245,0.2)',
+        }}>
+          <span style={{ fontSize: '14px' }}>⚡</span>
+          <span style={{ fontSize: '12px', color: 'rgba(255,255,255,0.6)', fontWeight: 500 }}>
+            AI-Powered Cloud Security
+          </span>
+        </div>
+
+        <h1 style={{
+          fontFamily: '"Syne", sans-serif',
+          fontSize: 'clamp(28px, 5vw, 40px)', fontWeight: 800,
+          margin: '0 0 12px', letterSpacing: '-0.03em',
+          background: 'linear-gradient(90deg, #42a5f5, #80d6ff, #42a5f5)',
+          backgroundSize: '200% auto',
+          WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent',
+          animation: 'shimmer 3s linear infinite',
         }}>
           CloudGuard AI
-        </Typography>
-        
-        <Typography variant="h5" color="text.secondary" sx={{ maxWidth: 700, mx: 'auto', mb: 4 }}>
-          Secure your cloud infrastructure with intelligent, automated security scanning
-          and real-time threat detection
-        </Typography>
+        </h1>
 
-        {/* Feature Badges */}
-        <Box sx={{ display: 'flex', gap: 2, justifyContent: 'center', flexWrap: 'wrap', mb: 2 }}>
+        <p style={{
+          color: 'rgba(255,255,255,0.4)', fontSize: '15px',
+          maxWidth: '600px', margin: '0 auto 20px', lineHeight: 1.6,
+        }}>
+          Secure your cloud infrastructure with intelligent, automated security scanning and real-time threat detection
+        </p>
+
+        <div style={{ display: 'flex', gap: '10px', justifyContent: 'center', flexWrap: 'wrap' }}>
           {[
-            { icon: ShieldIcon, text: 'Advanced Security' },
-            { icon: BoltIcon, text: 'Real-time Analysis' },
-            { icon: LockIcon, text: 'Best Practices' }
-          ].map((feature, i) => (
-            <Chip
-              key={i}
-              icon={<feature.icon sx={{ fontSize: 18 }} />}
-              label={feature.text}
-              sx={{
-                py: 2.5,
-                px: 1,
-                fontWeight: 'medium',
-                bgcolor: 'background.paper',
-                border: '2px solid',
-                borderColor: 'divider',
-                '&:hover': {
-                  borderColor: 'primary.main',
-                  boxShadow: 2
-                }
-              }}
-            />
+            { icon: '🛡️', text: 'Advanced Security' },
+            { icon: '⚡', text: 'Real-time Analysis' },
+            { icon: '🔒', text: 'Best Practices' },
+          ].map((f, i) => (
+            <div key={i} style={{
+              padding: '6px 14px', borderRadius: '8px',
+              background: 'rgba(255,255,255,0.04)',
+              border: '1px solid rgba(255,255,255,0.08)',
+              fontSize: '12px', color: 'rgba(255,255,255,0.5)',
+              display: 'flex', alignItems: 'center', gap: '6px',
+            }}>
+              {f.icon} {f.text}
+            </div>
           ))}
-        </Box>
-      </Box>
+        </div>
+      </div>
 
-      {/* Main Content */}
-      <Grid container spacing={4}>
-        <Grid item xs={12} md={8}>
-          {/* Enhanced Upload Component */}
-          <EnhancedUpload 
-            onFileSelect={handleFileSelect}
-            isScanning={loading}
-          />
+      {/* Main Grid */}
+      <div style={{ display: 'grid', gridTemplateColumns: '1fr 320px', gap: '24px', alignItems: 'start' }}>
+        {/* Left Column */}
+        <div>
+          <EnhancedUpload onFileSelect={handleFileSelect} isScanning={loading} />
 
           {/* File Preview */}
           {file && (
-            <Card 
-              variant="outlined" 
-              sx={{ 
-                mt: 3,
-                border: '2px solid',
-                borderColor: 'success.light',
-                bgcolor: 'success.lighter',
-                '&:hover': {
-                  borderColor: 'success.main',
-                  boxShadow: 3
-                },
-                transition: 'all 0.3s'
-              }}
-            >
-              <CardContent>
-                <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
-                  <Box sx={{
-                    p: 1.5,
-                    borderRadius: 2,
-                    bgcolor: 'success.main',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center'
-                  }}>
-                    <InsertDriveFileIcon sx={{ color: 'white' }} />
-                  </Box>
-                  <Box sx={{ flexGrow: 1 }}>
-                    <Typography variant="body1" fontWeight="bold">
-                      {file.name}
-                    </Typography>
-                    <Typography variant="caption" color="text.secondary">
-                      {formatFileSize(file.size)}
-                    </Typography>
-                  </Box>
-                  <Button
-                    size="small"
-                    color="error"
-                    variant="outlined"
-                    startIcon={<DeleteIcon />}
-                    onClick={removeFile}
-                    disabled={loading}
-                    sx={{ borderRadius: 2 }}
-                  >
-                    Remove
-                  </Button>
-                </Box>
-              </CardContent>
-            </Card>
+            <div style={{
+              marginTop: '16px', padding: '16px 20px', borderRadius: '12px',
+              background: 'rgba(102,187,106,0.06)',
+              border: '1px solid rgba(102,187,106,0.2)',
+              display: 'flex', alignItems: 'center', gap: '14px',
+            }}>
+              <div style={{
+                width: '38px', height: '38px', borderRadius: '8px',
+                background: 'rgba(102,187,106,0.15)',
+                display: 'flex', alignItems: 'center', justifyContent: 'center',
+                fontSize: '18px',
+              }}>📄</div>
+              <div style={{ flex: 1 }}>
+                <div style={{ fontSize: '14px', fontWeight: 600, color: '#fff' }}>{file.name}</div>
+                <div style={{ fontSize: '12px', color: 'rgba(255,255,255,0.4)' }}>{formatFileSize(file.size)}</div>
+              </div>
+              <button onClick={removeFile} disabled={loading} style={{
+                padding: '6px 14px', borderRadius: '8px',
+                background: 'rgba(239,83,80,0.1)', border: '1px solid rgba(239,83,80,0.3)',
+                color: '#ef5350', fontSize: '12px', fontWeight: 500, cursor: 'pointer',
+                fontFamily: '"DM Sans", sans-serif',
+              }}>
+                Remove
+              </button>
+            </div>
           )}
 
-          {/* Error Alert */}
           {error && (
-            <Alert 
-              severity="error" 
-              onClose={() => setError(null)} 
-              sx={{ mt: 3, borderRadius: 2 }}
-            >
-              {error}
-            </Alert>
+            <div style={{
+              marginTop: '16px', padding: '14px 20px', borderRadius: '12px',
+              background: 'rgba(239,83,80,0.08)', border: '1px solid rgba(239,83,80,0.2)',
+              color: '#ef5350', fontSize: '13px',
+              display: 'flex', alignItems: 'center', gap: '10px',
+            }}>
+              <span>⚠️</span> {error}
+              <button onClick={() => setError(null)} style={{
+                marginLeft: 'auto', background: 'none', border: 'none',
+                color: '#ef5350', cursor: 'pointer', fontSize: '16px',
+              }}>×</button>
+            </div>
           )}
-          
-          {/* Scan Mode Selection */}
+
+          {/* Scan Mode */}
           {file && !loading && (
-            <Paper sx={{ mt: 3, p: 3, borderRadius: 2 }}>
-              <FormControl component="fieldset">
-                <FormLabel sx={{ mb: 2, fontWeight: 'bold' }}>
-                  🤖 Select AI Scan Mode
-                </FormLabel>
-                <RadioGroup value={scanMode} onChange={(e) => setScanMode(e.target.value)}>
-                  <FormControlLabel 
-                    value="all" 
-                    control={<Radio />} 
-                    label={
-                      <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-                        <ShieldIcon fontSize="small" color="primary" />
-                        <Typography>Complete AI Scan (GNN + RL + Checkov + CVE)</Typography>
-                      </Box>
-                    }
-                  />
-                  <FormControlLabel 
-                    value="gnn" 
-                    control={<Radio />} 
-                    label={
-                      <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-                        <PsychologyIcon fontSize="small" color="secondary" />
-                        <Typography>GNN Attack Path Detection (114K params)</Typography>
-                      </Box>
-                    }
-                  />
-                  <FormControlLabel 
-                    value="checkov" 
-                    control={<Radio />} 
-                    label={
-                      <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-                        <BugReportIcon fontSize="small" color="warning" />
-                        <Typography>Checkov Compliance Only</Typography>
-                      </Box>
-                    }
-                  />
-                </RadioGroup>
-              </FormControl>
-            </Paper>
+            <div style={{ marginTop: '16px' }}>
+              <div style={{
+                fontSize: '13px', fontWeight: 600, color: 'rgba(255,255,255,0.5)',
+                marginBottom: '12px',
+              }}>
+                🤖 Select AI Scan Mode
+              </div>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+                {scanModes.map((mode) => (
+                  <div
+                    key={mode.value}
+                    className="mode-card"
+                    onClick={() => setScanMode(mode.value)}
+                    style={{
+                      padding: '14px 18px', borderRadius: '10px',
+                      background: scanMode === mode.value ? `${mode.color}12` : 'rgba(255,255,255,0.02)',
+                      border: `1px solid ${scanMode === mode.value ? `${mode.color}40` : 'rgba(255,255,255,0.06)'}`,
+                      display: 'flex', alignItems: 'center', gap: '14px',
+                    }}
+                  >
+                    <div style={{
+                      width: '18px', height: '18px', borderRadius: '50%',
+                      border: `2px solid ${scanMode === mode.value ? mode.color : 'rgba(255,255,255,0.2)'}`,
+                      display: 'flex', alignItems: 'center', justifyContent: 'center',
+                    }}>
+                      {scanMode === mode.value && (
+                        <div style={{ width: '8px', height: '8px', borderRadius: '50%', background: mode.color }} />
+                      )}
+                    </div>
+                    <span style={{ fontSize: '16px' }}>{mode.icon}</span>
+                    <div>
+                      <div style={{ fontSize: '14px', color: '#fff', fontWeight: 500 }}>{mode.label}</div>
+                      <div style={{ fontSize: '11px', color: 'rgba(255,255,255,0.35)' }}>{mode.desc}</div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
           )}
 
-          {/* Progress Bar */}
+          {/* Progress */}
           {loading && (
-            <Box sx={{ width: '100%', mt: 3 }}>
-              <LinearProgress 
-                variant="determinate" 
-                value={progress}
-                sx={{
-                  height: 8,
-                  borderRadius: 1,
-                  bgcolor: 'rgba(255,255,255,0.08)',
-                  '& .MuiLinearProgress-bar': {
-                    background: 'linear-gradient(90deg, #1976d2 0%, #2196f3 100%)',
-                    borderRadius: 1
-                  }
-                }}
-              />
-              <Typography variant="body2" color="text.secondary" sx={{ mt: 1 }}>
+            <div style={{ marginTop: '16px' }}>
+              <div style={{
+                height: '6px', borderRadius: '3px',
+                background: 'rgba(255,255,255,0.06)', overflow: 'hidden',
+              }}>
+                <div style={{
+                  height: '100%', borderRadius: '3px',
+                  width: `${progress}%`,
+                  background: 'linear-gradient(90deg, #1976d2, #42a5f5)',
+                  transition: 'width 0.4s ease',
+                }} />
+              </div>
+              <div style={{ fontSize: '13px', color: 'rgba(255,255,255,0.4)', marginTop: '8px' }}>
                 Analyzing security vulnerabilities... {progress}%
-              </Typography>
-            </Box>
+              </div>
+            </div>
           )}
 
-          {/* Submit Button */}
-          <Button
-            variant="contained"
-            size="large"
-            fullWidth
+          {/* Submit */}
+          <button
+            className="scan-btn"
             onClick={handleSubmit}
             disabled={!file || loading}
-            startIcon={loading ? <CircularProgress size={20} color="inherit" /> : <CheckCircleIcon />}
-            sx={{ 
-              py: 2, 
-              mt: 3,
-              borderRadius: 2,
-              fontSize: '1.1rem',
-              fontWeight: 'bold',
-              background: 'linear-gradient(135deg, #42a5f5 0%, #0077c2 100%)',
-              '&:hover': {
-                background: 'linear-gradient(135deg, #0077c2 0%, #0d47a1 100%)',
-                boxShadow: 4
-              },
-              '&:disabled': {
-                background: 'grey.300'
-              }
+            style={{
+              width: '100%', padding: '16px', marginTop: '20px',
+              borderRadius: '12px', border: 'none',
+              background: file && !loading
+                ? 'linear-gradient(135deg, #1976d2, #42a5f5)'
+                : 'rgba(255,255,255,0.06)',
+              color: file && !loading ? '#fff' : 'rgba(255,255,255,0.3)',
+              fontSize: '16px', fontWeight: 700,
+              fontFamily: '"DM Sans", sans-serif',
+              cursor: file && !loading ? 'pointer' : 'not-allowed',
+              display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '10px',
             }}
           >
-            {loading ? 'Scanning...' : 'Start Security Scan'}
-          </Button>
-        </Grid>
+            {loading ? (
+              <><CircularProgress size={20} sx={{ color: 'inherit' }} /> Scanning...</>
+            ) : (
+              <>✅ Start Security Scan</>
+            )}
+          </button>
+        </div>
 
-        <Grid item xs={12} md={4}>
-          {/* What We Check Card */}
-          <Card sx={{ 
-            border: '2px solid',
-            borderColor: 'divider',
-            borderRadius: 3,
-            '&:hover': {
-              borderColor: 'primary.main',
-              boxShadow: 4
-            },
-            transition: 'all 0.3s'
+        {/* Right Sidebar */}
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+          {/* What we check */}
+          <div style={{
+            background: 'rgba(10,22,38,0.8)', border: '1px solid rgba(255,255,255,0.06)',
+            borderRadius: '14px', padding: '24px', backdropFilter: 'blur(8px)',
           }}>
-            <CardContent sx={{ p: 3 }}>
-              <Typography variant="h6" gutterBottom fontWeight="bold">
-                What we check
-              </Typography>
-              <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2, mt: 3 }}>
-                {[
-                  { label: 'ML', text: 'Machine Learning Analysis', color: 'primary' },
-                  { label: 'Rules', text: '500+ Security Rules', color: 'secondary' },
-                  { label: 'LLM', text: 'AI-Powered Insights', color: 'success' },
-                  { label: 'Risk', text: 'Unified Risk Scoring', color: 'warning' }
-                ].map((item, i) => (
-                  <Box key={i} sx={{ display: 'flex', alignItems: 'center', gap: 1.5 }}>
-                    <Chip 
-                      label={item.label} 
-                      color={item.color} 
-                      size="small"
-                      sx={{ fontWeight: 'bold', minWidth: 60 }}
-                    />
-                    <Typography variant="body2">{item.text}</Typography>
-                  </Box>
-                ))}
-              </Box>
-            </CardContent>
-          </Card>
+            <div style={{
+              fontFamily: '"Syne", sans-serif',
+              fontSize: '15px', fontWeight: 700, color: '#fff', marginBottom: '16px',
+            }}>
+              What we check
+            </div>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+              {[
+                { tag: 'ML', text: 'Machine Learning Analysis', color: '#42a5f5' },
+                { tag: 'Rules', text: '500+ Security Rules', color: '#ce93d8' },
+                { tag: 'LLM', text: 'AI-Powered Insights', color: '#66bb6a' },
+                { tag: 'Risk', text: 'Unified Risk Scoring', color: '#ffa726' },
+              ].map((item, i) => (
+                <div key={i} style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                  <span style={{
+                    padding: '2px 10px', borderRadius: '6px', fontSize: '11px', fontWeight: 700,
+                    background: `${item.color}15`, color: item.color,
+                    border: `1px solid ${item.color}30`,
+                  }}>
+                    {item.tag}
+                  </span>
+                  <span style={{ fontSize: '13px', color: 'rgba(255,255,255,0.55)' }}>{item.text}</span>
+                </div>
+              ))}
+            </div>
+          </div>
 
-          {/* Detection Categories Card */}
-          <Card sx={{ 
-            mt: 3,
-            border: '2px solid',
-            borderColor: 'divider',
-            borderRadius: 3,
-            background: 'linear-gradient(135deg, rgba(25, 118, 210, 0.02) 0%, rgba(21, 101, 192, 0.05) 100%)',
-            '&:hover': {
-              borderColor: 'primary.main',
-              boxShadow: 4
-            },
-            transition: 'all 0.3s'
+          {/* Detection Categories */}
+          <div style={{
+            background: 'rgba(10,22,38,0.8)', border: '1px solid rgba(255,255,255,0.06)',
+            borderRadius: '14px', padding: '24px', backdropFilter: 'blur(8px)',
           }}>
-            <CardContent sx={{ p: 3 }}>
-              <Typography variant="h6" gutterBottom fontWeight="bold">
-                Detection Categories
-              </Typography>
-              <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1.5, mt: 2 }}>
-                {[
-                  'Misconfigurations',
-                  'Exposed Secrets',
-                  'Insecure Defaults',
-                  'Compliance Violations',
-                  'Access Control Issues',
-                  'Network Security'
-                ].map((category, i) => (
-                  <Box key={i} sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-                    <Box sx={{
-                      width: 6,
-                      height: 6,
-                      borderRadius: '50%',
-                      bgcolor: 'primary.main'
-                    }} />
-                    <Typography variant="body2" color="text.secondary">
-                      {category}
-                    </Typography>
-                  </Box>
-                ))}
-              </Box>
-            </CardContent>
-          </Card>
+            <div style={{
+              fontFamily: '"Syne", sans-serif',
+              fontSize: '15px', fontWeight: 700, color: '#fff', marginBottom: '16px',
+            }}>
+              Detection Categories
+            </div>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
+              {[
+                'Misconfigurations', 'Exposed Secrets', 'Insecure Defaults',
+                'Compliance Violations', 'Access Control Issues', 'Network Security',
+              ].map((cat, i) => (
+                <div key={i} style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                  <div style={{
+                    width: '5px', height: '5px', borderRadius: '50%',
+                    background: '#42a5f5', boxShadow: '0 0 6px rgba(66,165,245,0.4)',
+                  }} />
+                  <span style={{ fontSize: '13px', color: 'rgba(255,255,255,0.45)' }}>{cat}</span>
+                </div>
+              ))}
+            </div>
+          </div>
 
-          {/* Stats Card */}
-          <Card sx={{ 
-            mt: 3,
-            border: '2px solid',
-            borderColor: 'success.light',
-            borderRadius: 3,
-            background: 'linear-gradient(135deg, rgba(76, 175, 80, 0.05) 0%, rgba(46, 125, 50, 0.08) 100%)',
-            '&:hover': {
-              borderColor: 'success.main',
-              boxShadow: 4
-            },
-            transition: 'all 0.3s'
+          {/* Why Choose */}
+          <div style={{
+            background: 'linear-gradient(135deg, rgba(102,187,106,0.05), rgba(10,22,38,0.8))',
+            border: '1px solid rgba(102,187,106,0.12)',
+            borderRadius: '14px', padding: '24px', backdropFilter: 'blur(8px)',
           }}>
-            <CardContent sx={{ p: 3, textAlign: 'center' }}>
-              <Typography variant="h6" fontWeight="bold" gutterBottom>
-                Why Choose CloudGuard AI?
-              </Typography>
-              <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2, mt: 3 }}>
-                {[
-                  { icon: CheckCircleIcon, text: 'Multi-cloud support' },
-                  { icon: CheckCircleIcon, text: 'IaC scanning' },
-                  { icon: CheckCircleIcon, text: 'Compliance validation' },
-                  { icon: CheckCircleIcon, text: 'Actionable remediation' }
-                ].map((item, i) => (
-                  <Box key={i} sx={{ display: 'flex', alignItems: 'center', gap: 1.5 }}>
-                    <item.icon sx={{ color: 'success.main', fontSize: 20 }} />
-                    <Typography variant="body2">{item.text}</Typography>
-                  </Box>
-                ))}
-              </Box>
-            </CardContent>
-          </Card>
-        </Grid>
-      </Grid>
-    </Box>
+            <div style={{
+              fontFamily: '"Syne", sans-serif',
+              fontSize: '15px', fontWeight: 700, color: '#fff', marginBottom: '16px',
+            }}>
+              Why Choose CloudGuard AI?
+            </div>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
+              {[
+                'Multi-cloud support', 'IaC scanning', 'Compliance validation', 'Actionable remediation',
+              ].map((item, i) => (
+                <div key={i} style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                  <span style={{ color: '#66bb6a', fontSize: '14px' }}>✓</span>
+                  <span style={{ fontSize: '13px', color: 'rgba(255,255,255,0.5)' }}>{item}</span>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
   );
 }

@@ -1,45 +1,5 @@
 import { useState, useEffect, useCallback } from 'react';
-import {
-  Box,
-  Card,
-  CardContent,
-  Typography,
-  Grid,
-  CircularProgress,
-  Alert,
-  Paper,
-  Divider,
-  Button,
-  Chip,
-  LinearProgress,
-  Table,
-  TableBody,
-  TableCell,
-  TableContainer,
-  TableHead,
-  TableRow,
-  Tooltip,
-  Collapse,
-  IconButton,
-  List,
-  ListItem,
-  ListItemText,
-  ListItemIcon,
-} from '@mui/material';
-import PsychologyIcon from '@mui/icons-material/Psychology';
-import AutorenewIcon from '@mui/icons-material/Autorenew';
-import TrendingUpIcon from '@mui/icons-material/TrendingUp';
-import WarningAmberIcon from '@mui/icons-material/WarningAmber';
-import CheckCircleIcon from '@mui/icons-material/CheckCircle';
-import PatternIcon from '@mui/icons-material/Pattern';
-import ScaleIcon from '@mui/icons-material/Scale';
-import TimelineIcon from '@mui/icons-material/Timeline';
-import RuleIcon from '@mui/icons-material/Rule';
-import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
-import ExpandLessIcon from '@mui/icons-material/ExpandLess';
-import SecurityIcon from '@mui/icons-material/Security';
-import BugReportIcon from '@mui/icons-material/BugReport';
-import BuildIcon from '@mui/icons-material/Build';
+import { CircularProgress, LinearProgress } from '@mui/material';
 import {
   getLearningStatus,
   triggerPatternDiscovery,
@@ -48,34 +8,58 @@ import {
 } from '../api/client';
 import CurrentScanBanner from '../components/enhanced/CurrentScanBanner';
 
-function StatusChip({ active }) {
+function GlassCard({ children, style }) {
   return (
-    <Chip
-      label={active ? 'ACTIVE — Learning' : 'OFFLINE'}
-      color={active ? 'success' : 'error'}
-      variant="outlined"
-      icon={active ? <PsychologyIcon /> : <WarningAmberIcon />}
-      sx={{ fontWeight: 'bold' }}
-    />
+    <div style={{
+      background: 'rgba(10,22,38,0.8)',
+      border: '1px solid rgba(255,255,255,0.06)',
+      borderRadius: '14px', padding: '24px',
+      backdropFilter: 'blur(8px)',
+      ...style,
+    }}>{children}</div>
   );
 }
 
-function MetricCard({ title, value, subtitle, icon, color = 'primary.main' }) {
+function StatusChip({ active }) {
   return (
-    <Card variant="outlined" sx={{ height: '100%', borderRadius: 3, border: '2px solid', borderColor: 'divider', transition: 'all 0.3s', '&:hover': { borderColor: color, boxShadow: 4 } }}>
-      <CardContent sx={{ p: 3 }}>
-        <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
-          <Box>
-            <Typography variant="body2" color="text.secondary" gutterBottom>{title}</Typography>
-            <Typography variant="h3" fontWeight="bold" color={color}>{value}</Typography>
-            {subtitle && <Typography variant="caption" color="text.secondary">{subtitle}</Typography>}
-          </Box>
-          <Box sx={{ p: 1.5, borderRadius: 2, bgcolor: `${color}15`, display: 'flex', alignItems: 'center' }}>
-            {icon}
-          </Box>
-        </Box>
-      </CardContent>
-    </Card>
+    <span style={{
+      padding: '5px 14px', borderRadius: '99px', fontSize: '12px', fontWeight: 600,
+      background: active ? 'rgba(102,187,106,0.12)' : 'rgba(239,83,80,0.12)',
+      color: active ? '#66bb6a' : '#ef5350',
+      border: `1px solid ${active ? 'rgba(102,187,106,0.3)' : 'rgba(239,83,80,0.3)'}`,
+      display: 'inline-flex', alignItems: 'center', gap: '6px',
+    }}>
+      <span style={{
+        width: '7px', height: '7px', borderRadius: '50%',
+        background: active ? '#66bb6a' : '#ef5350',
+        boxShadow: `0 0 6px ${active ? '#66bb6a' : '#ef5350'}`,
+      }} />
+      {active ? 'ACTIVE — Learning' : 'OFFLINE'}
+    </span>
+  );
+}
+
+function MetricCard({ title, value, subtitle, icon, color }) {
+  return (
+    <GlassCard style={{ position: 'relative', overflow: 'hidden' }}>
+      <div style={{
+        position: 'absolute', top: 0, left: 0, right: 0, height: '3px',
+        background: color,
+      }} />
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
+        <div>
+          <div style={{ fontSize: '12px', color: 'rgba(255,255,255,0.4)', marginBottom: '6px' }}>{title}</div>
+          <div style={{ fontFamily: '"Syne", sans-serif', fontSize: '32px', fontWeight: 800, color, lineHeight: 1 }}>{value}</div>
+          {subtitle && <div style={{ fontSize: '11px', color: 'rgba(255,255,255,0.35)', marginTop: '6px' }}>{subtitle}</div>}
+        </div>
+        <div style={{
+          width: '40px', height: '40px', borderRadius: '10px',
+          background: `${color}15`, border: `1px solid ${color}30`,
+          display: 'flex', alignItems: 'center', justifyContent: 'center',
+          fontSize: '18px',
+        }}>{icon}</div>
+      </div>
+    </GlassCard>
   );
 }
 
@@ -92,64 +76,50 @@ export default function LearningIntelligence() {
   const fetchData = useCallback(async () => {
     try {
       const [s, t] = await Promise.all([getLearningStatus(), getLearningTelemetry(20)]);
-      setStatus(s);
-      setTelemetry(t);
-      setError(null);
+      setStatus(s); setTelemetry(t); setError(null);
     } catch (err) {
       setError(err.message || 'Failed to load learning status');
-    } finally {
-      setLoading(false);
-    }
+    } finally { setLoading(false); }
   }, []);
 
   useEffect(() => { fetchData(); }, [fetchData]);
-
-  // Auto-refresh every 15s
-  useEffect(() => {
-    const interval = setInterval(fetchData, 15000);
-    return () => clearInterval(interval);
-  }, [fetchData]);
+  useEffect(() => { const id = setInterval(fetchData, 15000); return () => clearInterval(id); }, [fetchData]);
 
   const handleDiscover = async () => {
     setDiscovering(true);
-    try {
-      await triggerPatternDiscovery();
-      await fetchData();
-    } catch (err) {
-      setError(err.message);
-    } finally {
-      setDiscovering(false);
-    }
+    try { await triggerPatternDiscovery(); await fetchData(); } catch (err) { setError(err.message); }
+    finally { setDiscovering(false); }
   };
 
   const handleTogglePattern = async (sig) => {
-    if (expandedPattern === sig) {
-      setExpandedPattern(null);
-      setPatternDetail(null);
-      return;
-    }
-    setExpandedPattern(sig);
-    setLoadingDetail(true);
-    try {
-      const detail = await getPatternDetail(sig);
-      setPatternDetail(detail);
-    } catch {
-      setPatternDetail(null);
-    } finally {
-      setLoadingDetail(false);
-    }
+    if (expandedPattern === sig) { setExpandedPattern(null); setPatternDetail(null); return; }
+    setExpandedPattern(sig); setLoadingDetail(true);
+    try { const detail = await getPatternDetail(sig); setPatternDetail(detail); }
+    catch { setPatternDetail(null); }
+    finally { setLoadingDetail(false); }
   };
 
   if (loading) {
     return (
-      <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '50vh' }}>
-        <CircularProgress size={48} />
-      </Box>
+      <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '50vh' }}>
+        <CircularProgress size={48} sx={{ color: '#42a5f5' }} />
+      </div>
     );
   }
 
   if (error) {
-    return <Alert severity="warning" sx={{ borderRadius: 2 }}>{error} — <Button size="small" onClick={fetchData}>Retry</Button></Alert>;
+    return (
+      <GlassCard style={{ border: '1px solid rgba(255,167,38,0.3)' }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+          <span style={{ fontSize: '20px' }}>⚠️</span>
+          <span style={{ color: 'rgba(255,255,255,0.7)', fontSize: '14px' }}>{error}</span>
+          <button onClick={fetchData} style={{
+            marginLeft: 'auto', background: 'rgba(66,165,245,0.12)', border: '1px solid rgba(66,165,245,0.3)',
+            borderRadius: '8px', color: '#42a5f5', padding: '6px 16px', cursor: 'pointer', fontSize: '13px', fontWeight: 600,
+          }}>Retry</button>
+        </div>
+      </GlassCard>
+    );
   }
 
   const drift = status?.drift ?? {};
@@ -157,483 +127,375 @@ export default function LearningIntelligence() {
   const ruleWeights = status?.rule_weights ?? {};
   const tel = status?.telemetry_summary ?? {};
 
+  const SEV_COLOR = { CRITICAL: '#ef5350', HIGH: '#ffa726', MEDIUM: '#f9a825', LOW: '#66bb6a' };
+
   return (
-    <Box>
-      {/* Current Scan Banner */}
+    <div style={{ fontFamily: '"DM Sans", sans-serif' }}>
+      <style>{`
+        @import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&family=Syne:wght@700;800&display=swap');
+        .li-btn { cursor:pointer; transition:all 0.2s ease; }
+        .li-btn:hover { transform:translateY(-1px); filter:brightness(1.15); }
+        .pattern-row { cursor:pointer; transition:all 0.15s ease; }
+        .pattern-row:hover { background:rgba(66,165,245,0.06)!important; }
+      `}</style>
+
       <CurrentScanBanner />
 
       {/* Header */}
-      <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 4 }}>
-        <Box>
-          <Typography variant="h4" fontWeight="bold" gutterBottom>
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '32px' }}>
+        <div>
+          <h1 style={{ fontFamily: '"Syne", sans-serif', fontSize: '28px', fontWeight: 800, color: '#fff', margin: '0 0 8px', letterSpacing: '-0.02em' }}>
             🧠 Learning Intelligence
-          </Typography>
-          <Typography variant="body1" color="text.secondary">
+          </h1>
+          <p style={{ color: 'rgba(255,255,255,0.4)', fontSize: '14px', margin: 0, maxWidth: '600px', lineHeight: 1.5 }}>
             The system learns from every scan and every feedback event — patterns are discovered, models are retrained, and rules adapt automatically.
-          </Typography>
-        </Box>
+          </p>
+        </div>
         <StatusChip active={status?.adaptive_learning_active} />
-      </Box>
+      </div>
 
-      {/* Top Metric Cards */}
-      <Grid container spacing={3} sx={{ mb: 4 }}>
-        <Grid item xs={12} sm={6} md={3}>
-          <MetricCard
-            title="Training Buffer"
-            value={status?.training_buffer_size ?? 0}
-            subtitle={`${status?.feedback_since_retrain ?? 0} / ${status?.auto_retrain_threshold ?? 20} to auto-retrain`}
-            icon={<TrendingUpIcon sx={{ color: 'primary.main' }} />}
-            color="primary.main"
-          />
-        </Grid>
-        <Grid item xs={12} sm={6} md={3}>
-          <MetricCard
-            title="Drift Score"
-            value={drift.psi_score?.toFixed(4) ?? '0.0000'}
-            subtitle={drift.drift_detected ? '⚠️ Drift Detected' : '✅ Stable'}
-            icon={<TimelineIcon sx={{ color: drift.drift_detected ? 'error.main' : 'success.main' }} />}
-            color={drift.drift_detected ? 'error.main' : 'success.main'}
-          />
-        </Grid>
-        <Grid item xs={12} sm={6} md={3}>
-          <MetricCard
-            title="Patterns Tracked"
-            value={patterns.total_patterns_tracked ?? 0}
-            subtitle={`${patterns.rules_generated ?? 0} rules auto-generated`}
-            icon={<PatternIcon sx={{ color: 'secondary.main' }} />}
-            color="secondary.main"
-          />
-        </Grid>
-        <Grid item xs={12} sm={6} md={3}>
-          <MetricCard
-            title="Learning Events"
-            value={tel.total_events ?? 0}
-            subtitle={Object.keys(tel.event_types ?? {}).length + ' event types'}
-            icon={<PsychologyIcon sx={{ color: 'info.main' }} />}
-            color="info.main"
-          />
-        </Grid>
-      </Grid>
+      {/* Metric Cards */}
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '14px', marginBottom: '24px' }}>
+        <MetricCard
+          title="Training Buffer" value={status?.training_buffer_size ?? 0}
+          subtitle={`${status?.feedback_since_retrain ?? 0} / ${status?.auto_retrain_threshold ?? 20} to auto-retrain`}
+          icon="📈" color="#42a5f5"
+        />
+        <MetricCard
+          title="Drift Score" value={drift.psi_score?.toFixed(4) ?? '0.0000'}
+          subtitle={drift.drift_detected ? '⚠️ Drift Detected' : '✅ Stable'}
+          icon="📊" color={drift.drift_detected ? '#ef5350' : '#66bb6a'}
+        />
+        <MetricCard
+          title="Patterns Tracked" value={patterns.total_patterns_tracked ?? 0}
+          subtitle={`${patterns.rules_generated ?? 0} rules auto-generated`}
+          icon="🔬" color="#ce93d8"
+        />
+        <MetricCard
+          title="Learning Events" value={tel.total_events ?? 0}
+          subtitle={`${Object.keys(tel.event_types ?? {}).length} event types`}
+          icon="🧠" color="#26c6da"
+        />
+      </div>
 
-      <Grid container spacing={3}>
-        {/* Auto-Retrain Status */}
-        <Grid item xs={12} md={6}>
-          <Paper variant="outlined" sx={{ p: 3, borderRadius: 3, border: '2px solid', borderColor: 'divider' }}>
-            <Typography variant="h6" fontWeight="bold" gutterBottom>
-              <AutorenewIcon sx={{ mr: 1, verticalAlign: 'middle' }} />
-              Auto-Retrain Pipeline
-            </Typography>
-            <Divider sx={{ mb: 2 }} />
-            <Box sx={{ mb: 2 }}>
-              <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 0.5 }}>
-                <Typography variant="body2">Feedback progress</Typography>
-                <Typography variant="body2" fontWeight="bold">
-                  {status?.feedback_since_retrain ?? 0} / {status?.auto_retrain_threshold ?? 20}
-                </Typography>
-              </Box>
-              <LinearProgress
-                variant="determinate"
-                value={Math.min(((status?.feedback_since_retrain ?? 0) / (status?.auto_retrain_threshold ?? 20)) * 100, 100)}
-                sx={{ height: 10, borderRadius: 1 }}
-              />
-            </Box>
-            <Box sx={{ display: 'flex', gap: 1, flexWrap: 'wrap', mb: 2 }}>
-              <Chip
-                label={status?.should_retrain ? `Retrain needed: ${status.retrain_reason}` : 'No retrain needed'}
-                color={status?.should_retrain ? 'warning' : 'success'}
-                size="small"
-                variant="outlined"
-              />
-            </Box>
-            <Typography variant="body2" color="text.secondary">
-              The system automatically triggers retraining when feedback volume reaches the threshold
-              or when prediction drift exceeds PSI {drift.threshold ?? 0.15}. Every new data point
-              makes the model smarter.
-            </Typography>
-          </Paper>
-        </Grid>
+      {/* Two-column row: Auto-Retrain + Drift Monitor */}
+      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px', marginBottom: '20px' }}>
+        <GlassCard>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '12px' }}>
+            <span style={{ fontSize: '16px' }}>🔄</span>
+            <span style={{ fontFamily: '"Syne", sans-serif', fontSize: '16px', fontWeight: 700, color: '#fff' }}>Auto-Retrain Pipeline</span>
+          </div>
+          <div style={{ height: '1px', background: 'rgba(255,255,255,0.06)', marginBottom: '16px' }} />
+          <div style={{ marginBottom: '16px' }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '6px' }}>
+              <span style={{ fontSize: '12px', color: 'rgba(255,255,255,0.5)' }}>Feedback progress</span>
+              <span style={{ fontSize: '12px', fontWeight: 700, color: '#fff' }}>
+                {status?.feedback_since_retrain ?? 0} / {status?.auto_retrain_threshold ?? 20}
+              </span>
+            </div>
+            <LinearProgress variant="determinate"
+              value={Math.min(((status?.feedback_since_retrain ?? 0) / (status?.auto_retrain_threshold ?? 20)) * 100, 100)}
+              sx={{ height: 6, borderRadius: 3, bgcolor: 'rgba(255,255,255,0.06)', '& .MuiLinearProgress-bar': { background: 'linear-gradient(90deg, #1976d2, #42a5f5)', borderRadius: 3 } }}
+            />
+          </div>
+          <span style={{
+            padding: '4px 12px', borderRadius: '6px', fontSize: '11px', fontWeight: 500,
+            background: status?.should_retrain ? 'rgba(255,167,38,0.12)' : 'rgba(102,187,106,0.12)',
+            color: status?.should_retrain ? '#ffa726' : '#66bb6a',
+            border: `1px solid ${status?.should_retrain ? 'rgba(255,167,38,0.3)' : 'rgba(102,187,106,0.3)'}`,
+          }}>
+            {status?.should_retrain ? `Retrain needed: ${status.retrain_reason}` : 'No retrain needed'}
+          </span>
+          <p style={{ color: 'rgba(255,255,255,0.35)', fontSize: '12px', lineHeight: 1.5, marginTop: '12px' }}>
+            Automatically triggers retraining when feedback reaches threshold or drift exceeds PSI {drift.threshold ?? 0.15}.
+          </p>
+        </GlassCard>
 
-        {/* Drift Monitor */}
-        <Grid item xs={12} md={6}>
-          <Paper variant="outlined" sx={{ p: 3, borderRadius: 3, border: '2px solid', borderColor: 'divider' }}>
-            <Typography variant="h6" fontWeight="bold" gutterBottom>
-              <TimelineIcon sx={{ mr: 1, verticalAlign: 'middle' }} />
-              Model Drift Monitor (PSI)
-            </Typography>
-            <Divider sx={{ mb: 2 }} />
-            <Box sx={{ mb: 2 }}>
-              <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 0.5 }}>
-                <Typography variant="body2">Population Stability Index</Typography>
-                <Typography variant="body2" fontWeight="bold" color={drift.drift_detected ? 'error.main' : 'success.main'}>
-                  {(drift.psi_score ?? 0).toFixed(4)}
-                </Typography>
-              </Box>
-              <LinearProgress
-                variant="determinate"
-                value={Math.min((drift.psi_score ?? 0) / 0.3 * 100, 100)}
-                color={drift.drift_detected ? 'error' : 'success'}
-                sx={{ height: 10, borderRadius: 1 }}
-              />
-              <Box sx={{ display: 'flex', justifyContent: 'space-between', mt: 0.5 }}>
-                <Typography variant="caption" color="text.secondary">0.00 (stable)</Typography>
-                <Typography variant="caption" color="text.secondary">0.15 (threshold)</Typography>
-                <Typography variant="caption" color="text.secondary">0.30 (critical)</Typography>
-              </Box>
-            </Box>
-            <Box sx={{ display: 'flex', gap: 1 }}>
-              <Chip label={`Reference: ${drift.reference_size ?? 0} predictions`} size="small" variant="outlined" />
-              <Chip label={`Recent: ${drift.recent_size ?? 0} predictions`} size="small" variant="outlined" />
-            </Box>
-          </Paper>
-        </Grid>
+        <GlassCard>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '12px' }}>
+            <span style={{ fontSize: '16px' }}>📊</span>
+            <span style={{ fontFamily: '"Syne", sans-serif', fontSize: '16px', fontWeight: 700, color: '#fff' }}>Model Drift Monitor (PSI)</span>
+          </div>
+          <div style={{ height: '1px', background: 'rgba(255,255,255,0.06)', marginBottom: '16px' }} />
+          <div style={{ marginBottom: '12px' }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '6px' }}>
+              <span style={{ fontSize: '12px', color: 'rgba(255,255,255,0.5)' }}>Population Stability Index</span>
+              <span style={{ fontSize: '12px', fontWeight: 700, color: drift.drift_detected ? '#ef5350' : '#66bb6a' }}>
+                {(drift.psi_score ?? 0).toFixed(4)}
+              </span>
+            </div>
+            <LinearProgress variant="determinate"
+              value={Math.min((drift.psi_score ?? 0) / 0.3 * 100, 100)}
+              sx={{ height: 6, borderRadius: 3, bgcolor: 'rgba(255,255,255,0.06)', '& .MuiLinearProgress-bar': { background: drift.drift_detected ? '#ef5350' : '#66bb6a', borderRadius: 3 } }}
+            />
+            <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: '4px' }}>
+              <span style={{ fontSize: '10px', color: 'rgba(255,255,255,0.25)' }}>0.00 (stable)</span>
+              <span style={{ fontSize: '10px', color: 'rgba(255,255,255,0.25)' }}>0.15 (threshold)</span>
+              <span style={{ fontSize: '10px', color: 'rgba(255,255,255,0.25)' }}>0.30 (critical)</span>
+            </div>
+          </div>
+          <div style={{ display: 'flex', gap: '8px' }}>
+            <span style={{ padding: '3px 10px', borderRadius: '6px', fontSize: '10px', background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.06)', color: 'rgba(255,255,255,0.4)' }}>
+              Reference: {drift.reference_size ?? 0} predictions
+            </span>
+            <span style={{ padding: '3px 10px', borderRadius: '6px', fontSize: '10px', background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.06)', color: 'rgba(255,255,255,0.4)' }}>
+              Recent: {drift.recent_size ?? 0} predictions
+            </span>
+          </div>
+        </GlassCard>
+      </div>
 
-        {/* Rule Weights */}
-        <Grid item xs={12} md={6}>
-          <Paper variant="outlined" sx={{ p: 3, borderRadius: 3, border: '2px solid', borderColor: 'divider' }}>
-            <Typography variant="h6" fontWeight="bold" gutterBottom>
-              <ScaleIcon sx={{ mr: 1, verticalAlign: 'middle' }} />
-              Adaptive Rule Weights
-            </Typography>
-            <Divider sx={{ mb: 2 }} />
-            {ruleWeights.total_rules_tracked > 0 ? (
-              <>
-                <Typography variant="body2" sx={{ mb: 1 }}>
-                  Tracking <strong>{ruleWeights.total_rules_tracked}</strong> rules —
-                  avg confidence <strong>{(ruleWeights.avg_confidence ?? 0).toFixed(2)}</strong>
-                </Typography>
-                {(ruleWeights.low_confidence_rules?.length > 0) && (
-                  <Alert severity="info" sx={{ mb: 1 }}>
-                    {ruleWeights.low_confidence_rules.length} rule(s) flagged as noisy (confidence &lt; 0.4)
-                  </Alert>
-                )}
-                <TableContainer sx={{ maxHeight: 200 }}>
-                  <Table size="small" stickyHeader>
-                    <TableHead>
-                      <TableRow>
-                        <TableCell>Rule ID</TableCell>
-                        <TableCell align="right">Confidence</TableCell>
-                        <TableCell align="right">TP</TableCell>
-                        <TableCell align="right">FP</TableCell>
-                      </TableRow>
-                    </TableHead>
-                    <TableBody>
-                      {Object.entries(ruleWeights.rules ?? {}).slice(0, 10).map(([ruleId, data]) => (
-                        <TableRow key={ruleId}>
-                          <TableCell sx={{ fontFamily: 'monospace', fontSize: 12 }}>{ruleId}</TableCell>
-                          <TableCell align="right">
-                            <Chip
-                              label={data.confidence?.toFixed(2)}
-                              size="small"
-                              color={data.confidence >= 0.7 ? 'success' : data.confidence >= 0.4 ? 'warning' : 'error'}
-                            />
-                          </TableCell>
-                          <TableCell align="right">{data.true_positives}</TableCell>
-                          <TableCell align="right">{data.false_positives}</TableCell>
-                        </TableRow>
+      {/* Rule Weights + Pattern Discovery */}
+      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px', marginBottom: '20px' }}>
+        <GlassCard>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '12px' }}>
+            <span style={{ fontSize: '16px' }}>⚖️</span>
+            <span style={{ fontFamily: '"Syne", sans-serif', fontSize: '16px', fontWeight: 700, color: '#fff' }}>Adaptive Rule Weights</span>
+          </div>
+          <div style={{ height: '1px', background: 'rgba(255,255,255,0.06)', marginBottom: '16px' }} />
+          {ruleWeights.total_rules_tracked > 0 ? (
+            <>
+              <p style={{ fontSize: '12px', color: 'rgba(255,255,255,0.5)', marginBottom: '12px' }}>
+                Tracking <strong style={{ color: '#fff' }}>{ruleWeights.total_rules_tracked}</strong> rules — avg confidence <strong style={{ color: '#fff' }}>{(ruleWeights.avg_confidence ?? 0).toFixed(2)}</strong>
+              </p>
+              {(ruleWeights.low_confidence_rules?.length > 0) && (
+                <div style={{ padding: '8px 12px', borderRadius: '8px', background: 'rgba(66,165,245,0.08)', border: '1px solid rgba(66,165,245,0.15)', fontSize: '12px', color: '#42a5f5', marginBottom: '12px' }}>
+                  ℹ️ {ruleWeights.low_confidence_rules.length} rule(s) flagged as noisy (confidence &lt; 0.4)
+                </div>
+              )}
+              <div style={{ overflowX: 'auto', maxHeight: '200px' }}>
+                <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '12px' }}>
+                  <thead>
+                    <tr style={{ borderBottom: '1px solid rgba(255,255,255,0.06)' }}>
+                      {['Rule ID', 'Confidence', 'TP', 'FP'].map(h => (
+                        <th key={h} style={{ padding: '8px 12px', textAlign: h === 'Rule ID' ? 'left' : 'right', color: 'rgba(255,255,255,0.4)', fontWeight: 600, fontSize: '10px', textTransform: 'uppercase' }}>{h}</th>
                       ))}
-                    </TableBody>
-                  </Table>
-                </TableContainer>
-              </>
-            ) : (
-              <Box sx={{ textAlign: 'center', py: 3 }}>
-                <RuleIcon sx={{ fontSize: 48, color: 'text.disabled', mb: 1 }} />
-                <Typography color="text.secondary">No rule feedback yet — submit scan feedback to start learning</Typography>
-              </Box>
-            )}
-          </Paper>
-        </Grid>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {Object.entries(ruleWeights.rules ?? {}).slice(0, 10).map(([ruleId, data]) => (
+                      <tr key={ruleId} style={{ borderBottom: '1px solid rgba(255,255,255,0.03)' }}>
+                        <td style={{ padding: '6px 12px', fontFamily: '"JetBrains Mono", monospace', fontSize: '11px', color: 'rgba(255,255,255,0.6)' }}>{ruleId}</td>
+                        <td style={{ padding: '6px 12px', textAlign: 'right' }}>
+                          <span style={{
+                            padding: '2px 8px', borderRadius: '4px', fontSize: '10px', fontWeight: 700,
+                            background: data.confidence >= 0.7 ? 'rgba(102,187,106,0.15)' : data.confidence >= 0.4 ? 'rgba(255,167,38,0.15)' : 'rgba(239,83,80,0.15)',
+                            color: data.confidence >= 0.7 ? '#66bb6a' : data.confidence >= 0.4 ? '#ffa726' : '#ef5350',
+                          }}>{data.confidence?.toFixed(2)}</span>
+                        </td>
+                        <td style={{ padding: '6px 12px', textAlign: 'right', color: 'rgba(255,255,255,0.5)' }}>{data.true_positives}</td>
+                        <td style={{ padding: '6px 12px', textAlign: 'right', color: 'rgba(255,255,255,0.5)' }}>{data.false_positives}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            </>
+          ) : (
+            <div style={{ textAlign: 'center', padding: '24px' }}>
+              <div style={{ fontSize: '36px', marginBottom: '8px' }}>⚖️</div>
+              <p style={{ color: 'rgba(255,255,255,0.4)', fontSize: '13px' }}>No rule feedback yet — submit scan feedback to start learning</p>
+            </div>
+          )}
+        </GlassCard>
 
-        {/* Pattern Discovery — Expanded with rich detail view */}
-        <Grid item xs={12} md={6}>
-          <Paper variant="outlined" sx={{ p: 3, borderRadius: 3, border: '2px solid', borderColor: 'divider' }}>
-            <Typography variant="h6" fontWeight="bold" gutterBottom>
-              <PatternIcon sx={{ mr: 1, verticalAlign: 'middle' }} />
-              Pattern Discovery
-            </Typography>
-            <Divider sx={{ mb: 2 }} />
-            <Box sx={{ display: 'flex', gap: 1, mb: 2 }}>
-              <Chip label={`${patterns.total_patterns_tracked ?? 0} patterns tracked`} variant="outlined" size="small" />
-              <Chip label={`${patterns.rules_generated ?? 0} rules generated`} color="success" variant="outlined" size="small" />
-              <Chip label={`${patterns.pending_patterns ?? 0} pending`} color="warning" variant="outlined" size="small" />
-            </Box>
-            {(patterns.top_patterns ?? []).length > 0 ? (
-              <Box>
-                {patterns.top_patterns.map((p, i) => {
-                  const isExpanded = expandedPattern === p.signature;
-                  const detail = isExpanded ? patternDetail : null;
-                  const sevColor = p.severity === 'CRITICAL' ? 'error' : p.severity === 'HIGH' ? 'warning' : p.severity === 'MEDIUM' ? 'info' : 'success';
-                  return (
-                    <Paper key={i} variant="outlined" sx={{ mb: 1.5, borderRadius: 2, overflow: 'hidden', borderColor: isExpanded ? 'primary.main' : 'divider' }}>
-                      {/* Clickable header */}
-                      <Box
-                        sx={{ p: 1.5, cursor: 'pointer', display: 'flex', alignItems: 'center', gap: 1, '&:hover': { bgcolor: 'action.hover' } }}
-                        onClick={() => handleTogglePattern(p.signature)}
-                      >
-                        <Chip label={p.severity} size="small" color={sevColor} sx={{ fontWeight: 'bold', minWidth: 70 }} />
-                        <Tooltip title={(p.sample_description || '').replace(/\*\*Impact:?\*\*.*$/s, '').replace(/\*\*(.*?)\*\*/g, '$1').trim() || p.signature}>
-                          <Typography variant="body2" sx={{ flex: 1, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', fontWeight: 500 }}>
-                            {(p.sample_description || '').replace(/\*\*Impact:?\*\*.*$/s, '').replace(/\*\*(.*?)\*\*/g, '$1').trim() || p.signature}
-                          </Typography>
-                        </Tooltip>
-                        <Chip label={`${p.count}×`} size="small" variant="outlined" />
-                        <Chip label={`${p.scan_ids?.length ?? 0} scans`} size="small" variant="outlined" />
-                        {p.rule_generated
-                          ? <Chip label="Rule Created" size="small" color="success" />
-                          : <Chip label="Tracking" size="small" variant="outlined" />
-                        }
-                        <IconButton size="small">{isExpanded ? <ExpandLessIcon /> : <ExpandMoreIcon />}</IconButton>
-                      </Box>
-                      {/* Expanded detail panel */}
-                      <Collapse in={isExpanded}>
-                        <Divider />
-                        <Box sx={{ p: 2, bgcolor: 'action.hover' }}>
-                          {loadingDetail ? (
-                            <Box sx={{ display: 'flex', justifyContent: 'center', py: 2 }}><CircularProgress size={24} /></Box>
-                          ) : detail ? (
-                            <Box>
-                              {/* Risk explanation */}
-                              {detail.risk_explanation && (
-                                <Alert severity="info" sx={{ mb: 2, borderRadius: 2 }}>
-                                  <Typography variant="body2">{detail.risk_explanation}</Typography>
-                                </Alert>
-                              )}
-
-                              {/* Affected resources */}
-                              {(detail.affected_resources?.length > 0) && (
-                                <Box sx={{ mb: 2 }}>
-                                  <Typography variant="subtitle2" fontWeight="bold" gutterBottom>
-                                    <SecurityIcon sx={{ fontSize: 16, mr: 0.5, verticalAlign: 'middle' }} />
-                                    Affected Resources ({detail.affected_resources.length})
-                                  </Typography>
-                                  <Box sx={{ display: 'flex', gap: 0.5, flexWrap: 'wrap' }}>
-                                    {detail.affected_resources.map((r, ri) => (
-                                      <Chip key={ri} label={r} size="small" variant="outlined" sx={{ fontFamily: 'monospace', fontSize: 11 }} />
-                                    ))}
-                                  </Box>
-                                </Box>
-                              )}
-
-                              {/* Scanners & Rule IDs */}
-                              <Box sx={{ display: 'flex', gap: 3, mb: 2 }}>
-                                {(detail.scanners_involved?.length > 0) && (
-                                  <Box>
-                                    <Typography variant="caption" color="text.secondary">Detected by</Typography>
-                                    <Box sx={{ display: 'flex', gap: 0.5, mt: 0.5 }}>
-                                      {detail.scanners_involved.map((s, si) => (
-                                        <Chip key={si} label={s} size="small" color="primary" variant="outlined" />
-                                      ))}
-                                    </Box>
-                                  </Box>
-                                )}
-                                {(detail.rule_ids_involved?.length > 0) && (
-                                  <Box>
-                                    <Typography variant="caption" color="text.secondary">Rule IDs</Typography>
-                                    <Box sx={{ display: 'flex', gap: 0.5, mt: 0.5, flexWrap: 'wrap' }}>
-                                      {detail.rule_ids_involved.slice(0, 5).map((r, ri) => (
-                                        <Chip key={ri} label={r} size="small" variant="outlined" sx={{ fontFamily: 'monospace', fontSize: 10 }} />
-                                      ))}
-                                      {detail.rule_ids_involved.length > 5 && (
-                                        <Chip label={`+${detail.rule_ids_involved.length - 5} more`} size="small" variant="outlined" />
-                                      )}
-                                    </Box>
-                                  </Box>
-                                )}
-                              </Box>
-
-                              {/* Example findings */}
-                              {(detail.example_findings?.length > 0) && (
-                                <Box sx={{ mb: 2 }}>
-                                  <Typography variant="subtitle2" fontWeight="bold" gutterBottom>
-                                    <BugReportIcon sx={{ fontSize: 16, mr: 0.5, verticalAlign: 'middle' }} />
-                                    Example Findings ({detail.example_findings.length})
-                                  </Typography>
-                                  {detail.example_findings.map((ex, ei) => (
-                                    <Paper key={ei} variant="outlined" sx={{ p: 1.5, mb: 1, borderRadius: 1.5, borderLeft: '3px solid', borderLeftColor: ex.severity === 'CRITICAL' ? 'error.main' : ex.severity === 'HIGH' ? 'warning.main' : 'info.main' }}>
-                                      <Typography variant="body2" fontWeight="bold">{ex.title || 'Finding'}</Typography>
-                                      <Typography variant="caption" color="text.secondary" sx={{ display: 'block', mb: 0.5 }}>
-                                        {ex.resource && `Resource: ${ex.resource}`}{ex.file && ` | File: ${ex.file}`}{ex.line_number && ` | Line: ${ex.line_number}`}
-                                      </Typography>
-                                      {(() => {
-                                        const desc = ex.description?.slice(0, 300) || '';
-                                        const impactMatch = desc.match(/\*\*Impact:?\*\*\s*(.*?)$/s);
-                                        const mainDesc = impactMatch ? desc.slice(0, impactMatch.index).replace(/\.\s*$/, '.') : desc;
-                                        const impactText = impactMatch ? impactMatch[1].trim() : null;
-                                        const cleanDesc = mainDesc.replace(/\*\*(.*?)\*\*/g, '$1');
-                                        return (
-                                          <>
-                                            <Typography variant="body2" sx={{ fontSize: 12 }}>{cleanDesc}</Typography>
-                                            {impactText && (
-                                              <Alert severity="error" icon={<WarningAmberIcon sx={{ fontSize: 14 }} />} sx={{ mt: 1, py: 0.25, borderRadius: 1, '& .MuiAlert-message': { py: 0.25 } }}>
-                                                <Typography variant="caption" fontWeight="bold" sx={{ textTransform: 'uppercase', letterSpacing: 0.5 }}>Impact</Typography>
-                                                <Typography variant="caption" display="block" sx={{ mt: 0.25 }}>{impactText.replace(/\*\*(.*?)\*\*/g, '$1')}</Typography>
-                                              </Alert>
-                                            )}
-                                          </>
-                                        );
-                                      })()}
-                                      {ex.code_snippet && (
-                                        <Paper sx={{ p: 1, mt: 1, bgcolor: 'action.hover', borderRadius: 1 }}>
-                                          <Typography variant="caption" component="pre" sx={{ whiteSpace: 'pre-wrap', fontFamily: 'monospace', fontSize: 10 }}>
-                                            {ex.code_snippet}
-                                          </Typography>
-                                        </Paper>
-                                      )}
-                                    </Paper>
+        <GlassCard style={{ overflow: 'visible' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '12px' }}>
+            <span style={{ fontSize: '16px' }}>🔬</span>
+            <span style={{ fontFamily: '"Syne", sans-serif', fontSize: '16px', fontWeight: 700, color: '#fff' }}>Pattern Discovery</span>
+          </div>
+          <div style={{ height: '1px', background: 'rgba(255,255,255,0.06)', marginBottom: '16px' }} />
+          <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap', marginBottom: '14px' }}>
+            {[
+              { label: `${patterns.total_patterns_tracked ?? 0} patterns tracked`, color: 'rgba(255,255,255,0.4)' },
+              { label: `${patterns.rules_generated ?? 0} rules generated`, color: '#66bb6a' },
+              { label: `${patterns.pending_patterns ?? 0} pending`, color: '#ffa726' },
+            ].map((t, i) => (
+              <span key={i} style={{ padding: '3px 10px', borderRadius: '6px', fontSize: '10px', background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.06)', color: t.color }}>{t.label}</span>
+            ))}
+          </div>
+          {(patterns.top_patterns ?? []).length > 0 ? (
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+              {patterns.top_patterns.map((p, i) => {
+                const isExpanded = expandedPattern === p.signature;
+                const detail = isExpanded ? patternDetail : null;
+                const sevColor = SEV_COLOR[p.severity] || '#42a5f5';
+                const cleanDesc = (p.sample_description || '').replace(/\*\*Impact:?\*\*.*$/s, '').replace(/\*\*(.*?)\*\*/g, '$1').trim() || p.signature;
+                return (
+                  <div key={i} style={{
+                    borderRadius: '8px',
+                    border: `1px solid ${isExpanded ? 'rgba(66,165,245,0.3)' : 'rgba(255,255,255,0.06)'}`,
+                    transition: 'border-color 0.25s ease, box-shadow 0.25s ease',
+                    boxShadow: isExpanded ? '0 4px 20px rgba(66,165,245,0.08)' : 'none',
+                  }}>
+                    <div className="pattern-row" onClick={() => handleTogglePattern(p.signature)}
+                      style={{
+                        padding: '10px 14px', display: 'flex', alignItems: 'center', gap: '8px',
+                        background: isExpanded ? 'rgba(66,165,245,0.04)' : 'rgba(255,255,255,0.02)',
+                        borderRadius: isExpanded ? '8px 8px 0 0' : '8px',
+                        transition: 'background 0.2s ease',
+                        userSelect: 'none',
+                      }}>
+                      <span style={{ padding: '2px 8px', borderRadius: '4px', fontSize: '10px', fontWeight: 700, background: `${sevColor}20`, color: sevColor, minWidth: '60px', textAlign: 'center', flexShrink: 0 }}>{p.severity}</span>
+                      <span style={{ flex: 1, fontSize: '12px', color: 'rgba(255,255,255,0.6)', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{cleanDesc}</span>
+                      <span style={{ fontSize: '11px', color: 'rgba(255,255,255,0.3)', flexShrink: 0 }}>{p.count}×</span>
+                      {p.rule_generated
+                        ? <span style={{ padding: '2px 8px', borderRadius: '4px', fontSize: '9px', fontWeight: 600, background: 'rgba(102,187,106,0.15)', color: '#66bb6a', flexShrink: 0 }}>Rule Created</span>
+                        : <span style={{ padding: '2px 8px', borderRadius: '4px', fontSize: '9px', background: 'rgba(255,255,255,0.04)', color: 'rgba(255,255,255,0.3)', flexShrink: 0 }}>Tracking</span>
+                      }
+                      <span style={{
+                        fontSize: '10px', color: 'rgba(255,255,255,0.3)', flexShrink: 0,
+                        transition: 'transform 0.25s ease',
+                        transform: isExpanded ? 'rotate(180deg)' : 'rotate(0deg)',
+                        display: 'inline-block',
+                      }}>▼</span>
+                    </div>
+                    <div style={{
+                      maxHeight: isExpanded ? '500px' : '0px',
+                      overflow: 'hidden',
+                      transition: 'max-height 0.35s ease, opacity 0.25s ease',
+                      opacity: isExpanded ? 1 : 0,
+                    }}>
+                      <div style={{ padding: '14px', background: 'rgba(255,255,255,0.015)', borderTop: '1px solid rgba(255,255,255,0.04)' }}>
+                        {loadingDetail ? (
+                          <div style={{ display: 'flex', justifyContent: 'center', padding: '12px' }}><CircularProgress size={20} sx={{ color: '#42a5f5' }} /></div>
+                        ) : detail ? (
+                          <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
+                            {detail.risk_explanation && (
+                              <div style={{ padding: '10px 12px', borderRadius: '8px', background: 'rgba(66,165,245,0.06)', border: '1px solid rgba(66,165,245,0.15)', fontSize: '12px', color: 'rgba(255,255,255,0.55)', lineHeight: 1.5 }}>
+                                ℹ️ {detail.risk_explanation}
+                              </div>
+                            )}
+                            {detail.affected_resources?.length > 0 && (
+                              <div>
+                                <div style={{ fontSize: '11px', fontWeight: 600, color: 'rgba(255,255,255,0.5)', marginBottom: '6px' }}>Affected Resources ({detail.affected_resources.length})</div>
+                                <div style={{ display: 'flex', gap: '4px', flexWrap: 'wrap' }}>
+                                  {detail.affected_resources.map((r, ri) => (
+                                    <span key={ri} style={{ padding: '2px 8px', borderRadius: '4px', fontSize: '10px', fontFamily: '"JetBrains Mono", monospace', background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.06)', color: 'rgba(255,255,255,0.5)' }}>{r}</span>
                                   ))}
-                                </Box>
-                              )}
+                                </div>
+                              </div>
+                            )}
+                            {detail.remediation_guidance?.length > 0 && (
+                              <div style={{ padding: '10px 12px', borderRadius: '8px', background: 'rgba(102,187,106,0.06)', border: '1px solid rgba(102,187,106,0.15)' }}>
+                                <div style={{ fontSize: '11px', fontWeight: 700, color: '#66bb6a', marginBottom: '6px' }}>Remediation</div>
+                                {detail.remediation_guidance.map((step, si) => (
+                                  <div key={si} style={{ fontSize: '11px', color: 'rgba(255,255,255,0.5)', marginBottom: '3px', display: 'flex', alignItems: 'center', gap: '6px' }}>
+                                    <span style={{ color: '#66bb6a', fontSize: '12px' }}>✓</span> {step}
+                                  </div>
+                                ))}
+                              </div>
+                            )}
+                            <div style={{ display: 'flex', gap: '12px' }}>
+                              <span style={{ fontSize: '10px', color: 'rgba(255,255,255,0.25)' }}>First: {detail.first_seen ? new Date(detail.first_seen).toLocaleDateString() : '—'}</span>
+                              <span style={{ fontSize: '10px', color: 'rgba(255,255,255,0.25)' }}>Last: {detail.last_seen ? new Date(detail.last_seen).toLocaleDateString() : '—'}</span>
+                              <span style={{ fontSize: '10px', color: 'rgba(255,255,255,0.25)' }}>Files: {detail.affected_files?.length ?? 0}</span>
+                            </div>
+                          </div>
+                        ) : (
+                          <p style={{ color: 'rgba(255,255,255,0.4)', fontSize: '12px', margin: 0 }}>No detail available.</p>
+                        )}
+                      </div>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          ) : (
+            <p style={{ color: 'rgba(255,255,255,0.4)', fontSize: '13px' }}>No patterns discovered yet — run more scans.</p>
+          )}
+          <button className="li-btn" onClick={handleDiscover} disabled={discovering} style={{
+            marginTop: '14px', padding: '8px 18px', borderRadius: '8px',
+            background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.12)',
+            color: 'rgba(255,255,255,0.6)', fontSize: '12px', fontWeight: 500,
+            fontFamily: '"DM Sans", sans-serif',
+            display: 'flex', alignItems: 'center', gap: '6px',
+          }}>
+            🔬 {discovering ? 'Discovering…' : 'Run Discovery Cycle'}
+          </button>
+        </GlassCard>
+      </div>
 
-                              {/* Remediation guidance */}
-                              {(detail.remediation_guidance?.length > 0) && (
-                                <Box sx={{ mb: 1 }}>
-                                  <Typography variant="subtitle2" fontWeight="bold" gutterBottom>
-                                    <BuildIcon sx={{ fontSize: 16, mr: 0.5, verticalAlign: 'middle' }} />
-                                    Remediation Guidance
-                                  </Typography>
-                                  <List dense disablePadding>
-                                    {detail.remediation_guidance.map((step, si) => (
-                                      <ListItem key={si} disableGutters sx={{ py: 0.25 }}>
-                                        <ListItemIcon sx={{ minWidth: 24 }}>
-                                          <CheckCircleIcon sx={{ fontSize: 14, color: 'success.main' }} />
-                                        </ListItemIcon>
-                                        <ListItemText primaryTypographyProps={{ variant: 'body2', fontSize: 12 }} primary={step} />
-                                      </ListItem>
-                                    ))}
-                                  </List>
-                                </Box>
-                              )}
-
-                              {/* Metadata */}
-                              <Box sx={{ display: 'flex', gap: 2, mt: 1 }}>
-                                <Typography variant="caption" color="text.secondary">
-                                  First seen: {detail.first_seen ? new Date(detail.first_seen).toLocaleDateString() : '—'}
-                                </Typography>
-                                <Typography variant="caption" color="text.secondary">
-                                  Last seen: {detail.last_seen ? new Date(detail.last_seen).toLocaleDateString() : '—'}
-                                </Typography>
-                                <Typography variant="caption" color="text.secondary">
-                                  Files: {detail.affected_files?.length ?? 0}
-                                </Typography>
-                              </Box>
-                            </Box>
-                          ) : (
-                            <Typography variant="body2" color="text.secondary">No detail available for this pattern.</Typography>
-                          )}
-                        </Box>
-                      </Collapse>
-                    </Paper>
+      {/* Telemetry Feed */}
+      <GlassCard style={{ marginBottom: '20px' }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '12px' }}>
+          <span style={{ fontSize: '16px' }}>📡</span>
+          <span style={{ fontFamily: '"Syne", sans-serif', fontSize: '16px', fontWeight: 700, color: '#fff' }}>Learning Telemetry (Live)</span>
+        </div>
+        <div style={{ height: '1px', background: 'rgba(255,255,255,0.06)', marginBottom: '14px' }} />
+        {(telemetry?.recent_events ?? []).length > 0 ? (
+          <div style={{ overflowX: 'auto', maxHeight: '280px' }}>
+            <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '12px' }}>
+              <thead>
+                <tr style={{ borderBottom: '1px solid rgba(255,255,255,0.06)' }}>
+                  {['Time', 'Event', 'Details'].map(h => (
+                    <th key={h} style={{ padding: '8px 14px', textAlign: 'left', color: 'rgba(255,255,255,0.4)', fontWeight: 600, fontSize: '10px', textTransform: 'uppercase' }}>{h}</th>
+                  ))}
+                </tr>
+              </thead>
+              <tbody>
+                {telemetry.recent_events.slice().reverse().map((evt, i) => {
+                  const evtColor = evt.type === 'retrain_completed' ? '#66bb6a' : evt.type === 'drift_detected' ? '#ef5350' : evt.type === 'feedback_processed' ? '#42a5f5' : 'rgba(255,255,255,0.4)';
+                  return (
+                    <tr key={i} style={{ borderBottom: '1px solid rgba(255,255,255,0.03)' }}>
+                      <td style={{ padding: '6px 14px', whiteSpace: 'nowrap', color: 'rgba(255,255,255,0.35)', fontSize: '11px' }}>
+                        {evt.timestamp ? new Date(evt.timestamp).toLocaleTimeString() : '—'}
+                      </td>
+                      <td style={{ padding: '6px 14px' }}>
+                        <span style={{
+                          padding: '2px 8px', borderRadius: '4px', fontSize: '10px', fontWeight: 600,
+                          fontFamily: '"JetBrains Mono", monospace',
+                          background: `${evtColor}15`, color: evtColor,
+                          border: `1px solid ${evtColor}30`,
+                        }}>{evt.type}</span>
+                      </td>
+                      <td style={{ padding: '6px 14px', fontSize: '11px', fontFamily: '"JetBrains Mono", monospace', color: 'rgba(255,255,255,0.35)', maxWidth: '400px', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+                        {JSON.stringify(Object.fromEntries(Object.entries(evt).filter(([k]) => !['type', 'timestamp'].includes(k)))).slice(0, 120)}
+                      </td>
+                    </tr>
                   );
                 })}
-              </Box>
-            ) : (
-              <Typography variant="body2" color="text.secondary">
-                No patterns discovered yet — run more scans to build data.
-              </Typography>
-            )}
-            <Box sx={{ mt: 2 }}>
-              <Button
-                variant="outlined"
-                size="small"
-                startIcon={<PatternIcon />}
-                onClick={handleDiscover}
-                disabled={discovering}
-              >
-                {discovering ? 'Discovering…' : 'Run Discovery Cycle'}
-              </Button>
-            </Box>
-          </Paper>
-        </Grid>
+              </tbody>
+            </table>
+          </div>
+        ) : (
+          <div style={{ textAlign: 'center', padding: '32px' }}>
+            <div style={{ fontSize: '36px', marginBottom: '8px' }}>🧠</div>
+            <p style={{ color: 'rgba(255,255,255,0.4)', fontSize: '13px' }}>No learning events yet — scan a file to start.</p>
+          </div>
+        )}
+      </GlassCard>
 
-        {/* Telemetry Feed */}
-        <Grid item xs={12}>
-          <Paper variant="outlined" sx={{ p: 3, borderRadius: 3, border: '2px solid', borderColor: 'divider' }}>
-            <Typography variant="h6" fontWeight="bold" gutterBottom>
-              📡 Learning Telemetry (Live)
-            </Typography>
-            <Divider sx={{ mb: 2 }} />
-            {(telemetry?.recent_events ?? []).length > 0 ? (
-              <TableContainer sx={{ maxHeight: 300 }}>
-                <Table size="small" stickyHeader>
-                  <TableHead>
-                    <TableRow>
-                      <TableCell>Time</TableCell>
-                      <TableCell>Event</TableCell>
-                      <TableCell>Details</TableCell>
-                    </TableRow>
-                  </TableHead>
-                  <TableBody>
-                    {telemetry.recent_events.slice().reverse().map((evt, i) => (
-                      <TableRow key={i} sx={{ '&:last-child td': { borderBottom: 0 } }}>
-                        <TableCell sx={{ fontSize: 11, whiteSpace: 'nowrap', color: 'text.secondary' }}>
-                          {evt.timestamp ? new Date(evt.timestamp).toLocaleTimeString() : '—'}
-                        </TableCell>
-                        <TableCell>
-                          <Chip
-                            label={evt.type}
-                            size="small"
-                            color={
-                              evt.type === 'retrain_completed' ? 'success' :
-                              evt.type === 'drift_detected' ? 'error' :
-                              evt.type === 'feedback_processed' ? 'info' : 'default'
-                            }
-                            variant="outlined"
-                            sx={{ fontFamily: 'monospace', fontSize: 11 }}
-                          />
-                        </TableCell>
-                        <TableCell sx={{ fontSize: 12, fontFamily: 'monospace', maxWidth: 400, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
-                          {JSON.stringify(Object.fromEntries(
-                            Object.entries(evt).filter(([k]) => !['type', 'timestamp'].includes(k))
-                          )).slice(0, 120)}
-                        </TableCell>
-                      </TableRow>
-                    ))}
-                  </TableBody>
-                </Table>
-              </TableContainer>
-            ) : (
-              <Box sx={{ textAlign: 'center', py: 3 }}>
-                <PsychologyIcon sx={{ fontSize: 48, color: 'text.disabled', mb: 1 }} />
-                <Typography color="text.secondary">
-                  No learning events yet — scan a file to see the system start learning.
-                </Typography>
-              </Box>
-            )}
-          </Paper>
-        </Grid>
-
-        {/* How It Works */}
-        <Grid item xs={12}>
-          <Paper variant="outlined" sx={{ p: 3, borderRadius: 3, border: '2px solid', borderColor: 'divider', bgcolor: 'background.paper' }}>
-            <Typography variant="h6" fontWeight="bold" gutterBottom>
-              🔄 How Adaptive Learning Works
-            </Typography>
-            <Divider sx={{ mb: 2 }} />
-            <Grid container spacing={2}>
-              {[
-                { step: '1', title: 'Scan Ingestion', desc: 'Every scan result feeds the drift detector and pattern engine. New vulnerability signatures are tracked automatically.' },
-                { step: '2', title: 'Feedback Learning', desc: 'User feedback (accurate / false positive / false negative) trains the model with correct labels and adjusts rule confidence weights.' },
-                { step: '3', title: 'Drift Detection', desc: 'PSI-based monitoring compares recent predictions vs historical baseline. When the world changes, the system notices.' },
-                { step: '4', title: 'Auto-Retrain', desc: `After ${status?.auto_retrain_threshold ?? 20} feedback events or significant drift, the model automatically retrains with new data.` },
-                { step: '5', title: 'Pattern Discovery', desc: 'Recurring findings are clustered. When a pattern appears in 3+ scans with no matching rule, a YAML rule is auto-generated.' },
-                { step: '6', title: 'Model Evaluation', desc: 'New models are compared against the champion using holdout data. Only improvements get promoted — no regressions.' },
-              ].map(({ step, title, desc }) => (
-                <Grid item xs={12} sm={6} md={4} key={step}>
-                  <Box sx={{ display: 'flex', gap: 1.5 }}>
-                    <Box sx={{ width: 32, height: 32, borderRadius: '50%', bgcolor: 'primary.main', color: 'white', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 'bold', flexShrink: 0 }}>
-                      {step}
-                    </Box>
-                    <Box>
-                      <Typography variant="subtitle2" fontWeight="bold">{title}</Typography>
-                      <Typography variant="caption" color="text.secondary">{desc}</Typography>
-                    </Box>
-                  </Box>
-                </Grid>
-              ))}
-            </Grid>
-          </Paper>
-        </Grid>
-      </Grid>
-    </Box>
+      {/* How It Works */}
+      <GlassCard>
+        <div style={{ fontFamily: '"Syne", sans-serif', fontSize: '16px', fontWeight: 700, color: '#fff', marginBottom: '16px' }}>
+          🔄 How Adaptive Learning Works
+        </div>
+        <div style={{ height: '1px', background: 'rgba(255,255,255,0.06)', marginBottom: '20px' }} />
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '18px' }}>
+          {[
+            { step: '1', title: 'Scan Ingestion', desc: 'Every scan feeds the drift detector and pattern engine.' },
+            { step: '2', title: 'Feedback Learning', desc: 'User feedback trains the model and adjusts rule weights.' },
+            { step: '3', title: 'Drift Detection', desc: 'PSI monitoring compares predictions vs baseline.' },
+            { step: '4', title: 'Auto-Retrain', desc: `After ${status?.auto_retrain_threshold ?? 20} feedback events or drift.` },
+            { step: '5', title: 'Pattern Discovery', desc: 'Recurring patterns auto-generate YAML rules.' },
+            { step: '6', title: 'Model Evaluation', desc: 'New models must improve on champion to be promoted.' },
+          ].map(({ step, title, desc }) => (
+            <div key={step} style={{ display: 'flex', gap: '12px' }}>
+              <div style={{
+                width: '28px', height: '28px', borderRadius: '50%', flexShrink: 0,
+                background: 'linear-gradient(135deg, #1976d2, #42a5f5)',
+                display: 'flex', alignItems: 'center', justifyContent: 'center',
+                fontSize: '12px', fontWeight: 700, color: '#fff',
+              }}>{step}</div>
+              <div>
+                <div style={{ fontSize: '13px', fontWeight: 700, color: '#fff', marginBottom: '3px' }}>{title}</div>
+                <div style={{ fontSize: '11px', color: 'rgba(255,255,255,0.35)', lineHeight: 1.4 }}>{desc}</div>
+              </div>
+            </div>
+          ))}
+        </div>
+      </GlassCard>
+    </div>
   );
 }
