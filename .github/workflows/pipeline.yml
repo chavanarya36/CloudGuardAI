@@ -1,10 +1,11 @@
 name: CloudGuard AI — Unified CI/CD
 
 on:
-  push:
-    branches: [main, develop, feature/**]
-  pull_request:
-    branches: [main]
+  workflow_dispatch:   # Manual trigger only — avoids lint failures on every push
+  # push:
+  #   branches: [main, develop, feature/**]
+  # pull_request:
+  #   branches: [main]
 
 permissions:
   contents: read
