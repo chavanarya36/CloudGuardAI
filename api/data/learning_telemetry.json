@@ -2074,16 +2074,10 @@
     ]
   },
   {
-    "type": "engine_started",
-    "timestamp": "2026-03-14T08:52:23.742112",
-    "components": [
-      "feature_extractor",
-      "label_transformer",
-      "drift_detector",
-      "rule_weights",
-      "pattern_engine",
-      "model_evaluator",
-      "telemetry"
-    ]
+    "type": "scan_processed",
+    "timestamp": "2026-03-14T14:08:43.903395",
+    "scan_id": 43,
+    "findings_count": 33,
+    "risk_score": 1.0
   }
 ]
